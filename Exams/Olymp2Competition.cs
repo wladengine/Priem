@@ -490,6 +490,8 @@ namespace Priem
                                         context.ProtocolHistory_UpdateExcluded(abId, protId, true, null);
                                 }
                             }
+
+                            transaction.Complete();
                         }
                     }
                 }
@@ -523,7 +525,7 @@ namespace Priem
                     StudyFormName, ed.extAbit.FIO as fio, ed.Competition.Name as Competition
                     FROM ed.extAbit INNER JOIN ed.extPerson ON ed.extAbit.PersonId = ed.extPerson.Id 
                     LEFT JOIN ed.Competition ON ed.extAbit.CompetitionId = ed.Competition.Id
-                    WHERE extAbit.CompFromOlymp = 1 AND extAbit.CompetitionId = 1 {0} ORDER BY 1", s1);           
+                    WHERE extAbit.CompFromOlymp = 1 AND extAbit.CompetitionId = 1 {0} ORDER BY 1", s1);
             try
             {
                 DataSet ds = _bdc.GetDataSet(query);

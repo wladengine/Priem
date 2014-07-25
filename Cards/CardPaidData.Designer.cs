@@ -37,29 +37,29 @@
             this.cbDogovorType = new System.Windows.Forms.ComboBox();
             this.tcDogovor = new System.Windows.Forms.TabControl();
             this.tpMain = new System.Windows.Forms.TabPage();
+            this.cbQualification = new System.Windows.Forms.ComboBox();
             this.label25 = new System.Windows.Forms.Label();
             this.tbSumTotal = new System.Windows.Forms.TextBox();
-            this.label24 = new System.Windows.Forms.Label();
-            this.tbSrokIndividual = new System.Windows.Forms.TextBox();
             this.label6 = new System.Windows.Forms.Label();
-            this.cbPayPeriod = new System.Windows.Forms.ComboBox();
             this.cbProrektor = new System.Windows.Forms.ComboBox();
+            this.tbSumFirstPeriod = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
             this.tbAbitFIORod = new System.Windows.Forms.TextBox();
+            this.label13 = new System.Windows.Forms.Label();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.label14 = new System.Windows.Forms.Label();
             this.tbParent = new System.Windows.Forms.TextBox();
-            this.label13 = new System.Windows.Forms.Label();
-            this.tbSumFirstPeriod = new System.Windows.Forms.TextBox();
+            this.label24 = new System.Windows.Forms.Label();
+            this.cbPayPeriod = new System.Windows.Forms.ComboBox();
+            this.tbSrokIndividual = new System.Windows.Forms.TextBox();
             this.label12 = new System.Windows.Forms.Label();
-            this.label11 = new System.Windows.Forms.Label();
             this.tbSumFirstYear = new System.Windows.Forms.TextBox();
+            this.label11 = new System.Windows.Forms.Label();
             this.label10 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
             this.dtDateFinish = new System.Windows.Forms.DateTimePicker();
             this.dtDateStart = new System.Windows.Forms.DateTimePicker();
             this.label8 = new System.Windows.Forms.Label();
-            this.tbQualification = new System.Windows.Forms.TextBox();
             this.label7 = new System.Windows.Forms.Label();
             this.tbSrok = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
@@ -182,27 +182,21 @@
             // 
             // tpMain
             // 
+            this.tpMain.Controls.Add(this.cbQualification);
             this.tpMain.Controls.Add(this.label25);
             this.tpMain.Controls.Add(this.tbSumTotal);
-            this.tpMain.Controls.Add(this.label24);
-            this.tpMain.Controls.Add(this.tbSrokIndividual);
             this.tpMain.Controls.Add(this.label6);
-            this.tpMain.Controls.Add(this.cbPayPeriod);
             this.tpMain.Controls.Add(this.cbProrektor);
+            this.tpMain.Controls.Add(this.tbSumFirstPeriod);
             this.tpMain.Controls.Add(this.label3);
             this.tpMain.Controls.Add(this.tbAbitFIORod);
-            this.tpMain.Controls.Add(this.groupBox2);
             this.tpMain.Controls.Add(this.label13);
-            this.tpMain.Controls.Add(this.tbSumFirstPeriod);
-            this.tpMain.Controls.Add(this.label12);
-            this.tpMain.Controls.Add(this.label11);
-            this.tpMain.Controls.Add(this.tbSumFirstYear);
+            this.tpMain.Controls.Add(this.groupBox2);
             this.tpMain.Controls.Add(this.label10);
             this.tpMain.Controls.Add(this.label9);
             this.tpMain.Controls.Add(this.dtDateFinish);
             this.tpMain.Controls.Add(this.dtDateStart);
             this.tpMain.Controls.Add(this.label8);
-            this.tpMain.Controls.Add(this.tbQualification);
             this.tpMain.Controls.Add(this.label7);
             this.tpMain.Controls.Add(this.tbSrok);
             this.tpMain.Controls.Add(this.label4);
@@ -214,10 +208,19 @@
             this.tpMain.Text = "Основное";
             this.tpMain.UseVisualStyleBackColor = true;
             // 
+            // cbQualification
+            // 
+            this.cbQualification.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbQualification.FormattingEnabled = true;
+            this.cbQualification.Location = new System.Drawing.Point(18, 82);
+            this.cbQualification.Name = "cbQualification";
+            this.cbQualification.Size = new System.Drawing.Size(392, 21);
+            this.cbQualification.TabIndex = 125;
+            // 
             // label25
             // 
             this.label25.AutoSize = true;
-            this.label25.Location = new System.Drawing.Point(3, 197);
+            this.label25.Location = new System.Drawing.Point(6, 229);
             this.label25.Name = "label25";
             this.label25.Size = new System.Drawing.Size(235, 13);
             this.label25.TabIndex = 124;
@@ -226,48 +229,19 @@
             // tbSumTotal
             // 
             this.tbSumTotal.AcceptsReturn = true;
-            this.tbSumTotal.Location = new System.Drawing.Point(238, 194);
+            this.tbSumTotal.Location = new System.Drawing.Point(247, 226);
             this.tbSumTotal.Name = "tbSumTotal";
-            this.tbSumTotal.Size = new System.Drawing.Size(172, 20);
+            this.tbSumTotal.Size = new System.Drawing.Size(163, 20);
             this.tbSumTotal.TabIndex = 123;
-            // 
-            // label24
-            // 
-            this.label24.AutoSize = true;
-            this.label24.Location = new System.Drawing.Point(215, 104);
-            this.label24.Name = "label24";
-            this.label24.Size = new System.Drawing.Size(189, 13);
-            this.label24.TabIndex = 121;
-            this.label24.Text = "Срок обучения по индивид. уч.плану";
-            // 
-            // tbSrokIndividual
-            // 
-            this.tbSrokIndividual.Location = new System.Drawing.Point(218, 120);
-            this.tbSrokIndividual.Name = "tbSrokIndividual";
-            this.tbSrokIndividual.Size = new System.Drawing.Size(192, 20);
-            this.tbSrokIndividual.TabIndex = 120;
             // 
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(100, 120);
+            this.label6.Location = new System.Drawing.Point(99, 149);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(56, 13);
             this.label6.TabIndex = 119;
             this.label6.Text = "года (лет)";
-            // 
-            // cbPayPeriod
-            // 
-            this.cbPayPeriod.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.cbPayPeriod.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
-            this.cbPayPeriod.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
-            this.cbPayPeriod.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbPayPeriod.FormattingEnabled = true;
-            this.cbPayPeriod.Location = new System.Drawing.Point(238, 246);
-            this.cbPayPeriod.Name = "cbPayPeriod";
-            this.cbPayPeriod.Size = new System.Drawing.Size(172, 21);
-            this.cbPayPeriod.TabIndex = 118;
             // 
             // cbProrektor
             // 
@@ -282,10 +256,18 @@
             this.cbProrektor.Size = new System.Drawing.Size(392, 21);
             this.cbProrektor.TabIndex = 116;
             // 
+            // tbSumFirstPeriod
+            // 
+            this.tbSumFirstPeriod.AcceptsReturn = true;
+            this.tbSumFirstPeriod.Location = new System.Drawing.Point(247, 251);
+            this.tbSumFirstPeriod.Name = "tbSumFirstPeriod";
+            this.tbSumFirstPeriod.Size = new System.Drawing.Size(163, 20);
+            this.tbSumFirstPeriod.TabIndex = 79;
+            // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(15, 306);
+            this.label3.Location = new System.Drawing.Point(9, 298);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(202, 13);
             this.label3.TabIndex = 80;
@@ -294,21 +276,37 @@
             // tbAbitFIORod
             // 
             this.tbAbitFIORod.AcceptsReturn = true;
-            this.tbAbitFIORod.Location = new System.Drawing.Point(15, 322);
+            this.tbAbitFIORod.Location = new System.Drawing.Point(9, 314);
             this.tbAbitFIORod.Name = "tbAbitFIORod";
             this.tbAbitFIORod.Size = new System.Drawing.Size(395, 20);
             this.tbAbitFIORod.TabIndex = 78;
+            // 
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.Location = new System.Drawing.Point(58, 254);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(176, 13);
+            this.label13.TabIndex = 81;
+            this.label13.Text = "Сумма оплаты за первый период";
             // 
             // groupBox2
             // 
             this.groupBox2.Controls.Add(this.label14);
             this.groupBox2.Controls.Add(this.tbParent);
-            this.groupBox2.Location = new System.Drawing.Point(15, 349);
+            this.groupBox2.Controls.Add(this.label24);
+            this.groupBox2.Controls.Add(this.cbPayPeriod);
+            this.groupBox2.Controls.Add(this.tbSrokIndividual);
+            this.groupBox2.Controls.Add(this.label12);
+            this.groupBox2.Controls.Add(this.tbSumFirstYear);
+            this.groupBox2.Controls.Add(this.label11);
+            this.groupBox2.Location = new System.Drawing.Point(9, 347);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(395, 73);
             this.groupBox2.TabIndex = 82;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Заполняется в случае недостижения студентом на момент заключения договора 18 лет";
+            this.groupBox2.Visible = false;
             // 
             // label14
             // 
@@ -322,60 +320,81 @@
             // tbParent
             // 
             this.tbParent.AcceptsReturn = true;
-            this.tbParent.Location = new System.Drawing.Point(6, 45);
+            this.tbParent.Location = new System.Drawing.Point(23, 40);
             this.tbParent.Name = "tbParent";
             this.tbParent.Size = new System.Drawing.Size(363, 20);
             this.tbParent.TabIndex = 24;
             // 
-            // label13
+            // label24
             // 
-            this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(41, 279);
-            this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(176, 13);
-            this.label13.TabIndex = 81;
-            this.label13.Text = "Сумма оплаты за первый период";
+            this.label24.AutoSize = true;
+            this.label24.Enabled = false;
+            this.label24.Location = new System.Drawing.Point(90, 13);
+            this.label24.Name = "label24";
+            this.label24.Size = new System.Drawing.Size(189, 13);
+            this.label24.TabIndex = 121;
+            this.label24.Text = "Срок обучения по индивид. уч.плану";
+            this.label24.Visible = false;
             // 
-            // tbSumFirstPeriod
+            // cbPayPeriod
             // 
-            this.tbSumFirstPeriod.AcceptsReturn = true;
-            this.tbSumFirstPeriod.Location = new System.Drawing.Point(238, 276);
-            this.tbSumFirstPeriod.Name = "tbSumFirstPeriod";
-            this.tbSumFirstPeriod.ReadOnly = true;
-            this.tbSumFirstPeriod.Size = new System.Drawing.Size(172, 20);
-            this.tbSumFirstPeriod.TabIndex = 79;
+            this.cbPayPeriod.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.cbPayPeriod.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
+            this.cbPayPeriod.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
+            this.cbPayPeriod.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbPayPeriod.Enabled = false;
+            this.cbPayPeriod.FormattingEnabled = true;
+            this.cbPayPeriod.Location = new System.Drawing.Point(142, 22);
+            this.cbPayPeriod.Name = "cbPayPeriod";
+            this.cbPayPeriod.Size = new System.Drawing.Size(172, 21);
+            this.cbPayPeriod.TabIndex = 118;
+            this.cbPayPeriod.Visible = false;
+            // 
+            // tbSrokIndividual
+            // 
+            this.tbSrokIndividual.Enabled = false;
+            this.tbSrokIndividual.Location = new System.Drawing.Point(93, 29);
+            this.tbSrokIndividual.Name = "tbSrokIndividual";
+            this.tbSrokIndividual.Size = new System.Drawing.Size(192, 20);
+            this.tbSrokIndividual.TabIndex = 120;
+            this.tbSrokIndividual.Visible = false;
             // 
             // label12
             // 
             this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(132, 252);
+            this.label12.Location = new System.Drawing.Point(108, 47);
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(85, 13);
             this.label12.TabIndex = 77;
             this.label12.Text = "Период оплаты";
-            // 
-            // label11
-            // 
-            this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(32, 223);
-            this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(202, 13);
-            this.label11.TabIndex = 76;
-            this.label11.Text = "Сумма оплаты за первый учебный год";
+            this.label12.Visible = false;
             // 
             // tbSumFirstYear
             // 
             this.tbSumFirstYear.AcceptsReturn = true;
-            this.tbSumFirstYear.Location = new System.Drawing.Point(238, 220);
+            this.tbSumFirstYear.Enabled = false;
+            this.tbSumFirstYear.Location = new System.Drawing.Point(214, 40);
             this.tbSumFirstYear.Name = "tbSumFirstYear";
             this.tbSumFirstYear.ReadOnly = true;
             this.tbSumFirstYear.Size = new System.Drawing.Size(172, 20);
             this.tbSumFirstYear.TabIndex = 75;
+            this.tbSumFirstYear.Visible = false;
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(6, 48);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(202, 13);
+            this.label11.TabIndex = 76;
+            this.label11.Text = "Сумма оплаты за первый учебный год";
+            this.label11.Visible = false;
             // 
             // label10
             // 
             this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(235, 144);
+            this.label10.Location = new System.Drawing.Point(220, 173);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(84, 13);
             this.label10.TabIndex = 74;
@@ -384,7 +403,7 @@
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(15, 144);
+            this.label9.Location = new System.Drawing.Point(14, 173);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(91, 13);
             this.label9.TabIndex = 73;
@@ -392,14 +411,14 @@
             // 
             // dtDateFinish
             // 
-            this.dtDateFinish.Location = new System.Drawing.Point(238, 160);
+            this.dtDateFinish.Location = new System.Drawing.Point(223, 189);
             this.dtDateFinish.Name = "dtDateFinish";
             this.dtDateFinish.Size = new System.Drawing.Size(156, 20);
             this.dtDateFinish.TabIndex = 72;
             // 
             // dtDateStart
             // 
-            this.dtDateStart.Location = new System.Drawing.Point(18, 160);
+            this.dtDateStart.Location = new System.Drawing.Point(17, 189);
             this.dtDateStart.Name = "dtDateStart";
             this.dtDateStart.Size = new System.Drawing.Size(156, 20);
             this.dtDateStart.TabIndex = 71;
@@ -407,24 +426,16 @@
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(15, 62);
+            this.label8.Location = new System.Drawing.Point(14, 65);
             this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(82, 13);
+            this.label8.Size = new System.Drawing.Size(264, 13);
             this.label8.TabIndex = 70;
-            this.label8.Text = "Квалификация";
-            // 
-            // tbQualification
-            // 
-            this.tbQualification.AcceptsReturn = true;
-            this.tbQualification.Location = new System.Drawing.Point(18, 78);
-            this.tbQualification.Name = "tbQualification";
-            this.tbQualification.Size = new System.Drawing.Size(392, 20);
-            this.tbQualification.TabIndex = 69;
+            this.label8.Text = "Документ об образовании и (или) о квалификации";
             // 
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(16, 101);
+            this.label7.Location = new System.Drawing.Point(15, 130);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(81, 13);
             this.label7.TabIndex = 68;
@@ -432,7 +443,7 @@
             // 
             // tbSrok
             // 
-            this.tbSrok.Location = new System.Drawing.Point(18, 117);
+            this.tbSrok.Location = new System.Drawing.Point(17, 146);
             this.tbSrok.Name = "tbSrok";
             this.tbSrok.Size = new System.Drawing.Size(78, 20);
             this.tbSrok.TabIndex = 67;
@@ -714,7 +725,6 @@
         private System.Windows.Forms.DateTimePicker dtDateFinish;
         private System.Windows.Forms.DateTimePicker dtDateStart;
         private System.Windows.Forms.Label label8;
-        private System.Windows.Forms.TextBox tbQualification;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.TextBox tbSrok;
         private System.Windows.Forms.Label label4;
@@ -747,5 +757,6 @@
         private System.Windows.Forms.Label label24;
         private System.Windows.Forms.TextBox tbSrokIndividual;
         private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.ComboBox cbQualification;
     }
 }

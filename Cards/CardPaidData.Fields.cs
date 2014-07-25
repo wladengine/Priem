@@ -39,8 +39,11 @@ namespace Priem
 
         public string Qualification
         {
-            get { return tbQualification.Text.Trim(); }
-            set { tbQualification.Text = value; }
+           // get { return tbQualification.Text.Trim(); }
+            //set { tbQualification.Text = value; }
+
+            get { return cbQualification.SelectedItem.ToString(); }
+            set { cbQualification.SelectedItem = value; }
         }
 
         public string Srok

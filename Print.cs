@@ -3156,14 +3156,14 @@ namespace Priem
                          pi.Props
                      }).FirstOrDefault();
 
-                bool IsCommonWithParent = false;
+                //bool IsCommonWithParent = false;
                 string dogType = dogovorInfo.DogovorTypeId.ToString();
-                if (dogType.Equals("1"))
-                    if (!String.IsNullOrEmpty(dogovorInfo.Parent))
-                    {
-                        dogType = "2";
-                        IsCommonWithParent = true;
-                    }
+                //if (dogType.Equals("1"))
+                //    if (!String.IsNullOrEmpty(dogovorInfo.Parent))
+                //    {
+                //        dogType = "2";
+                 //       IsCommonWithParent = true;
+                //    }
 
                 WordDoc wd = new WordDoc(string.Format(@"{0}\Dogovor{1}.dot", MainClass.dirTemplates, dogType), !forPrint);
 
@@ -3239,7 +3239,7 @@ namespace Priem
 
                 //сроки обучения
                 wd.SetFields("Srok", dogovorInfo.Srok); //dsRow["Srok"].ToString()
-                wd.SetFields("SrokIndividual", dogovorInfo.SrokIndividual); //dsRow["Srok"].ToString()
+                //wd.SetFields("SrokIndividual", dogovorInfo.SrokIndividual); //dsRow["Srok"].ToString()
 
                 DateTime dStart = dogovorInfo.DateStart.Value; //(DateTime)dsRow["DateStart"];
                 //wd.SetFields("DateStart", "\"" + dStart.Date.Day.ToString() + "\" " + dStart.Date.Month.ToString() + " " + dStart.Date.Year.ToString());
@@ -3252,7 +3252,7 @@ namespace Priem
                 wd.SetFields("SumTotal", dogovorInfo.SumTotal);//dsRow["SumFirstYear"].ToString()
 
                 //wd.SetFields("SumFirstYear", dogovorInfo.SumFirstYear);//dsRow["SumFirstYear"].ToString()
-                // wd.SetFields("SumFirstPeriod", dogovorInfo.SumFirstPeriod);//dsRow["SumFirstPeriod"].ToString()
+                wd.SetFields("SumFirstPeriod", dogovorInfo.SumFirstPeriod);//dsRow["SumFirstPeriod"].ToString()
 
                 //wd.SetFields("PayPeriod", dogovorInfo.PayPeriod);//dsRow["PayPeriod"].ToString()
 
@@ -3290,21 +3290,12 @@ namespace Priem
                     // физ лицо
                     case "2":
                         {
-                            if (IsCommonWithParent)
-                            {
-                                wd.SetFields("CustomerLico", dogovorInfo.Parent);
-                                wd.SetFields("CustomerAddress", "");
-                                wd.SetFields("CustomerINN", "Паспорт: " + "");
-                                wd.SetFields("CustomerRS", "Выдан: " + "");
-                            }
-                            else
-                            {
-                                wd.SetFields("CustomerLico", dogovorInfo.Customer);//dsRow["Customer"].ToString()
-                                //wd.SetFields("AbitFIORod2", dsRow["AbitFIORod"].ToString());
-                                wd.SetFields("CustomerAddress", dogovorInfo.CustomerAddress);//dsRow["CustomerAddress"].ToString()
-                                wd.SetFields("CustomerINN", "Паспорт: " + dogovorInfo.CustomerPassport);//dsRow["CustomerPassport"].ToString()
-                                wd.SetFields("CustomerRS", "Выдан: " + dogovorInfo.CustomerPassportAuthor);//dsRow["CustomerPassportAuthor"].ToString()
-                            }
+                            wd.SetFields("CustomerLico", dogovorInfo.Customer);//dsRow["Customer"].ToString()
+                            //wd.SetFields("AbitFIORod2", dsRow["AbitFIORod"].ToString());
+                            wd.SetFields("CustomerAddress", dogovorInfo.CustomerAddress);//dsRow["CustomerAddress"].ToString()
+                            wd.SetFields("CustomerINN", "Паспорт: " + dogovorInfo.CustomerPassport);//dsRow["CustomerPassport"].ToString()
+                            wd.SetFields("CustomerRS", "Выдан: " + dogovorInfo.CustomerPassportAuthor);//dsRow["CustomerPassportAuthor"].ToString()
+
                             break;
                         }
                     // мат кап

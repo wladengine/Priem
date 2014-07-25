@@ -17,6 +17,7 @@ namespace Priem
     {
         private Guid? _abitId;//айди абитуриента  
         private bool _isReadOnly;
+        List <string> QualificationList = new List<string>();
 
         public CardPaidData(Guid? abitId, bool isReadOnly)
         {
@@ -24,7 +25,11 @@ namespace Priem
            
             _abitId = abitId;
             _isReadOnly = isReadOnly;
-
+            QualificationList = new List<string> { { "диплом (бакалавр)" }, { "диплом (магистр)" }, { "диплом (специалист)" } };
+            // аспирантура
+            // QualificationList = new List<string> { { "диплом" } };
+            // ординатура, интернатура
+            // QualificationList =  new List<string> { { "врач" } };
             if (_abitId == null)
                 this.Close();          
                 
@@ -55,6 +60,7 @@ namespace Priem
                     UpdateAfterDogovorType();
                     ComboServ.FillCombo(cbProrektor, HelpClass.GetComboListByTable("ed.Prorektor"), false, false);
                     ComboServ.FillCombo(cbPayPeriod, HelpClass.GetComboListByTable("ed.PayPeriod"), false, false);
+                    ComboServ.FillCombo(cbQualification, QualificationList, false, false);
                 }
             }
             catch (Exception exc)
@@ -103,7 +109,10 @@ namespace Priem
                     DogovorNum = paiddata.DogovorNum;
                     DogovorDate = paiddata.DogovorDate;
                     DogovorTypeId = paiddata.DogovorTypeId;
-                    Qualification = paiddata.Qualification;
+                    if (QualificationList.Contains(paiddata.Qualification))
+                        Qualification = paiddata.Qualification;
+                    else
+                        Qualification = QualificationList.First();
                     Srok = paiddata.Srok;
                     SrokIndividual = paiddata.SrokIndividual;
                     DateStart = paiddata.DateStart;
@@ -145,8 +154,12 @@ namespace Priem
 
                     if (payData == null)
                         return;
-                    
-                    Qualification = payData.Qualification;
+
+                    if (QualificationList.Contains(payData.Qualification))
+                        Qualification = payData.Qualification;
+                    else
+                        Qualification = QualificationList.First();
+
                     Srok = payData.EducPeriod;
                     DateStart = payData.DateStart;
                     DateFinish = payData.DateFinish;

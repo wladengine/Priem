@@ -513,7 +513,8 @@ namespace Priem
                     LEFT JOIN ed.FixierenView ON ed.Fixieren.FixierenViewId=ed.FixierenView.Id 
                     LEFT JOIN ed.hlpAbiturientProfAdd ON ed.hlpAbiturientProfAdd.Id = ed.qAbiturient.Id 
                     LEFT JOIN ed.hlpAbiturientProf ON ed.hlpAbiturientProf.Id = ed.qAbiturient.Id 
-                    LEFT JOIN ed.extAbitMarksSum ON ed.qAbiturient.Id = ed.extAbitMarksSum.Id";
+                    LEFT JOIN ed.extAbitMarksSum ON ed.qAbiturient.Id = ed.extAbitMarksSum.Id
+                    LEFT JOIN ed.extAbitMarkByRating ON ed.qAbiturient.Id = ed.extAbitMarkByRating.Id";
 
                     string whereFix = string.Format(
 @" WHERE ed.FixierenView.StudyLevelGroupId = {10} AND ed.FixierenView.StudyFormId={0} AND ed.FixierenView.StudyBasisId={1} AND ed.FixierenView.FacultyId={2} 
@@ -551,8 +552,8 @@ AND ed.FixierenView.IsSecond = {7} AND ed.FixierenView.IsReduced = {8} AND ed.Fi
                     //квотники?
                     if (IsQuota)
                         sFilters += " AND ed.qAbiturient.CompetitionId IN (2, 7) ";
-                    else
-                        sFilters += " AND ed.qAbiturient.CompetitionId NOT IN (2, 7) ";
+                    //else
+                    //    sFilters += " AND ed.qAbiturient.CompetitionId NOT IN (2, 7) ";
 
                     // кроме бэ преодолены мин планки 
                     if (MainClass.dbType == PriemType.PriemMag)
@@ -593,7 +594,7 @@ AND ed.FixierenView.IsSecond = {7} AND ed.FixierenView.IsReduced = {8} AND ed.Fi
                         //sFilters += " AND ed.qAbiturient.CompetitionId NOT IN (6, 1, 2, 7) ";                                        
 
                         // кроме бэ и тех, у кого нет сертификатов и оценок нужное кол-во оценок есть
-                        sFilters += @" AND ((CompetitionId=1 OR CompetitionId=8 OR CompetitionId=12) 
+                        sFilters += @" AND (CompetitionId IN (1, 8, 11, 12) 
                                         OR (ed.qAbiturient.PersonId NOT IN (SELECT PersonId FROM ed.EgeCertificate) 
                                            AND ed.qAbiturient.Id NOT IN (SELECT abiturientid from ed.Mark where IsFromEge = 1) /*and ed.extPerson.EgeInSPbgu = 0 */and ed.qAbiturient.IsSecond = 0 and ed.qAbiturient.IsReduced = 0 and ed.qAbiturient.IsParallel = 0) 
                                         OR ed.extAbitMarksSum.TotalCount = " + examsCnt + " ) ";

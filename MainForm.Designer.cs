@@ -136,7 +136,6 @@
             this.smiExport = new System.Windows.Forms.ToolStripMenuItem();
             this.smiVTB = new System.Windows.Forms.ToolStripMenuItem();
             this.smiSberbank = new System.Windows.Forms.ToolStripMenuItem();
-            this.smiFISEGE_Migrator = new System.Windows.Forms.ToolStripMenuItem();
             this.smiImport = new System.Windows.Forms.ToolStripMenuItem();
             this.срюбаллToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.оплатаДоговоровToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -991,8 +990,7 @@
             // 
             this.smiExport.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.smiVTB,
-            this.smiSberbank,
-            this.smiFISEGE_Migrator});
+            this.smiSberbank});
             this.smiExport.Name = "smiExport";
             this.smiExport.Size = new System.Drawing.Size(64, 20);
             this.smiExport.Text = "Экспорт";
@@ -1010,13 +1008,6 @@
             this.smiSberbank.Size = new System.Drawing.Size(235, 22);
             this.smiSberbank.Text = "Поступивших для Сбербанка";
             this.smiSberbank.Click += new System.EventHandler(this.smiSberbank_Click);
-            // 
-            // smiFISEGE_Migrator
-            // 
-            this.smiFISEGE_Migrator.Name = "smiFISEGE_Migrator";
-            this.smiFISEGE_Migrator.Size = new System.Drawing.Size(235, 22);
-            this.smiFISEGE_Migrator.Text = "ФИС ЕГЭ СПО-ВПО";
-            this.smiFISEGE_Migrator.Click += new System.EventHandler(this.smiFISEGE_Migrator_Click);
             // 
             // smiImport
             // 
@@ -1173,7 +1164,6 @@
         private System.Windows.Forms.ToolStripMenuItem smiOlympAbitBallsAndRatings;
         private System.Windows.Forms.ToolStripMenuItem smiRegionAbitStat_Rev;
         private System.Windows.Forms.ToolStripMenuItem smiRegionAbitEGEMarksStatistics;
-        private System.Windows.Forms.ToolStripMenuItem smiFISEGE_Migrator;
         private System.Windows.Forms.ToolStripMenuItem smiOlympCheckList;
         private System.Windows.Forms.ToolStripMenuItem smiExamsResultCSV;
         private System.Windows.Forms.ToolStripMenuItem smiPriemResults_AbitExamResults;

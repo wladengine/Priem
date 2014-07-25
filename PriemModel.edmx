@@ -14,7 +14,6 @@
       [_FirstWaveGreen].[IsNew] AS [IsNew]
       FROM [ed].[_FirstWaveGreen] AS [_FirstWaveGreen]</DefiningQuery>
           </EntitySet>
-          <EntitySet Name="_SettingRoles" EntityType="Priem2012Model.Store._SettingRoles" store:Type="Tables" Schema="ed" />
           <EntitySet Name="AbitDoc" EntityType="Priem2012Model.Store.AbitDoc" store:Type="Tables" Schema="ed" />
           <EntitySet Name="Abiturient" EntityType="Priem2012Model.Store.Abiturient" store:Type="Tables" Schema="ed" />
           <EntitySet Name="Age" EntityType="Priem2012Model.Store.Age" store:Type="Tables" Schema="ed" />
@@ -24,7 +23,6 @@
           <EntitySet Name="AttMarks" EntityType="Priem2012Model.Store.AttMarks" store:Type="Tables" Schema="ed" />
           <EntitySet Name="AttSubject" EntityType="Priem2012Model.Store.AttSubject" store:Type="Tables" Schema="ed" />
           <EntitySet Name="BenefitDocumentType" EntityType="Priem2012Model.Store.BenefitDocumentType" store:Type="Tables" Schema="ed" />
-          <EntitySet Name="CampaignDates" EntityType="Priem2012Model.Store.CampaignDates" store:Type="Tables" Schema="ed" />
           <EntitySet Name="CelCompetition" EntityType="Priem2012Model.Store.CelCompetition" store:Type="Tables" Schema="ed" />
           <EntitySet Name="ChangeType" EntityType="Priem2012Model.Store.ChangeType" store:Type="Tables" Schema="ed" />
           <EntitySet Name="Comission" EntityType="Priem2012Model.Store.Comission" store:Type="Tables" store:Schema="ed" store:Name="Comission">
@@ -114,32 +112,14 @@
           <EntitySet Name="Person_EducationInfo" EntityType="Priem2012Model.Store.Person_EducationInfo" store:Type="Tables" Schema="ed" />
           <EntitySet Name="PersonBenefitDocument" EntityType="Priem2012Model.Store.PersonBenefitDocument" store:Type="Tables" Schema="ed" />
           <EntitySet Name="PersonChanges" EntityType="Priem2012Model.Store.PersonChanges" store:Type="Tables" Schema="ed" />
-          <EntitySet Name="Privilege" EntityType="Priem2012Model.Store.Privilege" store:Type="Tables" store:Schema="ed" store:Name="Privilege">
-            <DefiningQuery>SELECT 
-      [Privilege].[Number] AS [Number], 
-      [Privilege].[Maska] AS [Maska], 
-      [Privilege].[Name] AS [Name]
-      FROM [ed].[Privilege] AS [Privilege]</DefiningQuery>
-          </EntitySet>
           <EntitySet Name="ProfileInObrazProgramInEntry" EntityType="Priem2012Model.Store.ProfileInObrazProgramInEntry" store:Type="Tables" Schema="ed" />
           <EntitySet Name="Prorektor" EntityType="Priem2012Model.Store.Prorektor" store:Type="Tables" Schema="ed" />
           <EntitySet Name="Protocol" EntityType="Priem2012Model.Store.Protocol" store:Type="Tables" Schema="ed" />
-          <EntitySet Name="ProtocolHistory" EntityType="Priem2012Model.Store.ProtocolHistory" store:Type="Tables" store:Schema="ed" store:Name="ProtocolHistory">
-            <DefiningQuery>SELECT 
-      [ProtocolHistory].[Id] AS [Id], 
-      [ProtocolHistory].[AbiturientId] AS [AbiturientId], 
-      [ProtocolHistory].[ProtocolId] AS [ProtocolId], 
-      [ProtocolHistory].[Excluded] AS [Excluded], 
-      [ProtocolHistory].[ExcludeProtocolId] AS [ExcludeProtocolId], 
-      [ProtocolHistory].[EntryHeaderId] AS [EntryHeaderId]
-      FROM [ed].[ProtocolHistory] AS [ProtocolHistory]</DefiningQuery>
-          </EntitySet>
           <EntitySet Name="ProtocolNumbers" EntityType="Priem2012Model.Store.ProtocolNumbers" store:Type="Tables" Schema="ed" />
           <EntitySet Name="ProtocolType" EntityType="Priem2012Model.Store.ProtocolType" store:Type="Tables" Schema="ed" />
           <EntitySet Name="Region" EntityType="Priem2012Model.Store.Region" store:Type="Tables" Schema="ed" />
           <EntitySet Name="SchoolNames" EntityType="Priem2012Model.Store.SchoolNames" store:Type="Tables" Schema="ed" />
           <EntitySet Name="SchoolType" EntityType="Priem2012Model.Store.SchoolType" store:Type="Tables" Schema="ed" />
-          <EntitySet Name="SecondType" EntityType="Priem2012Model.Store.SecondType" store:Type="Tables" Schema="ed" />
           <EntitySet Name="Signer" EntityType="Priem2012Model.Store.Signer" store:Type="Tables" Schema="ed" />
           <EntitySet Name="SP_Faculty" EntityType="Priem2012Model.Store.SP_Faculty" store:Type="Tables" Schema="ed" />
           <EntitySet Name="SP_LicenseProgram" EntityType="Priem2012Model.Store.SP_LicenseProgram" store:Type="Tables" Schema="ed" />
@@ -225,6 +205,7 @@
       [extAbitMarksSum].[StudyFormId] AS [StudyFormId], 
       [extAbitMarksSum].[StudyBasisId] AS [StudyBasisId], 
       [extAbitMarksSum].[TotalSum] AS [TotalSum], 
+      [extAbitMarksSum].[TotalSumFiveGrade] AS [TotalSumFiveGrade], 
       [extAbitMarksSum].[TotalCount] AS [TotalCount]
       FROM [ed].[extAbitMarksSum] AS [extAbitMarksSum]</DefiningQuery>
           </EntitySet>
@@ -455,7 +436,8 @@
       [extExamInEntry].[IsSecond] AS [IsSecond], 
       [extExamInEntry].[IsReduced] AS [IsReduced], 
       [extExamInEntry].[IsParallel] AS [IsParallel], 
-      [extExamInEntry].[ExamInEntryToCompetitiveGroupId] AS [ExamInEntryToCompetitiveGroupId]
+      [extExamInEntry].[ExamInEntryToCompetitiveGroupId] AS [ExamInEntryToCompetitiveGroupId], 
+      [extExamInEntry].[OrderNumber] AS [OrderNumber]
       FROM [ed].[extExamInEntry] AS [extExamInEntry]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="extExamsVed" EntityType="Priem2012Model.Store.extExamsVed" store:Type="Views" store:Schema="ed" store:Name="extExamsVed">
@@ -799,28 +781,6 @@
       [hlpAbiturientProfAdd].[ProfAdd] AS [ProfAdd]
       FROM [ed].[hlpAbiturientProfAdd] AS [hlpAbiturientProfAdd]</DefiningQuery>
           </EntitySet>
-          <EntitySet Name="hlpLicenseProgramKCP" EntityType="Priem2012Model.Store.hlpLicenseProgramKCP" store:Type="Views" store:Schema="ed" store:Name="hlpLicenseProgramKCP">
-            <DefiningQuery>SELECT 
-      [hlpLicenseProgramKCP].[LicenseProgramId] AS [LicenseProgramId], 
-      [hlpLicenseProgramKCP].[LicenseProgramCode] AS [LicenseProgramCode], 
-      [hlpLicenseProgramKCP].[LicenseProgramName] AS [LicenseProgramName], 
-      [hlpLicenseProgramKCP].[StudyLevelId] AS [StudyLevelId], 
-      [hlpLicenseProgramKCP].[LevelGroupId] AS [LevelGroupId], 
-      [hlpLicenseProgramKCP].[QualificationCode] AS [QualificationCode], 
-      [hlpLicenseProgramKCP].[KC_OB] AS [KC_OB], 
-      [hlpLicenseProgramKCP].[KC_OP] AS [KC_OP], 
-      [hlpLicenseProgramKCP].[KC_ZB] AS [KC_ZB], 
-      [hlpLicenseProgramKCP].[KC_OZB] AS [KC_OZB], 
-      [hlpLicenseProgramKCP].[KC_OZP] AS [KC_OZP], 
-      [hlpLicenseProgramKCP].[KC_ZP] AS [KC_ZP], 
-      [hlpLicenseProgramKCP].[KC_O_CEL] AS [KC_O_CEL], 
-      [hlpLicenseProgramKCP].[KC_OZ_CEL] AS [KC_OZ_CEL], 
-      [hlpLicenseProgramKCP].[KC_Z_CEL] AS [KC_Z_CEL], 
-      [hlpLicenseProgramKCP].[KC_O_QUOTA] AS [KC_O_QUOTA], 
-      [hlpLicenseProgramKCP].[KC_OZ_QUOTA] AS [KC_OZ_QUOTA], 
-      [hlpLicenseProgramKCP].[KC_Z_QUOTA] AS [KC_Z_QUOTA]
-      FROM [ed].[hlpLicenseProgramKCP] AS [hlpLicenseProgramKCP]</DefiningQuery>
-          </EntitySet>
           <EntitySet Name="hlpStatistics" EntityType="Priem2012Model.Store.hlpStatistics" store:Type="Views" store:Schema="ed" store:Name="hlpStatistics">
             <DefiningQuery>SELECT 
       [hlpStatistics].[EntryId] AS [EntryId], 
@@ -999,23 +959,6 @@
       [qAbiturientForeignApplicationsOnly].[Id] AS [Id]
       FROM [ed].[qAbiturientForeignApplicationsOnly] AS [qAbiturientForeignApplicationsOnly]</DefiningQuery>
           </EntitySet>
-          <EntitySet Name="qCompetitiveGroup" EntityType="Priem2012Model.Store.qCompetitiveGroup" store:Type="Views" store:Schema="ed" store:Name="qCompetitiveGroup">
-            <DefiningQuery>SELECT 
-      [qCompetitiveGroup].[Id] AS [Id], 
-      [qCompetitiveGroup].[Name] AS [Name], 
-      [qCompetitiveGroup].[StudyLevelId] AS [StudyLevelId], 
-      [qCompetitiveGroup].[FacultyId] AS [FacultyId], 
-      [qCompetitiveGroup].[FacultyName] AS [FacultyName], 
-      [qCompetitiveGroup].[LicenseProgramId] AS [LicenseProgramId], 
-      [qCompetitiveGroup].[LicenseProgramCode] AS [LicenseProgramCode], 
-      [qCompetitiveGroup].[LicenseProgramName] AS [LicenseProgramName], 
-      [qCompetitiveGroup].[ObrazProgramId] AS [ObrazProgramId], 
-      [qCompetitiveGroup].[ObrazProgramCrypt] AS [ObrazProgramCrypt], 
-      [qCompetitiveGroup].[ObrazProgramName] AS [ObrazProgramName], 
-      [qCompetitiveGroup].[ProfileId] AS [ProfileId], 
-      [qCompetitiveGroup].[ProfileName] AS [ProfileName]
-      FROM [ed].[qCompetitiveGroup] AS [qCompetitiveGroup]</DefiningQuery>
-          </EntitySet>
           <EntitySet Name="qEntry" EntityType="Priem2012Model.Store.qEntry" store:Type="Views" store:Schema="ed" store:Name="qEntry">
             <DefiningQuery>SELECT 
       [qEntry].[Id] AS [Id], 
@@ -1107,7 +1050,8 @@
       [qMark].[ExamNameId] AS [ExamNameId], 
       [qMark].[EntranceTestType] AS [EntranceTestType], 
       [qMark].[OlympiadId] AS [OlympiadId], 
-      [qMark].[EgeCertificateId] AS [EgeCertificateId]
+      [qMark].[EgeCertificateId] AS [EgeCertificateId], 
+      [qMark].[OrderNumber] AS [OrderNumber]
       FROM [ed].[qMark] AS [qMark]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="qObrazProgram" EntityType="Priem2012Model.Store.qObrazProgram" store:Type="Views" store:Schema="ed" store:Name="qObrazProgram">
@@ -1488,18 +1432,6 @@
             <End Role="StudyForm" EntitySet="StudyForm" />
             <End Role="Protocol" EntitySet="Protocol" />
           </AssociationSet>
-          <AssociationSet Name="fk_ProtocolHistory_Abiturient" Association="Priem2012Model.Store.fk_ProtocolHistory_Abiturient">
-            <End Role="Abiturient" EntitySet="Abiturient" />
-            <End Role="ProtocolHistory" EntitySet="ProtocolHistory" />
-          </AssociationSet>
-          <AssociationSet Name="fk_Protocolhistory_EntryHeader" Association="Priem2012Model.Store.fk_Protocolhistory_EntryHeader">
-            <End Role="EntryHeader" EntitySet="EntryHeader" />
-            <End Role="ProtocolHistory" EntitySet="ProtocolHistory" />
-          </AssociationSet>
-          <AssociationSet Name="fk_ProtocolHistory_Protocol" Association="Priem2012Model.Store.fk_ProtocolHistory_Protocol">
-            <End Role="Protocol" EntitySet="Protocol" />
-            <End Role="ProtocolHistory" EntitySet="ProtocolHistory" />
-          </AssociationSet>
           <AssociationSet Name="FK_SP_LicenseProgram_StudyLevel" Association="Priem2012Model.Store.FK_SP_LicenseProgram_StudyLevel">
             <End Role="StudyLevel" EntitySet="StudyLevel" />
             <End Role="SP_LicenseProgram" EntitySet="SP_LicenseProgram" />
@@ -1544,17 +1476,6 @@
           </Key>
           <Property Name="AbiturientId" Type="uniqueidentifier" Nullable="false" />
           <Property Name="IsNew" Type="bit" Nullable="false" />
-        </EntityType>
-        <EntityType Name="_SettingRoles">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="int" Nullable="false" />
-          <Property Name="FacultyId" Type="int" />
-          <Property Name="RoleName" Type="nvarchar" MaxLength="50" />
-          <Property Name="IsFacultyRole" Type="bit" Nullable="false" />
-          <Property Name="PrintName" Type="nvarchar" Nullable="false" MaxLength="500" />
-          <Property Name="Show" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="AbitDoc">
           <Key>
@@ -1665,19 +1586,6 @@
           </Key>
           <Property Name="Id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
           <Property Name="Name" Type="nvarchar" MaxLength="100" />
-        </EntityType>
-        <EntityType Name="CampaignDates">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="uniqueidentifier" Nullable="false" />
-          <Property Name="StudyLevelId" Type="int" />
-          <Property Name="StudyFormId" Type="int" />
-          <Property Name="StudyBasisId" Type="int" />
-          <Property Name="Stage" Type="int" />
-          <Property Name="DateStart" Type="date" />
-          <Property Name="DateEnd" Type="date" />
-          <Property Name="DateOrder" Type="date" />
         </EntityType>
         <EntityType Name="CelCompetition">
           <Key>
@@ -2102,6 +2010,7 @@
           <Property Name="NameDative" Type="nvarchar" MaxLength="100" />
           <Property Name="IsOpen" Type="bit" Nullable="false" />
           <Property Name="Holder" Type="nvarchar" MaxLength="150" />
+          <Property Name="ExamId" Type="int" />
         </EntityType>
         <EntityType Name="OlympType">
           <Key>
@@ -2364,16 +2273,6 @@
         <!--Errors Found During Generation:
       warning 6002: The table/view 'Priem.ed.Privilege' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.
       -->
-        <EntityType Name="Privilege">
-          <Key>
-            <PropertyRef Name="Number" />
-            <PropertyRef Name="Maska" />
-            <PropertyRef Name="Name" />
-          </Key>
-          <Property Name="Number" Type="tinyint" Nullable="false" />
-          <Property Name="Maska" Type="int" Nullable="false" />
-          <Property Name="Name" Type="nvarchar" Nullable="false" MaxLength="50" />
-        </EntityType>
         <EntityType Name="ProfileInObrazProgramInEntry">
           <Key>
             <PropertyRef Name="Id" />
@@ -2413,23 +2312,6 @@
           <Property Name="IsParallel" Type="bit" />
           <Property Name="IsReduced" Type="bit" />
           <Property Name="IsListener" Type="bit" />
-        </EntityType>
-        <!--Errors Found During Generation:
-      warning 6002: The table/view 'Priem.ed.ProtocolHistory' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.
-      -->
-        <EntityType Name="ProtocolHistory">
-          <Key>
-            <PropertyRef Name="Id" />
-            <PropertyRef Name="AbiturientId" />
-            <PropertyRef Name="ProtocolId" />
-            <PropertyRef Name="Excluded" />
-          </Key>
-          <Property Name="Id" Type="uniqueidentifier" Nullable="false" />
-          <Property Name="AbiturientId" Type="uniqueidentifier" Nullable="false" />
-          <Property Name="ProtocolId" Type="uniqueidentifier" Nullable="false" />
-          <Property Name="Excluded" Type="bit" Nullable="false" />
-          <Property Name="ExcludeProtocolId" Type="uniqueidentifier" />
-          <Property Name="EntryHeaderId" Type="int" />
         </EntityType>
         <EntityType Name="ProtocolNumbers">
           <Key>
@@ -2477,14 +2359,6 @@
           <Property Name="Id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
           <Property Name="Name" Type="nvarchar" Nullable="false" MaxLength="50" />
           <Property Name="FullName" Type="nvarchar" MaxLength="150" />
-        </EntityType>
-        <EntityType Name="SecondType">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="nvarchar" MaxLength="50" />
-          <Property Name="Acronym" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="Signer">
           <Key>
@@ -2704,6 +2578,7 @@
           <Property Name="StudyFormId" Type="int" Nullable="false" />
           <Property Name="StudyBasisId" Type="int" Nullable="false" />
           <Property Name="TotalSum" Type="int" />
+          <Property Name="TotalSumFiveGrade" Type="int" />
           <Property Name="TotalCount" Type="int" />
         </EntityType>
         <!--Errors Found During Generation:
@@ -3043,6 +2918,7 @@
           <Property Name="IsReduced" Type="bit" Nullable="false" />
           <Property Name="IsParallel" Type="bit" Nullable="false" />
           <Property Name="ExamInEntryToCompetitiveGroupId" Type="uniqueidentifier" />
+          <Property Name="OrderNumber" Type="tinyint" />
         </EntityType>
         <!--Errors Found During Generation:
       warning 6002: The table/view 'Priem.ed.extExamsVed' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.
@@ -3178,6 +3054,7 @@
             
             <PropertyRef Name="Sex" />
             
+            
           </Key>
           <Property Name="Id" Type="uniqueidentifier" Nullable="false" />
           <Property Name="Barcode" Type="int" />
@@ -3202,7 +3079,7 @@
           <Property Name="Code" Type="nvarchar" MaxLength="20" />
           <Property Name="City" Type="nvarchar" MaxLength="1000" />
           <Property Name="Street" Type="nvarchar" MaxLength="100" />
-          <Property Name="House" Type="nvarchar" MaxLength="10" />
+          <Property Name="House" Type="nvarchar" MaxLength="20" />
           <Property Name="Flat" Type="nvarchar" MaxLength="10" />
           <Property Name="CodeReal" Type="nvarchar" MaxLength="20" />
           <Property Name="Korpus" Type="nvarchar" MaxLength="10" />
@@ -3250,7 +3127,7 @@
           <Property Name="ExtraInfo" Type="nvarchar(max)" />
           <Property Name="ScienceWork" Type="nvarchar(max)" />
           <Property Name="PersonNum" Type="nvarchar" MaxLength="7" />
-          <Property Name="FIO" Type="nvarchar" MaxLength="152" />
+          <Property Name="FIO" Type="nvarchar" Nullable="false" MaxLength="152" />
           <Property Name="PassportData" Type="nvarchar" MaxLength="532" />
           <Property Name="EducDocument" Type="nvarchar" MaxLength="44" />
           <Property Name="HostelFacultyAcr" Type="nvarchar" MaxLength="50" />
@@ -3273,6 +3150,7 @@
           <Key>
             <PropertyRef Name="Id" />
             <PropertyRef Name="Num" />
+            
             
             
             
@@ -3352,7 +3230,7 @@
           <Property Name="ExtraInfo" Type="nvarchar(max)" />
           <Property Name="ScienceWork" Type="nvarchar(max)" />
           <Property Name="PersonNum" Type="nvarchar" MaxLength="7" />
-          <Property Name="FIO" Type="nvarchar" MaxLength="152" />
+          <Property Name="FIO" Type="nvarchar" Nullable="false" MaxLength="152" />
           <Property Name="PassportData" Type="nvarchar" MaxLength="532" />
           <Property Name="EducDocument" Type="nvarchar" MaxLength="44" />
           <Property Name="HostelFacultyAcr" Type="nvarchar" MaxLength="50" />
@@ -3481,35 +3359,6 @@
           <Property Name="ProfAdd" Type="int" />
         </EntityType>
         <!--Errors Found During Generation:
-      warning 6002: The table/view 'Priem.ed.hlpLicenseProgramKCP' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.
-      -->
-        <EntityType Name="hlpLicenseProgramKCP">
-          <Key>
-            <PropertyRef Name="LicenseProgramId" />
-            
-            <PropertyRef Name="StudyLevelId" />
-            <PropertyRef Name="LevelGroupId" />
-          </Key>
-          <Property Name="LicenseProgramId" Type="int" Nullable="false" />
-          <Property Name="LicenseProgramCode" Type="nvarchar" MaxLength="10" />
-          <Property Name="LicenseProgramName" Type="nvarchar" Nullable="false" MaxLength="1000" />
-          <Property Name="StudyLevelId" Type="int" Nullable="false" />
-          <Property Name="LevelGroupId" Type="int" Nullable="false" />
-          <Property Name="QualificationCode" Type="nvarchar" MaxLength="5" />
-          <Property Name="KC_OB" Type="int" />
-          <Property Name="KC_OP" Type="int" />
-          <Property Name="KC_ZB" Type="int" />
-          <Property Name="KC_OZB" Type="int" />
-          <Property Name="KC_OZP" Type="int" />
-          <Property Name="KC_ZP" Type="int" />
-          <Property Name="KC_O_CEL" Type="int" />
-          <Property Name="KC_OZ_CEL" Type="int" />
-          <Property Name="KC_Z_CEL" Type="int" />
-          <Property Name="KC_O_QUOTA" Type="int" />
-          <Property Name="KC_OZ_QUOTA" Type="int" />
-          <Property Name="KC_Z_QUOTA" Type="int" />
-        </EntityType>
-        <!--Errors Found During Generation:
       warning 6002: The table/view 'Priem.ed.hlpStatistics' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.
       -->
         <EntityType Name="hlpStatistics">
@@ -3518,9 +3367,9 @@
             <PropertyRef Name="StudyLevelGroupId" />
             <PropertyRef Name="FacultyId" />
             <PropertyRef Name="LicenseProgramId" />
-            
+            <PropertyRef Name="LicenseProgramName" />
             <PropertyRef Name="ObrazProgramId" />
-            
+            <PropertyRef Name="ObrazProgramName" />
             <PropertyRef Name="StudyFormId" />
             <PropertyRef Name="StudyFormName" />
             <PropertyRef Name="StudyBasisId" />
@@ -3781,31 +3630,6 @@
           <Property Name="Id" Type="uniqueidentifier" Nullable="false" />
         </EntityType>
         <!--Errors Found During Generation:
-      warning 6002: The table/view 'Priem.ed.qCompetitiveGroup' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.
-      -->
-        <EntityType Name="qCompetitiveGroup">
-          <Key>
-            <PropertyRef Name="Id" />
-            <PropertyRef Name="StudyLevelId" />
-            <PropertyRef Name="FacultyId" />
-            <PropertyRef Name="LicenseProgramId" />
-            <PropertyRef Name="ObrazProgramId" />
-          </Key>
-          <Property Name="Id" Type="uniqueidentifier" Nullable="false" />
-          <Property Name="Name" Type="nvarchar" MaxLength="250" />
-          <Property Name="StudyLevelId" Type="int" Nullable="false" />
-          <Property Name="FacultyId" Type="int" Nullable="false" />
-          <Property Name="FacultyName" Type="nvarchar" MaxLength="100" />
-          <Property Name="LicenseProgramId" Type="int" Nullable="false" />
-          <Property Name="LicenseProgramCode" Type="nvarchar" MaxLength="10" />
-          <Property Name="LicenseProgramName" Type="nvarchar" MaxLength="1000" />
-          <Property Name="ObrazProgramId" Type="int" Nullable="false" />
-          <Property Name="ObrazProgramCrypt" Type="nvarchar" MaxLength="82" />
-          <Property Name="ObrazProgramName" Type="nvarchar" MaxLength="1000" />
-          <Property Name="ProfileId" Type="uniqueidentifier" />
-          <Property Name="ProfileName" Type="nvarchar" MaxLength="1000" />
-        </EntityType>
-        <!--Errors Found During Generation:
       warning 6002: The table/view 'Priem.ed.qEntry' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.
       -->
         <EntityType Name="qEntry">
@@ -3954,6 +3778,7 @@
           <Property Name="EntranceTestType" Type="varchar" Nullable="false" MaxLength="74" />
           <Property Name="OlympiadId" Type="uniqueidentifier" />
           <Property Name="EgeCertificateId" Type="uniqueidentifier" />
+          <Property Name="OrderNumber" Type="tinyint" />
         </EntityType>
         <!--Errors Found During Generation:
       warning 6002: The table/view 'Priem.ed.qObrazProgram' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.
@@ -5035,46 +4860,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="fk_ProtocolHistory_Abiturient">
-          <End Role="Abiturient" Type="Priem2012Model.Store.Abiturient" Multiplicity="1">
-            <OnDelete Action="Cascade" />
-          </End>
-          <End Role="ProtocolHistory" Type="Priem2012Model.Store.ProtocolHistory" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Abiturient">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="ProtocolHistory">
-              <PropertyRef Name="AbiturientId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="fk_Protocolhistory_EntryHeader">
-          <End Role="EntryHeader" Type="Priem2012Model.Store.EntryHeader" Multiplicity="0..1" />
-          <End Role="ProtocolHistory" Type="Priem2012Model.Store.ProtocolHistory" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="EntryHeader">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="ProtocolHistory">
-              <PropertyRef Name="EntryHeaderId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="fk_ProtocolHistory_Protocol">
-          <End Role="Protocol" Type="Priem2012Model.Store.Protocol" Multiplicity="1">
-            <OnDelete Action="Cascade" />
-          </End>
-          <End Role="ProtocolHistory" Type="Priem2012Model.Store.ProtocolHistory" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Protocol">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="ProtocolHistory">
-              <PropertyRef Name="ProtocolId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_SP_LicenseProgram_StudyLevel">
           <End Role="StudyLevel" Type="Priem2012Model.Store.StudyLevel" Multiplicity="1" />
           <End Role="SP_LicenseProgram" Type="Priem2012Model.Store.SP_LicenseProgram" Multiplicity="*" />
@@ -5790,11 +5575,13 @@
         <Function Name="OlympSubject_Insert" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="ed">
           <Parameter Name="OlympSubjName" Type="nvarchar" Mode="In" />
           <Parameter Name="NameDative" Type="nvarchar" Mode="In" />
+          <Parameter Name="ExamId" Type="int" Mode="In" />
           <Parameter Name="id" Type="int" Mode="InOut" />
         </Function>
         <Function Name="OlympSubject_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="ed">
           <Parameter Name="OlympSubjName" Type="nvarchar" Mode="In" />
           <Parameter Name="NameDative" Type="nvarchar" Mode="In" />
+          <Parameter Name="ExamId" Type="int" Mode="In" />
           <Parameter Name="id" Type="int" Mode="In" />
         </Function>
         <Function Name="OrderNumbers_Insert" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="ed">
@@ -6218,7 +6005,6 @@
     <edmx:ConceptualModels>
       <Schema Namespace="Priem2012Model" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
         <EntityContainer Name="PriemEntities" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="C_SettingRoles" EntityType="Priem2012Model.C_SettingRoles" />
           <EntitySet Name="Age" EntityType="Priem2012Model.Age" />
           <EntitySet Name="AttMarks" EntityType="Priem2012Model.AttMarks" />
           <EntitySet Name="AttSubject" EntityType="Priem2012Model.AttSubject" />
@@ -6230,16 +6016,13 @@
           <EntitySet Name="EgeCertificate" EntityType="Priem2012Model.EgeCertificate" />
           <EntitySet Name="EgeExamName" EntityType="Priem2012Model.EgeExamName" />
           <EntitySet Name="EgeMark" EntityType="Priem2012Model.EgeMark" />
-          <EntitySet Name="EntryHeader" EntityType="Priem2012Model.EntryHeader" />
           <EntitySet Name="FBSStatus" EntityType="Priem2012Model.FBSStatus" />
           <EntitySet Name="Language" EntityType="Priem2012Model.Language" />
           <EntitySet Name="PassportType" EntityType="Priem2012Model.PassportType" />
           <EntitySet Name="PayPeriod" EntityType="Priem2012Model.PayPeriod" />
-          <EntitySet Name="Privilege" EntityType="Priem2012Model.Privilege" />
           <EntitySet Name="Prorektor" EntityType="Priem2012Model.Prorektor" />
           <EntitySet Name="Region" EntityType="Priem2012Model.Region" />
           <EntitySet Name="SchoolType" EntityType="Priem2012Model.SchoolType" />
-          <EntitySet Name="SecondType" EntityType="Priem2012Model.SecondType" />
           <EntitySet Name="SP_Faculty" EntityType="Priem2012Model.SP_Faculty" />
           <EntitySet Name="StudyBasis" EntityType="Priem2012Model.StudyBasis" />
           <EntitySet Name="StudyForm" EntityType="Priem2012Model.StudyForm" />
@@ -6642,12 +6425,7 @@
             <End Role="ExamName" EntitySet="ExamName" />
             <End Role="Exam" EntitySet="Exam" />
           </AssociationSet>
-          <EntitySet Name="ProtocolHistory" EntityType="Priem2012Model.ProtocolHistory" />
           <EntitySet Name="ProtocolType" EntityType="Priem2012Model.ProtocolType" />
-          <AssociationSet Name="fk_Protocolhistory_EntryHeader" Association="Priem2012Model.fk_Protocolhistory_EntryHeader">
-            <End Role="EntryHeader" EntitySet="EntryHeader" />
-            <End Role="ProtocolHistory" EntitySet="ProtocolHistory" />
-          </AssociationSet>
           <FunctionImport Name="Protocol_Delete">
           <Parameter Name="id" Mode="In" Type="Guid" />
           </FunctionImport>
@@ -6804,6 +6582,7 @@
           <FunctionImport Name="OlympSubject_Insert">
             <Parameter Name="OlympSubjName" Mode="In" Type="String" />
             <Parameter Name="NameDative" Mode="In" Type="String" />
+            <Parameter Name="ExamId" Mode="In" Type="Int32" />
             <Parameter Name="id" Mode="InOut" Type="Int32" />
           </FunctionImport>
           <EntitySet Name="PersonChanges" EntityType="Priem2012Model.PersonChanges" />
@@ -6943,10 +6722,6 @@
             <End Role="Abiturient" EntitySet="Abiturient" />
             <End Role="PaidData" EntitySet="PaidData" />
           </AssociationSet>
-          <AssociationSet Name="fk_ProtocolHistory_Abiturient" Association="Priem2012Model.fk_ProtocolHistory_Abiturient">
-            <End Role="Abiturient" EntitySet="Abiturient" />
-            <End Role="ProtocolHistory" EntitySet="ProtocolHistory" />
-          </AssociationSet>
           <AssociationSet Name="fk_Protocol_ProtocolType" Association="Priem2012Model.fk_Protocol_ProtocolType">
             <End Role="ProtocolType" EntitySet="ProtocolType" />
             <End Role="Protocol" EntitySet="Protocol" />
@@ -6958,10 +6733,6 @@
           <AssociationSet Name="fk_Protocol_StudyForm" Association="Priem2012Model.fk_Protocol_StudyForm">
             <End Role="StudyForm" EntitySet="StudyForm" />
             <End Role="Protocol" EntitySet="Protocol" />
-          </AssociationSet>
-          <AssociationSet Name="fk_ProtocolHistory_Protocol" Association="Priem2012Model.fk_ProtocolHistory_Protocol">
-            <End Role="Protocol" EntitySet="Protocol" />
-            <End Role="ProtocolHistory" EntitySet="ProtocolHistory" />
           </AssociationSet>
           <FunctionImport Name="Abiturient_Insert">
             <Parameter Name="PersonId" Mode="In" Type="Guid" />
@@ -7290,9 +7061,6 @@
             <Parameter Name="id" Mode="In" Type="Guid" />
           </FunctionImport>
           <EntitySet Name="CompetitiveGroup" EntityType="Priem2012Model.CompetitiveGroup" />
-          <EntitySet Name="qCompetitiveGroup" EntityType="Priem2012Model.qCompetitiveGroup" />
-          <EntitySet Name="qEntryToCompetitiveGroup" EntityType="Priem2012Model.qEntryToCompetitiveGroup" />
-          <EntitySet Name="CampaignDates" EntityType="Priem2012Model.CampaignDates" />
           <EntitySet Name="Person" EntityType="Priem2012Model.Person" />
           <EntitySet Name="Person_AdditionalInfo" EntityType="Priem2012Model.Person_AdditionalInfo" />
           <EntitySet Name="Person_Contacts" EntityType="Priem2012Model.Person_Contacts" />
@@ -7368,7 +7136,6 @@
             <End Role="OlympName" EntitySet="OlympName" />
             <End Role="OlympBook" EntitySet="OlympBook" />
           </AssociationSet>
-          <EntitySet Name="hlpLicenseProgramKCP" EntityType="Priem2012Model.hlpLicenseProgramKCP" />
           <EntitySet Name="extCompetitiveGroup" EntityType="Priem2012Model.extCompetitiveGroup" />
           <EntitySet Name="BenefitDocumentType" EntityType="Priem2012Model.BenefitDocumentType" />
           <EntitySet Name="PersonBenefitDocument" EntityType="Priem2012Model.PersonBenefitDocument" />
@@ -7404,7 +7171,6 @@
             <Parameter Name="DisabilityTypeId" Mode="In" Type="Int32" />
             <Parameter Name="Id" Mode="In" Type="Guid" />
           </FunctionImport>
-          <EntitySet Name="hlpStatistics" EntityType="Priem2012Model.hlpStatistics" />
           <EntitySet Name="extPersonAll" EntityType="Priem2012Model.extPersonAll" />
           <EntitySet Name="StudyLevelGroup" EntityType="Priem2012Model.StudyLevelGroup" />
           <EntitySet Name="OlympiadCheckedByRectorat" EntityType="Priem2012Model.OlympiadCheckedByRectorat" />
@@ -7611,6 +7377,7 @@
           <FunctionImport Name="OlympSubject_Update">
             <Parameter Name="OlympSubjName" Mode="In" Type="String" />
             <Parameter Name="NameDative" Mode="In" Type="String" />
+            <Parameter Name="ExamId" Mode="In" Type="Int32" />
             <Parameter Name="id" Mode="In" Type="Int32" />
           </FunctionImport>
           <EntitySet Name="ApplicationDetails" EntityType="Priem2012Model.ApplicationDetails" />
@@ -7783,18 +7550,10 @@
             <Parameter Name="AbiturientId" Mode="In" Type="Guid" />
             <Parameter Name="SortNum" Mode="In" Type="Int32" />
           </FunctionImport>
+          <EntitySet Name="EntryHeader" EntityType="Priem2012Model.EntryHeader" />
+          <EntitySet Name="hlpStatistics" EntityType="Priem2012Model.hlpStatistics" />
+          <EntitySet Name="qEntryToCompetitiveGroup" EntityType="Priem2012Model.qEntryToCompetitiveGroup" />
           </EntityContainer>
-        <EntityType Name="C_SettingRoles">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" />
-          <Property Name="FacultyId" Type="Int32" />
-          <Property Name="RoleName" Type="String" MaxLength="50" Unicode="true" FixedLength="false" />
-          <Property Name="IsFacultyRole" Type="Boolean" Nullable="false" />
-          <Property Name="PrintName" Type="String" Nullable="false" MaxLength="500" Unicode="true" FixedLength="false" />
-          <Property Type="Boolean" Name="Show" Nullable="false" />
-        </EntityType>
         <EntityType Name="Age">
           <Key>
             <PropertyRef Name="Id" />
@@ -7921,16 +7680,6 @@
           <NavigationProperty Name="EgeExamName" Relationship="Priem2012Model.fk_ed_EgeMark_EgeExamName" FromRole="EgeMark" ToRole="EgeExamName" />
           <Property Type="Boolean" Name="IsCurrent" Nullable="false" />
         </EntityType>
-        <EntityType Name="EntryHeader">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" />
-          <Property Name="Name" Type="String" MaxLength="500" Unicode="true" FixedLength="false" />
-          <Property Name="Acronym" Type="String" MaxLength="50" Unicode="true" FixedLength="false" />
-          <Property Name="SortNum" Type="Int32" />
-          <NavigationProperty Name="ProtocolHistory" Relationship="Priem2012Model.fk_Protocolhistory_EntryHeader" FromRole="EntryHeader" ToRole="ProtocolHistory" />
-        </EntityType>
         <EntityType Name="FBSStatus">
           <Key>
             <PropertyRef Name="Id" />
@@ -7967,16 +7716,6 @@
           <Property Name="NamePad" Type="String" MaxLength="50" Unicode="true" FixedLength="false" />
           <NavigationProperty Name="PaidData" Relationship="Priem2012Model.FK_PaidData_PayPeriod" FromRole="PayPeriod" ToRole="PaidData" />
         </EntityType>
-        <EntityType Name="Privilege">
-          <Key>
-            <PropertyRef Name="Number" />
-            <PropertyRef Name="Maska" />
-            <PropertyRef Name="Name" />
-          </Key>
-          <Property Name="Number" Type="Byte" Nullable="false" />
-          <Property Name="Maska" Type="Int32" Nullable="false" />
-          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" Unicode="true" FixedLength="false" />
-        </EntityType>
         <EntityType Name="Prorektor">
           <Key>
             <PropertyRef Name="Id" />
@@ -8008,14 +7747,6 @@
           <Property Name="Name" Type="String" Nullable="false" MaxLength="50" Unicode="true" FixedLength="false" />
           <Property Name="FullName" Type="String" MaxLength="150" Unicode="true" FixedLength="false" />
           <NavigationProperty Name="Person_EducationInfo" Relationship="Priem2012Model.FK_Person_EducationInfo_SchoolType" FromRole="SchoolType" ToRole="Person_EducationInfo" />
-        </EntityType>
-        <EntityType Name="SecondType">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="String" MaxLength="50" Unicode="true" FixedLength="false" />
-          <Property Name="Acronym" Type="String" MaxLength="50" Unicode="true" FixedLength="false" />
         </EntityType>
         <EntityType Name="SP_Faculty">
           <Key>
@@ -8172,6 +7903,7 @@
           <NavigationProperty Name="Olympiads" Relationship="Priem2012Model.fk_Olympiads_OlympSubject" FromRole="OlympSubject" ToRole="Olympiads" />
           <Property Type="Boolean" Name="IsOpen" Nullable="false" />
           <Property Type="String" Name="Holder" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Type="Int32" Name="ExamId" />
         </EntityType>
         <EntityType Name="OlympValue">
           <Key>
@@ -8388,23 +8120,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityType Name="ProtocolHistory">
-          <Key>
-            <PropertyRef Name="Id" />
-            <PropertyRef Name="AbiturientId" />
-            <PropertyRef Name="ProtocolId" />
-            <PropertyRef Name="Excluded" />
-          </Key>
-          <Property Type="Guid" Name="Id" Nullable="false" />
-          <Property Type="Guid" Name="AbiturientId" Nullable="false" />
-          <Property Type="Guid" Name="ProtocolId" Nullable="false" />
-          <Property Type="Boolean" Name="Excluded" Nullable="false" />
-          <Property Type="Guid" Name="ExcludeProtocolId" />
-          <Property Type="Int32" Name="EntryHeaderId" />
-          <NavigationProperty Name="EntryHeader" Relationship="Priem2012Model.fk_Protocolhistory_EntryHeader" FromRole="ProtocolHistory" ToRole="EntryHeader" />
-          <NavigationProperty Name="Abiturient" Relationship="Priem2012Model.fk_ProtocolHistory_Abiturient" FromRole="ProtocolHistory" ToRole="Abiturient" />
-          <NavigationProperty Name="Protocol" Relationship="Priem2012Model.fk_ProtocolHistory_Protocol" FromRole="ProtocolHistory" ToRole="Protocol" />
-        </EntityType>
         <EntityType Name="ProtocolType">
           <Key>
             <PropertyRef Name="Id" />
@@ -8413,18 +8128,6 @@
           <Property Type="String" Name="Name" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="Protocol" Relationship="Priem2012Model.fk_Protocol_ProtocolType" FromRole="ProtocolType" ToRole="Protocol" />
         </EntityType>
-        <Association Name="fk_Protocolhistory_EntryHeader">
-          <End Type="Priem2012Model.EntryHeader" Role="EntryHeader" Multiplicity="0..1" />
-          <End Type="Priem2012Model.ProtocolHistory" Role="ProtocolHistory" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="EntryHeader">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="ProtocolHistory">
-              <PropertyRef Name="EntryHeaderId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <EntityType Name="extEgeMark">
           <Key>
             <PropertyRef Name="Id" />
@@ -8804,7 +8507,6 @@
           <NavigationProperty Name="Mark" Relationship="Priem2012Model.fk_Mark_Abiturient" FromRole="Abiturient" ToRole="Mark" />
           <NavigationProperty Name="Olympiads" Relationship="Priem2012Model.fk_Olympiads_Person" FromRole="Abiturient" ToRole="Olympiads" />
           <NavigationProperty Name="PaidData" Relationship="Priem2012Model.FK_PaidData_Abiturient" FromRole="Abiturient" ToRole="PaidData" />
-          <NavigationProperty Name="ProtocolHistory" Relationship="Priem2012Model.fk_ProtocolHistory_Abiturient" FromRole="Abiturient" ToRole="ProtocolHistory" />
           <NavigationProperty Name="DocInventory" Relationship="Priem2012Model.fk_DocInventory_Abiturient" FromRole="Abiturient" ToRole="DocInventory" />
           <NavigationProperty Name="Competition1" Relationship="Priem2012Model.FK_Abiturient_Competition1" FromRole="Abiturient" ToRole="Competition" />
           <NavigationProperty Name="Language" Relationship="Priem2012Model.FK_Abiturient_Language" FromRole="Abiturient" ToRole="Language" />
@@ -8842,7 +8544,6 @@
           <NavigationProperty Name="ProtocolType" Relationship="Priem2012Model.fk_Protocol_ProtocolType" FromRole="Protocol" ToRole="ProtocolType" />
           <NavigationProperty Name="StudyBasis" Relationship="Priem2012Model.fk_Protocol_StudyBasis" FromRole="Protocol" ToRole="StudyBasis" />
           <NavigationProperty Name="StudyForm" Relationship="Priem2012Model.fk_Protocol_StudyForm" FromRole="Protocol" ToRole="StudyForm" />
-          <NavigationProperty Name="ProtocolHistory" Relationship="Priem2012Model.fk_ProtocolHistory_Protocol" FromRole="Protocol" ToRole="ProtocolHistory" />
           <Property Type="Boolean" Name="IsParallel" />
           <Property Type="Boolean" Name="IsReduced" />
         </EntityType>
@@ -8885,6 +8586,7 @@
           <Property Type="Boolean" Name="IsReduced" Nullable="false" />
           <Property Type="Boolean" Name="IsParallel" Nullable="false" />
           <Property Type="Guid" Name="ExamInEntryToCompetitiveGroupId" />
+          <Property Type="Byte" Name="OrderNumber" />
         </EntityType>
         <EntityType Name="qAbitAll">
           <Key>
@@ -9077,18 +8779,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="fk_ProtocolHistory_Abiturient">
-          <End Type="Priem2012Model.Abiturient" Role="Abiturient" Multiplicity="1" />
-          <End Type="Priem2012Model.ProtocolHistory" Role="ProtocolHistory" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Abiturient">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="ProtocolHistory">
-              <PropertyRef Name="AbiturientId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="fk_Protocol_ProtocolType">
           <End Type="Priem2012Model.ProtocolType" Role="ProtocolType" Multiplicity="0..1" />
           <End Type="Priem2012Model.Protocol" Role="Protocol" Multiplicity="*" />
@@ -9122,18 +8812,6 @@
             </Principal>
             <Dependent Role="Protocol">
               <PropertyRef Name="StudyFormId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="fk_ProtocolHistory_Protocol">
-          <End Type="Priem2012Model.Protocol" Role="Protocol" Multiplicity="1" />
-          <End Type="Priem2012Model.ProtocolHistory" Role="ProtocolHistory" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Protocol">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="ProtocolHistory">
-              <PropertyRef Name="ProtocolId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -9409,6 +9087,7 @@
           <Property Type="Int32" Name="TotalCount" />
           <Property Type="Int32" Name="StudyFormId" Nullable="false" />
           <Property Type="Int32" Name="StudyBasisId" Nullable="false" />
+          <Property Type="Int32" Name="TotalSumFiveGrade" />
         </EntityType>
         <EntityType Name="extEntryView">
           <Key>
@@ -9649,50 +9328,6 @@
           <Property Type="Boolean" Name="IsReduced" Nullable="false" />
           <Property Type="Boolean" Name="IsSecond" Nullable="false" />
           <Property Type="Boolean" Name="IsParallel" Nullable="false" />
-        </EntityType>
-        <EntityType Name="qCompetitiveGroup">
-          <Key>
-            <PropertyRef Name="Id" />
-            <PropertyRef Name="StudyLevelId" />
-            <PropertyRef Name="FacultyId" />
-            <PropertyRef Name="LicenseProgramId" />
-            <PropertyRef Name="ObrazProgramId" />
-          </Key>
-          <Property Type="Guid" Name="Id" Nullable="false" />
-          <Property Type="String" Name="Name" MaxLength="250" FixedLength="false" Unicode="true" />
-          <Property Type="Int32" Name="StudyLevelId" Nullable="false" />
-          <Property Type="Int32" Name="FacultyId" Nullable="false" />
-          <Property Type="String" Name="FacultyName" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Type="Int32" Name="LicenseProgramId" Nullable="false" />
-          <Property Type="String" Name="LicenseProgramCode" MaxLength="10" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="LicenseProgramName" MaxLength="1000" FixedLength="false" Unicode="true" />
-          <Property Type="Int32" Name="ObrazProgramId" Nullable="false" />
-          <Property Type="String" Name="ObrazProgramCrypt" MaxLength="82" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="ObrazProgramName" MaxLength="1000" FixedLength="false" Unicode="true" />
-          <Property Type="Guid" Name="ProfileId" />
-          <Property Type="String" Name="ProfileName" MaxLength="1000" FixedLength="false" Unicode="true" />
-        </EntityType>
-        <EntityType Name="qEntryToCompetitiveGroup">
-          <Key>
-            <PropertyRef Name="EntryId" />
-            <PropertyRef Name="CompetitiveGroupId" />
-          </Key>
-          <Property Type="Guid" Name="EntryId" Nullable="false" />
-          <Property Type="Guid" Name="CompetitiveGroupId" Nullable="false" />
-          <Property Type="String" Name="CompetitiveGroupName" MaxLength="250" FixedLength="false" Unicode="true" />
-        </EntityType>
-        <EntityType Name="CampaignDates">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Type="Guid" Name="Id" Nullable="false" />
-          <Property Type="Int32" Name="StudyLevelId" />
-          <Property Type="Int32" Name="StudyFormId" />
-          <Property Type="Int32" Name="StudyBasisId" />
-          <Property Type="Int32" Name="Stage" />
-          <Property Type="DateTime" Name="DateStart" Precision="0" />
-          <Property Type="DateTime" Name="DateEnd" Precision="0" />
-          <Property Type="DateTime" Name="DateOrder" Precision="0" />
         </EntityType>
         <EntityType Name="Person">
           <Key>
@@ -10030,31 +9665,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityType Name="hlpLicenseProgramKCP">
-          <Key>
-            <PropertyRef Name="LicenseProgramId" />
-            <PropertyRef Name="StudyLevelId" />
-            <PropertyRef Name="LevelGroupId" />
-          </Key>
-          <Property Type="Int32" Name="LicenseProgramId" Nullable="false" />
-          <Property Type="String" Name="LicenseProgramCode" MaxLength="10" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="LicenseProgramName" MaxLength="1000" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Type="Int32" Name="StudyLevelId" Nullable="false" />
-          <Property Type="Int32" Name="LevelGroupId" Nullable="false" />
-          <Property Type="String" Name="QualificationCode" MaxLength="5" FixedLength="false" Unicode="true" />
-          <Property Type="Int32" Name="KC_OB" />
-          <Property Type="Int32" Name="KC_OP" />
-          <Property Type="Int32" Name="KC_ZB" />
-          <Property Type="Int32" Name="KC_OZB" />
-          <Property Type="Int32" Name="KC_OZP" />
-          <Property Type="Int32" Name="KC_ZP" />
-          <Property Type="Int32" Name="KC_O_CEL" />
-          <Property Type="Int32" Name="KC_OZ_CEL" />
-          <Property Type="Int32" Name="KC_Z_CEL" />
-          <Property Type="Int32" Name="KC_O_QUOTA" />
-          <Property Type="Int32" Name="KC_OZ_QUOTA" />
-          <Property Type="Int32" Name="KC_Z_QUOTA" />
-        </EntityType>
         <EntityType Name="extCompetitiveGroup">
           <Key>
             <PropertyRef Name="Id" />
@@ -10143,37 +9753,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityType Name="hlpStatistics">
-          <Key>
-            <PropertyRef Name="EntryId" />
-            <PropertyRef Name="StudyLevelGroupId" />
-            <PropertyRef Name="FacultyId" />
-            <PropertyRef Name="LicenseProgramId" />
-            <PropertyRef Name="ObrazProgramId" />
-            <PropertyRef Name="StudyFormId" />
-            <PropertyRef Name="StudyFormName" />
-            <PropertyRef Name="StudyBasisId" />
-            <PropertyRef Name="StudyBasisName" />
-          </Key>
-          <Property Type="Guid" Name="EntryId" Nullable="false" />
-          <Property Type="Int32" Name="StudyLevelGroupId" Nullable="false" />
-          <Property Type="Int32" Name="FacultyId" Nullable="false" />
-          <Property Type="Int32" Name="LicenseProgramId" Nullable="false" />
-          <Property Type="String" Name="LicenseProgramCode" MaxLength="10" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="LicenseProgramName" MaxLength="1000" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Type="Int32" Name="ObrazProgramId" Nullable="false" />
-          <Property Type="String" Name="ObrazProgramCrypt" MaxLength="66" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="ObrazProgramName" MaxLength="1000" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Type="Guid" Name="ProfileId" />
-          <Property Type="String" Name="ProfileName" MaxLength="1000" FixedLength="false" Unicode="true" />
-          <Property Type="Int32" Name="StudyFormId" Nullable="false" />
-          <Property Type="String" Name="StudyFormName" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Type="Int32" Name="StudyBasisId" Nullable="false" />
-          <Property Type="String" Name="StudyBasisName" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Type="Int32" Name="KCP" />
-          <Property Type="DateTime" Name="Date" Precision="0" />
-          <Property Type="Int32" Name="CNT" />
-        </EntityType>
         <EntityType Name="extPersonAll">
           <Key>
             <PropertyRef Name="Id" />
@@ -10249,7 +9828,7 @@
           <Property Type="String" Name="ExtraInfo" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Type="String" Name="ScienceWork" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Type="String" Name="PersonNum" MaxLength="7" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="FIO" MaxLength="152" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="FIO" MaxLength="152" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Type="String" Name="PassportData" MaxLength="532" FixedLength="false" Unicode="true" />
           <Property Type="String" Name="EducDocument" MaxLength="44" FixedLength="false" Unicode="true" />
           <Property Type="String" Name="HostelFacultyAcr" MaxLength="50" FixedLength="false" Unicode="true" />
@@ -10342,6 +9921,7 @@
           <Property Type="String" Name="EntranceTestType" Nullable="false" MaxLength="74" FixedLength="false" Unicode="false" />
           <Property Type="Guid" Name="OlympiadId" />
           <Property Type="Guid" Name="EgeCertificateId" />
+          <Property Type="Byte" Name="OrderNumber" />
         </EntityType>
         <EntityType Name="hlpAbiturientProf">
           <Key>
@@ -10487,7 +10067,7 @@
           <Property Type="String" Name="Code" MaxLength="20" FixedLength="false" Unicode="true" />
           <Property Type="String" Name="City" MaxLength="1000" FixedLength="false" Unicode="true" />
           <Property Type="String" Name="Street" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="House" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="House" MaxLength="20" FixedLength="false" Unicode="true" />
           <Property Type="String" Name="Flat" MaxLength="10" FixedLength="false" Unicode="true" />
           <Property Type="String" Name="CodeReal" MaxLength="20" FixedLength="false" Unicode="true" />
           <Property Type="String" Name="Korpus" MaxLength="10" FixedLength="false" Unicode="true" />
@@ -10534,7 +10114,7 @@
           <Property Type="String" Name="ExtraInfo" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Type="String" Name="ScienceWork" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Type="String" Name="PersonNum" MaxLength="7" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="FIO" MaxLength="152" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="FIO" MaxLength="152" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Type="String" Name="PassportData" MaxLength="532" FixedLength="false" Unicode="true" />
           <Property Type="String" Name="EducDocument" MaxLength="44" FixedLength="false" Unicode="true" />
           <Property Type="String" Name="HostelFacultyAcr" MaxLength="50" FixedLength="false" Unicode="true" />
@@ -11386,20 +10966,63 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="EntryHeader">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Type="Int32" Name="Id" Nullable="false" />
+          <Property Type="String" Name="Name" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Acronym" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="Int32" Name="SortNum" />
+        </EntityType>
+        <EntityType Name="hlpStatistics">
+          <Key>
+            <PropertyRef Name="EntryId" />
+            <PropertyRef Name="StudyLevelGroupId" />
+            <PropertyRef Name="FacultyId" />
+            <PropertyRef Name="LicenseProgramId" />
+            <PropertyRef Name="LicenseProgramName" />
+            <PropertyRef Name="ObrazProgramId" />
+            <PropertyRef Name="ObrazProgramName" />
+            <PropertyRef Name="StudyFormId" />
+            <PropertyRef Name="StudyFormName" />
+            <PropertyRef Name="StudyBasisId" />
+            <PropertyRef Name="StudyBasisName" />
+          </Key>
+          <Property Type="Guid" Name="EntryId" Nullable="false" />
+          <Property Type="Int32" Name="StudyLevelGroupId" Nullable="false" />
+          <Property Type="Int32" Name="FacultyId" Nullable="false" />
+          <Property Type="Int32" Name="LicenseProgramId" Nullable="false" />
+          <Property Type="String" Name="LicenseProgramCode" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="LicenseProgramName" Nullable="false" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <Property Type="Int32" Name="ObrazProgramId" Nullable="false" />
+          <Property Type="String" Name="ObrazProgramCrypt" MaxLength="66" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="ObrazProgramName" Nullable="false" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <Property Type="Guid" Name="ProfileId" />
+          <Property Type="String" Name="ProfileName" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <Property Type="Int32" Name="StudyFormId" Nullable="false" />
+          <Property Type="String" Name="StudyFormName" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="Int32" Name="StudyBasisId" Nullable="false" />
+          <Property Type="String" Name="StudyBasisName" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="Int32" Name="KCP" />
+          <Property Type="DateTime" Name="Date" Precision="0" />
+          <Property Type="Int32" Name="CNT" />
+        </EntityType>
+        <EntityType Name="qEntryToCompetitiveGroup">
+          <Key>
+            <PropertyRef Name="EntryId" />
+            <PropertyRef Name="CompetitiveGroupId" />
+          </Key>
+          <Property Type="Guid" Name="EntryId" Nullable="false" />
+          <Property Type="Guid" Name="CompetitiveGroupId" Nullable="false" />
+          <Property Type="String" Name="CompetitiveGroupName" MaxLength="250" FixedLength="false" Unicode="true" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="Priem2012ModelStoreContainer" CdmEntityContainer="PriemEntities">
-          <EntitySetMapping Name="C_SettingRoles"><EntityTypeMapping TypeName="Priem2012Model.C_SettingRoles"><MappingFragment StoreEntitySet="_SettingRoles">
-            <ScalarProperty Name="Show" ColumnName="Show" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-            <ScalarProperty Name="FacultyId" ColumnName="FacultyId" />
-            <ScalarProperty Name="RoleName" ColumnName="RoleName" />
-            <ScalarProperty Name="IsFacultyRole" ColumnName="IsFacultyRole" />
-            <ScalarProperty Name="PrintName" ColumnName="PrintName" />
-          </MappingFragment></EntityTypeMapping></EntitySetMapping>
           <EntitySetMapping Name="Age"><EntityTypeMapping TypeName="Priem2012Model.Age"><MappingFragment StoreEntitySet="Age">
             <ScalarProperty Name="Id" ColumnName="Id" />
             <ScalarProperty Name="MinAge" ColumnName="MinAge" />
@@ -11473,12 +11096,6 @@
             <ScalarProperty Name="EgeCertificateId" ColumnName="EgeCertificateId" />
             <ScalarProperty Name="IsAppeal" ColumnName="IsAppeal" />
           </MappingFragment></EntityTypeMapping></EntitySetMapping>
-          <EntitySetMapping Name="EntryHeader"><EntityTypeMapping TypeName="Priem2012Model.EntryHeader"><MappingFragment StoreEntitySet="EntryHeader">
-            <ScalarProperty Name="Id" ColumnName="Id" />
-            <ScalarProperty Name="Name" ColumnName="Name" />
-            <ScalarProperty Name="Acronym" ColumnName="Acronym" />
-            <ScalarProperty Name="SortNum" ColumnName="SortNum" />
-          </MappingFragment></EntityTypeMapping></EntitySetMapping>
           <EntitySetMapping Name="FBSStatus"><EntityTypeMapping TypeName="Priem2012Model.FBSStatus"><MappingFragment StoreEntitySet="FBSStatus">
             <ScalarProperty Name="Id" ColumnName="Id" />
             <ScalarProperty Name="Name" ColumnName="Name" />
@@ -11496,11 +11113,6 @@
             <ScalarProperty Name="Id" ColumnName="Id" />
             <ScalarProperty Name="Name" ColumnName="Name" />
             <ScalarProperty Name="NamePad" ColumnName="NamePad" />
-          </MappingFragment></EntityTypeMapping></EntitySetMapping>
-          <EntitySetMapping Name="Privilege"><EntityTypeMapping TypeName="Priem2012Model.Privilege"><MappingFragment StoreEntitySet="Privilege">
-            <ScalarProperty Name="Number" ColumnName="Number" />
-            <ScalarProperty Name="Maska" ColumnName="Maska" />
-            <ScalarProperty Name="Name" ColumnName="Name" />
           </MappingFragment></EntityTypeMapping></EntitySetMapping>
           <EntitySetMapping Name="Prorektor"><EntityTypeMapping TypeName="Priem2012Model.Prorektor"><MappingFragment StoreEntitySet="Prorektor">
             <ScalarProperty Name="Id" ColumnName="Id" />
@@ -11520,11 +11132,6 @@
             <ScalarProperty Name="Id" ColumnName="Id" />
             <ScalarProperty Name="Name" ColumnName="Name" />
             <ScalarProperty Name="FullName" ColumnName="FullName" />
-          </MappingFragment></EntityTypeMapping></EntitySetMapping>
-          <EntitySetMapping Name="SecondType"><EntityTypeMapping TypeName="Priem2012Model.SecondType"><MappingFragment StoreEntitySet="SecondType">
-            <ScalarProperty Name="Id" ColumnName="Id" />
-            <ScalarProperty Name="Name" ColumnName="Name" />
-            <ScalarProperty Name="Acronym" ColumnName="Acronym" />
           </MappingFragment></EntityTypeMapping></EntitySetMapping>
           <EntitySetMapping Name="SP_Faculty"><EntityTypeMapping TypeName="Priem2012Model.SP_Faculty"><MappingFragment StoreEntitySet="SP_Faculty">
             <ScalarProperty Name="VinName" ColumnName="VinName" />
@@ -11606,6 +11213,7 @@
           <EntitySetMapping Name="OlympSubject">
             <EntityTypeMapping TypeName="Priem2012Model.OlympSubject">
               <MappingFragment StoreEntitySet="OlympSubject">
+                <ScalarProperty Name="ExamId" ColumnName="ExamId" />
                 <ScalarProperty Name="Holder" ColumnName="Holder" />
                 <ScalarProperty Name="IsOpen" ColumnName="IsOpen" />
                 <ScalarProperty Name="NameDative" ColumnName="NameDative" />
@@ -11750,18 +11358,6 @@
                 <ScalarProperty Name="LevelGroupId" ColumnName="LevelGroupId" />
                 <ScalarProperty Name="Acronym" ColumnName="Acronym" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="ProtocolHistory">
-            <EntityTypeMapping TypeName="Priem2012Model.ProtocolHistory">
-              <MappingFragment StoreEntitySet="ProtocolHistory">
-                <ScalarProperty Name="EntryHeaderId" ColumnName="EntryHeaderId" />
-                <ScalarProperty Name="ExcludeProtocolId" ColumnName="ExcludeProtocolId" />
-                <ScalarProperty Name="Excluded" ColumnName="Excluded" />
-                <ScalarProperty Name="ProtocolId" ColumnName="ProtocolId" />
-                <ScalarProperty Name="AbiturientId" ColumnName="AbiturientId" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -12091,6 +11687,7 @@
           <EntitySetMapping Name="extExamInEntry">
             <EntityTypeMapping TypeName="Priem2012Model.extExamInEntry">
               <MappingFragment StoreEntitySet="extExamInEntry">
+                <ScalarProperty Name="OrderNumber" ColumnName="OrderNumber" />
                 <ScalarProperty Name="ExamInEntryToCompetitiveGroupId" ColumnName="ExamInEntryToCompetitiveGroupId" />
                 <ScalarProperty Name="IsParallel" ColumnName="IsParallel" />
                 <ScalarProperty Name="IsReduced" ColumnName="IsReduced" />
@@ -12380,6 +11977,7 @@
           <EntitySetMapping Name="extAbitMarksSum">
             <EntityTypeMapping TypeName="Priem2012Model.extAbitMarksSum">
               <MappingFragment StoreEntitySet="extAbitMarksSum">
+                <ScalarProperty Name="TotalSumFiveGrade" ColumnName="TotalSumFiveGrade" />
                 <ScalarProperty Name="StudyBasisId" ColumnName="StudyBasisId" />
                 <ScalarProperty Name="StudyFormId" ColumnName="StudyFormId" />
                 <ScalarProperty Name="TotalCount" ColumnName="TotalCount" />
@@ -12608,48 +12206,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="qCompetitiveGroup">
-            <EntityTypeMapping TypeName="Priem2012Model.qCompetitiveGroup">
-              <MappingFragment StoreEntitySet="qCompetitiveGroup">
-                <ScalarProperty Name="ProfileName" ColumnName="ProfileName" />
-                <ScalarProperty Name="ProfileId" ColumnName="ProfileId" />
-                <ScalarProperty Name="ObrazProgramName" ColumnName="ObrazProgramName" />
-                <ScalarProperty Name="ObrazProgramCrypt" ColumnName="ObrazProgramCrypt" />
-                <ScalarProperty Name="ObrazProgramId" ColumnName="ObrazProgramId" />
-                <ScalarProperty Name="LicenseProgramName" ColumnName="LicenseProgramName" />
-                <ScalarProperty Name="LicenseProgramCode" ColumnName="LicenseProgramCode" />
-                <ScalarProperty Name="LicenseProgramId" ColumnName="LicenseProgramId" />
-                <ScalarProperty Name="FacultyName" ColumnName="FacultyName" />
-                <ScalarProperty Name="FacultyId" ColumnName="FacultyId" />
-                <ScalarProperty Name="StudyLevelId" ColumnName="StudyLevelId" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="qEntryToCompetitiveGroup">
-            <EntityTypeMapping TypeName="Priem2012Model.qEntryToCompetitiveGroup">
-              <MappingFragment StoreEntitySet="qEntryToCompetitiveGroup">
-                <ScalarProperty Name="CompetitiveGroupName" ColumnName="CompetitiveGroupName" />
-                <ScalarProperty Name="CompetitiveGroupId" ColumnName="CompetitiveGroupId" />
-                <ScalarProperty Name="EntryId" ColumnName="EntryId" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="CampaignDates">
-            <EntityTypeMapping TypeName="Priem2012Model.CampaignDates">
-              <MappingFragment StoreEntitySet="CampaignDates">
-                <ScalarProperty Name="DateOrder" ColumnName="DateOrder" />
-                <ScalarProperty Name="DateEnd" ColumnName="DateEnd" />
-                <ScalarProperty Name="DateStart" ColumnName="DateStart" />
-                <ScalarProperty Name="Stage" ColumnName="Stage" />
-                <ScalarProperty Name="StudyBasisId" ColumnName="StudyBasisId" />
-                <ScalarProperty Name="StudyFormId" ColumnName="StudyFormId" />
-                <ScalarProperty Name="StudyLevelId" ColumnName="StudyLevelId" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="Person">
             <EntityTypeMapping TypeName="Priem2012Model.Person">
               <MappingFragment StoreEntitySet="Person">
@@ -12766,30 +12322,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="hlpLicenseProgramKCP">
-            <EntityTypeMapping TypeName="Priem2012Model.hlpLicenseProgramKCP">
-              <MappingFragment StoreEntitySet="hlpLicenseProgramKCP">
-                <ScalarProperty Name="KC_Z_QUOTA" ColumnName="KC_Z_QUOTA" />
-                <ScalarProperty Name="KC_OZ_QUOTA" ColumnName="KC_OZ_QUOTA" />
-                <ScalarProperty Name="KC_O_QUOTA" ColumnName="KC_O_QUOTA" />
-                <ScalarProperty Name="KC_Z_CEL" ColumnName="KC_Z_CEL" />
-                <ScalarProperty Name="KC_OZ_CEL" ColumnName="KC_OZ_CEL" />
-                <ScalarProperty Name="KC_O_CEL" ColumnName="KC_O_CEL" />
-                <ScalarProperty Name="KC_ZP" ColumnName="KC_ZP" />
-                <ScalarProperty Name="KC_OZP" ColumnName="KC_OZP" />
-                <ScalarProperty Name="KC_OZB" ColumnName="KC_OZB" />
-                <ScalarProperty Name="KC_ZB" ColumnName="KC_ZB" />
-                <ScalarProperty Name="KC_OP" ColumnName="KC_OP" />
-                <ScalarProperty Name="KC_OB" ColumnName="KC_OB" />
-                <ScalarProperty Name="QualificationCode" ColumnName="QualificationCode" />
-                <ScalarProperty Name="LevelGroupId" ColumnName="LevelGroupId" />
-                <ScalarProperty Name="StudyLevelId" ColumnName="StudyLevelId" />
-                <ScalarProperty Name="LicenseProgramName" ColumnName="LicenseProgramName" />
-                <ScalarProperty Name="LicenseProgramCode" ColumnName="LicenseProgramCode" />
-                <ScalarProperty Name="LicenseProgramId" ColumnName="LicenseProgramId" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="extCompetitiveGroup">
             <EntityTypeMapping TypeName="Priem2012Model.extCompetitiveGroup">
               <MappingFragment StoreEntitySet="extCompetitiveGroup">
@@ -12850,30 +12382,6 @@
           <FunctionImportMapping FunctionImportName="PersonBenefitDocument_delete" FunctionName="Priem2012Model.Store.PersonBenefitDocument_delete" />
           <FunctionImportMapping FunctionImportName="PersonBenefitDocument_insert" FunctionName="Priem2012Model.Store.PersonBenefitDocument_insert" />
           <FunctionImportMapping FunctionImportName="PersonBenefitDocument_update" FunctionName="Priem2012Model.Store.PersonBenefitDocument_update" />
-          <EntitySetMapping Name="hlpStatistics">
-            <EntityTypeMapping TypeName="Priem2012Model.hlpStatistics">
-              <MappingFragment StoreEntitySet="hlpStatistics">
-                <ScalarProperty Name="CNT" ColumnName="CNT" />
-                <ScalarProperty Name="Date" ColumnName="Date" />
-                <ScalarProperty Name="KCP" ColumnName="KCP" />
-                <ScalarProperty Name="StudyBasisName" ColumnName="StudyBasisName" />
-                <ScalarProperty Name="StudyBasisId" ColumnName="StudyBasisId" />
-                <ScalarProperty Name="StudyFormName" ColumnName="StudyFormName" />
-                <ScalarProperty Name="StudyFormId" ColumnName="StudyFormId" />
-                <ScalarProperty Name="ProfileName" ColumnName="ProfileName" />
-                <ScalarProperty Name="ProfileId" ColumnName="ProfileId" />
-                <ScalarProperty Name="ObrazProgramName" ColumnName="ObrazProgramName" />
-                <ScalarProperty Name="ObrazProgramCrypt" ColumnName="ObrazProgramCrypt" />
-                <ScalarProperty Name="ObrazProgramId" ColumnName="ObrazProgramId" />
-                <ScalarProperty Name="LicenseProgramName" ColumnName="LicenseProgramName" />
-                <ScalarProperty Name="LicenseProgramCode" ColumnName="LicenseProgramCode" />
-                <ScalarProperty Name="LicenseProgramId" ColumnName="LicenseProgramId" />
-                <ScalarProperty Name="FacultyId" ColumnName="FacultyId" />
-                <ScalarProperty Name="StudyLevelGroupId" ColumnName="StudyLevelGroupId" />
-                <ScalarProperty Name="EntryId" ColumnName="EntryId" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="extPersonAll">
             <EntityTypeMapping TypeName="Priem2012Model.extPersonAll">
               <MappingFragment StoreEntitySet="extPersonAll">
@@ -12998,6 +12506,7 @@
           <EntitySetMapping Name="qMark">
             <EntityTypeMapping TypeName="Priem2012Model.qMark">
               <MappingFragment StoreEntitySet="qMark">
+                <ScalarProperty Name="OrderNumber" ColumnName="OrderNumber" />
                 <ScalarProperty Name="EgeCertificateId" ColumnName="EgeCertificateId" />
                 <ScalarProperty Name="OlympiadId" ColumnName="OlympiadId" />
                 <ScalarProperty Name="EntranceTestType" ColumnName="EntranceTestType" />
@@ -13650,6 +13159,49 @@
           <FunctionImportMapping FunctionImportName="ExamsVed_DeleteAllExaminerAccountInVed" FunctionName="Priem2012Model.Store.ExamsVed_DeleteAllExaminerAccountInVed" />
           <FunctionImportMapping FunctionImportName="FirstWave_INSERTCRIMEA" FunctionName="Priem2012Model.Store.FirstWave_INSERTCRIMEA" />
           <FunctionImportMapping FunctionImportName="FirstWave_INSERTQUOTA" FunctionName="Priem2012Model.Store.FirstWave_INSERTQUOTA" />
+          <EntitySetMapping Name="EntryHeader">
+            <EntityTypeMapping TypeName="Priem2012Model.EntryHeader">
+              <MappingFragment StoreEntitySet="EntryHeader">
+                <ScalarProperty Name="SortNum" ColumnName="SortNum" />
+                <ScalarProperty Name="Acronym" ColumnName="Acronym" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="hlpStatistics">
+            <EntityTypeMapping TypeName="Priem2012Model.hlpStatistics">
+              <MappingFragment StoreEntitySet="hlpStatistics">
+                <ScalarProperty Name="CNT" ColumnName="CNT" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="KCP" ColumnName="KCP" />
+                <ScalarProperty Name="StudyBasisName" ColumnName="StudyBasisName" />
+                <ScalarProperty Name="StudyBasisId" ColumnName="StudyBasisId" />
+                <ScalarProperty Name="StudyFormName" ColumnName="StudyFormName" />
+                <ScalarProperty Name="StudyFormId" ColumnName="StudyFormId" />
+                <ScalarProperty Name="ProfileName" ColumnName="ProfileName" />
+                <ScalarProperty Name="ProfileId" ColumnName="ProfileId" />
+                <ScalarProperty Name="ObrazProgramName" ColumnName="ObrazProgramName" />
+                <ScalarProperty Name="ObrazProgramCrypt" ColumnName="ObrazProgramCrypt" />
+                <ScalarProperty Name="ObrazProgramId" ColumnName="ObrazProgramId" />
+                <ScalarProperty Name="LicenseProgramName" ColumnName="LicenseProgramName" />
+                <ScalarProperty Name="LicenseProgramCode" ColumnName="LicenseProgramCode" />
+                <ScalarProperty Name="LicenseProgramId" ColumnName="LicenseProgramId" />
+                <ScalarProperty Name="FacultyId" ColumnName="FacultyId" />
+                <ScalarProperty Name="StudyLevelGroupId" ColumnName="StudyLevelGroupId" />
+                <ScalarProperty Name="EntryId" ColumnName="EntryId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="qEntryToCompetitiveGroup">
+            <EntityTypeMapping TypeName="Priem2012Model.qEntryToCompetitiveGroup">
+              <MappingFragment StoreEntitySet="qEntryToCompetitiveGroup">
+                <ScalarProperty Name="CompetitiveGroupName" ColumnName="CompetitiveGroupName" />
+                <ScalarProperty Name="CompetitiveGroupId" ColumnName="CompetitiveGroupId" />
+                <ScalarProperty Name="EntryId" ColumnName="EntryId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -13671,7 +13223,6 @@
     <!-- Diagram content (shape and connector positions) -->
     <Diagrams>
       <Diagram Name="PriemModel" ZoomLevel="51">
-        <EntityTypeShape EntityType="Priem2012Model.C_SettingRoles" Width="1.5" PointX="0.75" PointY="4.75" Height="1.9210009765624996" IsExpanded="true" />
         <EntityTypeShape EntityType="Priem2012Model.Age" Width="1.5" PointX="2.75" PointY="4.75" Height="1.4279589843749996" IsExpanded="true" />
         <EntityTypeShape EntityType="Priem2012Model.AttMarks" Width="1.5" PointX="4" PointY="41.625" Height="1.9210009765624996" IsExpanded="true" />
         <EntityTypeShape EntityType="Priem2012Model.AttSubject" Width="1.5" PointX="1.75" PointY="48" Height="1.4279589843750031" IsExpanded="true" />
@@ -13683,16 +13234,13 @@
         <EntityTypeShape EntityType="Priem2012Model.EgeCertificate" Width="1.5" PointX="11" PointY="40.875" Height="3.4001269531249996" IsExpanded="true" />
         <EntityTypeShape EntityType="Priem2012Model.EgeExamName" Width="1.5" PointX="17" PointY="14.25" Height="2.0853483072916674" IsExpanded="true" />
         <EntityTypeShape EntityType="Priem2012Model.EgeMark" Width="1.5" PointX="22.25" PointY="27.25" Height="2.24969563802083" IsExpanded="true" />
-        <EntityTypeShape EntityType="Priem2012Model.EntryHeader" Width="1.5" PointX="14.25" PointY="18" Height="1.7566536458333353" IsExpanded="true" />
         <EntityTypeShape EntityType="Priem2012Model.FBSStatus" Width="1.5" PointX="8.75" PointY="46" Height="1.427958984374996" IsExpanded="true" />
         <EntityTypeShape EntityType="Priem2012Model.Language" Width="1.5" PointX="9" PointY="15" Height="1.7566536458333317" IsExpanded="true" />
         <EntityTypeShape EntityType="Priem2012Model.PassportType" Width="1.5" PointX="1.5" PointY="37.125" Height="1.4279589843749996" IsExpanded="true" />
         <EntityTypeShape EntityType="Priem2012Model.PayPeriod" Width="1.5" PointX="17.25" PointY="35" Height="1.5923063151041674" IsExpanded="true" />
-        <EntityTypeShape EntityType="Priem2012Model.Privilege" Width="1.5" PointX="5.75" PointY="0.75" Height="1.4279589843749996" IsExpanded="true" />
         <EntityTypeShape EntityType="Priem2012Model.Prorektor" Width="1.5" PointX="6" PointY="18.625" Height="2.0853483072916674" IsExpanded="true" />
         <EntityTypeShape EntityType="Priem2012Model.Region" Width="1.5" PointX="6.5" PointY="41.75" Height="1.9210009765624996" IsExpanded="true" />
         <EntityTypeShape EntityType="Priem2012Model.SchoolType" Width="1.5" PointX="19" PointY="37.75" Height="1.5923063151041674" IsExpanded="true" />
-        <EntityTypeShape EntityType="Priem2012Model.SecondType" Width="1.5" PointX="6.75" PointY="3.75" Height="1.4279589843750031" IsExpanded="true" />
         <EntityTypeShape EntityType="Priem2012Model.SP_Faculty" Width="1.5" PointX="0.75" PointY="25.25" Height="2.414042968749996" IsExpanded="true" />
         <EntityTypeShape EntityType="Priem2012Model.StudyBasis" Width="1.5" PointX="3.75" PointY="30.25" Height="1.7566536458333388" IsExpanded="true" />
         <EntityTypeShape EntityType="Priem2012Model.StudyForm" Width="1.5" PointX="3.75" PointY="33.375" Height="2.0853483072916674" IsExpanded="true" />
@@ -13796,16 +13344,7 @@
           <ConnectorPoint PointX="2.6250025" PointY="16.457021484374998" />
           <ConnectorPoint PointX="2.25" PointY="16.457021484374998" />
         </AssociationConnector>
-        <EntityTypeShape EntityType="Priem2012Model.ProtocolHistory" Width="1.5" PointX="16.5" PointY="20.375" Height="2.4140429687500031" />
         <EntityTypeShape EntityType="Priem2012Model.ProtocolType" Width="1.5" PointX="12" PointY="13.375" Height="1.427958984374996" />
-        <AssociationConnector Association="Priem2012Model.fk_Protocolhistory_EntryHeader" >
-          <ConnectorPoint PointX="7.5" PointY="12.506653645833335" />
-          <ConnectorPoint PointX="7.875" PointY="13.024048665364557" />
-          <ConnectorPoint PointX="7.875" PointY="23.526173874999969" />
-          <ConnectorPoint PointX="7.885416666666667" PointY="23.526173874999969" />
-          <ConnectorPoint PointX="8.0520833333333339" PointY="23.526173874999969" />
-          <ConnectorPoint PointX="8.25" PointY="23.526173874999969" />
-        </AssociationConnector>
         <EntityTypeShape EntityType="Priem2012Model.extEgeMark" Width="1.5" PointX="8.75" PointY="3.75" Height="2.5783902994791674" />
         <EntityTypeShape EntityType="Priem2012Model.EgeToExam" Width="1.5" PointX="22.25" PointY="24.25" Height="1.7566536458333388" />
         <AssociationConnector Association="Priem2012Model.FK_EgeToExam_EgeExamName" >
@@ -13967,14 +13506,6 @@
           <ConnectorPoint PointX="11.020833333333334" PointY="18.936291114257816" />
           <ConnectorPoint PointX="11.25" PointY="18.936291114257816" />
         </AssociationConnector>
-        <AssociationConnector Association="Priem2012Model.fk_ProtocolHistory_Abiturient" >
-          <ConnectorPoint PointX="7.5" PointY="22.416010742187503" />
-          <ConnectorPoint PointX="7.5937500000000009" PointY="22.416010742187503" />
-          <ConnectorPoint PointX="7.760416666666667" PointY="22.416010742187503" />
-          <ConnectorPoint PointX="7.8958333333333339" PointY="22.416010742187503" />
-          <ConnectorPoint PointX="8.1458333333333339" PointY="22.416010742187503" />
-          <ConnectorPoint PointX="8.25" PointY="22.416010742187503" />
-        </AssociationConnector>
         <AssociationConnector Association="Priem2012Model.fk_Protocol_ProtocolType" >
           <ConnectorPoint PointX="5.25" PointY="36.9639794921875" />
           <ConnectorPoint PointX="5.541666666666667" PointY="36.9639794921875" />
@@ -13995,11 +13526,6 @@
           <ConnectorPoint PointX="5.541666666666667" PointY="39.423431803385419" />
           <ConnectorPoint PointX="5.708333333333333" PointY="39.423431803385419" />
           <ConnectorPoint PointX="6" PointY="39.423431803385419" />
-        </AssociationConnector>
-        <AssociationConnector Association="Priem2012Model.fk_ProtocolHistory_Protocol" >
-          <ConnectorPoint PointX="7.5" PointY="38.360931803385419" />
-          <ConnectorPoint PointX="8.625" PointY="38.360931803385419" />
-          <ConnectorPoint PointX="8.625" PointY="24.289042968750003" />
         </AssociationConnector>
         <EntityTypeShape EntityType="Priem2012Model.extOlympiadsAll" Width="1.5" PointX="23.75" PointY="0.75" Height="3.2357796223958388" />
         <EntityTypeShape EntityType="Priem2012Model.AbitDoc" Width="1.5" PointX="11.25" PointY="38" Height="1.427958984374996" />
@@ -14093,9 +13619,6 @@
         <EntityTypeShape EntityType="Priem2012Model.C_FirstWaveGreen" Width="1.5" PointX="8.75" PointY="12.75" Height="1.2636116536458317" />
         <EntityTypeShape EntityType="Priem2012Model.extEntryProtocols" Width="1.5" PointX="26.75" PointY="21.75" Height="4.2218636067708317" />
         <EntityTypeShape EntityType="Priem2012Model.CompetitiveGroup" Width="1.5" PointX="3.75" PointY="16.25" Height="1.4279589843749818" />
-        <EntityTypeShape EntityType="Priem2012Model.qCompetitiveGroup" Width="1.5" PointX="27.75" PointY="0.75" Height="3.0714322916666674" />
-        <EntityTypeShape EntityType="Priem2012Model.qEntryToCompetitiveGroup" Width="1.5" PointX="27.75" PointY="5.75" Height="1.4279589843749818" />
-        <EntityTypeShape EntityType="Priem2012Model.CampaignDates" Width="1.5" PointX="27.75" PointY="8.75" Height="2.249695638020853" />
         <EntityTypeShape EntityType="Priem2012Model.Person" Width="1.5" PointX="0.75" PointY="29.25" Height="5.0436002604166106" />
         <EntityTypeShape EntityType="Priem2012Model.Person_AdditionalInfo" Width="1.5" PointX="3" PointY="24.5" Height="3.0714322916666674" />
         <EntityTypeShape EntityType="Priem2012Model.Person_Contacts" Width="1.5" PointX="8.75" PointY="39.125" Height="4.3862109374999818" />
@@ -14243,7 +13766,6 @@
           <ConnectorPoint PointX="12.916666666666666" PointY="11.246216634114582" />
           <ConnectorPoint PointX="12.75" PointY="11.246216634114582" />
         </AssociationConnector>
-        <EntityTypeShape EntityType="Priem2012Model.hlpLicenseProgramKCP" Width="1.5" PointX="27.75" PointY="12.75" Height="3.4001269531249818" />
         <EntityTypeShape EntityType="Priem2012Model.extCompetitiveGroup" Width="1.5" PointX="26.75" PointY="27.75" Height="4.8792529296874818" />
         <EntityTypeShape EntityType="Priem2012Model.BenefitDocumentType" Width="1.5" PointX="3.75" PointY="45" Height="1.263611653645853" />
         <EntityTypeShape EntityType="Priem2012Model.PersonBenefitDocument" Width="1.5" PointX="6" PointY="32.875" Height="2.4140429687499818" />
@@ -14262,7 +13784,6 @@
           <ConnectorPoint PointX="31.350769230769231" PointY="0.375" />
           <ConnectorPoint PointX="31.75" PointY="0.77423076923076939" />
         </AssociationConnector>
-        <EntityTypeShape EntityType="Priem2012Model.hlpStatistics" Width="1.5" PointX="28.75" PointY="17.75" Height="3.8931689453124818" />
         <EntityTypeShape EntityType="Priem2012Model.extPersonAll" Width="1.5" PointX="28.75" PointY="23.75" Height="14.411398111979167" />
         <EntityTypeShape EntityType="Priem2012Model.StudyLevelGroup" Width="1.5" PointX="1.5" PointY="12.875" Height="1.4279589843749818" />
         <EntityTypeShape EntityType="Priem2012Model.OlympiadCheckedByRectorat" Width="1.5" PointX="18.75" PointY="31.875" Height="1.5923063151041106" />
@@ -14274,7 +13795,7 @@
         <EntityTypeShape EntityType="Priem2012Model.qMark" Width="1.5" PointX="29.75" PointY="0.75" />
         <EntityTypeShape EntityType="Priem2012Model.hlpAbiturientProf" Width="1.5" PointX="29.75" PointY="6.75" />
         <EntityTypeShape EntityType="Priem2012Model.hlpAbiturientProfAdd" Width="1.5" PointX="29.75" PointY="9.75" />
-        <EntityTypeShape EntityType="Priem2012Model.OrderNumbers" Width="1.5" PointX="3" PointY="1" />
+        <EntityTypeShape EntityType="Priem2012Model.OrderNumbers" Width="1.5" PointX="6.5" PointY="2.75" />
         <EntityTypeShape EntityType="Priem2012Model.qExamPackMark" Width="1.5" PointX="29.75" PointY="12.75" />
         <EntityTypeShape EntityType="Priem2012Model.extEntryView_ForDisEntered" Width="1.5" PointX="30.75" PointY="15.75" />
         <EntityTypeShape EntityType="Priem2012Model.C_FirstWave" Width="1.5" PointX="30.75" PointY="22.75" />
@@ -14331,6 +13852,9 @@
         <EntityTypeShape EntityType="Priem2012Model.ExaminerAccount" Width="1.5" PointX="7.4834869333931646" PointY="29.866944490869969" />
         <EntityTypeShape EntityType="Priem2012Model.ExaminerInExamsVed" Width="1.5" PointX="4.00805898011106" PointY="23.428414594115882" />
         <AssociationConnector Association="Priem2012Model.FK_Mark_EgeCertificate" />
+        <EntityTypeShape EntityType="Priem2012Model.EntryHeader" Width="1.5" PointX="3.5991386080156724" PointY="31.433940350745775" />
+        <EntityTypeShape EntityType="Priem2012Model.hlpStatistics" Width="1.5" PointX="8.8489326670993727" PointY="24.988508504344388" />
+        <EntityTypeShape EntityType="Priem2012Model.qEntryToCompetitiveGroup" Width="1.5" PointX="2.7219928143182734" PointY="23.85480150201116" />
         </Diagram>
     </Diagrams>
   </Designer>

@@ -746,10 +746,10 @@ namespace Priem
            MessageBox.Show("");
         }
 
-        private void smiFISEGE_Migrator_Click(object sender, EventArgs e)
-        {
-            new MigratorFISEGE().Show();
-        }
+        //private void smiFISEGE_Migrator_Click(object sender, EventArgs e)
+        //{
+        //    //new MigratorFISEGE().Show();
+        //}
 
         private void smiOlympCheckList_Click(object sender, EventArgs e)
         {

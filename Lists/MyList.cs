@@ -253,9 +253,9 @@ namespace Priem
              * надо бы вытащить для каждого Entry (cтолбца) вытащить столбец данных с Abiturient учитывая ранжирования по баллу
              */
             List<DataRow> RowList = new List<DataRow>();
-            query = @"select " + toplist + @" Abiturient.Id, PersonId, Priority, extAbitMarksSum.TotalSum, (Person.Surname+' '+Person.Name+(case when SecondName is not null then ' '+SecondName else '' end)) as FIO
+            query = @"select " + toplist + @" Abiturient.Id, PersonNum, PersonId, Priority, extAbitMarksSum.TotalSum, extPerson.FIO as FIO
             from ed.Abiturient
-            inner join ed.Person on Abiturient.PersonId = Person.Id
+            inner join ed.extPerson on Abiturient.PersonId = extPerson.Id
             left join ed.extAbitMarksSum on extAbitMarksSum.Id = Abiturient.Id
             inner join ed.qEntry on Abiturient.EntryId = qEntry.Id
             where Abiturient.EntryId=@EntryId and Abiturient.BackDoc = 0  and Abiturient.IsGosLine=0 
@@ -272,7 +272,7 @@ namespace Priem
                 {
                     Guid _AbitId = rw.Field<Guid>("Id");
                     Guid _PersonId = rw.Field<Guid>("PersonId");
-                    string FIO = rw.Field<string>("FIO");
+                    string FIO = rw.Field<string>("PersonNum")+"_"+rw.Field<string>("FIO");
                     if (!PersonList.Contains(_PersonId))
                     {
                         PersonList.Add(_PersonId);
@@ -629,11 +629,12 @@ namespace Priem
 
         private void dgvAbitList_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
+            /*
             if (e.RowIndex < 5)
                 return;
             if (e.ColumnIndex < 1)
                 return;
-
+            
             if (dgvAbitList.Rows[e.RowIndex].Cells[e.ColumnIndex].Style.BackColor == Color.LightGreen)
                 return;
 
@@ -646,7 +647,7 @@ namespace Priem
                     {
                         dgvAbitList.CurrentCell = dgvAbitList.Rows[kvp.Value + 5].Cells[kvp.Key];
                     }
-                }
+                }*/
         }
 
         private void btnToExcel_Click(object sender, EventArgs e)
@@ -833,6 +834,61 @@ namespace Priem
                 //На всякий случай
                 sfd.Dispose();
             }
+        }
+
+        private void dgvAbitList_CellContentDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex < 5)
+                return;
+            if (e.ColumnIndex < 1)
+                return;
+        
+            string FIO = dgvAbitList.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString().Substring(0, dgvAbitList.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString().IndexOf('(') -1);
+            int index = PersonListFio.IndexOf(FIO);
+            
+            MainClass.OpenCardPerson(PersonList[index].ToString(), this, dgvAbitList.CurrentRow.Index); 
+        }
+
+        private void dgvAbitList_CellMouseClick(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            if (e.RowIndex < 5)
+                return;
+            if (e.ColumnIndex < 1)
+                return;
+
+            if (e.Button == MouseButtons.Right)
+            {
+                dgvAbitList.CurrentCell = dgvAbitList.Rows[e.RowIndex].Cells[e.ColumnIndex];
+                ContextMenu m = new ContextMenu();
+                m.MenuItems.Add(new MenuItem("Перейти к зеленой позиции", new EventHandler(this.ContextMenuToGreen_OnClick)));
+                m.MenuItems.Add(new MenuItem("Открыть карточку абитуриента", new EventHandler(this.ContextMenuOpenCard_OnClick)));
+
+                Point pCell = dgvAbitList.GetCellDisplayRectangle(dgvAbitList.CurrentCell.ColumnIndex, dgvAbitList.CurrentCell.RowIndex, true).Location;
+                Point pGrid = dgvAbitList.Location;
+                new Point(pCell.X + pGrid.X, pCell.Y + pGrid.Y + dgvAbitList.CurrentRow.Height);
+
+                m.Show(dgvAbitList, new Point(pCell.X + pGrid.X, pCell.Y + dgvAbitList.CurrentRow.Height));
+            }
+        }
+        private void ContextMenuToGreen_OnClick(object sender, EventArgs e)
+        {
+            string FIO = dgvAbitList.CurrentCell.Value.ToString().Substring(0, dgvAbitList.CurrentCell.Value.ToString().IndexOf('(') - 1);
+            int index = PersonListFio.IndexOf(FIO);
+            if (index > -1)
+                foreach (KeyValuePair<int, int> kvp in Coord_Save[index])
+                {
+                    if (dgvAbitList.Rows[kvp.Value + 5].Cells[kvp.Key].Style.BackColor == Color.LightGreen)
+                    {
+                        dgvAbitList.CurrentCell = dgvAbitList.Rows[kvp.Value + 5].Cells[kvp.Key];
+                    }
+                }
+        }
+        private void ContextMenuOpenCard_OnClick(object sender, EventArgs e)
+        {
+            string FIO = dgvAbitList.CurrentCell.Value.ToString().Substring(0, dgvAbitList.CurrentCell.Value.ToString().IndexOf('(') - 1);
+            int index = PersonListFio.IndexOf(FIO);
+
+            MainClass.OpenCardPerson(PersonList[index].ToString(), this, dgvAbitList.CurrentRow.Index); 
         }
     }
 }

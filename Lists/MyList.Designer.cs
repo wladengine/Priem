@@ -145,7 +145,9 @@
             this.dgvAbitList.Name = "dgvAbitList";
             this.dgvAbitList.Size = new System.Drawing.Size(1075, 425);
             this.dgvAbitList.TabIndex = 5;
-            this.dgvAbitList.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvAbitList_CellContentClick);
+            this.dgvAbitList.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvAbitList_CellContentClick);
+            this.dgvAbitList.CellContentDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvAbitList_CellContentDoubleClick);
+            this.dgvAbitList.CellMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dgvAbitList_CellMouseClick);
             // 
             // groupBox2
             // 
@@ -293,9 +295,9 @@
             this.label8.AutoSize = true;
             this.label8.Location = new System.Drawing.Point(661, 94);
             this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(365, 13);
+            this.label8.Size = new System.Drawing.Size(422, 13);
             this.label8.TabIndex = 79;
-            this.label8.Text = "ФИО (Приоритет_программы, внутренний_приоритет, сумма_баллов)\r\n";
+            this.label8.Text = "Ид.Номер_ФИО (Приоритет_программы, внутренний_приоритет, сумма_баллов)\r\n";
             // 
             // pictureBox4
             // 

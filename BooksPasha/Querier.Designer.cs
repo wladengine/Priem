@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.btnPayDataEntryLoadCSV = new System.Windows.Forms.Button();
+            this.btnImportExamSpecAspirant = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // btnPayDataEntryLoadCSV
@@ -41,11 +42,22 @@
             this.btnPayDataEntryLoadCSV.UseVisualStyleBackColor = true;
             this.btnPayDataEntryLoadCSV.Click += new System.EventHandler(this.btnPayDataEntryLoadCSV_Click);
             // 
+            // btnImportExamSpecAspirant
+            // 
+            this.btnImportExamSpecAspirant.Location = new System.Drawing.Point(31, 74);
+            this.btnImportExamSpecAspirant.Name = "btnImportExamSpecAspirant";
+            this.btnImportExamSpecAspirant.Size = new System.Drawing.Size(132, 23);
+            this.btnImportExamSpecAspirant.TabIndex = 1;
+            this.btnImportExamSpecAspirant.Text = "ImportExamSpecAspirant";
+            this.btnImportExamSpecAspirant.UseVisualStyleBackColor = true;
+            this.btnImportExamSpecAspirant.Click += new System.EventHandler(this.btnImportExamSpecAspirant_Click);
+            // 
             // Querier
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(430, 319);
+            this.Controls.Add(this.btnImportExamSpecAspirant);
             this.Controls.Add(this.btnPayDataEntryLoadCSV);
             this.Name = "Querier";
             this.Text = "Querier";
@@ -56,5 +68,6 @@
         #endregion
 
         private System.Windows.Forms.Button btnPayDataEntryLoadCSV;
+        private System.Windows.Forms.Button btnImportExamSpecAspirant;
     }
 }

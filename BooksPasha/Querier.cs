@@ -167,5 +167,10 @@ namespace Priem
 
             MessageBox.Show("DONE!");
         }
+
+        private void btnImportExamSpecAspirant_Click(object sender, EventArgs e)
+        {
+            //some code here
+        }
     }
 }

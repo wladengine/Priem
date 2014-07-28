@@ -674,7 +674,7 @@ namespace Priem
                     }
                 }
 
-                DataTable tbl = ((DataView)dgvAbitList.DataSource).Table;
+                DataTable tbl = ((DataView)dgvAbitList.DataSource).Table.Copy();
 
                 string sheetName = "export";
 

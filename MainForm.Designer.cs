@@ -277,7 +277,6 @@
             this.smiMyList.Name = "smiMyList";
             this.smiMyList.Size = new System.Drawing.Size(402, 22);
             this.smiMyList.Text = "Рейтинговый список конкурсов с внутр. приоритетами";
-            this.smiMyList.Visible = false;
             this.smiMyList.Click += new System.EventHandler(this.smiMyList_Click);
             // 
             // smiProtocols

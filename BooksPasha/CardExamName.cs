@@ -51,7 +51,7 @@ namespace Priem
 
         protected override bool IsForReadOnly()
         {
-            return false; // !MainClass.RightsPashaOlia();
+            return !MainClass.RightsPashaOlia();
         }
 
         protected override void FillCard()

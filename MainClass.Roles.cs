@@ -87,6 +87,7 @@ namespace Priem
             if (
                 System.Environment.UserName == "o.belenog" 
                 || System.Environment.UserName == "v.chikhira"
+                || System.Environment.UserName == "st021085"
                 )
                 return true;
             else

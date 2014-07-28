@@ -143,6 +143,12 @@
     <Compile Include="BooksPasha\CardOlympSubject.Designer.cs">
       <DependentUpon>CardOlympSubject.cs</DependentUpon>
     </Compile>
+    <Compile Include="BooksPasha\CardOlympSubjectToExam.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="BooksPasha\CardOlympSubjectToExam.Designer.cs">
+      <DependentUpon>CardOlympSubjectToExam.cs</DependentUpon>
+    </Compile>
     <Compile Include="BooksPasha\CardProfileInObrazProgramInEntry.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -939,6 +945,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="BooksPasha\CardOlympSubject.resx">
       <DependentUpon>CardOlympSubject.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="BooksPasha\CardOlympSubjectToExam.resx">
+      <DependentUpon>CardOlympSubjectToExam.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="BooksPasha\CardProfileInObrazProgramInEntry.resx">
       <DependentUpon>CardProfileInObrazProgramInEntry.cs</DependentUpon>

@@ -32,22 +32,27 @@
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.tbNameDative = new System.Windows.Forms.TextBox();
-            this.cbExam = new System.Windows.Forms.ComboBox();
-            this.label3 = new System.Windows.Forms.Label();
+            this.dgvOlympSubjectToExam = new System.Windows.Forms.DataGridView();
+            this.btnAdd = new System.Windows.Forms.Button();
+            this.btnOpen = new System.Windows.Forms.Button();
+            this.btnDelete = new System.Windows.Forms.Button();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
             ((System.ComponentModel.ISupportInitialize)(this.epError)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvOlympSubjectToExam)).BeginInit();
+            this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // btnClose
             // 
-            this.btnClose.Location = new System.Drawing.Point(417, 118);
+            this.btnClose.Location = new System.Drawing.Point(417, 207);
             // 
             // btnSaveChange
             // 
-            this.btnSaveChange.Location = new System.Drawing.Point(12, 117);
+            this.btnSaveChange.Location = new System.Drawing.Point(12, 206);
             // 
             // btnSaveAsNew
             // 
-            this.btnSaveAsNew.Location = new System.Drawing.Point(280, 117);
+            this.btnSaveAsNew.Location = new System.Drawing.Point(280, 206);
             // 
             // tbName
             // 
@@ -85,30 +90,67 @@
             this.tbNameDative.Size = new System.Drawing.Size(359, 20);
             this.tbNameDative.TabIndex = 27;
             // 
-            // cbExam
+            // dgvOlympSubjectToExam
             // 
-            this.cbExam.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbExam.FormattingEnabled = true;
-            this.cbExam.Location = new System.Drawing.Point(139, 64);
-            this.cbExam.Name = "cbExam";
-            this.cbExam.Size = new System.Drawing.Size(359, 21);
-            this.cbExam.TabIndex = 29;
+            this.dgvOlympSubjectToExam.AllowUserToAddRows = false;
+            this.dgvOlympSubjectToExam.AllowUserToDeleteRows = false;
+            this.dgvOlympSubjectToExam.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvOlympSubjectToExam.Location = new System.Drawing.Point(134, 19);
+            this.dgvOlympSubjectToExam.Name = "dgvOlympSubjectToExam";
+            this.dgvOlympSubjectToExam.ReadOnly = true;
+            this.dgvOlympSubjectToExam.Size = new System.Drawing.Size(346, 112);
+            this.dgvOlympSubjectToExam.TabIndex = 31;
+            this.dgvOlympSubjectToExam.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvOlympSubjectToExam_CellDoubleClick);
             // 
-            // label3
+            // btnAdd
             // 
-            this.label3.Location = new System.Drawing.Point(12, 61);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(121, 31);
-            this.label3.TabIndex = 30;
-            this.label3.Text = "Соответствующий профильный предмет";
+            this.btnAdd.Location = new System.Drawing.Point(43, 19);
+            this.btnAdd.Name = "btnAdd";
+            this.btnAdd.Size = new System.Drawing.Size(75, 23);
+            this.btnAdd.TabIndex = 32;
+            this.btnAdd.Text = "Добавить";
+            this.btnAdd.UseVisualStyleBackColor = true;
+            this.btnAdd.Click += new System.EventHandler(this.btnAdd_Click);
+            // 
+            // btnOpen
+            // 
+            this.btnOpen.Location = new System.Drawing.Point(43, 48);
+            this.btnOpen.Name = "btnOpen";
+            this.btnOpen.Size = new System.Drawing.Size(75, 23);
+            this.btnOpen.TabIndex = 33;
+            this.btnOpen.Text = "Открыть";
+            this.btnOpen.UseVisualStyleBackColor = true;
+            this.btnOpen.Click += new System.EventHandler(this.btnOpen_Click);
+            // 
+            // btnDelete
+            // 
+            this.btnDelete.Location = new System.Drawing.Point(43, 108);
+            this.btnDelete.Name = "btnDelete";
+            this.btnDelete.Size = new System.Drawing.Size(75, 23);
+            this.btnDelete.TabIndex = 34;
+            this.btnDelete.Text = "Удалить";
+            this.btnDelete.UseVisualStyleBackColor = true;
+            this.btnDelete.Click += new System.EventHandler(this.btnDelete_Click);
+            // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.dgvOlympSubjectToExam);
+            this.groupBox1.Controls.Add(this.btnDelete);
+            this.groupBox1.Controls.Add(this.btnOpen);
+            this.groupBox1.Controls.Add(this.btnAdd);
+            this.groupBox1.Location = new System.Drawing.Point(12, 64);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(486, 137);
+            this.groupBox1.TabIndex = 35;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Соответствующие профильные предметы";
             // 
             // CardOlympSubject
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(510, 152);
-            this.Controls.Add(this.label3);
-            this.Controls.Add(this.cbExam);
+            this.ClientSize = new System.Drawing.Size(510, 241);
+            this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.tbNameDative);
             this.Controls.Add(this.label1);
@@ -122,9 +164,10 @@
             this.Controls.SetChildIndex(this.label1, 0);
             this.Controls.SetChildIndex(this.tbNameDative, 0);
             this.Controls.SetChildIndex(this.label2, 0);
-            this.Controls.SetChildIndex(this.cbExam, 0);
-            this.Controls.SetChildIndex(this.label3, 0);
+            this.Controls.SetChildIndex(this.groupBox1, 0);
             ((System.ComponentModel.ISupportInitialize)(this.epError)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvOlympSubjectToExam)).EndInit();
+            this.groupBox1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -136,7 +179,10 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TextBox tbNameDative;
-        private System.Windows.Forms.ComboBox cbExam;
-        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.DataGridView dgvOlympSubjectToExam;
+        private System.Windows.Forms.Button btnAdd;
+        private System.Windows.Forms.Button btnOpen;
+        private System.Windows.Forms.Button btnDelete;
+        private System.Windows.Forms.GroupBox groupBox1;
     }
 }

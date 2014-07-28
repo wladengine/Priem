@@ -1441,11 +1441,19 @@ namespace Priem
                 if (_Id == null)
                     return;
 
+                if (dgvEGE.SelectedCells.Count == 0)
+                {
+                    WinFormsServ.Error("Нужно выбрать сертификат");
+                    return;
+                }
+
+                int rwInd = dgvEGE.SelectedCells[0].RowIndex;
+                Guid egeCertId = (Guid)dgvEGE["Id", rwInd].Value;
 
                 using (PriemEntities context = new PriemEntities())
                 {
                     var cert = (from ec in context.EgeCertificate
-                                where ec.PersonId == GuidId && (ec.FBSStatusId == 0 || ec.FBSStatusId == 2) && (ec.Number.EndsWith("-00") || ec.Number.EndsWith("-10") || ec.Number.EndsWith("-11"))
+                                where ec.PersonId == GuidId && ec.Id == egeCertId && (ec.FBSStatusId == 0 || ec.FBSStatusId == 2) //&& (ec.Number.EndsWith("-00") || ec.Number.EndsWith("-10") || ec.Number.EndsWith("-11"))
                                 select ec).FirstOrDefault();
 
                     if (cert != null)

@@ -40,11 +40,12 @@ namespace Priem
             _queryBody = @"SELECT DISTINCT ed.qAbiturient.Id as Id, ed.qAbiturient.RegNum as Рег_Номер, 
                     ed.extPerson.PersonNum as 'Ид. номер', ed.extPerson.FIO as ФИО, 
                     ed.extAbitMarksSum.TotalSum as 'Сумма баллов', ed.extAbitMarksSum.TotalCount as 'Кол-во оценок', 
-                    case when ed.qAbiturient.HasOriginals>0 then 'Да' else 'Нет' end as 'Подлинники документов', ed.qAbiturient.Coefficient as 'Рейтинговый коэффициент', 
+                    case when ed.qAbiturient.HasOriginals>0 then 'Да' else 'Нет' end as 'Подлинники документов', 
+                    ed.qAbiturient.Coefficient as 'Рейтинговый коэффициент', 
                     ed.Competition.Name as Конкурс, ed.hlpAbiturientProf.Prof AS 'Проф. экзамен', 
                     ed.hlpAbiturientProfAdd.ProfAdd AS 'Доп. экзамен',
                     extAbitMarkByRating.Value1 AS [Экзамен 1], extAbitMarkByRating.Value2 AS [Экзамен 2], extAbitMarkByRating.Value3 AS [Экзамен 3],
-                    CASE WHEN EXISTS(SELECT Id FROM ed.Olympiads WHERE OlympTypeId = 3 AND OlympValueId = 6 AND AbiturientId = ed.qAbiturient.Id) then 1 else CASE WHEN EXISTS(SELECT Id FROM ed.Olympiads WHERE OlympTypeId = 3 AND OlympValueId = 5 AND AbiturientId = ed.qAbiturient.Id) then 2 else CASE WHEN EXISTS(SELECT Id FROM ed.Olympiads WHERE OlympTypeId = 3 AND OlympValueId = 7 AND AbiturientId = ed.qAbiturient.Id) then 3 else 4 end end end as olymp,
+                    CASE WHEN EXISTS(SELECT Id FROM ed.hlpProfOlympiads AS Olympiads WHERE OlympValueId = 6 AND AbiturientId = ed.qAbiturient.Id) then 1 else CASE WHEN EXISTS(SELECT Id FROM ed.hlpProfOlympiads AS Olympiads WHERE OlympValueId = 5 AND AbiturientId = ed.qAbiturient.Id) then 2 else CASE WHEN EXISTS(SELECT Id FROM ed.hlpProfOlympiads AS Olympiads WHERE OlympValueId = 7 AND AbiturientId = ed.qAbiturient.Id) then 3 else 4 end end end as olymp,
                     CASE WHEN  ed.extPerson.AttestatSeries IN ('ЗА','ЗБ','ЗВ','АЗ') then 1 else CASE WHEN  ed.extPerson.AttestatSeries IN ('СА','СБ','СВ') then 2 else 3 end end as attestat,
                     (CASE WHEN ed.extPerson.IsExcellent=1 THEN 5 ELSE ed.extPerson.SchoolAVG END) as attAvg, 
                     CASE WHEN (CompetitionId=1  OR CompetitionId=8) then 1 else case when (CompetitionId=2 OR CompetitionId=7) AND ed.extPerson.Privileges>0 then 2 else (case when CompetitionId=6 then 3 else 4 end) end end as comp, 
@@ -488,8 +489,8 @@ namespace Priem
                         chbCel.Checked ?
                         " ORDER BY ed.qAbiturient.Coefficient, comp, noexamssort desc, ed.extAbitMarksSum.TotalSum desc, ProfSort desc, ProfAdd desc, ed.extAbitMarksSum.TotalCount desc, ФИО"
                         :
-                        " ORDER BY comp, noexamssort, ed.extAbitMarksSum.TotalSum desc, preimsort desc, ProfSort desc, [Экзамен 1], [Экзамен 2], [Экзамен 3], ProfAdd desc, " + 
-                        "olymp, attestat, attAvg desc, ed.qAbiturient.Coefficient, ed.extAbitMarksSum.TotalCount desc, ФИО"
+                        " ORDER BY comp, noexamssort, ed.extAbitMarksSum.TotalSum desc, [Экзамен 1] desc, [Экзамен 2] desc, [Экзамен 3] desc, preimsort desc, ProfAdd desc, " +
+                        "olymp, Медалист, attAvg desc, ed.qAbiturient.Coefficient, ed.extAbitMarksSum.TotalCount desc, ФИО"
                         ;
                 }
                 string totalQuery = null;
@@ -797,7 +798,7 @@ AND ed.FixierenView.IsSecond = {7} AND ed.FixierenView.IsReduced = {8} AND ed.Fi
             SaveFileDialog sfd = new SaveFileDialog();
             sfd.Filter = "ADOBE Pdf files|*.pdf";
             if (sfd.ShowDialog() == DialogResult.OK)
-                Print.PrintRatingProtocol(StudyFormId, StudyBasisId, FacultyId, LicenseProgramId, ObrazProgramId, ProfileId, IsCel,  
+                Print.PrintRatingProtocol(StudyFormId, StudyBasisId, FacultyId, LicenseProgramId, ObrazProgramId, ProfileId, IsCel, IsCrimea, 
                     plan, sfd.FileName, IsSecond, IsReduced, IsParallel);
         }        
 

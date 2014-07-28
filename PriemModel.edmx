@@ -81,6 +81,7 @@
           <EntitySet Name="OlympLevel" EntityType="Priem2012Model.Store.OlympLevel" store:Type="Tables" Schema="ed" />
           <EntitySet Name="OlympName" EntityType="Priem2012Model.Store.OlympName" store:Type="Tables" Schema="ed" />
           <EntitySet Name="OlympSubject" EntityType="Priem2012Model.Store.OlympSubject" store:Type="Tables" Schema="ed" />
+          <EntitySet Name="OlympSubjectToExam" EntityType="Priem2012Model.Store.OlympSubjectToExam" store:Type="Tables" Schema="ed" />
           <EntitySet Name="OlympType" EntityType="Priem2012Model.Store.OlympType" store:Type="Tables" Schema="ed" />
           <EntitySet Name="OlympValue" EntityType="Priem2012Model.Store.OlympValue" store:Type="Tables" Schema="ed" />
           <EntitySet Name="OrderNumbers" EntityType="Priem2012Model.Store.OrderNumbers" store:Type="Tables" Schema="ed" />
@@ -1324,6 +1325,14 @@
             <End Role="OlympValue" EntitySet="OlympValue" />
             <End Role="Olympiads" EntitySet="Olympiads" />
           </AssociationSet>
+          <AssociationSet Name="FK_OlympSubjectToExam_Exam" Association="Priem2012Model.Store.FK_OlympSubjectToExam_Exam">
+            <End Role="Exam" EntitySet="Exam" />
+            <End Role="OlympSubjectToExam" EntitySet="OlympSubjectToExam" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OlympSubjectToExam_OlympSubject" Association="Priem2012Model.Store.FK_OlympSubjectToExam_OlympSubject">
+            <End Role="OlympSubject" EntitySet="OlympSubject" />
+            <End Role="OlympSubjectToExam" EntitySet="OlympSubjectToExam" />
+          </AssociationSet>
           <AssociationSet Name="FK_OrderNumbers_Signer" Association="Priem2012Model.Store.FK_OrderNumbers_Signer">
             <End Role="Signer" EntitySet="Signer" />
             <End Role="OrderNumbers" EntitySet="OrderNumbers" />
@@ -2012,6 +2021,14 @@
           <Property Name="Holder" Type="nvarchar" MaxLength="150" />
           <Property Name="ExamId" Type="int" />
         </EntityType>
+        <EntityType Name="OlympSubjectToExam">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="OlympSubjectId" Type="int" Nullable="false" />
+          <Property Name="ExamId" Type="int" Nullable="false" />
+        </EntityType>
         <EntityType Name="OlympType">
           <Key>
             <PropertyRef Name="Id" />
@@ -2270,9 +2287,6 @@
           <Property Name="Date" Type="smalldatetime" />
           <Property Name="FacultyId" Type="int" />
         </EntityType>
-        <!--Errors Found During Generation:
-      warning 6002: The table/view 'Priem.ed.Privilege' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.
-      -->
         <EntityType Name="ProfileInObrazProgramInEntry">
           <Key>
             <PropertyRef Name="Id" />
@@ -4524,6 +4538,30 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_OlympSubjectToExam_Exam">
+          <End Role="Exam" Type="Priem2012Model.Store.Exam" Multiplicity="1" />
+          <End Role="OlympSubjectToExam" Type="Priem2012Model.Store.OlympSubjectToExam" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Exam">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="OlympSubjectToExam">
+              <PropertyRef Name="ExamId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OlympSubjectToExam_OlympSubject">
+          <End Role="OlympSubject" Type="Priem2012Model.Store.OlympSubject" Multiplicity="1" />
+          <End Role="OlympSubjectToExam" Type="Priem2012Model.Store.OlympSubjectToExam" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="OlympSubject">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="OlympSubjectToExam">
+              <PropertyRef Name="OlympSubjectId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_OrderNumbers_Signer">
           <End Role="Signer" Type="Priem2012Model.Store.Signer" Multiplicity="0..1" />
           <End Role="OrderNumbers" Type="Priem2012Model.Store.OrderNumbers" Multiplicity="*" />
@@ -5575,12 +5613,23 @@
         <Function Name="OlympSubject_Insert" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="ed">
           <Parameter Name="OlympSubjName" Type="nvarchar" Mode="In" />
           <Parameter Name="NameDative" Type="nvarchar" Mode="In" />
-          <Parameter Name="ExamId" Type="int" Mode="In" />
           <Parameter Name="id" Type="int" Mode="InOut" />
         </Function>
         <Function Name="OlympSubject_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="ed">
           <Parameter Name="OlympSubjName" Type="nvarchar" Mode="In" />
           <Parameter Name="NameDative" Type="nvarchar" Mode="In" />
+          <Parameter Name="id" Type="int" Mode="In" />
+        </Function>
+        <Function Name="OlympSubjectToExam_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="ed">
+          <Parameter Name="id" Type="int" Mode="In" />
+        </Function>
+        <Function Name="OlympSubjectToExam_Insert" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="ed">
+          <Parameter Name="OlympSubjectId" Type="int" Mode="In" />
+          <Parameter Name="ExamId" Type="int" Mode="In" />
+          <Parameter Name="id" Type="int" Mode="InOut" />
+        </Function>
+        <Function Name="OlympSubjectToExam_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="ed">
+          <Parameter Name="OlympSubjectId" Type="int" Mode="In" />
           <Parameter Name="ExamId" Type="int" Mode="In" />
           <Parameter Name="id" Type="int" Mode="In" />
         </Function>
@@ -6582,7 +6631,6 @@
           <FunctionImport Name="OlympSubject_Insert">
             <Parameter Name="OlympSubjName" Mode="In" Type="String" />
             <Parameter Name="NameDative" Mode="In" Type="String" />
-            <Parameter Name="ExamId" Mode="In" Type="Int32" />
             <Parameter Name="id" Mode="InOut" Type="Int32" />
           </FunctionImport>
           <EntitySet Name="PersonChanges" EntityType="Priem2012Model.PersonChanges" />
@@ -7377,7 +7425,6 @@
           <FunctionImport Name="OlympSubject_Update">
             <Parameter Name="OlympSubjName" Mode="In" Type="String" />
             <Parameter Name="NameDative" Mode="In" Type="String" />
-            <Parameter Name="ExamId" Mode="In" Type="Int32" />
             <Parameter Name="id" Mode="In" Type="Int32" />
           </FunctionImport>
           <EntitySet Name="ApplicationDetails" EntityType="Priem2012Model.ApplicationDetails" />
@@ -7553,6 +7600,28 @@
           <EntitySet Name="EntryHeader" EntityType="Priem2012Model.EntryHeader" />
           <EntitySet Name="hlpStatistics" EntityType="Priem2012Model.hlpStatistics" />
           <EntitySet Name="qEntryToCompetitiveGroup" EntityType="Priem2012Model.qEntryToCompetitiveGroup" />
+          <EntitySet Name="OlympSubjectToExam" EntityType="Priem2012Model.OlympSubjectToExam" />
+          <FunctionImport Name="OlympSubjectToExam_Delete">
+          <Parameter Name="id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="OlympSubjectToExam_Insert">
+            <Parameter Name="OlympSubjectId" Mode="In" Type="Int32" />
+            <Parameter Name="ExamId" Mode="In" Type="Int32" />
+            <Parameter Name="id" Mode="InOut" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="OlympSubjectToExam_Update">
+            <Parameter Name="OlympSubjectId" Mode="In" Type="Int32" />
+            <Parameter Name="ExamId" Mode="In" Type="Int32" />
+            <Parameter Name="id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <AssociationSet Name="FK_OlympSubjectToExam_Exam" Association="Priem2012Model.FK_OlympSubjectToExam_Exam">
+            <End Role="Exam" EntitySet="Exam" />
+            <End Role="OlympSubjectToExam" EntitySet="OlympSubjectToExam" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OlympSubjectToExam_OlympSubject" Association="Priem2012Model.FK_OlympSubjectToExam_OlympSubject">
+            <End Role="OlympSubject" EntitySet="OlympSubject" />
+            <End Role="OlympSubjectToExam" EntitySet="OlympSubjectToExam" />
+          </AssociationSet>
           </EntityContainer>
         <EntityType Name="Age">
           <Key>
@@ -7904,6 +7973,7 @@
           <Property Type="Boolean" Name="IsOpen" Nullable="false" />
           <Property Type="String" Name="Holder" MaxLength="150" FixedLength="false" Unicode="true" />
           <Property Type="Int32" Name="ExamId" />
+          <NavigationProperty Name="OlympSubjectToExam" Relationship="Priem2012Model.FK_OlympSubjectToExam_OlympSubject" FromRole="OlympSubject" ToRole="OlympSubjectToExam" />
         </EntityType>
         <EntityType Name="OlympValue">
           <Key>
@@ -8050,6 +8120,7 @@
           <NavigationProperty Name="EgeToExam" Relationship="Priem2012Model.FK_EgeToExam_Exam" FromRole="Exam" ToRole="EgeToExam" />
           <NavigationProperty Name="EgeToLanguage" Relationship="Priem2012Model.FK_EgeToLanguage_Exam" FromRole="Exam" ToRole="EgeToLanguage" />
           <NavigationProperty Name="ExamInEntry" Relationship="Priem2012Model.FK_ExamInEntry_Exam" FromRole="Exam" ToRole="ExamInEntry" />
+          <NavigationProperty Name="OlympSubjectToExam" Relationship="Priem2012Model.FK_OlympSubjectToExam_Exam" FromRole="Exam" ToRole="OlympSubjectToExam" />
         </EntityType>
         <EntityType Name="Mark">
           <Key>
@@ -11017,6 +11088,40 @@
           <Property Type="Guid" Name="CompetitiveGroupId" Nullable="false" />
           <Property Type="String" Name="CompetitiveGroupName" MaxLength="250" FixedLength="false" Unicode="true" />
         </EntityType>
+        <EntityType Name="OlympSubjectToExam">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="Int32" Name="OlympSubjectId" Nullable="false" />
+          <Property Type="Int32" Name="ExamId" Nullable="false" />
+          <NavigationProperty Name="Exam" Relationship="Priem2012Model.FK_OlympSubjectToExam_Exam" FromRole="OlympSubjectToExam" ToRole="Exam" />
+          <NavigationProperty Name="OlympSubject" Relationship="Priem2012Model.FK_OlympSubjectToExam_OlympSubject" FromRole="OlympSubjectToExam" ToRole="OlympSubject" />
+        </EntityType>
+        <Association Name="FK_OlympSubjectToExam_Exam">
+          <End Type="Priem2012Model.Exam" Role="Exam" Multiplicity="1" />
+          <End Type="Priem2012Model.OlympSubjectToExam" Role="OlympSubjectToExam" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Exam">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="OlympSubjectToExam">
+              <PropertyRef Name="ExamId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OlympSubjectToExam_OlympSubject">
+          <End Type="Priem2012Model.OlympSubject" Role="OlympSubject" Multiplicity="1" />
+          <End Type="Priem2012Model.OlympSubjectToExam" Role="OlympSubjectToExam" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="OlympSubject">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="OlympSubjectToExam">
+              <PropertyRef Name="OlympSubjectId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -13202,6 +13307,18 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="OlympSubjectToExam">
+            <EntityTypeMapping TypeName="Priem2012Model.OlympSubjectToExam">
+              <MappingFragment StoreEntitySet="OlympSubjectToExam">
+                <ScalarProperty Name="ExamId" ColumnName="ExamId" />
+                <ScalarProperty Name="OlympSubjectId" ColumnName="OlympSubjectId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="OlympSubjectToExam_Delete" FunctionName="Priem2012Model.Store.OlympSubjectToExam_Delete" />
+          <FunctionImportMapping FunctionImportName="OlympSubjectToExam_Insert" FunctionName="Priem2012Model.Store.OlympSubjectToExam_Insert" />
+          <FunctionImportMapping FunctionImportName="OlympSubjectToExam_Update" FunctionName="Priem2012Model.Store.OlympSubjectToExam_Update" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -13855,6 +13972,9 @@
         <EntityTypeShape EntityType="Priem2012Model.EntryHeader" Width="1.5" PointX="3.5991386080156724" PointY="31.433940350745775" />
         <EntityTypeShape EntityType="Priem2012Model.hlpStatistics" Width="1.5" PointX="8.8489326670993727" PointY="24.988508504344388" />
         <EntityTypeShape EntityType="Priem2012Model.qEntryToCompetitiveGroup" Width="1.5" PointX="2.7219928143182734" PointY="23.85480150201116" />
+        <EntityTypeShape EntityType="Priem2012Model.OlympSubjectToExam" Width="1.5" PointX="10.827191976284233" PointY="16.8249235380557" />
+        <AssociationConnector Association="Priem2012Model.FK_OlympSubjectToExam_Exam" />
+        <AssociationConnector Association="Priem2012Model.FK_OlympSubjectToExam_OlympSubject" />
         </Diagram>
     </Diagrams>
   </Designer>

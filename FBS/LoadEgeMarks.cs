@@ -33,7 +33,7 @@ namespace Priem
             this.MdiParent = MainClass.mainform;
             bdc = MainClass.Bdc;
 
-            ComboServ.FillCombo(cbFaculty, HelpClass.GetComboListByTable("ed.SP_Faculty"), false, false);             
+            ComboServ.FillCombo(cbFaculty, HelpClass.GetComboListByTable("ed.qFaculty"), false, false);             
             FillExams();
 
             cbFaculty.SelectedIndexChanged += new EventHandler(cbFaculty_SelectedIndexChanged);                 
@@ -135,8 +135,30 @@ namespace Priem
                     string flt_backDoc = " AND ed.qAbiturient.BackDoc = 0  ";
                     string flt_enable = " AND ed.qAbiturient.NotEnabled = 0 ";
                     string flt_protocol = " AND ProtocolTypeId = 1 AND IsOld = 0 AND Excluded = 0 ";
-                    string flt_status = " AND ed.extFBSStatus.FBSStatusId IN (1,4) ";
-                    string flt_mark = string.Format(" AND NOT EXISTS( SELECT ed.Mark.Value FROM ed.Mark INNER JOIN ed.extExamInEntry ON ed.Mark.ExamInEntryId = ed.extExamInEntry.Id WHERE ed.Mark.AbiturientId = ed.qAbiturient.Id AND ed.extExamInEntry.ExamId = {0} AND ed.extExamInEntry.IsAdditional=0) ", examId);
+                    string flt_status = " /*AND ed.extFBSStatus.FBSStatusId IN (1,4) */";
+                    string flt_mark = string.Format(@" AND 
+(
+NOT EXISTS
+    (
+        SELECT ed.Mark.Value 
+        FROM ed.Mark 
+        INNER JOIN ed.extExamInEntry ON ed.Mark.ExamInEntryId = ed.extExamInEntry.Id 
+        WHERE ed.Mark.AbiturientId = ed.qAbiturient.Id 
+        AND ed.extExamInEntry.ExamId = {0} 
+        AND ed.extExamInEntry.IsAdditional=0
+    ) 
+OR 
+qAbiturient.Id IN 
+    (
+        select  qMark.AbiturientId
+        FROM ed.qMark
+        INNER JOIN ed.EgeToExam ON EgeToExam.ExamId = qMark.ExamId
+        INNER JOIN ed.extEgeMarkMaxAbit ON extEgeMarkMaxAbit.AbiturientId = qMark.AbiturientId AND qMark.ExamId = EgeToExam.ExamId AND extEgeMarkMaxAbit.EgeExamNameId = EgeToExam.EgeExamNameId
+        INNER JOIN ed.EgeCertificate ON EgeCertificate.Id = extEgeMarkMaxAbit.EgeCertificateId
+        WHERE qMark.Value < extEgeMarkMaxAbit.Value AND EgeCertificate.FBSStatusId IN (1, 4)
+        AND qMark.IsFromEge = 1
+    )
+)", examId);
                     string flt_hasEge = string.Format(" AND ed.Person.Id IN (SELECT PersonId FROM  ed.extEgeMark LEFT JOIN ed.EgeToExam ON ed.extEgeMark.EgeExamNameId = ed.EgeToExam.EgeExamNameId WHERE ed.EgeToExam.ExamId = {0})", examId);
                     string flt_hasExam = string.Format(" AND ed.qAbiturient.EntryId IN (SELECT ed.extExamInEntry.EntryId FROM ed.extExamInEntry WHERE ed.extExamInEntry.ExamId = {0})", examId);
 
@@ -171,9 +193,10 @@ namespace Priem
                                 {
                                     var lBalls =
                                         (from emm in context.extEgeMarkMaxAbit
-                                         join ete in context.EgeToExam
-                                         on emm.EgeExamNameId equals ete.EgeExamNameId
+                                         join ete in context.EgeToExam on emm.EgeExamNameId equals ete.EgeExamNameId
+                                         join ec in context.EgeCertificate on emm.EgeCertificateId equals ec.Id
                                          where emm.AbiturientId == abId && ete.ExamId == examId
+                                         && (ec.FBSStatusId == 1 || ec.FBSStatusId == 4)
                                          select new
                                          {
                                              emm.Value,

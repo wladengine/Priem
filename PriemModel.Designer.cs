@@ -104,6 +104,8 @@ using System.Xml.Serialization;
 [assembly: EdmRelationshipAttribute("Priem2012Model", "FK_Entry_SP_LicenseProgram", "SP_LicenseProgram", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(Priem.SP_LicenseProgram), "Entry", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(Priem.Entry), true)]
 [assembly: EdmRelationshipAttribute("Priem2012Model", "FK_Entry_SP_ObrazProgram", "SP_ObrazProgram", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(Priem.SP_ObrazProgram), "Entry", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(Priem.Entry), true)]
 [assembly: EdmRelationshipAttribute("Priem2012Model", "FK_Mark_EgeCertificate", "EgeCertificate", System.Data.Metadata.Edm.RelationshipMultiplicity.ZeroOrOne, typeof(Priem.EgeCertificate), "Mark", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(Priem.Mark), true)]
+[assembly: EdmRelationshipAttribute("Priem2012Model", "FK_OlympSubjectToExam_Exam", "Exam", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(Priem.Exam), "OlympSubjectToExam", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(Priem.OlympSubjectToExam), true)]
+[assembly: EdmRelationshipAttribute("Priem2012Model", "FK_OlympSubjectToExam_OlympSubject", "OlympSubject", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(Priem.OlympSubject), "OlympSubjectToExam", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(Priem.OlympSubjectToExam), true)]
 
 #endregion
 
@@ -2042,6 +2044,22 @@ namespace Priem
             }
         }
         private ObjectSet<qEntryToCompetitiveGroup> _qEntryToCompetitiveGroup;
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        public ObjectSet<OlympSubjectToExam> OlympSubjectToExam
+        {
+            get
+            {
+                if ((_OlympSubjectToExam == null))
+                {
+                    _OlympSubjectToExam = base.CreateObjectSet<OlympSubjectToExam>("OlympSubjectToExam");
+                }
+                return _OlympSubjectToExam;
+            }
+        }
+        private ObjectSet<OlympSubjectToExam> _OlympSubjectToExam;
 
         #endregion
 
@@ -2989,6 +3007,14 @@ namespace Priem
         public void AddToqEntryToCompetitiveGroup(qEntryToCompetitiveGroup qEntryToCompetitiveGroup)
         {
             base.AddObject("qEntryToCompetitiveGroup", qEntryToCompetitiveGroup);
+        }
+    
+        /// <summary>
+        /// Deprecated Method for adding a new object to the OlympSubjectToExam EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// </summary>
+        public void AddToOlympSubjectToExam(OlympSubjectToExam olympSubjectToExam)
+        {
+            base.AddObject("OlympSubjectToExam", olympSubjectToExam);
         }
 
         #endregion
@@ -7142,9 +7168,8 @@ namespace Priem
         /// </summary>
         /// <param name="olympSubjName">No Metadata Documentation available.</param>
         /// <param name="nameDative">No Metadata Documentation available.</param>
-        /// <param name="examId">No Metadata Documentation available.</param>
         /// <param name="id">No Metadata Documentation available.</param>
-        public int OlympSubject_Insert(global::System.String olympSubjName, global::System.String nameDative, Nullable<global::System.Int32> examId, ObjectParameter id)
+        public int OlympSubject_Insert(global::System.String olympSubjName, global::System.String nameDative, ObjectParameter id)
         {
             ObjectParameter olympSubjNameParameter;
             if (olympSubjName != null)
@@ -7166,17 +7191,7 @@ namespace Priem
                 nameDativeParameter = new ObjectParameter("NameDative", typeof(global::System.String));
             }
     
-            ObjectParameter examIdParameter;
-            if (examId.HasValue)
-            {
-                examIdParameter = new ObjectParameter("ExamId", examId);
-            }
-            else
-            {
-                examIdParameter = new ObjectParameter("ExamId", typeof(global::System.Int32));
-            }
-    
-            return base.ExecuteFunction("OlympSubject_Insert", olympSubjNameParameter, nameDativeParameter, examIdParameter, id);
+            return base.ExecuteFunction("OlympSubject_Insert", olympSubjNameParameter, nameDativeParameter, id);
         }
     
         /// <summary>
@@ -11967,9 +11982,8 @@ namespace Priem
         /// </summary>
         /// <param name="olympSubjName">No Metadata Documentation available.</param>
         /// <param name="nameDative">No Metadata Documentation available.</param>
-        /// <param name="examId">No Metadata Documentation available.</param>
         /// <param name="id">No Metadata Documentation available.</param>
-        public int OlympSubject_Update(global::System.String olympSubjName, global::System.String nameDative, Nullable<global::System.Int32> examId, Nullable<global::System.Int32> id)
+        public int OlympSubject_Update(global::System.String olympSubjName, global::System.String nameDative, Nullable<global::System.Int32> id)
         {
             ObjectParameter olympSubjNameParameter;
             if (olympSubjName != null)
@@ -11991,16 +12005,6 @@ namespace Priem
                 nameDativeParameter = new ObjectParameter("NameDative", typeof(global::System.String));
             }
     
-            ObjectParameter examIdParameter;
-            if (examId.HasValue)
-            {
-                examIdParameter = new ObjectParameter("ExamId", examId);
-            }
-            else
-            {
-                examIdParameter = new ObjectParameter("ExamId", typeof(global::System.Int32));
-            }
-    
             ObjectParameter idParameter;
             if (id.HasValue)
             {
@@ -12011,7 +12015,7 @@ namespace Priem
                 idParameter = new ObjectParameter("id", typeof(global::System.Int32));
             }
     
-            return base.ExecuteFunction("OlympSubject_Update", olympSubjNameParameter, nameDativeParameter, examIdParameter, idParameter);
+            return base.ExecuteFunction("OlympSubject_Update", olympSubjNameParameter, nameDativeParameter, idParameter);
         }
     
         /// <summary>
@@ -12630,6 +12634,97 @@ namespace Priem
             }
     
             return base.ExecuteFunction("FirstWave_INSERTQUOTA", abiturientIdParameter, sortNumParameter);
+        }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        /// <param name="id">No Metadata Documentation available.</param>
+        public int OlympSubjectToExam_Delete(Nullable<global::System.Int32> id)
+        {
+            ObjectParameter idParameter;
+            if (id.HasValue)
+            {
+                idParameter = new ObjectParameter("id", id);
+            }
+            else
+            {
+                idParameter = new ObjectParameter("id", typeof(global::System.Int32));
+            }
+    
+            return base.ExecuteFunction("OlympSubjectToExam_Delete", idParameter);
+        }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        /// <param name="olympSubjectId">No Metadata Documentation available.</param>
+        /// <param name="examId">No Metadata Documentation available.</param>
+        /// <param name="id">No Metadata Documentation available.</param>
+        public int OlympSubjectToExam_Insert(Nullable<global::System.Int32> olympSubjectId, Nullable<global::System.Int32> examId, ObjectParameter id)
+        {
+            ObjectParameter olympSubjectIdParameter;
+            if (olympSubjectId.HasValue)
+            {
+                olympSubjectIdParameter = new ObjectParameter("OlympSubjectId", olympSubjectId);
+            }
+            else
+            {
+                olympSubjectIdParameter = new ObjectParameter("OlympSubjectId", typeof(global::System.Int32));
+            }
+    
+            ObjectParameter examIdParameter;
+            if (examId.HasValue)
+            {
+                examIdParameter = new ObjectParameter("ExamId", examId);
+            }
+            else
+            {
+                examIdParameter = new ObjectParameter("ExamId", typeof(global::System.Int32));
+            }
+    
+            return base.ExecuteFunction("OlympSubjectToExam_Insert", olympSubjectIdParameter, examIdParameter, id);
+        }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        /// <param name="olympSubjectId">No Metadata Documentation available.</param>
+        /// <param name="examId">No Metadata Documentation available.</param>
+        /// <param name="id">No Metadata Documentation available.</param>
+        public int OlympSubjectToExam_Update(Nullable<global::System.Int32> olympSubjectId, Nullable<global::System.Int32> examId, Nullable<global::System.Int32> id)
+        {
+            ObjectParameter olympSubjectIdParameter;
+            if (olympSubjectId.HasValue)
+            {
+                olympSubjectIdParameter = new ObjectParameter("OlympSubjectId", olympSubjectId);
+            }
+            else
+            {
+                olympSubjectIdParameter = new ObjectParameter("OlympSubjectId", typeof(global::System.Int32));
+            }
+    
+            ObjectParameter examIdParameter;
+            if (examId.HasValue)
+            {
+                examIdParameter = new ObjectParameter("ExamId", examId);
+            }
+            else
+            {
+                examIdParameter = new ObjectParameter("ExamId", typeof(global::System.Int32));
+            }
+    
+            ObjectParameter idParameter;
+            if (id.HasValue)
+            {
+                idParameter = new ObjectParameter("id", id);
+            }
+            else
+            {
+                idParameter = new ObjectParameter("id", typeof(global::System.Int32));
+            }
+    
+            return base.ExecuteFunction("OlympSubjectToExam_Update", olympSubjectIdParameter, examIdParameter, idParameter);
         }
 
         #endregion
@@ -20037,6 +20132,28 @@ namespace Priem
                 if ((value != null))
                 {
                     ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<ExamInEntry>("Priem2012Model.FK_ExamInEntry_Exam", "ExamInEntry", value);
+                }
+            }
+        }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("Priem2012Model", "FK_OlympSubjectToExam_Exam", "OlympSubjectToExam")]
+        public EntityCollection<OlympSubjectToExam> OlympSubjectToExam
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<OlympSubjectToExam>("Priem2012Model.FK_OlympSubjectToExam_Exam", "OlympSubjectToExam");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<OlympSubjectToExam>("Priem2012Model.FK_OlympSubjectToExam_Exam", "OlympSubjectToExam", value);
                 }
             }
         }
@@ -40370,6 +40487,217 @@ namespace Priem
                 if ((value != null))
                 {
                     ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<Olympiads>("Priem2012Model.fk_Olympiads_OlympSubject", "Olympiads", value);
+                }
+            }
+        }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("Priem2012Model", "FK_OlympSubjectToExam_OlympSubject", "OlympSubjectToExam")]
+        public EntityCollection<OlympSubjectToExam> OlympSubjectToExam
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<OlympSubjectToExam>("Priem2012Model.FK_OlympSubjectToExam_OlympSubject", "OlympSubjectToExam");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<OlympSubjectToExam>("Priem2012Model.FK_OlympSubjectToExam_OlympSubject", "OlympSubjectToExam", value);
+                }
+            }
+        }
+
+        #endregion
+
+    }
+    
+    /// <summary>
+    /// No Metadata Documentation available.
+    /// </summary>
+    [EdmEntityTypeAttribute(NamespaceName="Priem2012Model", Name="OlympSubjectToExam")]
+    [Serializable()]
+    [DataContractAttribute(IsReference=true)]
+    public partial class OlympSubjectToExam : EntityObject
+    {
+        #region Factory Method
+    
+        /// <summary>
+        /// Create a new OlympSubjectToExam object.
+        /// </summary>
+        /// <param name="id">Initial value of the Id property.</param>
+        /// <param name="olympSubjectId">Initial value of the OlympSubjectId property.</param>
+        /// <param name="examId">Initial value of the ExamId property.</param>
+        public static OlympSubjectToExam CreateOlympSubjectToExam(global::System.Int32 id, global::System.Int32 olympSubjectId, global::System.Int32 examId)
+        {
+            OlympSubjectToExam olympSubjectToExam = new OlympSubjectToExam();
+            olympSubjectToExam.Id = id;
+            olympSubjectToExam.OlympSubjectId = olympSubjectId;
+            olympSubjectToExam.ExamId = examId;
+            return olympSubjectToExam;
+        }
+
+        #endregion
+
+        #region Primitive Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 Id
+        {
+            get
+            {
+                return _Id;
+            }
+            set
+            {
+                if (_Id != value)
+                {
+                    OnIdChanging(value);
+                    ReportPropertyChanging("Id");
+                    _Id = StructuralObject.SetValidValue(value);
+                    ReportPropertyChanged("Id");
+                    OnIdChanged();
+                }
+            }
+        }
+        private global::System.Int32 _Id;
+        partial void OnIdChanging(global::System.Int32 value);
+        partial void OnIdChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 OlympSubjectId
+        {
+            get
+            {
+                return _OlympSubjectId;
+            }
+            set
+            {
+                OnOlympSubjectIdChanging(value);
+                ReportPropertyChanging("OlympSubjectId");
+                _OlympSubjectId = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("OlympSubjectId");
+                OnOlympSubjectIdChanged();
+            }
+        }
+        private global::System.Int32 _OlympSubjectId;
+        partial void OnOlympSubjectIdChanging(global::System.Int32 value);
+        partial void OnOlympSubjectIdChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 ExamId
+        {
+            get
+            {
+                return _ExamId;
+            }
+            set
+            {
+                OnExamIdChanging(value);
+                ReportPropertyChanging("ExamId");
+                _ExamId = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("ExamId");
+                OnExamIdChanged();
+            }
+        }
+        private global::System.Int32 _ExamId;
+        partial void OnExamIdChanging(global::System.Int32 value);
+        partial void OnExamIdChanged();
+
+        #endregion
+
+    
+        #region Navigation Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("Priem2012Model", "FK_OlympSubjectToExam_Exam", "Exam")]
+        public Exam Exam
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<Exam>("Priem2012Model.FK_OlympSubjectToExam_Exam", "Exam").Value;
+            }
+            set
+            {
+                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<Exam>("Priem2012Model.FK_OlympSubjectToExam_Exam", "Exam").Value = value;
+            }
+        }
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [BrowsableAttribute(false)]
+        [DataMemberAttribute()]
+        public EntityReference<Exam> ExamReference
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<Exam>("Priem2012Model.FK_OlympSubjectToExam_Exam", "Exam");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<Exam>("Priem2012Model.FK_OlympSubjectToExam_Exam", "Exam", value);
+                }
+            }
+        }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("Priem2012Model", "FK_OlympSubjectToExam_OlympSubject", "OlympSubject")]
+        public OlympSubject OlympSubject
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<OlympSubject>("Priem2012Model.FK_OlympSubjectToExam_OlympSubject", "OlympSubject").Value;
+            }
+            set
+            {
+                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<OlympSubject>("Priem2012Model.FK_OlympSubjectToExam_OlympSubject", "OlympSubject").Value = value;
+            }
+        }
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [BrowsableAttribute(false)]
+        [DataMemberAttribute()]
+        public EntityReference<OlympSubject> OlympSubjectReference
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<OlympSubject>("Priem2012Model.FK_OlympSubjectToExam_OlympSubject", "OlympSubject");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<OlympSubject>("Priem2012Model.FK_OlympSubjectToExam_OlympSubject", "OlympSubject", value);
                 }
             }
         }

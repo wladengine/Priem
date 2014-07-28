@@ -654,51 +654,14 @@ namespace Priem
         {
             if (dgvAbitList.Rows.Count>5)
             {
-                byte[][] tableColors = new byte[dgvAbitList.Rows.Count][];
-                for (int i = 0; i < tableColors.Length; i++)
-                {
-                    tableColors[i] = new byte[dgvAbitList.Columns.Count];
-                    for (int j = 0; j < tableColors[i].Length; j++)
-                    {
-                        if (dgvAbitList.Rows[i].Cells[j].Style.BackColor == Color.LightGreen)
-                            tableColors[i][j] = 1;
-                        else
-                            if (dgvAbitList.Rows[i].Cells[j].Style.BackColor == Color.Yellow)
-                                tableColors[i][j] = 2;
-                            else
-                                if (dgvAbitList.Rows[i].Cells[j].Style.BackColor == Color.LightBlue)
-                                    tableColors[i][j] = 3;
-                                else
-                                    tableColors[i][j] = 0;
-
-                    }
-                }
-
                 DataTable tbl = ((DataView)dgvAbitList.DataSource).Table.Copy();
 
                 string sheetName = "export";
 
-                
 
                 if (tbl.Columns.Contains("Id"))
                 {
                     tbl.Columns.Remove("Id");
-                }
-                for (int i = 0; i < tableColors.Length; i++)
-                {
-                    for (int j = 1; j < tableColors[i].Length; j++)
-                    {
-                        if (tableColors[i][j] == 0)
-                            continue;
-                        if (tableColors[i][j] == 1)
-                            dgvAbitList.Rows[i].Cells[j-1].Style.BackColor = Color.LightGreen;
-                        else
-                            if (tableColors[i][j] == 2)
-                                dgvAbitList.Rows[i].Cells[j-1].Style.BackColor = Color.Yellow;
-                            else
-                                if (tableColors[i][j] == 3)
-                                    dgvAbitList.Rows[i].Cells[j-1].Style.BackColor = Color.LightBlue;
-                    }
                 }
                 tbl.Rows[3].Delete();
                 tbl.Rows[2].Delete();
@@ -802,8 +765,9 @@ namespace Priem
                                 DataColumn dc = tbl.Columns[colindex];
                                 ws.Cells[i, j] = dr[dc.ColumnName] == null ? "" : dr[dc.ColumnName].ToString();
                                 Range3 = ws.Cells[i, j];
-                                if (tableColors[rowindex+2][colindex+1] !=0)
-                                    Range3.Interior.Color = dgvAbitList.Rows[rowindex].Cells[colindex].Style.BackColor;
+                                Color clr = dgvAbitList.Rows[rowindex + 2].Cells[colindex + 1].Style.BackColor;
+                                if (clr != Color.Empty)
+                                    Range3.Interior.Color = dgvAbitList.Rows[rowindex+2].Cells[colindex+1].Style.BackColor;
                                 j++;
                             }
 

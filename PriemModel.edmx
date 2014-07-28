@@ -5705,6 +5705,9 @@
           <Parameter Name="SrokIndividual" Type="nvarchar" Mode="In" />
           <Parameter Name="id" Type="uniqueidentifier" Mode="In" />
         </Function>
+        <Function Name="PayDataEntry_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="ed">
+          <Parameter Name="EntryId" Type="uniqueidentifier" Mode="In" />
+        </Function>
         <Function Name="PayDataEntry_Insert" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="ed">
           <Parameter Name="EntryId" Type="uniqueidentifier" Mode="In" />
           <Parameter Name="UniverName" Type="nvarchar" Mode="In" />
@@ -7622,6 +7625,9 @@
             <End Role="OlympSubject" EntitySet="OlympSubject" />
             <End Role="OlympSubjectToExam" EntitySet="OlympSubjectToExam" />
           </AssociationSet>
+          <FunctionImport Name="PayDataEntry_Delete">
+            <Parameter Name="EntryId" Mode="In" Type="Guid" />
+          </FunctionImport>
           </EntityContainer>
         <EntityType Name="Age">
           <Key>
@@ -13319,6 +13325,7 @@
           <FunctionImportMapping FunctionImportName="OlympSubjectToExam_Delete" FunctionName="Priem2012Model.Store.OlympSubjectToExam_Delete" />
           <FunctionImportMapping FunctionImportName="OlympSubjectToExam_Insert" FunctionName="Priem2012Model.Store.OlympSubjectToExam_Insert" />
           <FunctionImportMapping FunctionImportName="OlympSubjectToExam_Update" FunctionName="Priem2012Model.Store.OlympSubjectToExam_Update" />
+          <FunctionImportMapping FunctionImportName="PayDataEntry_Delete" FunctionName="Priem2012Model.Store.PayDataEntry_Delete" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

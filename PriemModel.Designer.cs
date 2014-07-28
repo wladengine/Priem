@@ -12726,6 +12726,25 @@ namespace Priem
     
             return base.ExecuteFunction("OlympSubjectToExam_Update", olympSubjectIdParameter, examIdParameter, idParameter);
         }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        /// <param name="entryId">No Metadata Documentation available.</param>
+        public int PayDataEntry_Delete(Nullable<global::System.Guid> entryId)
+        {
+            ObjectParameter entryIdParameter;
+            if (entryId.HasValue)
+            {
+                entryIdParameter = new ObjectParameter("EntryId", entryId);
+            }
+            else
+            {
+                entryIdParameter = new ObjectParameter("EntryId", typeof(global::System.Guid));
+            }
+    
+            return base.ExecuteFunction("PayDataEntry_Delete", entryIdParameter);
+        }
 
         #endregion
 

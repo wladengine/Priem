@@ -201,5 +201,31 @@ namespace Priem
             }
 
         }
+
+        private void btnDelete_Click_1(object sender, EventArgs e)
+        {
+            if (dgvList.SelectedCells.Count == 0)
+                return;
+            int rwInd = dgvList.SelectedCells[0].RowIndex;
+
+            if (MessageBox.Show("Удалить запись?", "Внимание", MessageBoxButtons.YesNo) == System.Windows.Forms.DialogResult.No)
+                return;
+
+            Guid EntryId = (Guid)dgvList["EntryId", rwInd].Value;
+
+            try
+            {
+                using (PriemEntities context = new PriemEntities())
+                {
+                    context.PayDataEntry_Delete(EntryId);
+                }
+
+                FillGrid();
+            }
+            catch (Exception ex)
+            {
+                WinFormsServ.Error(ex);
+            }
+        }
     }
 }

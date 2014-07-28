@@ -107,6 +107,12 @@
     <Compile Include="BooksPasha\CardExamInEntry.Designer.cs">
       <DependentUpon>CardExamInEntry.cs</DependentUpon>
     </Compile>
+    <Compile Include="BooksPasha\CardExamName.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="BooksPasha\CardExamName.Designer.cs">
+      <DependentUpon>CardExamName.cs</DependentUpon>
+    </Compile>
     <Compile Include="BooksPasha\CardLicenseProgram.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -924,6 +930,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="BooksPasha\CardExamInEntry.resx">
       <DependentUpon>CardExamInEntry.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="BooksPasha\CardExamName.resx">
+      <DependentUpon>CardExamName.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="BooksPasha\CardLicenseProgram.resx">
       <DependentUpon>CardLicenseProgram.cs</DependentUpon>

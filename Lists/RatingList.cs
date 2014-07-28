@@ -71,7 +71,8 @@ namespace Priem
                     LEFT JOIN ed.hlpAbiturientProf ON ed.hlpAbiturientProf.Id = ed.qAbiturient.Id 
                     LEFT JOIN ed.extAbitMarksSum ON ed.qAbiturient.Id = ed.extAbitMarksSum.Id
                     LEFT JOIN ed.extAbitMarkByRating ON ed.qAbiturient.Id = ed.extAbitMarkByRating.Id
-                    LEFT JOIN ed.hlpMinMarkAbiturient ON hlpMinMarkAbiturient.Id = qAbiturient.Id";
+                    LEFT JOIN ed.hlpMinMarkAbiturient ON hlpMinMarkAbiturient.Id = qAbiturient.Id
+                    LEFT JOIN ed.qAbiturientForeignApplicationsOnly qFor ON qAbiturient.Id = qFor.Id";
 
             if (MainClass.dbType == PriemType.PriemMag)
                 _queryFrom += " LEFT JOIN ed.hlpMinMarkMag ON hlpMinMarkMag.AbiturientId = qAbiturient.Id";
@@ -543,6 +544,9 @@ AND ed.FixierenView.IsSecond = {7} AND ed.FixierenView.IsReduced = {8} AND ed.Fi
                     //не забрали доки
                     sFilters += " AND (ed.qAbiturient.BackDoc=0) ";
                     sFilters += " AND ed.qAbiturient.Id NOT IN (select abiturientid from ed.extentryview) ";
+
+                    //не иностранцы
+                    sFilters += " AND qFor.Id IS NULL ";
 
                     //крым?
                     if (IsCrimea)

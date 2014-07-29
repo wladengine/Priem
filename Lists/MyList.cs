@@ -467,12 +467,15 @@ namespace Priem
                     {
                         if ((dgvAbitList.Rows[j].Cells[colindex].Style.BackColor != Color.LightGreen) &&
                             (dgvAbitList.Rows[j].Cells[colindex].Style.BackColor != Color.Yellow) &&
-                            (dgvAbitList.Rows[j].Cells[colindex].Style.BackColor != Color.LightBlue))
+                            (dgvAbitList.Rows[j].Cells[colindex].Style.BackColor != Color.LightBlue) &&
+                            (dgvAbitList.Rows[j].Cells[colindex].Style.BackColor != Color.Red))
                         {
                             break;
                         }
+                        
                         if (dgvAbitList.Rows[j].Cells[colindex].Style.BackColor == Color.LightGreen)
                         {
+                            
                             string cellvalue = dgvAbitList.Rows[j].Cells[colindex].Value.ToString();
                             // пока только первый приоритет
                             string temp = cellvalue.Substring(0, cellvalue.IndexOf('_'));
@@ -491,12 +494,11 @@ namespace Priem
                             cellvalue = cellvalue.Substring(cellvalue.IndexOf('_') + 1);
                             cellvalue = cellvalue.Substring(0, cellvalue.IndexOf('_'));
                             // пора обновить грид, нашли в списке PersonId
+                            
                             int index = PersonList.IndexOf(Guid.Parse(cellvalue));
                             // если он был:
                             if (index > -1)
                             {
-                                if (cellvalue.StartsWith("c6a065"))
-                                { }
                                 // по всем координатам key;value = столбец; строка
                                 foreach (KeyValuePair<int, int> kvp in Coord[index])
                                 {
@@ -530,21 +532,30 @@ namespace Priem
                                             dgvAbitList.Rows[kvp.Value + startrow].Cells[kvp.Key].Style.BackColor = Color.Red;
                                             continue;
                                         }
-                                        if (innerprior_temp > innerprior)
+                                        if (innerprior_temp >= innerprior)
                                         {
+                                            if (innerprior_temp == innerprior)
+                                            {
+                                                string FIO = PersonListFio[index];
+                                                MessageBox.Show(this, "Вы знаете, у абитуриента: " + FIO + " существуют повторяющиеся приоритеты", "Внимание", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                                            }
                                             bool isGreen = false;
                                             if (dgvAbitList.Rows[kvp.Value + startrow].Cells[kvp.Key].Style.BackColor == Color.LightGreen)
                                             {
                                                 isGreen = true;
                                             }
-                                            
                                             dgvAbitList.Rows[kvp.Value + startrow].Cells[kvp.Key].Style.BackColor = Color.Yellow;
-
+                                            if (innerprior_temp == innerprior)
+                                            {
+                                                dgvAbitList.Rows[kvp.Value + startrow].Cells[kvp.Key].Style.BackColor = Color.Red;
+                                            }
                                             DeleteList.Add(new KeyValuePair<int, KeyValuePair<int, int>>(index, kvp));
                                             if (isGreen)
                                             {
                                                 for (int row_temp = startrow + KCP_temp; row_temp < dgvAbitList.Rows.Count; row_temp++)
                                                 {
+                                                    if (String.IsNullOrEmpty(dgvAbitList.Rows[row_temp].Cells[kvp.Key].Value.ToString()))
+                                                        break;
                                                     if ((dgvAbitList.Rows[row_temp].Cells[kvp.Key].Style.BackColor != Color.LightGreen) &&
                                                    (dgvAbitList.Rows[row_temp].Cells[kvp.Key].Style.BackColor != Color.Yellow) &&
                                                        (dgvAbitList.Rows[row_temp].Cells[kvp.Key].Style.BackColor != Color.LightBlue))
@@ -556,24 +567,34 @@ namespace Priem
                                                 }
                                             }
                                         }
-
                                     }
                                     else
                                     {
-                                        if (prior_temp > prior)
+                                        if (prior_temp >= prior)
                                         {
+                                            if (prior_temp == prior)
+                                            {
+                                                string FIO = PersonListFio[index];
+                                                MessageBox.Show(this, "Вы знаете, у абитуриента: "+FIO+" существуют повторяющиеся приоритеты", "Внимание", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                                            }
                                             bool isGreen = false;
                                             if (dgvAbitList.Rows[kvp.Value + startrow].Cells[kvp.Key].Style.BackColor == Color.LightGreen)
                                             {
                                                 isGreen = true;
                                             }
                                             dgvAbitList.Rows[kvp.Value + startrow].Cells[kvp.Key].Style.BackColor = Color.Yellow;
+                                            if (prior_temp == prior)
+                                            {
+                                                dgvAbitList.Rows[kvp.Value + startrow].Cells[kvp.Key].Style.BackColor = Color.Red;
+                                            }
                                             //Coord[index].Remove(kvp);
                                             DeleteList.Add(new KeyValuePair<int, KeyValuePair<int, int>>(index, kvp));
                                             if (isGreen)
                                             {
                                                 for (int row_temp = startrow + KCP_temp; row_temp < dgvAbitList.Rows.Count; row_temp++)
                                                 {
+                                                    if (String.IsNullOrEmpty(dgvAbitList.Rows[row_temp].Cells[kvp.Key].Value.ToString()))
+                                                        break;
                                                     if ((dgvAbitList.Rows[row_temp].Cells[kvp.Key].Style.BackColor != Color.LightGreen) &&
                                                     (dgvAbitList.Rows[row_temp].Cells[kvp.Key].Style.BackColor != Color.Yellow) &&
                                                         (dgvAbitList.Rows[row_temp].Cells[kvp.Key].Style.BackColor != Color.LightBlue))
@@ -584,7 +605,7 @@ namespace Priem
                                                     }
                                                 }
                                             }
-                                        }
+                                        } 
                                     }
                                 }
                                 foreach (KeyValuePair<int, KeyValuePair<int, int>> kvp in DeleteList)

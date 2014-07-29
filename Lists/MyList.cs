@@ -177,7 +177,7 @@ namespace Priem
                             clm.ColumnName = index;
                             examTable.Columns.Add(clm);
                             row_LicProg[index] = rwEntry.Field<string>("LicenseProgramName");
-                            row_ObrazProg[index] = rw_licProg.Field<string>("ObrazProgramName");
+                            row_ObrazProg[index] = rw_licProg.Field<string>("ObrazProgramName") + "(" + row_profile.Field<string>("ProfileName") + ")";
                             row_EntryId[index] = row_profile.Field<Guid>("Id");
                             row_ObrazProgramInEntryId[index] = "";
                             row_KCP[index] = row_profile.Field<int>("KCP");
@@ -536,9 +536,7 @@ namespace Priem
                                             {
                                                 isGreen = true;
                                             }
-                                            if (kvp.Key == 1)
-                                                if (kvp.Value == 18)
-                                                { }
+                                            
                                             dgvAbitList.Rows[kvp.Value + startrow].Cells[kvp.Key].Style.BackColor = Color.Yellow;
 
                                             DeleteList.Add(new KeyValuePair<int, KeyValuePair<int, int>>(index, kvp));
@@ -815,24 +813,47 @@ namespace Priem
 
         private void dgvAbitList_CellMouseClick(object sender, DataGridViewCellMouseEventArgs e)
         {
-            if (e.RowIndex < 5)
+             if (e.ColumnIndex < 1)
                 return;
-            if (e.ColumnIndex < 1)
-                return;
+             // есть ли профили
+             if (e.RowIndex < 5)
+             {
+                 if (e.Button == MouseButtons.Right)
+                 {
+                     if (!String.IsNullOrEmpty(dgvAbitList.Rows[3].Cells[e.ColumnIndex].Value.ToString()))
+                     {
+                         string query = @"select Id from ed.ProfileInObrazProgramInEntry where ObrazProgramInEntryId ='"+dgvAbitList.Rows[3].Cells[e.ColumnIndex].Value.ToString()+"'";
+                         DataTable tbl = MainClass.Bdc.GetDataSet(query).Tables[0];
+                         if (tbl.Rows.Count < 2)
+                             return;
 
-            if (e.Button == MouseButtons.Right)
-            {
-                dgvAbitList.CurrentCell = dgvAbitList.Rows[e.RowIndex].Cells[e.ColumnIndex];
-                ContextMenu m = new ContextMenu();
-                m.MenuItems.Add(new MenuItem("Перейти к зеленой позиции", new EventHandler(this.ContextMenuToGreen_OnClick)));
-                m.MenuItems.Add(new MenuItem("Открыть карточку абитуриента", new EventHandler(this.ContextMenuOpenCard_OnClick)));
+                         dgvAbitList.CurrentCell = dgvAbitList.Rows[e.RowIndex].Cells[e.ColumnIndex];
+                         ContextMenu m = new ContextMenu();
+                         m.MenuItems.Add(new MenuItem("Открыть распределение по профилям", new EventHandler(this.ContextMenuProfile_OnClick)));
+                         Point pCell = dgvAbitList.GetCellDisplayRectangle(dgvAbitList.CurrentCell.ColumnIndex, dgvAbitList.CurrentCell.RowIndex, true).Location;
+                         Point pGrid = dgvAbitList.Location;
+                         new Point(pCell.X + pGrid.X, pCell.Y + pGrid.Y + dgvAbitList.CurrentRow.Height);
 
-                Point pCell = dgvAbitList.GetCellDisplayRectangle(dgvAbitList.CurrentCell.ColumnIndex, dgvAbitList.CurrentCell.RowIndex, true).Location;
-                Point pGrid = dgvAbitList.Location;
-                new Point(pCell.X + pGrid.X, pCell.Y + pGrid.Y + dgvAbitList.CurrentRow.Height);
+                         m.Show(dgvAbitList, new Point(pCell.X + pGrid.X, pCell.Y + dgvAbitList.CurrentRow.Height));
+                     }
+                 }
+             }
+             // абитуриенты
+             else
 
-                m.Show(dgvAbitList, new Point(pCell.X + pGrid.X, pCell.Y + dgvAbitList.CurrentRow.Height));
-            }
+                 if (e.Button == MouseButtons.Right)
+                 {
+                     dgvAbitList.CurrentCell = dgvAbitList.Rows[e.RowIndex].Cells[e.ColumnIndex];
+                     ContextMenu m = new ContextMenu();
+                     m.MenuItems.Add(new MenuItem("Перейти к зеленой позиции", new EventHandler(this.ContextMenuToGreen_OnClick)));
+                     m.MenuItems.Add(new MenuItem("Открыть карточку абитуриента", new EventHandler(this.ContextMenuOpenCard_OnClick)));
+
+                     Point pCell = dgvAbitList.GetCellDisplayRectangle(dgvAbitList.CurrentCell.ColumnIndex, dgvAbitList.CurrentCell.RowIndex, true).Location;
+                     Point pGrid = dgvAbitList.Location;
+                     new Point(pCell.X + pGrid.X, pCell.Y + pGrid.Y + dgvAbitList.CurrentRow.Height);
+
+                     m.Show(dgvAbitList, new Point(pCell.X + pGrid.X, pCell.Y + dgvAbitList.CurrentRow.Height));
+                 }
         }
         private void ContextMenuToGreen_OnClick(object sender, EventArgs e)
         {
@@ -853,6 +874,39 @@ namespace Priem
             int index = PersonListFio.IndexOf(FIO);
 
             MainClass.OpenCardPerson(PersonList[index].ToString(), this, dgvAbitList.CurrentRow.Index); 
+        }
+        private void ContextMenuProfile_OnClick(object sender, EventArgs e)
+        {
+            int _startrow = 5;
+            int columnindex = dgvAbitList.CurrentCell.ColumnIndex;
+            string ObrazProgramInEntryId = dgvAbitList.Rows[3].Cells[columnindex].Value.ToString();
+            if (String.IsNullOrEmpty(ObrazProgramInEntryId))
+                return;
+            List<Guid> PersonNumList = new List<Guid>();
+            List<string> PersonFIOList = new List<string>();
+
+            string value = "";
+            for (int i = _startrow; i < dgvAbitList.Rows.Count; i++)
+            {
+                if (dgvAbitList.Rows[i].Cells[columnindex].Style.BackColor == Color.LightGreen)
+                {
+                    value = dgvAbitList.Rows[i].Cells[columnindex].Value.ToString();
+                    if (String.IsNullOrEmpty(value))
+                    {
+                        break;
+                    }
+                    string NUMFIO = value.Substring(0, value.IndexOf("(") -1);
+                    int index = PersonListFio.IndexOf(NUMFIO);
+                    if (index > -1)
+                    {    
+                        PersonNumList.Add(PersonList[index]);
+                        PersonFIOList.Add(NUMFIO);
+                    }
+                    else
+                        MessageBox.Show ("SomeError while searching FIO and Person.Id");
+                }
+            }
+            new MyListRatingProfileList(ObrazProgramInEntryId, PersonNumList, PersonFIOList).Show();
         }
     }
 }

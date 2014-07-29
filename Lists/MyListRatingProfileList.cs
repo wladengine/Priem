@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using Excel = Microsoft.Office.Interop.Excel;
 
 using WordOut;
 using EducServLib;
@@ -29,7 +30,6 @@ namespace Priem
             PersonNumList = List;
             PersonFIOList = ListFio;
             InitControls();
-            
         }
 
         public override void UpdateDataGrid()
@@ -40,6 +40,8 @@ namespace Priem
         {
             base.ExtraInit();
             btnRemove.Visible = btnAdd.Visible = false;
+            btnExcel.Enabled = false;
+
             _title = "Рейтинговый список с внутренними приоритетами";
             try
             {
@@ -142,7 +144,7 @@ namespace Priem
             //GridPaint();
             //CopyTable();
         }
-        private void GridPaint () 
+        private void GridPaint() 
         {
             int startrow = 2;
             int startcol = 1;
@@ -204,6 +206,8 @@ namespace Priem
                                 {
                                     for (int row_temp = startrow + KCP_temp; row_temp < dgvAbitProfileList.Rows.Count; row_temp++)
                                     {
+                                        if (String.IsNullOrEmpty(dgvAbitProfileList.Rows[row_temp].Cells[j].Value.ToString()))
+                                            break;
                                         if ((dgvAbitProfileList.Rows[row_temp].Cells[j].Style.BackColor != Color.LightGreen) &&
                                        (dgvAbitProfileList.Rows[row_temp].Cells[j].Style.BackColor != Color.Yellow) &&
                                            (dgvAbitProfileList.Rows[row_temp].Cells[j].Style.BackColor != Color.LightBlue))
@@ -218,7 +222,13 @@ namespace Priem
                             temp_cell.Style.BackColor = Color.Yellow;
                         }
                         else
-                        { 
+                        {
+                            if (priority == temp_priority)
+                            {
+                                string cellvalue = cell.Value.ToString().Substring(0,cell.Value.ToString().IndexOf("_"));
+                                string FIO = PersonFIOList[PersonNumList.IndexOf(Guid.Parse(cellvalue))];
+                                MessageBox.Show(this, "Вы знаете, у абитуриента: " + FIO + " существуют повторяющиеся приоритеты", "Внимание", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            }
                             if (temp_cell.Style.BackColor == Color.LightGreen)
                             {
                                 priority = temp_priority;
@@ -229,9 +239,11 @@ namespace Priem
                                 {
                                     for (int row_temp = startrow + KCP_temp; row_temp < dgvAbitProfileList.Rows.Count; row_temp++)
                                     {
+                                        if (String.IsNullOrEmpty(dgvAbitProfileList.Rows[row_temp].Cells[cell.ColumnIndex].Value.ToString()))
+                                            break;
                                         if ((dgvAbitProfileList.Rows[row_temp].Cells[cell.ColumnIndex].Style.BackColor != Color.LightGreen) &&
-                                       (dgvAbitProfileList.Rows[row_temp].Cells[cell.ColumnIndex].Style.BackColor != Color.Yellow) &&
-                                           (dgvAbitProfileList.Rows[row_temp].Cells[cell.ColumnIndex].Style.BackColor != Color.LightBlue))
+                                            (dgvAbitProfileList.Rows[row_temp].Cells[cell.ColumnIndex].Style.BackColor != Color.Yellow) &&
+                                            (dgvAbitProfileList.Rows[row_temp].Cells[cell.ColumnIndex].Style.BackColor != Color.LightBlue))
                                         //if (dgvAbitProfileList.Rows[row_temp].Cells[cell.ColumnIndex].Style.BackColor == Color.White)
                                         {
                                             dgvAbitProfileList.Rows[row_temp].Cells[cell.ColumnIndex].Style.BackColor = Color.LightGreen;
@@ -261,9 +273,11 @@ namespace Priem
                                     {
                                         for (int row_temp = startrow + KCP_temp; row_temp < dgvAbitProfileList.Rows.Count; row_temp++)
                                         {
-                                            if ((dgvAbitProfileList.Rows[row_temp].Cells[cells.ColumnIndex].Style.BackColor != Color.LightGreen) &&
-                                           (dgvAbitProfileList.Rows[row_temp].Cells[cells.ColumnIndex].Style.BackColor != Color.Yellow) &&
-                                               (dgvAbitProfileList.Rows[row_temp].Cells[cells.ColumnIndex].Style.BackColor != Color.LightBlue))
+                                            if (String.IsNullOrEmpty(dgvAbitProfileList.Rows[row_temp].Cells[cells.ColumnIndex].Value.ToString()))
+                                                break;
+                                            if  ((dgvAbitProfileList.Rows[row_temp].Cells[cells.ColumnIndex].Style.BackColor != Color.LightGreen) &&
+                                                (dgvAbitProfileList.Rows[row_temp].Cells[cells.ColumnIndex].Style.BackColor != Color.Yellow) &&
+                                                (dgvAbitProfileList.Rows[row_temp].Cells[cells.ColumnIndex].Style.BackColor != Color.LightBlue))
                                             //if (dgvAbitProfileList.Rows[row_temp].Cells[cells.ColumnIndex].Style.BackColor == Color.White)
                                             {
                                                 dgvAbitProfileList.Rows[row_temp].Cells[cells.ColumnIndex].Style.BackColor = Color.LightGreen;
@@ -285,6 +299,7 @@ namespace Priem
             GridPaint();
             CopyTable();
             btnPaint.Enabled = false;
+            btnExcel.Enabled = true;
         }
 
         private void CopyTable()
@@ -341,6 +356,92 @@ namespace Priem
             int index = PersonFIOList.IndexOf(FIO);
 
             MainClass.OpenCardPerson(PersonNumList[index].ToString(), this, dgvAbitProfileList.CurrentRow.Index);
+        }
+
+        private void btnExcel_Click(object sender, EventArgs e)
+        {
+            if (dgvAbitProfileList.Rows.Count > 2)
+            {
+                DataTable tbl = ((DataView)dgvAbitProfileList.DataSource).Table.Copy();
+
+                string sheetName = "export";
+                if (tbl.Columns.Contains("Id"))
+                {
+                    tbl.Columns.Remove("Id");
+                }
+
+                int rowHeight = 70;
+                double colFIOWidth = 50;
+                SaveFileDialog sfd = new SaveFileDialog();
+
+                sfd.Filter = "Файлы Excel (.xls)|*.xls";
+                if (sfd.ShowDialog() == DialogResult.OK)
+                {
+                    try
+                    {
+                        Excel.Application exc = new Excel.Application();
+                        Excel.Workbook wb = exc.Workbooks.Add(System.Reflection.Missing.Value);
+                        Excel.Worksheet ws = (Excel.Worksheet)exc.ActiveSheet;
+                        ws.Name = sheetName.Substring(0, sheetName.Length < 30 ? sheetName.Length - 1 : 30);
+
+                        int i = 1;
+                        int j = 1;
+
+                        ProgressForm prog = new ProgressForm(0, tbl.Rows.Count, 1, ProgressBarStyle.Blocks, "Импорт списка");
+                        prog.Show();
+                         
+                        Excel.Range Range3 = ws.Range[ws.Cells[1, 1], ws.Cells[2, tbl.Columns.Count]];
+                        Range3.WrapText = true;
+                        Range3.RowHeight = rowHeight;
+                        Range3.ColumnWidth = colFIOWidth;
+                        Range3.HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter;
+                        Range3.VerticalAlignment = Excel.XlHAlign.xlHAlignCenter;
+
+                        Range3 = ws.Range[ws.Cells[3, 1], ws.Cells[tbl.Rows.Count, tbl.Columns.Count]];
+                        Range3.HorizontalAlignment = Excel.XlHAlign.xlHAlignLeft;
+                         
+                        for (int rowindex = 0; rowindex < tbl.Rows.Count; rowindex++)
+                        {
+                            DataRow dr = tbl.Rows[rowindex];
+                            j = 1;
+                            for (int colindex = 0; colindex < tbl.Columns.Count; colindex++)
+                            {
+                                DataColumn dc = tbl.Columns[colindex];
+                                ws.Cells[i, j] = dr[dc.ColumnName] == null ? "" : dr[dc.ColumnName].ToString();
+                                Range3 = ws.Cells[i, j];
+                                Color clr = dgvAbitProfileList.Rows[rowindex].Cells[colindex + 1].Style.BackColor;
+                                if (clr != Color.Empty)
+                                    Range3.Interior.Color = dgvAbitProfileList.Rows[rowindex].Cells[colindex + 1].Style.BackColor;
+                                j++;
+                            }
+
+                            i++;
+                            prog.PerformStep();
+                        }
+                        prog.Close();
+
+                        wb.SaveAs(sfd.FileName, Excel.XlFileFormat.xlExcel7,
+                            System.Reflection.Missing.Value,
+                            System.Reflection.Missing.Value,
+                            System.Reflection.Missing.Value,
+                            System.Reflection.Missing.Value,
+                            Excel.XlSaveAsAccessMode.xlExclusive,
+                            System.Reflection.Missing.Value,
+                            System.Reflection.Missing.Value,
+                            System.Reflection.Missing.Value,
+                            System.Reflection.Missing.Value,
+                            System.Reflection.Missing.Value);
+                        exc.Visible = true;
+
+                    }
+                    catch (System.Runtime.InteropServices.COMException exc)
+                    {
+                        MessageBox.Show(exc.Message);
+                    }
+                }
+                //На всякий случай
+                sfd.Dispose();
+            }
         }
     }
 }

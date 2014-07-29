@@ -925,10 +925,15 @@ namespace Priem
                         PersonFIOList.Add(NUMFIO);
                     }
                     else
-                        MessageBox.Show ("SomeError while searching FIO and Person.Id");
+                        MessageBox.Show (this,"SomeError while searching FIO and Person.Id: "+value,"ContextMenuProfile_OnClick");
                 }
             }
             new MyListRatingProfileList(ObrazProgramInEntryId, PersonNumList, PersonFIOList).Show();
+        }
+
+        private void tbAbitsTop_MouseClick(object sender, MouseEventArgs e)
+        {
+            rbAbitsTop.Checked = true;
         }
     }
 }

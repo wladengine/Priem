@@ -42,6 +42,8 @@
             this.tbObrazProgramInEntry = new System.Windows.Forms.TextBox();
             this.label6 = new System.Windows.Forms.Label();
             this.btnPaint = new System.Windows.Forms.Button();
+            this.btnExcel = new System.Windows.Forms.Button();
+            this.label7 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dgvAbitProfileList)).BeginInit();
             this.SuspendLayout();
             // 
@@ -114,6 +116,7 @@
             this.label5.Size = new System.Drawing.Size(158, 13);
             this.label5.TabIndex = 4;
             this.label5.Text = "Образовательная программа";
+            this.label5.Visible = false;
             // 
             // tbFaculty
             // 
@@ -154,6 +157,7 @@
             this.tbObrazProgram.ReadOnly = true;
             this.tbObrazProgram.Size = new System.Drawing.Size(217, 20);
             this.tbObrazProgram.TabIndex = 9;
+            this.tbObrazProgram.Visible = false;
             // 
             // dgvAbitProfileList
             // 
@@ -169,7 +173,7 @@
             // 
             // tbObrazProgramInEntry
             // 
-            this.tbObrazProgramInEntry.Location = new System.Drawing.Point(486, 58);
+            this.tbObrazProgramInEntry.Location = new System.Drawing.Point(486, 34);
             this.tbObrazProgramInEntry.Name = "tbObrazProgramInEntry";
             this.tbObrazProgramInEntry.ReadOnly = true;
             this.tbObrazProgramInEntry.Size = new System.Drawing.Size(217, 20);
@@ -178,7 +182,7 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(327, 61);
+            this.label6.Location = new System.Drawing.Point(327, 37);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(158, 13);
             this.label6.TabIndex = 25;
@@ -186,19 +190,40 @@
             // 
             // btnPaint
             // 
-            this.btnPaint.Location = new System.Drawing.Point(714, 13);
+            this.btnPaint.Location = new System.Drawing.Point(710, 8);
             this.btnPaint.Name = "btnPaint";
-            this.btnPaint.Size = new System.Drawing.Size(50, 42);
+            this.btnPaint.Size = new System.Drawing.Size(79, 33);
             this.btnPaint.TabIndex = 27;
-            this.btnPaint.Text = "Paint";
+            this.btnPaint.Text = "Приоритеты";
             this.btnPaint.UseVisualStyleBackColor = true;
             this.btnPaint.Click += new System.EventHandler(this.btnPaint_Click);
+            // 
+            // btnExcel
+            // 
+            this.btnExcel.Location = new System.Drawing.Point(710, 45);
+            this.btnExcel.Name = "btnExcel";
+            this.btnExcel.Size = new System.Drawing.Size(79, 33);
+            this.btnExcel.TabIndex = 28;
+            this.btnExcel.Text = "Excel";
+            this.btnExcel.UseVisualStyleBackColor = true;
+            this.btnExcel.Click += new System.EventHandler(this.btnExcel_Click);
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(424, 63);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(199, 13);
+            this.label7.TabIndex = 29;
+            this.label7.Text = "Ид.Номер_ФИО (приоритет профиля)";
             // 
             // MyListRatingProfileList
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(801, 568);
+            this.Controls.Add(this.label7);
+            this.Controls.Add(this.btnExcel);
             this.Controls.Add(this.btnPaint);
             this.Controls.Add(this.tbObrazProgramInEntry);
             this.Controls.Add(this.label6);
@@ -234,6 +259,8 @@
             this.Controls.SetChildIndex(this.label6, 0);
             this.Controls.SetChildIndex(this.tbObrazProgramInEntry, 0);
             this.Controls.SetChildIndex(this.btnPaint, 0);
+            this.Controls.SetChildIndex(this.btnExcel, 0);
+            this.Controls.SetChildIndex(this.label7, 0);
             ((System.ComponentModel.ISupportInitialize)(this.dgvAbitProfileList)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -256,5 +283,7 @@
         private System.Windows.Forms.TextBox tbObrazProgramInEntry;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Button btnPaint;
+        private System.Windows.Forms.Button btnExcel;
+        private System.Windows.Forms.Label label7;
     }
 }

@@ -107,18 +107,18 @@ namespace Priem
                                      where ab.Id == GuidId
                                      select ab.PersonId).FirstOrDefault();
 
+                    ComboServ.FillCombo(cbLanguage, HelpClass.GetComboListByTable("ed.Language"), true, false);
+                    ComboServ.FillCombo(cbCelCompetition, HelpClass.GetComboListByTable("ed.CelCompetition"), true, false);
+
                     FillLicenseProgram();
                     FillObrazProgram();
                     FillProfile();
                     FillFaculty();
                     FillStudyForm();
                     FillStudyBasis();
-                    UpdateInnerPrioritiesAfterStudyBasis();
                     FillCompetition();
-
-                    ComboServ.FillCombo(cbLanguage, HelpClass.GetComboListByTable("ed.Language"), true, false);
-                    ComboServ.FillCombo(cbCelCompetition, HelpClass.GetComboListByTable("ed.CelCompetition"), true, false);
-
+                    UpdateInnerPrioritiesAfterStudyBasis();
+                    
                     cbOtherCompetition.Visible = false;
                     lblOtherCompetition.Visible = false;
                     cbCelCompetition.Visible = false;
@@ -243,7 +243,7 @@ namespace Priem
 
                     if (abit.BackDoc)
                     {
-                        GetWhoSetBackDoc(context);
+                        GetWhoSetBackDoc();
                     }
                     else
                     {
@@ -277,7 +277,7 @@ namespace Priem
 
                     if (abit.HasOriginals)
                     {
-                        GetWhoSetHasOriginals(context);
+                        GetWhoSetHasOriginals();
                     }
                     else
                     {
@@ -315,16 +315,42 @@ namespace Priem
             }
         }
 
-        private void GetWhoSetHasOriginals(PriemEntities context)
+        private void GetWhoSetHasOriginals()
         {
-            var _who = context.qAbiturient_WhoSetHasOriginals.Where(x => x.Id == GuidId).FirstOrDefault();
+            //var _who = context.qAbiturient_WhoSetHasOriginals.Where(x => x.Id == GuidId).FirstOrDefault();
+            //if (_who == null)
+            //    return;
+
+            BackgroundWorker bw_whoSetOriginals = new BackgroundWorker();
+            bw_whoSetOriginals.DoWork += bw_whoSetOriginals_DoWork;
+            bw_whoSetOriginals.RunWorkerCompleted += bw_whoSetOriginals_RunWorkerCompleted;
+
+            bw_whoSetOriginals.RunWorkerAsync(GuidId);
+        }
+        
+        void bw_whoSetOriginals_DoWork(object sender, DoWorkEventArgs e)
+        {
+            Guid _Id = (Guid)e.Argument;
+            using (PriemEntities context = new PriemEntities())
+            {
+                e.Result = context.qAbiturient_WhoSetHasOriginals.Where(x => x.Id == _Id).FirstOrDefault();
+            }
+        }
+        void bw_whoSetOriginals_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            dynamic _who = e.Result;
             if (_who == null)
                 return;
 
-            string who = _who.UserId;
-            string whoFac = _who.FacultyName;
-            string whoDate = _who.ActionTime.ToShortDateString() + " " + _who.ActionTime.ToShortTimeString();
-            who = MainClass.GetADUserName(who);
+            string who = "", whoFac = "", whoDate = "";
+            try
+            {
+                who = _who.UserId;
+                whoFac = _who.FacultyName;
+                whoDate = _who.ActionTime.ToShortDateString() + " " + _who.ActionTime.ToShortTimeString();
+                who = MainClass.GetADUserName(who);
+            }
+            catch { lblHasOriginalsUser.Visible = false; }
 
             if (!string.IsNullOrEmpty(who))
             {
@@ -332,16 +358,42 @@ namespace Priem
                 lblHasOriginalsUser.Visible = true;
             }
         }
-        private void GetWhoSetBackDoc(PriemEntities context)
+
+        private void GetWhoSetBackDoc()
         {
-            var _who = context.qAbiturient_WhoSetBackDoc.Where(x => x.Id == GuidId).FirstOrDefault();
+            //var _who = context.qAbiturient_WhoSetBackDoc.Where(x => x.Id == GuidId).FirstOrDefault();
+            //if (_who == null)
+            //    return;
+
+            BackgroundWorker bw_whoBackDoc = new BackgroundWorker();
+            bw_whoBackDoc.DoWork += bw_whoBackDoc_DoWork;
+            bw_whoBackDoc.RunWorkerCompleted += bw_whoBackDoc_RunWorkerCompleted;
+            bw_whoBackDoc.RunWorkerAsync();
+        }
+
+        void bw_whoBackDoc_DoWork(object sender, DoWorkEventArgs e)
+        {
+            Guid _Id = (Guid)e.Argument;
+            using (PriemEntities context = new PriemEntities())
+            {
+                e.Result = context.qAbiturient_WhoSetBackDoc.Where(x => x.Id == GuidId).FirstOrDefault();
+            }
+        }
+        void bw_whoBackDoc_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            dynamic _who = e.Result;
             if (_who == null)
                 return;
 
-            string who = _who.UserId;
-            string whoFac = _who.FacultyName;
-            string whoDate = _who.ActionTime.ToShortDateString() + " " + _who.ActionTime.ToShortTimeString();
-            who = MainClass.GetADUserName(who);
+            string who = "", whoFac = "", whoDate = "";
+            try
+            {
+                who = _who.UserId;
+                whoFac = _who.FacultyName;
+                whoDate = _who.ActionTime.ToShortDateString() + " " + _who.ActionTime.ToShortTimeString();
+                who = MainClass.GetADUserName(who);
+            }
+            catch { lblWhoBackDoc.Visible = false; }
 
             if (!string.IsNullOrEmpty(who))
             {
@@ -349,6 +401,7 @@ namespace Priem
                 lblWhoBackDoc.Visible = true;
             }
         }
+
         private string GetAbitSum(string abitId)
         {
             if (string.IsNullOrEmpty(abitId))
@@ -705,7 +758,6 @@ namespace Priem
             cbProfile.SelectedIndexChanged += new EventHandler(cbProfile_SelectedIndexChanged);
             cbStudyForm.SelectedIndexChanged += new EventHandler(cbStudyForm_SelectedIndexChanged);
             cbStudyBasis.SelectedIndexChanged += new EventHandler(cbStudyBasis_SelectedIndexChanged);
-            cbCompetition.SelectedIndexChanged += new EventHandler(cbCompetition_SelectedIndexChanged);
             chbHasOriginals.CheckedChanged += new System.EventHandler(chbHasOriginals_CheckedChanged);
 
         }
@@ -719,7 +771,6 @@ namespace Priem
             cbProfile.SelectedIndexChanged -= new EventHandler(cbProfile_SelectedIndexChanged);
             cbStudyForm.SelectedIndexChanged -= new EventHandler(cbStudyForm_SelectedIndexChanged);
             cbStudyBasis.SelectedIndexChanged -= new EventHandler(cbStudyBasis_SelectedIndexChanged);
-            cbCompetition.SelectedIndexChanged -= new EventHandler(cbCompetition_SelectedIndexChanged);
             chbHasOriginals.CheckedChanged -= new System.EventHandler(chbHasOriginals_CheckedChanged);
         }
 
@@ -958,26 +1009,28 @@ namespace Priem
             {
                 using (PriemEntities context = new PriemEntities())
                 {
-                    List<KeyValuePair<string, string>> lst = ((from cp in context.Competition
-                                                               where cp.StudyBasisId == StudyBasisId
-                                                               orderby cp.Name
-                                                               select new
-                                                               {
-                                                                   cp.Id,
-                                                                   cp.Name
-                                                               }).Distinct()).ToList().Select(u => new KeyValuePair<string, string>(u.Id.ToString(), u.Name)).ToList();
+                    List<KeyValuePair<string, string>>
+                        lst = ((from cp in context.Competition
+                                where cp.StudyBasisId == StudyBasisId && (cp.Id < 6 || cp.Id == 9)
+                                select new
+                                {
+                                    cp.Id,
+                                    cp.Name
+                                }).Distinct()).ToList().Select(u => new KeyValuePair<string, string>(u.Id.ToString(), u.Name)).ToList();
+                    ComboServ.FillCombo(cbOtherCompetition, lst, true, false);
+                        
+                    lst = ((from cp in context.Competition
+                           where cp.StudyBasisId == StudyBasisId
+                           orderby cp.Name
+                           select new
+                           {
+                               cp.Id,
+                               cp.Name
+                           }).Distinct()).ToList().Select(u => new KeyValuePair<string, string>(u.Id.ToString(), u.Name)).ToList();
 
                     ComboServ.FillCombo(cbCompetition, lst, false, false);
 
-                    lst = ((from cp in context.Competition
-                            where cp.StudyBasisId == StudyBasisId && (cp.Id < 6 || cp.Id == 9)
-                            select new
-                            {
-                                cp.Id,
-                                cp.Name
-                            }).Distinct()).ToList().Select(u => new KeyValuePair<string, string>(u.Id.ToString(), u.Name)).ToList();
-
-                    ComboServ.FillCombo(cbOtherCompetition, lst, true, false);
+                    
 
                     if (StudyBasisId == 1)
                     {
@@ -1015,9 +1068,6 @@ namespace Priem
                 chbChecked.Checked = false;
                 chbChecked.Enabled = false;
             }
-
-            
-
 
             if (CompetitionId == 6)
             {

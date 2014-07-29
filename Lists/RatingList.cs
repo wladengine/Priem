@@ -482,7 +482,7 @@ namespace Priem
                     sOrderBy =
                         chbCel.Checked ?
                         " ORDER BY ed.qAbiturient.Coefficient, comp , noexamssort desc, ed.extAbitMarksSum.TotalSum desc, ed.extAbitMarksSum.TotalCount desc, ФИО" :
-                        " ORDER BY comp , noexamssort, ed.extAbitMarksSum.TotalSum desc, preimsort desc, ed.qAbiturient.Coefficient DESC, ed.extAbitMarksSum.TotalCount desc, ФИО";
+                        " ORDER BY comp , noexamssort, ed.extAbitMarksSum.TotalSum desc, 'Проф. экзамен' DESC, ed.qAbiturient.Coefficient DESC, ed.extAbitMarksSum.TotalCount desc, ФИО";
                 }
                 else
                 {
@@ -803,7 +803,7 @@ AND ed.FixierenView.IsSecond = {7} AND ed.FixierenView.IsReduced = {8} AND ed.Fi
             sfd.Filter = "ADOBE Pdf files|*.pdf";
             if (sfd.ShowDialog() == DialogResult.OK)
                 Print.PrintRatingProtocol(StudyFormId, StudyBasisId, FacultyId, LicenseProgramId, ObrazProgramId, ProfileId, IsCel, IsCrimea, 
-                    plan, sfd.FileName, IsSecond, IsReduced, IsParallel);
+                    plan, sfd.FileName, IsSecond, IsReduced, IsParallel, IsQuota);
         }        
 
         private void btnWord_Click(object sender, EventArgs e)

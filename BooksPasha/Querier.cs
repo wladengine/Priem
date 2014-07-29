@@ -161,7 +161,6 @@ namespace Priem
                         context.PayDataEntry_Insert(entryId.Value, "", "", "", "", "", ProrectorId, "бакалавр", "4 года", new DateTime(2013, 9, 1), new DateTime(2017, 8, 31), splitted[5]);
                     else
                         context.PayDataEntry_Update(entryId.Value, "", "", "", "", "", ProrectorId, "бакалавр", "4 года", new DateTime(2013, 9, 1), new DateTime(2017, 8, 31), splitted[5]);
-
                 }
             }
 

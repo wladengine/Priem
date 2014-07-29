@@ -428,6 +428,7 @@
             this.cbCompetition.Name = "cbCompetition";
             this.cbCompetition.Size = new System.Drawing.Size(207, 21);
             this.cbCompetition.TabIndex = 121;
+            this.cbCompetition.SelectedIndexChanged += new System.EventHandler(this.cbCompetition_SelectedIndexChanged);
             // 
             // cbStudyBasis
             // 

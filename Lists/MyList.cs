@@ -323,6 +323,7 @@ namespace Priem
             DataView dv = new DataView(examTable);
             dgvAbitList.DataSource = dv;
             dgvAbitList.Columns["Id"].Visible = false;
+            dgvAbitList.ColumnHeadersVisible = false;
             dgvAbitList.AllowUserToOrderColumns = false;
             for (int i = 0; i < dgvAbitList.Columns.Count; i++)
                 dgvAbitList.Columns[i].SortMode = DataGridViewColumnSortMode.NotSortable;

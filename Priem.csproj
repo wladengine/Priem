@@ -642,6 +642,10 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Lists\MyList.Designer.cs" />
+    <Compile Include="Lists\MyListRatingProfileList.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Lists\MyListRatingProfileList.Designer.cs" />
     <Compile Include="Lists\OlympAbitList.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -1169,6 +1173,7 @@
       <DependentUpon>ListPersonFilter.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Lists\MyList.resx" />
+    <EmbeddedResource Include="Lists\MyListRatingProfileList.resx" />
     <EmbeddedResource Include="Lists\OlympAbitList.resx">
       <DependentUpon>OlympAbitList.cs</DependentUpon>
     </EmbeddedResource>

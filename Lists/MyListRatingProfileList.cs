@@ -58,9 +58,9 @@ namespace Priem
                     tbStudyForm.Text = rw.Field<string>("StudyFormName");
                 }
                 query = @"select SP_ObrazProgram.Name
-                          from   ObrazProgramInEntry
-                          inner join SP_ObrazProgram on ObrazProgramId= SP_ObrazProgram.Id
-                          where ObrazProgramInEntry.Id = '"+ _ObrazProgramInEntryId + "'";
+                          from   ed.ObrazProgramInEntry
+                          inner join ed.SP_ObrazProgram on ObrazProgramId= SP_ObrazProgram.Id
+                          where ObrazProgramInEntry.Id = '" + _ObrazProgramInEntryId + "'";
                 tbl = MainClass.Bdc.GetDataSet(query).Tables[0];
                 if (tbl.Rows.Count == 1)
                 {
@@ -109,7 +109,7 @@ namespace Priem
                           ApplicationDetails.ProfileInObrazProgramInEntryId
                          ,ApplicationDetails.ProfileInObrazProgramInEntryPriority
                          from ed.Abiturient  
-                         left join ApplicationDetails on ApplicationDetails.ApplicationId = Abiturient.Id
+                         left join ed.ApplicationDetails on ApplicationDetails.ApplicationId = Abiturient.Id
   
                          where Abiturient.PersonId=@PersonId and Abiturient.BackDoc = 0 and Abiturient.IsGosLine=0 
                          and ApplicationDetails.ObrazProgramInEntryId='" + _ObrazProgramInEntryId+"'";
@@ -307,7 +307,7 @@ namespace Priem
             if (e.ColumnIndex < 1)
                 return;
             // есть ли профили
-            if (e.RowIndex < 5)
+            if (e.RowIndex < 2)
                 return;
             // абитуриенты
             else
@@ -342,7 +342,5 @@ namespace Priem
 
             MainClass.OpenCardPerson(PersonNumList[index].ToString(), this, dgvAbitProfileList.CurrentRow.Index);
         }
-
-        
     }
 }

@@ -160,16 +160,14 @@ namespace Priem
                                 from ed.qEntry " + abitFilters + " order by StudyFormId, StudyBasisId, LicenseProgramName ";
             DataTable tbl = MainClass.Bdc.GetDataSet(query).Tables[0];
             string index = "";
-            int cnt = 1;
-            wc.SetMax(tbl.Rows.Count);
+            int cnt = 1; 
             foreach (DataRow rwEntry in tbl.Rows)
-            {
-                
+            { 
                 wc.SetText("Получение данных по учебным планам... (Обработано конкурсов: " + (cnt++).ToString() + "/" + tbl.Rows.Count + ")");
                 ///// Поиск ОБРАЗОВАТЕЛЬНЫХ ПРОГРАММ 
                 query = @"Select distinct qEntry.ObrazProgramId, qEntry.ObrazProgramName
                                 from ed.qEntry " + abitFilters + " and LicenseProgramId=" + rwEntry.Field<int>("LicenseProgramId").ToString() +" and StudyBasisId="+ rwEntry.Field<int>("StudyBasisId").ToString()+
-                                                 " and StudyFormId=" + rwEntry.Field<int>("StudyFormId").ToString();
+                                                 " and StudyFormId=" + rwEntry.Field<int>("StudyFormId").ToString() +" and IsSecond = 0";
                 DataTable tbl_LicProg = MainClass.Bdc.GetDataSet(query).Tables[0];
 
                 foreach (DataRow rw_licProg in tbl_LicProg.Rows)
@@ -177,7 +175,7 @@ namespace Priem
                     ///// ДЛЯ КАЖДОЙ ОБРАЗОВАТЕЛЬНОЙ ПРОГРАММЫ ПОИСК ПРОФИЛЕЙ:
                     query = @"select distinct qEntry.Id, KCP, ProfileId, ProfileName, StudyBasisName from ed.qEntry" + abitFilters + " and LicenseProgramId=" + rwEntry.Field<int>("LicenseProgramId").ToString() +
                             " and ObrazProgramId=" + rw_licProg.Field<int>("ObrazProgramId").ToString() + " and ProfileId is not null and StudyBasisId=" + rwEntry.Field<int>("StudyBasisId").ToString() +
-                                                 " and StudyFormId=" + rwEntry.Field<int>("StudyFormId").ToString();
+                                                 " and StudyFormId=" + rwEntry.Field<int>("StudyFormId").ToString() + " and IsSecond = 0"; 
                     DataTable tbl_ObrProgramProfile = MainClass.Bdc.GetDataSet(query).Tables[0];
                     /////  ЕСЛИ ЕСТЬ НЕНУЛЕВЫЕ ПРОФИЛИ (ПРОБЛЕМА С ИД СТОЛБЦА)
                     ///// НЕ ДОЛЖНО БЫТЬ ЗАГОЛОВКА СЛОБЦА, СТОЛБЕЦ = (НАПР/ОБРПРОГ/ПРОФ)
@@ -204,7 +202,7 @@ namespace Priem
                         //// нужно получить EntryId 
                         query = @"select distinct qEntry.Id, qEntry.StudyBasisName, KCP from ed.qEntry" + abitFilters + " and LicenseProgramId=" + rwEntry.Field<int>("LicenseProgramId").ToString() +
                             " and ObrazProgramId=" + rw_licProg.Field<int>("ObrazProgramId").ToString() + " and StudyBasisId=" + rwEntry.Field<int>("StudyBasisId").ToString() +
-                                                 " and StudyFormId=" + rwEntry.Field<int>("StudyFormId").ToString();
+                                                 " and StudyFormId=" + rwEntry.Field<int>("StudyFormId").ToString() + " and IsSecond = 0"; 
                         DataSet ds = MainClass.Bdc.GetDataSet(query);
                         Guid EntryId =  ds.Tables[0].Rows[0].Field<Guid>("Id");
                         int _KCP =  ds.Tables[0].Rows[0].Field<int>("KCP");

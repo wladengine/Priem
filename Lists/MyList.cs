@@ -173,7 +173,7 @@ namespace Priem
                 foreach (DataRow rw_licProg in tbl_LicProg.Rows)
                 {
                     ///// ДЛЯ КАЖДОЙ ОБРАЗОВАТЕЛЬНОЙ ПРОГРАММЫ ПОИСК ПРОФИЛЕЙ:
-                    query = @"select distinct qEntry.Id, KCP, ProfileId, ProfileName, StudyBasisName from ed.qEntry" + abitFilters + " and LicenseProgramId=" + rwEntry.Field<int>("LicenseProgramId").ToString() +
+                    query = @"select distinct qEntry.Id, KCP, ProfileId, ProfileName from ed.qEntry" + abitFilters + " and LicenseProgramId=" + rwEntry.Field<int>("LicenseProgramId").ToString() +
                             " and ObrazProgramId=" + rw_licProg.Field<int>("ObrazProgramId").ToString() + " and ProfileId is not null and StudyBasisId=" + rwEntry.Field<int>("StudyBasisId").ToString() +
                                                  " and StudyFormId=" + rwEntry.Field<int>("StudyFormId").ToString() + " and IsSecond = 0"; 
                     DataTable tbl_ObrProgramProfile = MainClass.Bdc.GetDataSet(query).Tables[0];

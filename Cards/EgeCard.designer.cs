@@ -222,7 +222,7 @@ namespace Priem
             this.tbFBSComment.Multiline = true;
             this.tbFBSComment.Name = "tbFBSComment";
             this.tbFBSComment.ReadOnly = true;
-            this.tbFBSComment.Size = new System.Drawing.Size(179, 31);
+            this.tbFBSComment.Size = new System.Drawing.Size(252, 31);
             this.tbFBSComment.TabIndex = 88;
             // 
             // label45

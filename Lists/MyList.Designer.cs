@@ -53,6 +53,7 @@
             this.pictureBox4 = new System.Windows.Forms.PictureBox();
             this.label9 = new System.Windows.Forms.Label();
             this.label10 = new System.Windows.Forms.Label();
+            this.btn_GreenList = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dgvAbitList)).BeginInit();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
@@ -128,7 +129,7 @@
             // 
             // btnFillGrid
             // 
-            this.btnFillGrid.Location = new System.Drawing.Point(400, 67);
+            this.btnFillGrid.Location = new System.Drawing.Point(342, 65);
             this.btnFillGrid.Name = "btnFillGrid";
             this.btnFillGrid.Size = new System.Drawing.Size(189, 23);
             this.btnFillGrid.TabIndex = 4;
@@ -230,7 +231,7 @@
             // 
             // btnToExcel
             // 
-            this.btnToExcel.Location = new System.Drawing.Point(400, 96);
+            this.btnToExcel.Location = new System.Drawing.Point(342, 92);
             this.btnToExcel.Name = "btnToExcel";
             this.btnToExcel.Size = new System.Drawing.Size(189, 23);
             this.btnToExcel.TabIndex = 72;
@@ -329,11 +330,22 @@
             this.label10.TabIndex = 82;
             this.label10.Text = "Щелкните правой мышкой по направлению или абитуриенту";
             // 
+            // btn_GreenList
+            // 
+            this.btn_GreenList.Location = new System.Drawing.Point(537, 66);
+            this.btn_GreenList.Name = "btn_GreenList";
+            this.btn_GreenList.Size = new System.Drawing.Size(108, 50);
+            this.btn_GreenList.TabIndex = 83;
+            this.btn_GreenList.Text = "НЕ НАЖИМАТЬ!";
+            this.btn_GreenList.UseVisualStyleBackColor = true;
+            this.btn_GreenList.Click += new System.EventHandler(this.btn_GreenList_Click);
+            // 
             // MyList
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1100, 553);
+            this.Controls.Add(this.btn_GreenList);
             this.Controls.Add(this.label10);
             this.Controls.Add(this.pictureBox4);
             this.Controls.Add(this.label9);
@@ -385,6 +397,7 @@
             this.Controls.SetChildIndex(this.label9, 0);
             this.Controls.SetChildIndex(this.pictureBox4, 0);
             this.Controls.SetChildIndex(this.label10, 0);
+            this.Controls.SetChildIndex(this.btn_GreenList, 0);
             ((System.ComponentModel.ISupportInitialize)(this.dgvAbitList)).EndInit();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
@@ -424,5 +437,6 @@
         private System.Windows.Forms.PictureBox pictureBox4;
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.Button btn_GreenList;
     }
 }

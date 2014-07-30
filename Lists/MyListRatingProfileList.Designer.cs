@@ -44,6 +44,7 @@
             this.btnPaint = new System.Windows.Forms.Button();
             this.btnExcel = new System.Windows.Forms.Button();
             this.label7 = new System.Windows.Forms.Label();
+            this.btnGreenList = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dgvAbitProfileList)).BeginInit();
             this.SuspendLayout();
             // 
@@ -192,7 +193,7 @@
             // 
             this.btnPaint.Location = new System.Drawing.Point(710, 8);
             this.btnPaint.Name = "btnPaint";
-            this.btnPaint.Size = new System.Drawing.Size(79, 33);
+            this.btnPaint.Size = new System.Drawing.Size(79, 22);
             this.btnPaint.TabIndex = 27;
             this.btnPaint.Text = "Приоритеты";
             this.btnPaint.UseVisualStyleBackColor = true;
@@ -200,9 +201,9 @@
             // 
             // btnExcel
             // 
-            this.btnExcel.Location = new System.Drawing.Point(710, 45);
+            this.btnExcel.Location = new System.Drawing.Point(710, 34);
             this.btnExcel.Name = "btnExcel";
-            this.btnExcel.Size = new System.Drawing.Size(79, 33);
+            this.btnExcel.Size = new System.Drawing.Size(79, 21);
             this.btnExcel.TabIndex = 28;
             this.btnExcel.Text = "Excel";
             this.btnExcel.UseVisualStyleBackColor = true;
@@ -217,11 +218,22 @@
             this.label7.TabIndex = 29;
             this.label7.Text = "Ид.Номер_ФИО (приоритет профиля)";
             // 
+            // btnGreenList
+            // 
+            this.btnGreenList.Location = new System.Drawing.Point(710, 59);
+            this.btnGreenList.Name = "btnGreenList";
+            this.btnGreenList.Size = new System.Drawing.Size(79, 21);
+            this.btnGreenList.TabIndex = 30;
+            this.btnGreenList.Text = "GreenList";
+            this.btnGreenList.UseVisualStyleBackColor = true;
+            this.btnGreenList.Click += new System.EventHandler(this.btnGreenList_Click);
+            // 
             // MyListRatingProfileList
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(801, 568);
+            this.Controls.Add(this.btnGreenList);
             this.Controls.Add(this.label7);
             this.Controls.Add(this.btnExcel);
             this.Controls.Add(this.btnPaint);
@@ -261,6 +273,7 @@
             this.Controls.SetChildIndex(this.btnPaint, 0);
             this.Controls.SetChildIndex(this.btnExcel, 0);
             this.Controls.SetChildIndex(this.label7, 0);
+            this.Controls.SetChildIndex(this.btnGreenList, 0);
             ((System.ComponentModel.ISupportInitialize)(this.dgvAbitProfileList)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -285,5 +298,6 @@
         private System.Windows.Forms.Button btnPaint;
         private System.Windows.Forms.Button btnExcel;
         private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.Button btnGreenList;
     }
 }

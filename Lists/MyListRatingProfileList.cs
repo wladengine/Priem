@@ -27,6 +27,7 @@ namespace Priem
         {
             InitializeComponent();
             Dgv = dgvAbitProfileList;
+
             _ObrazProgramInEntryId = Guid.Parse(Id);
             _EntryId = Guid.Parse(EntryId);
             PersonNumList = List;
@@ -142,6 +143,7 @@ namespace Priem
             }
             
             DataView dv = new DataView(examTable);
+
             dgvAbitProfileList.DataSource = dv;
             dgvAbitProfileList.AllowUserToOrderColumns = false;
             for (int i = 0; i < dgvAbitProfileList.Columns.Count; i++)

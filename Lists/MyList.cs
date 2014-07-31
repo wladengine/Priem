@@ -594,6 +594,10 @@ namespace Priem
                                                     if (String.IsNullOrEmpty(dgvAbitList.Rows[row_temp].Cells[kvp.Key].Value.ToString()))
                                                         break;
                                                     if (dgvAbitList.Rows[row_temp].Cells[kvp.Key].Style.BackColor == Color.Empty) 
+                                                    /*if ((dgvAbitList.Rows[row_temp].Cells[kvp.Key].Style.BackColor != Color.LightGreen) && 
+                                                        (dgvAbitList.Rows[row_temp].Cells[kvp.Key].Style.BackColor != Color.LightBlue)  &&
+                                                        (dgvAbitList.Rows[row_temp].Cells[kvp.Key].Style.BackColor != Color.Yellow) &&
+                                                        (dgvAbitList.Rows[row_temp].Cells[kvp.Key].Style.BackColor != Color.Red))*/
                                                     {
                                                         dgvAbitList.Rows[row_temp].Cells[kvp.Key].Style.BackColor = Color.LightGreen;
                                                         break;
@@ -629,7 +633,7 @@ namespace Priem
                                                 {
                                                     if (String.IsNullOrEmpty(dgvAbitList.Rows[row_temp].Cells[kvp.Key].Value.ToString()))
                                                         break;
-                                                    if (dgvAbitList.Rows[row_temp].Cells[kvp.Key].Style.BackColor != Color.Empty) 
+                                                    if (dgvAbitList.Rows[row_temp].Cells[kvp.Key].Style.BackColor == Color.Empty) 
                                                     {
                                                         dgvAbitList.Rows[row_temp].Cells[kvp.Key].Style.BackColor = Color.LightGreen;
                                                         break;
@@ -993,7 +997,7 @@ namespace Priem
                 string PersonId = "";
                 string AbitId = "";
                 string NumFio = "";
-                string query = @"select Abiturient.Id from ed.Abiturient where EntryId ='"+EntryId+"' and PersonId='";
+                string query = @"select Abiturient.Id from ed.Abiturient where BackDoc=0 and NotEnabled = 0 and  EntryId ='"+EntryId+"' and PersonId='";
                 
                 // человеки
                 List<string> AbitIdList = new List<string>();
@@ -1080,7 +1084,7 @@ namespace Priem
                             //List<int> MyPriorList = TablePriorities[rowindex];
                             for (int colindex = 0; colindex < ProfileList.Count; colindex++)
                             {
-                                if (TableGreenYellow[colindex][rowindex] == 0)
+                                if (TableGreenYellow[colindex][rowindex] != 1)
                                     continue;
                                 int abit_profile_priority = TablePriorities[colindex][rowindex];
 
@@ -1092,7 +1096,7 @@ namespace Priem
                                         // менее приоритетное заявление (освободить место)
                                         if (TableGreenYellow[temp_colindex][rowindex] == 1)
                                         {
-                                            TableGreenYellow[temp_colindex][rowindex] = 0;
+                                            TableGreenYellow[temp_colindex][rowindex] = -1;
                                             // сдвинуть зеленку
                                             for (int temp_rowindex = rowindex+1; temp_rowindex < AbitIdList.Count; temp_rowindex++)
                                             {
@@ -1116,7 +1120,7 @@ namespace Priem
                                         {
                                             if (TableGreenYellow[temp_colindex][rowindex] == 1)
                                             {
-                                                TableGreenYellow[colindex][rowindex] = 0;
+                                                TableGreenYellow[colindex][rowindex] = -1;
                                                 abit_profile_priority = temp_priority;
                                                 // сдвинуть зеленку
                                                 for (int temp_rowindex = rowindex+1; temp_rowindex < AbitIdList.Count; temp_rowindex++)

@@ -975,7 +975,7 @@ namespace Priem
             wc.Show();
             wc.SetText("Удаление старых данных...");
             MainClass.Bdc.ExecuteQuery(@"  delete from ed.AbiturientGREEN
-                                           where AbiturientId In (select qAbiturient.Id from ed.qAbiturient inner join qEntry on qEntry.Id = EntryId " + GetAbitFilterString() + ")");
+                                           where AbiturientId In (select qAbiturient.Id from ed.qAbiturient inner join ed.qEntry on qEntry.Id = EntryId " + GetAbitFilterString() + ")");
             wc.SetText("Добавление новых данных...");
             wc.SetMax(dgvAbitList.Columns.Count);
             for (int clmn = startcol; clmn < dgvAbitList.Columns.Count; clmn ++)

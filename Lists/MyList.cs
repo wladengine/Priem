@@ -975,7 +975,7 @@ namespace Priem
             wc.Show();
             wc.SetText("Удаление старых данных...");
             MainClass.Bdc.ExecuteQuery(@"  delete from ed.AbiturientGREEN
-                                           where AbiturientId In (select Id from ed.qAbiturient where StudyLevelGroupId =" + MainClass.studyLevelGroupId+")");
+                                           where AbiturientId In (select qAbiturient.Id from ed.qAbiturient inner join qEntry on qEntry.Id = EntryId " + GetAbitFilterString() + ")");
             wc.SetText("Добавление новых данных...");
             wc.SetMax(dgvAbitList.Columns.Count);
             for (int clmn = startcol; clmn < dgvAbitList.Columns.Count; clmn ++)
@@ -995,8 +995,10 @@ namespace Priem
                 string NumFio = "";
                 string query = @"select Abiturient.Id from ed.Abiturient where EntryId ='"+EntryId+"' and PersonId='";
                 
-
-                for (int rowindex = startrow; rowindex < dgvAbitList.Rows.Count; rowindex ++ )
+                // человеки
+                List<string> AbitIdList = new List<string>();
+                
+                for (int rowindex = startrow; rowindex < dgvAbitList.Rows.Count; rowindex++ )
                 {
                     string value = dgvAbitList.Rows[rowindex].Cells[clmn].Value.ToString();
                     if (String.IsNullOrEmpty(value))
@@ -1015,6 +1017,8 @@ namespace Priem
                             AbitId = MainClass.Bdc.GetDataSet(query + PersonId + "'").Tables[0].Rows[0].Field<Guid>("Id").ToString();
                             if (!String.IsNullOrEmpty(AbitId))
                             {
+                                // добавляем ID абитуриента в список счастливых лиц
+                                AbitIdList.Add(AbitId);
                                 if (string.IsNullOrEmpty(ObrazProgramInEntryId))
                                     MainClass.Bdc.ExecuteQuery("Insert into  ed.AbiturientGreen (AbiturientId) Values ('" + AbitId + "')");
                                 else
@@ -1031,12 +1035,127 @@ namespace Priem
                         }
                     }
                 }
+                // образовательную программу мы добавили, теперь дело за профилем.
+                // если список лиц не пуст, надо понять если там профили
+                if (AbitIdList.Count>0)
+                {
+                    if (dgvAbitList.Rows[1].Cells[clmn].Style.BackColor == Color.Azure)
+                    {
+                        // найдем профили и посчитаем кого и куда
+                        DataTable tbl = MainClass.Bdc.GetDataSet("select Distinct Id, KCP from ed.ProfileInObrazProgramInEntry where ObrazProgramInEntryId ='"+ObrazProgramInEntryId+"'").Tables[0];
+                        List<List<int>> TablePriorities = new List<List<int>>();
+                        List<List<int>> TableGreenYellow = new List<List<int>>();
+                        List<Guid> ProfileList = new List<Guid>(); 
+                        foreach (DataRow rw in tbl.Rows)
+                        {
+                            ProfileList.Add(rw.Field<Guid>("Id"));
+                            // список приоритетов для ПРОФИЛЯ
+                            List<int> TempPriorList = new List<int>();
+                            for (int rowindex = 0; rowindex < AbitIdList.Count; rowindex++)
+                            {
+                                int PriorTemp = (int)MainClass.Bdc.GetValue("select Distinct ProfileInObrazProgramInEntryPriority from ed.ApplicationDetails "+
+                                                " where ApplicationId='" + AbitIdList[rowindex] +
+                                                "' and ObrazProgramInEntryId ='" + ObrazProgramInEntryId +
+                                                "' and ProfileInObrazProgramInEntryId='"+rw.Field<Guid>("Id").ToString()+ "'");
+                                TempPriorList.Add(PriorTemp);
+                            }
+                            TablePriorities.Add(TempPriorList);
+
+                            TempPriorList = new List<int>();
+                            for (int rowindex = 0; (rowindex < rw.Field<int>("KCP")) && (rowindex < AbitIdList.Count); rowindex++)
+                            {
+                                TempPriorList.Add(1);
+                            }
+                            for (int rowindex = rw.Field<int>("KCP"); rowindex < AbitIdList.Count; rowindex++)
+                            {
+                                TempPriorList.Add(0);
+                            }
+                            TableGreenYellow.Add(TempPriorList);
+                        }
+                        // получили таблицы приоритетов и рекомендованных
+                        // теперь надо перерасставить рекомендации согласно приоритетам
+                        // для каждого абитуриента
+                        for (int rowindex = 0; rowindex < AbitIdList.Count; rowindex++)
+                        {
+                            //List<int> MyPriorList = TablePriorities[rowindex];
+                            for (int colindex = 0; colindex < ProfileList.Count; colindex++)
+                            {
+                                if (TableGreenYellow[colindex][rowindex] == 0)
+                                    continue;
+                                int abit_profile_priority = TablePriorities[colindex][rowindex];
+
+                                for (int temp_colindex = colindex + 1; temp_colindex < ProfileList.Count; temp_colindex++)
+                                {
+                                    int temp_priority = TablePriorities[temp_colindex][rowindex];
+                                    if (temp_priority > abit_profile_priority)
+                                    {
+                                        // менее приоритетное заявление (освободить место)
+                                        if (TableGreenYellow[temp_colindex][rowindex] == 1)
+                                        {
+                                            TableGreenYellow[temp_colindex][rowindex] = 0;
+                                            // сдвинуть зеленку
+                                            for (int temp_rowindex = rowindex+1; temp_rowindex < AbitIdList.Count; temp_rowindex++)
+                                            {
+                                                if (TableGreenYellow[temp_colindex][temp_rowindex] == 0)
+                                                {
+                                                    TableGreenYellow[temp_colindex][temp_rowindex] = 1;
+                                                    break;
+                                                }
+                                                       
+                                            }
+                                            
+                                        }
+                                    }
+                                    else
+                                    {
+                                        // более приоритетное заявление (перезаписать)
+                                        if (temp_priority == abit_profile_priority)
+                                        {
+                                        }
+                                        else
+                                        {
+                                            if (TableGreenYellow[temp_colindex][rowindex] == 1)
+                                            {
+                                                TableGreenYellow[colindex][rowindex] = 0;
+                                                abit_profile_priority = temp_priority;
+                                                // сдвинуть зеленку
+                                                for (int temp_rowindex = rowindex+1; temp_rowindex < AbitIdList.Count; temp_rowindex++)
+                                                {
+                                                    if (TableGreenYellow[colindex][temp_rowindex] == 0)
+                                                    {
+                                                        TableGreenYellow[colindex][temp_rowindex] = 1;
+                                                        break;
+                                                    }
+                                                }
+                                                colindex = temp_colindex;
+                                            }
+                                        }
+                                    }
+                                }
+                                break;
+                            }
+                        }
+                        // вроде все расставили. Надо бы как то сравнить списки эти и таблицы гридов из профилей
+                        // Теперь надо обновить профили для Абитуриентов
+                        for (int colindex = 0; colindex < ProfileList.Count; colindex++)
+                        {
+                            for (int rowindex = 0; rowindex < TableGreenYellow[colindex].Count; rowindex++)
+                            {
+                                if (TableGreenYellow[colindex][rowindex] == 1)
+                                {
+                                    MainClass.Bdc.ExecuteQuery("Update ed.AbiturientGreen  set ProfileInObrazProgramInEntryId = '" + ProfileList[colindex].ToString() + "' where AbiturientId ='" + AbitIdList[rowindex] + "' and ObrazProgramInEntryId ='" + ObrazProgramInEntryId + "'");
+                                }
+                            }
+                        }
+                    }                     
+                }
 
                 wc.PerformStep();
                 wc.SetText("Добавление новых данных: Обработано конкурсов "+clmn+"/"+(dgvAbitList.Columns.Count-1)+"...");
             }
             wc.Close();
             btnGreenIsClicked = true;
+            MessageBox.Show(this, "Done", "", MessageBoxButtons.OK);
         }
     }
 }

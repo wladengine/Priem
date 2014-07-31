@@ -119,7 +119,7 @@ namespace Priem
             examTable.Rows.Add(rowProfileId);
             examTable.Rows.Add(rowKCP);
             // abiturients 
-            query = @"select 
+            query = @"select distinct
                           ApplicationDetails.ProfileInObrazProgramInEntryId
                          ,ApplicationDetails.ProfileInObrazProgramInEntryPriority
                          from ed.Abiturient  
@@ -225,10 +225,7 @@ namespace Priem
                                     {
                                         if (String.IsNullOrEmpty(dgvAbitProfileList.Rows[row_temp].Cells[j].Value.ToString()))
                                             break;
-                                        if ((dgvAbitProfileList.Rows[row_temp].Cells[j].Style.BackColor != Color.LightGreen) &&
-                                       (dgvAbitProfileList.Rows[row_temp].Cells[j].Style.BackColor != Color.Yellow) &&
-                                           (dgvAbitProfileList.Rows[row_temp].Cells[j].Style.BackColor != Color.LightBlue))
-                                        //if (dgvAbitList.Rows[row_temp].Cells[kvp.Key].Style.BackColor == Color.White)
+                                        if (dgvAbitProfileList.Rows[row_temp].Cells[j].Style.BackColor == Color.Empty) 
                                         {
                                             dgvAbitProfileList.Rows[row_temp].Cells[j].Style.BackColor = Color.LightGreen;
                                             break;
@@ -258,10 +255,7 @@ namespace Priem
                                     {
                                         if (String.IsNullOrEmpty(dgvAbitProfileList.Rows[row_temp].Cells[cell.ColumnIndex].Value.ToString()))
                                             break;
-                                        if ((dgvAbitProfileList.Rows[row_temp].Cells[cell.ColumnIndex].Style.BackColor != Color.LightGreen) &&
-                                            (dgvAbitProfileList.Rows[row_temp].Cells[cell.ColumnIndex].Style.BackColor != Color.Yellow) &&
-                                            (dgvAbitProfileList.Rows[row_temp].Cells[cell.ColumnIndex].Style.BackColor != Color.LightBlue))
-                                        //if (dgvAbitProfileList.Rows[row_temp].Cells[cell.ColumnIndex].Style.BackColor == Color.White)
+                                        if (dgvAbitProfileList.Rows[row_temp].Cells[cell.ColumnIndex].Style.BackColor == Color.Empty) 
                                         {
                                             dgvAbitProfileList.Rows[row_temp].Cells[cell.ColumnIndex].Style.BackColor = Color.LightGreen;
                                             break;
@@ -292,10 +286,7 @@ namespace Priem
                                         {
                                             if (String.IsNullOrEmpty(dgvAbitProfileList.Rows[row_temp].Cells[cells.ColumnIndex].Value.ToString()))
                                                 break;
-                                            if  ((dgvAbitProfileList.Rows[row_temp].Cells[cells.ColumnIndex].Style.BackColor != Color.LightGreen) &&
-                                                (dgvAbitProfileList.Rows[row_temp].Cells[cells.ColumnIndex].Style.BackColor != Color.Yellow) &&
-                                                (dgvAbitProfileList.Rows[row_temp].Cells[cells.ColumnIndex].Style.BackColor != Color.LightBlue))
-                                            //if (dgvAbitProfileList.Rows[row_temp].Cells[cells.ColumnIndex].Style.BackColor == Color.White)
+                                            if  (dgvAbitProfileList.Rows[row_temp].Cells[cells.ColumnIndex].Style.BackColor == Color.Empty) 
                                             {
                                                 dgvAbitProfileList.Rows[row_temp].Cells[cells.ColumnIndex].Style.BackColor = Color.LightGreen;
                                                 break;
@@ -307,6 +298,7 @@ namespace Priem
                             }
                         }
                     }
+                    break;
                 }
             } 
         }

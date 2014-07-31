@@ -514,5 +514,9 @@ namespace Priem
             btnExcel.Enabled = true;
         }
 
+        protected override void OpenCard(string itemId)
+        {
+            //base.OpenCard(itemId);
+        }
     }
 }

@@ -32,6 +32,8 @@ namespace Priem
         bool b1kursAddNabor1Enabled = true;
         DateTime dt1kursAddNabor1 = new DateTime(2013, 8, 20);
 
+        bool bFirstWaveEnabled = true;
+
         //constructor
         public RatingList(bool fromFixieren)
         {
@@ -72,7 +74,8 @@ namespace Priem
                     LEFT JOIN ed.extAbitMarksSum ON ed.qAbiturient.Id = ed.extAbitMarksSum.Id
                     LEFT JOIN ed.extAbitMarkByRating ON ed.qAbiturient.Id = ed.extAbitMarkByRating.Id
                     LEFT JOIN ed.hlpMinMarkAbiturient ON hlpMinMarkAbiturient.Id = qAbiturient.Id
-                    LEFT JOIN ed.qAbiturientForeignApplicationsOnly qFor ON qAbiturient.Id = qFor.Id";
+                    LEFT JOIN ed.qAbiturientForeignApplicationsOnly qFor ON qAbiturient.Id = qFor.Id
+                    LEFT JOIN ed.[_FirstWaveBackUp] FW ON FW.AbiturientId = qAbiturient.Id";
 
             if (MainClass.dbType == PriemType.PriemMag)
                 _queryFrom += " LEFT JOIN ed.hlpMinMarkMag ON hlpMinMarkMag.AbiturientId = qAbiturient.Id";
@@ -516,7 +519,9 @@ namespace Priem
                     LEFT JOIN ed.hlpAbiturientProfAdd ON ed.hlpAbiturientProfAdd.Id = ed.qAbiturient.Id 
                     LEFT JOIN ed.hlpAbiturientProf ON ed.hlpAbiturientProf.Id = ed.qAbiturient.Id 
                     LEFT JOIN ed.extAbitMarksSum ON ed.qAbiturient.Id = ed.extAbitMarksSum.Id
-                    LEFT JOIN ed.extAbitMarkByRating ON ed.qAbiturient.Id = ed.extAbitMarkByRating.Id";
+                    LEFT JOIN ed.extAbitMarkByRating ON ed.qAbiturient.Id = ed.extAbitMarkByRating.Id
+                    
+";
 
                     string whereFix = string.Format(
 @" WHERE ed.FixierenView.StudyLevelGroupId = {10} AND ed.FixierenView.StudyFormId={0} AND ed.FixierenView.StudyBasisId={1} AND ed.FixierenView.FacultyId={2} 
@@ -543,6 +548,7 @@ AND ed.FixierenView.IsSecond = {7} AND ed.FixierenView.IsReduced = {8} AND ed.Fi
 
                     //не забрали доки
                     sFilters += " AND (ed.qAbiturient.BackDoc=0) ";
+
                     sFilters += " AND ed.qAbiturient.Id NOT IN (select abiturientid from ed.extentryview) ";
 
                     //не иностранцы
@@ -584,6 +590,8 @@ AND ed.FixierenView.IsSecond = {7} AND ed.FixierenView.IsReduced = {8} AND ed.Fi
                     {
                         _queryOrange = @", CASE WHEN EXISTS(SELECT ed.extEntryView.Id FROM ed.extEntryView INNER JOIN ed.Abiturient a ON ed.extEntryView.AbiturientId = a.Id WHERE a.PersonId = ed.qAbiturient.PersonId) then 1 else 0 end as orange ";
 
+                        if (bFirstWaveEnabled && MainClass.dbType == PriemType.Priem)
+                            sFilters += " AND FW.AbiturientId IS NOT NULL";
 
                         //эту хрень использовать только во второй волне - оно не будет работать, пока в _FirstWaveBackup или в _FirstWave не появятся люди
                         //ЗАКОММЕНТИТЬ К НОВОМУ ПРИЁМУ!!!

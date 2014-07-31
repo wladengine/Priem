@@ -23,7 +23,8 @@ namespace Priem
         List<List<KeyValuePair<int, int>>> Coord_Save = new List<List<KeyValuePair<int, int>>>();
         List<KeyValuePair<int, KeyValuePair<int, int>>> DeleteList = new List<KeyValuePair<int, KeyValuePair<int, int>>>();
         Guid ErrorGuid = Guid.Empty;
-        int startrow = 7; 
+        int startrow = 7;
+        bool btnGreenIsClicked = false;
 
         public MyList()
         {
@@ -435,6 +436,20 @@ namespace Priem
 
         private void PaintGrid()
         {
+            /// Раскрашиваем профили
+            for (int colindex = 1; colindex <dgvAbitList.Columns.Count; colindex++)
+            {
+                if (!String.IsNullOrEmpty(dgvAbitList.Rows[3].Cells[colindex].Value.ToString()))
+                {
+                    string query = @"select Id from ed.ProfileInObrazProgramInEntry where ObrazProgramInEntryId ='" + dgvAbitList.Rows[3].Cells[colindex].Value.ToString() + "'";
+                    DataTable tbl = MainClass.Bdc.GetDataSet(query).Tables[0];
+                    if (tbl.Rows.Count < 2)
+                        continue;
+                    for (int j = 0; j< startrow-1; j++)
+                        dgvAbitList.Rows[j].Cells[colindex].Style.BackColor = Color.Azure;
+                }
+            }
+            ///
             for (int colindex = 1; colindex < dgvAbitList.Columns.Count; colindex++)
             {
                 int KCP = 0;
@@ -945,7 +960,7 @@ namespace Priem
                         MessageBox.Show (this,"SomeError while searching FIO and Person.Id: "+value,"ContextMenuProfile_OnClick");
                 }
             }
-            new MyListRatingProfileList(ObrazProgramInEntryId, EntryId, PersonNumList, PersonFIOList).Show();
+            new MyListRatingProfileList(ObrazProgramInEntryId, EntryId, PersonNumList, PersonFIOList, btnGreenIsClicked).Show();
         }
 
         private void tbAbitsTop_MouseClick(object sender, MouseEventArgs e)
@@ -1021,6 +1036,7 @@ namespace Priem
                 wc.SetText("Добавление новых данных: Обработано конкурсов "+clmn+"/"+(dgvAbitList.Columns.Count-1)+"...");
             }
             wc.Close();
+            btnGreenIsClicked = true;
         }
     }
 }

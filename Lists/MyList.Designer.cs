@@ -336,7 +336,7 @@
             this.btn_GreenList.Name = "btn_GreenList";
             this.btn_GreenList.Size = new System.Drawing.Size(108, 50);
             this.btn_GreenList.TabIndex = 83;
-            this.btn_GreenList.Text = "НЕ НАЖИМАТЬ!";
+            this.btn_GreenList.Text = "GreenList";
             this.btn_GreenList.UseVisualStyleBackColor = true;
             this.btn_GreenList.Click += new System.EventHandler(this.btn_GreenList_Click);
             // 

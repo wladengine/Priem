@@ -22,8 +22,9 @@ namespace Priem
         List<Guid> PersonNumList = new List<Guid>();
         List<string> PersonFIOList = new List<string>();
         int startrow = 3;
+        bool IsGreen;
 
-        public MyListRatingProfileList(string Id, string EntryId,  List<Guid>List, List<string>ListFio)
+        public MyListRatingProfileList(string Id, string EntryId,  List<Guid>List, List<string>ListFio, bool isgr)
         {
             InitializeComponent();
             Dgv = dgvAbitProfileList;
@@ -32,6 +33,7 @@ namespace Priem
             _EntryId = Guid.Parse(EntryId);
             PersonNumList = List;
             PersonFIOList = ListFio;
+            IsGreen = isgr;
             InitControls();
         }
 
@@ -45,7 +47,8 @@ namespace Priem
             btnRemove.Visible = btnAdd.Visible = false;
             btnExcel.Enabled = false;
             btnGreenList.Visible = false;
-            btnGreenList.Enabled = false;
+            btnGreenList.Enabled = IsGreen;
+            
             if (MainClass.IsOwner())
                 btnGreenList.Visible = true;
             _title = "Рейтинговый список с внутренними приоритетами";
@@ -308,15 +311,6 @@ namespace Priem
             } 
         }
 
-        private void btnPaint_Click(object sender, EventArgs e)
-        {
-            GridPaint();
-            CopyTable();
-            btnPaint.Enabled = false;
-            btnExcel.Enabled = true;
-            btnGreenList.Enabled = true;
-        }
-
         private void CopyTable()
         {
             int startcol = 1;
@@ -329,6 +323,7 @@ namespace Priem
                     dgvAbitProfileList.Rows[i].Cells[j].Value = PersonFIOList[PersonNumList.IndexOf(PersId)] + " (" + value.Substring(value.IndexOf("_") + 1) + ")";
                 }
             }
+            // ProfileId
             dgvAbitProfileList.Rows[1].Visible = false;
         }
 
@@ -519,5 +514,13 @@ namespace Priem
             }
             wc.Close();
         }
+
+        private void MyListRatingProfileList_Shown(object sender, EventArgs e)
+        {
+            GridPaint();
+            CopyTable();
+            btnExcel.Enabled = true;
+        }
+
     }
 }

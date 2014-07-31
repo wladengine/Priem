@@ -208,6 +208,10 @@ namespace Priem
             examTable.Columns.Add(clm);
 
             clm = new DataColumn();
+            clm.ColumnName = "PersonNum";
+            examTable.Columns.Add(clm);
+
+            clm = new DataColumn();
             clm.ColumnName = "ФИО";
             examTable.Columns.Add(clm);
 
@@ -381,10 +385,12 @@ namespace Priem
                 }
             string toplist = (rbAbitsAll.Checked)? "": ((itopList == 0)?"":" top "+itopList.ToString());
             query = @"SELECT distinct" + toplist + @"
-                        Abiturient.PersonId, 
-                        Person.Surname +' '+ Person.Name + (case when (Person.SecondName is not null) then ' '+Person.SecondName else '' end) as FIO
+                        Abiturient.PersonId,
+                        extPerson.PersonNum,
+                        --Person.Surname +' '+ Person.Name + (case when (Person.SecondName is not null) then ' '+Person.SecondName else '' end) as FIO
+                        extPerson.FIO as FIO
                         FROM [ed].Abiturient
-                        inner join ed.Person on Person.Id = Abiturient.PersonId
+                        inner join ed.extPerson on extPerson.Id = Abiturient.PersonId
                         inner join ed.qEntry on qEntry.Id = Abiturient.EntryId 
                         " + abitFilters + " AND Abiturient.Id NOT IN (SELECT Id FROM ed.qAbiturientForeignApplicationsOnly) AND Abiturient.BackDoc = 0"+
                         @" order by FIO";
@@ -420,6 +426,7 @@ namespace Priem
                 DataRow newRow;
                 newRow = examTable.NewRow();
                 newRow["Id"] = rw.Field<Guid>("PersonId");
+                newRow["PersonNum"] = rw.Field<string>("PersonNum");
                 newRow["ФИО"] = rw.Field<string>("FIO");
 
                 DataTable tbl_abit = _bdc.GetDataSet(query).Tables[0];
@@ -629,7 +636,7 @@ namespace Priem
         private void btnToExcel_Click(object sender, EventArgs e)
         {
             if ((DataView)dgvAbitList.DataSource != null)
-                PrintToExcel(((DataView)dgvAbitList.DataSource).Table, "export");
+                PrintToExcel(((DataView)dgvAbitList.DataSource).Table.Copy(), "export");
         }
 
         private void btnRePaint_Click(object sender, EventArgs e)
@@ -648,11 +655,12 @@ namespace Priem
             {
                 tbl.Columns.Remove("Id");
             }
-
+            
             List<string> lstFields = new List<string>();
 
             int rowHeight = 70;
             double colWidth = 21;
+            double colNum = 10;
             double colFIOWidth = 35;
 
             SaveFileDialog sfd = new SaveFileDialog();
@@ -669,22 +677,13 @@ namespace Priem
                      
                     int i = 0;
                     int j = 1;
-                    /*
-                    foreach (DataColumn dc in tbl.Columns)
-                    {
-                        //нам не нужны заголовки
-                        //ws.Cells[i, j] = dc.Caption;
-                        j++;
-                    }
-                    */
+                    
                     i++;
 
                     ProgressForm prog = new ProgressForm(0, tbl.Rows.Count, 1, ProgressBarStyle.Blocks, "Импорт списка");
                     prog.Show();
                     
                     // печать из грида
-
-
                     for (int rowindex = 0; rowindex < 2; rowindex++)
                     {
                         DataRow dr = tbl.Rows[rowindex];
@@ -736,11 +735,18 @@ namespace Priem
                     Range3.WrapText = true;
                     Range3.RowHeight = rowHeight;
                     Range3.ColumnWidth = colWidth;
-                    
+
                     Range3 = ws.Range[ws.Cells[3, 1], ws.Cells[3, 1]];
+                    Range3.ColumnWidth = colNum; 
+
+
+                    Range3 = ws.Range[ws.Cells[3, 2], ws.Cells[3, 2]];
                     Range3.ColumnWidth = colFIOWidth;
 
-                    Range3 = ws.Range[ws.Cells[1, 2], ws.Cells[tbl.Rows.Count, tbl.Columns.Count]];
+                    Range3 = ws.Range[ws.Cells[1, 1], ws.Cells[tbl.Rows.Count, 2]];
+                    Range3.HorizontalAlignment = Excel.XlHAlign.xlHAlignLeft;
+
+                    Range3 = ws.Range[ws.Cells[1, 3], ws.Cells[tbl.Rows.Count, tbl.Columns.Count]];
                     Range3.HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter;
                     Range3.NumberFormat = "General"; 
 

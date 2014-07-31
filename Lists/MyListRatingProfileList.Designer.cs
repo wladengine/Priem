@@ -41,7 +41,6 @@
             this.dgvAbitProfileList = new System.Windows.Forms.DataGridView();
             this.tbObrazProgramInEntry = new System.Windows.Forms.TextBox();
             this.label6 = new System.Windows.Forms.Label();
-            this.btnPaint = new System.Windows.Forms.Button();
             this.btnExcel = new System.Windows.Forms.Button();
             this.label7 = new System.Windows.Forms.Label();
             this.btnGreenList = new System.Windows.Forms.Button();
@@ -189,21 +188,11 @@
             this.label6.TabIndex = 25;
             this.label6.Text = "Образовательная программа";
             // 
-            // btnPaint
-            // 
-            this.btnPaint.Location = new System.Drawing.Point(710, 8);
-            this.btnPaint.Name = "btnPaint";
-            this.btnPaint.Size = new System.Drawing.Size(79, 22);
-            this.btnPaint.TabIndex = 27;
-            this.btnPaint.Text = "Приоритеты";
-            this.btnPaint.UseVisualStyleBackColor = true;
-            this.btnPaint.Click += new System.EventHandler(this.btnPaint_Click);
-            // 
             // btnExcel
             // 
-            this.btnExcel.Location = new System.Drawing.Point(710, 34);
+            this.btnExcel.Location = new System.Drawing.Point(713, 10);
             this.btnExcel.Name = "btnExcel";
-            this.btnExcel.Size = new System.Drawing.Size(79, 21);
+            this.btnExcel.Size = new System.Drawing.Size(79, 40);
             this.btnExcel.TabIndex = 28;
             this.btnExcel.Text = "Excel";
             this.btnExcel.UseVisualStyleBackColor = true;
@@ -220,9 +209,9 @@
             // 
             // btnGreenList
             // 
-            this.btnGreenList.Location = new System.Drawing.Point(710, 59);
+            this.btnGreenList.Location = new System.Drawing.Point(713, 56);
             this.btnGreenList.Name = "btnGreenList";
-            this.btnGreenList.Size = new System.Drawing.Size(79, 21);
+            this.btnGreenList.Size = new System.Drawing.Size(79, 24);
             this.btnGreenList.TabIndex = 30;
             this.btnGreenList.Text = "GreenList";
             this.btnGreenList.UseVisualStyleBackColor = true;
@@ -236,7 +225,6 @@
             this.Controls.Add(this.btnGreenList);
             this.Controls.Add(this.label7);
             this.Controls.Add(this.btnExcel);
-            this.Controls.Add(this.btnPaint);
             this.Controls.Add(this.tbObrazProgramInEntry);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.dgvAbitProfileList);
@@ -252,6 +240,7 @@
             this.Controls.Add(this.label1);
             this.Name = "MyListRatingProfileList";
             this.Text = "MyListRatingProfileList";
+            this.Shown += new System.EventHandler(this.MyListRatingProfileList_Shown);
             this.Controls.SetChildIndex(this.label1, 0);
             this.Controls.SetChildIndex(this.label2, 0);
             this.Controls.SetChildIndex(this.label3, 0);
@@ -270,7 +259,6 @@
             this.Controls.SetChildIndex(this.btnRemove, 0);
             this.Controls.SetChildIndex(this.label6, 0);
             this.Controls.SetChildIndex(this.tbObrazProgramInEntry, 0);
-            this.Controls.SetChildIndex(this.btnPaint, 0);
             this.Controls.SetChildIndex(this.btnExcel, 0);
             this.Controls.SetChildIndex(this.label7, 0);
             this.Controls.SetChildIndex(this.btnGreenList, 0);
@@ -295,7 +283,6 @@
         private System.Windows.Forms.DataGridView dgvAbitProfileList;
         private System.Windows.Forms.TextBox tbObrazProgramInEntry;
         private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.Button btnPaint;
         private System.Windows.Forms.Button btnExcel;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Button btnGreenList;

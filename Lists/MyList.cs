@@ -174,7 +174,7 @@ namespace Priem
                 foreach (DataRow rw_licProg in tbl_LicProg.Rows)
                 {
                     ///// ДЛЯ КАЖДОЙ ОБРАЗОВАТЕЛЬНОЙ ПРОГРАММЫ ПОИСК ПРОФИЛЕЙ:
-                    query = @"select distinct qEntry.Id, KCP, ProfileId, ProfileName, StudyBasisName from ed.qEntry" + abitFilters + " and LicenseProgramId=" + rwEntry.Field<int>("LicenseProgramId").ToString() +
+                    query = @"select distinct qEntry.Id, KCP, ProfileId, ProfileName from ed.qEntry" + abitFilters + " and LicenseProgramId=" + rwEntry.Field<int>("LicenseProgramId").ToString() +
                             " and ObrazProgramId=" + rw_licProg.Field<int>("ObrazProgramId").ToString() + " and ProfileId is not null and StudyBasisId=" + rwEntry.Field<int>("StudyBasisId").ToString() +
                                                  " and StudyFormId=" + rwEntry.Field<int>("StudyFormId").ToString() + " and IsSecond = 0"; 
                     DataTable tbl_ObrProgramProfile = MainClass.Bdc.GetDataSet(query).Tables[0];
@@ -974,8 +974,8 @@ namespace Priem
             NewWatch wc = new NewWatch();
             wc.Show();
             wc.SetText("Удаление старых данных...");
-            MainClass.Bdc.ExecuteQuery(@"  delete from AbiturientGREEN
-                                           where AbiturientId In (select Id from qAbiturient where StudyLevelGroupId =" + MainClass.studyLevelGroupId+")");
+            MainClass.Bdc.ExecuteQuery(@"  delete from ed.AbiturientGREEN
+                                           where AbiturientId In (select Id from ed.qAbiturient where StudyLevelGroupId =" + MainClass.studyLevelGroupId+")");
             wc.SetText("Добавление новых данных...");
             wc.SetMax(dgvAbitList.Columns.Count);
             for (int clmn = startcol; clmn < dgvAbitList.Columns.Count; clmn ++)

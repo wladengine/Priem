@@ -486,7 +486,7 @@ namespace Priem
 
             if (cntProt > 0)
             {
-                tpEntry.visible = true;
+                //tpEntry.visible = true;
                 return true;
             }
             else

@@ -845,5 +845,10 @@ namespace Priem
         {
             new MyList().Show();
         }
+
+        private void smiRatingWithEGE_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

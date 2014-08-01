@@ -590,7 +590,7 @@ AND ed.FixierenView.IsSecond = {7} AND ed.FixierenView.IsReduced = {8} AND ed.Fi
                     {
                         _queryOrange = @", CASE WHEN EXISTS(SELECT ed.extEntryView.Id FROM ed.extEntryView INNER JOIN ed.Abiturient a ON ed.extEntryView.AbiturientId = a.Id WHERE a.PersonId = ed.qAbiturient.PersonId) then 1 else 0 end as orange ";
 
-                        if (bFirstWaveEnabled && MainClass.dbType == PriemType.Priem)
+                        if (bFirstWaveEnabled && MainClass.dbType == PriemType.Priem && StudyBasisId != 2)
                             sFilters += " AND FW.AbiturientId IS NOT NULL";
 
                         //эту хрень использовать только во второй волне - оно не будет работать, пока в _FirstWaveBackup или в _FirstWave не появятся люди

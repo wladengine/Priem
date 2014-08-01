@@ -142,6 +142,7 @@
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.lblDBPath = new System.Windows.Forms.ToolStripStatusLabel();
             this.tsslMain = new System.Windows.Forms.ToolStripStatusLabel();
+            this.smiRatingWithEGE = new System.Windows.Forms.ToolStripMenuItem();
             this.msMainMenu.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -418,7 +419,8 @@
             this.smiAbitFacultyIntesection,
             this.smiRegionStat,
             this.smiOlympStatistics,
-            this.smiPriemResults_AbitExamResults});
+            this.smiPriemResults_AbitExamResults,
+            this.smiRatingWithEGE});
             this.smiStatistics.Name = "smiStatistics";
             this.smiStatistics.Size = new System.Drawing.Size(80, 20);
             this.smiStatistics.Text = "Статистика";
@@ -426,56 +428,56 @@
             // smiCPK1
             // 
             this.smiCPK1.Name = "smiCPK1";
-            this.smiCPK1.Size = new System.Drawing.Size(255, 22);
+            this.smiCPK1.Size = new System.Drawing.Size(274, 22);
             this.smiCPK1.Text = "ЦПК1";
             this.smiCPK1.Click += new System.EventHandler(this.smiCPK1_Click);
             // 
             // smiFormA
             // 
             this.smiFormA.Name = "smiFormA";
-            this.smiFormA.Size = new System.Drawing.Size(255, 22);
+            this.smiFormA.Size = new System.Drawing.Size(274, 22);
             this.smiFormA.Text = "Форма А";
             this.smiFormA.Click += new System.EventHandler(this.smiFormA_Click);
             // 
             // smiFormB
             // 
             this.smiFormB.Name = "smiFormB";
-            this.smiFormB.Size = new System.Drawing.Size(255, 22);
+            this.smiFormB.Size = new System.Drawing.Size(274, 22);
             this.smiFormB.Text = "Форма Б";
             this.smiFormB.Click += new System.EventHandler(this.smiFormB_Click);
             // 
             // smiFormV
             // 
             this.smiFormV.Name = "smiFormV";
-            this.smiFormV.Size = new System.Drawing.Size(255, 22);
+            this.smiFormV.Size = new System.Drawing.Size(274, 22);
             this.smiFormV.Text = "Форма В";
             this.smiFormV.Click += new System.EventHandler(this.smiFormV_Click);
             // 
             // smiForm2
             // 
             this.smiForm2.Name = "smiForm2";
-            this.smiForm2.Size = new System.Drawing.Size(255, 22);
+            this.smiForm2.Size = new System.Drawing.Size(274, 22);
             this.smiForm2.Text = "Форма 2";
             this.smiForm2.Click += new System.EventHandler(this.smiForm2_Click);
             // 
             // smiDynamics
             // 
             this.smiDynamics.Name = "smiDynamics";
-            this.smiDynamics.Size = new System.Drawing.Size(255, 22);
+            this.smiDynamics.Size = new System.Drawing.Size(274, 22);
             this.smiDynamics.Text = "Динамика абитуриентов";
             this.smiDynamics.Click += new System.EventHandler(this.smiDynamics_Click);
             // 
             // smiEGEStatistics
             // 
             this.smiEGEStatistics.Name = "smiEGEStatistics";
-            this.smiEGEStatistics.Size = new System.Drawing.Size(255, 22);
+            this.smiEGEStatistics.Size = new System.Drawing.Size(274, 22);
             this.smiEGEStatistics.Text = "Баллы ЕГЭ";
             this.smiEGEStatistics.Click += new System.EventHandler(this.smiEGEStatistics_Click);
             // 
             // smiAbitFacultyIntesection
             // 
             this.smiAbitFacultyIntesection.Name = "smiAbitFacultyIntesection";
-            this.smiAbitFacultyIntesection.Size = new System.Drawing.Size(255, 22);
+            this.smiAbitFacultyIntesection.Size = new System.Drawing.Size(274, 22);
             this.smiAbitFacultyIntesection.Text = "Пересечения абитуриентов";
             this.smiAbitFacultyIntesection.Click += new System.EventHandler(this.smiAbitFacultyIntesection_Click);
             // 
@@ -488,7 +490,7 @@
             this.smiRegionAbitEGEMarksStatistics,
             this.smiRegionFacultyAbitCount});
             this.smiRegionStat.Name = "smiRegionStat";
-            this.smiRegionStat.Size = new System.Drawing.Size(255, 22);
+            this.smiRegionStat.Size = new System.Drawing.Size(274, 22);
             this.smiRegionStat.Text = "Статистика по регионам";
             // 
             // smiRegionAbitsStat
@@ -533,7 +535,7 @@
             this.smiOlympLevelAbitRating,
             this.smiOlympAbitBallsAndRatings});
             this.smiOlympStatistics.Name = "smiOlympStatistics";
-            this.smiOlympStatistics.Size = new System.Drawing.Size(255, 22);
+            this.smiOlympStatistics.Size = new System.Drawing.Size(274, 22);
             this.smiOlympStatistics.Text = "Статистика по олимпиадам";
             // 
             // предметыПоРегионамToolStripMenuItem
@@ -576,7 +578,7 @@
             // smiPriemResults_AbitExamResults
             // 
             this.smiPriemResults_AbitExamResults.Name = "smiPriemResults_AbitExamResults";
-            this.smiPriemResults_AbitExamResults.Size = new System.Drawing.Size(255, 22);
+            this.smiPriemResults_AbitExamResults.Size = new System.Drawing.Size(274, 22);
             this.smiPriemResults_AbitExamResults.Text = "Информационная прозрачность";
             this.smiPriemResults_AbitExamResults.Click += new System.EventHandler(this.smiPriemResults_AbitExamResults_Click);
             // 
@@ -1051,6 +1053,13 @@
             this.tsslMain.Name = "tsslMain";
             this.tsslMain.Size = new System.Drawing.Size(0, 17);
             // 
+            // smiRatingWithEGE
+            // 
+            this.smiRatingWithEGE.Name = "smiRatingWithEGE";
+            this.smiRatingWithEGE.Size = new System.Drawing.Size(274, 22);
+            this.smiRatingWithEGE.Text = "Расчёт для филологии/лингвистики";
+            this.smiRatingWithEGE.Click += new System.EventHandler(this.smiRatingWithEGE_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1187,6 +1196,7 @@
         private System.Windows.Forms.ToolStripMenuItem smiAbitLogChangesToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem smiListAbitWithInnerPriorities;
         private System.Windows.Forms.ToolStripMenuItem smiMyList;
+        private System.Windows.Forms.ToolStripMenuItem smiRatingWithEGE;
 
     }
 }

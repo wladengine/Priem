@@ -93,6 +93,8 @@ namespace Priem
             MainClass.AddHandler(_drh);
 
             tcCard = tabCard;
+            if (tabCard.TabPages.Contains(tpEntry))
+                tabCard.TabPages.Remove(tpEntry);
             abitBarcode = 0;
 
             if (MainClass.dbType == PriemType.PriemMag)
@@ -486,11 +488,16 @@ namespace Priem
 
             if (cntProt > 0)
             {
-                tpEntry.visible = true;
+                //if (!tabCard.TabPages.Contains(tpEntry))
+                 //   tabCard.TabPages.Add(tpEntry);
                 return true;
             }
             else
+            {
+                //if (tabCard.TabPages.Contains(tpEntry))
+                //    tabCard.TabPages.Remove(tpEntry);
                 return false;
+            }
         }
 
         private void FillProtocols(PriemEntities context)
@@ -1885,7 +1892,18 @@ namespace Priem
             var OPs = context.ObrazProgramInEntry.Where(x => x.EntryId == EntryId).Count();
 
             if (OPs > 0)
+            {
                 btnObrazProgramInEntry.Visible = true;
+                if (GetInEntryView(context))
+                {
+                    if (!tabCard.TabPages.Contains(tpEntry))
+                    {
+                        tabCard.TabPages.Add(tpEntry);
+
+                    }
+                }
+            }
+
         }
 
         private void btnObrazProgramInEntry_Click(object sender, EventArgs e)
@@ -1894,6 +1912,33 @@ namespace Priem
             {
                 var crd = new CardApplication_ObrazProgramInEntryPriorities(GuidId.Value);
                 crd.Show();
+            }
+        }
+
+        private void FillObrazProgramInEntry( )
+        {
+            using (PriemEntities context = new PriemEntities())
+            {
+               List<KeyValuePair<string, string>>  ObrazProgramInEntryList =
+                               (from ent in context.ObrazProgramInEntry
+                                join SP_ObrazProgr in context.SP_ObrazProgram on ent.ObrazProgramId equals SP_ObrazProgr.Id
+                                where ent.EntryId == EntryId
+                                select new KeyValuePair<string, string>(ent.Id.ToString(), SP_ObrazProgr.Name))
+                                .ToList();
+               ComboServ.FillCombo(cbObrazProgramInEntry, ObrazProgramInEntryList, false, false);
+               // set ObrazProgramInEntryId
+               //context.Abiturient_UpdateObrazProgramInEntryId(ObrazProgramInEntryId, Guid.Parse(_Id));
+                 
+               List<KeyValuePair<string, string>> ProfileInObrazProgramInEntryList =
+                               (from ent in context.ProfileInObrazProgramInEntry
+                                join SP_Prof in context.SP_Profile on ent.ProfileId equals SP_Prof.Id
+                                where ent.ObrazProgramInEntryId == ObrazProgramInEntryId
+                                select new KeyValuePair<string, string>(ent.Id.ToString(), SP_Prof.Name))
+                                .ToList();
+
+               ComboServ.FillCombo(cbProfileInObrazProgramInEntry, ProfileInObrazProgramInEntryList, false, false);
+               // set ProfileInObrazProgramId
+               //context.Abiturient_UpdateProfileInObrazProgramInEntryId(ProfileInObrazProgramInEntryId, Guid.Parse(_Id));
             }
         }
     }

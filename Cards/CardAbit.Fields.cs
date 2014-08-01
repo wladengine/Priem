@@ -296,6 +296,18 @@ namespace Priem
                     return null;
             }
             set { tbPriority.Text = Util.ToStr(value); }
-        }        
+        }
+
+        public Guid? ObrazProgramInEntryId
+        {
+            get { return (Guid?)cbObrazProgramInEntry.SelectedValue; }
+            set { cbObrazProgramInEntry.SelectedValue = value; }
+        }
+
+        public Guid? ProfileInObrazProgramInEntryId
+        {
+            get { return (Guid?)cbProfileInObrazProgramInEntry.SelectedValue; }
+            set { cbProfileInObrazProgramInEntry.SelectedValue = value; }
+        }
     }
 }

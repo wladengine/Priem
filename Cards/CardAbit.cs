@@ -30,7 +30,7 @@ namespace Priem
         private bool IsGosLine
         {
             get { return chbIsGosLine.Checked; }
-            set { chbIsGosLine.Checked = value; } 
+            set { chbIsGosLine.Checked = value; }
         }
 
         // конструктор нового заявления для человека
@@ -93,6 +93,8 @@ namespace Priem
             MainClass.AddHandler(_drh);
 
             tcCard = tabCard;
+            if (tabCard.TabPages.Contains(tpEntry))
+                tabCard.TabPages.Remove(tpEntry);
             abitBarcode = 0;
 
             if (MainClass.dbType == PriemType.PriemMag)
@@ -118,7 +120,7 @@ namespace Priem
                     FillStudyBasis();
                     FillCompetition();
                     UpdateInnerPrioritiesAfterStudyBasis();
-                    
+
                     cbOtherCompetition.Visible = false;
                     lblOtherCompetition.Visible = false;
                     cbCelCompetition.Visible = false;
@@ -259,7 +261,7 @@ namespace Priem
                     Coefficient = abit.Coefficient;
                     LanguageId = abit.LanguageId;
                     HasOriginals = abit.HasOriginals;
-                    
+
                     if (StudyBasisId == 2)
                     {
                         chbIsCommonRussianCompetition.Visible = true;
@@ -327,7 +329,7 @@ namespace Priem
 
             bw_whoSetOriginals.RunWorkerAsync(GuidId);
         }
-        
+
         void bw_whoSetOriginals_DoWork(object sender, DoWorkEventArgs e)
         {
             Guid _Id = (Guid)e.Argument;
@@ -486,11 +488,16 @@ namespace Priem
 
             if (cntProt > 0)
             {
-                //tpEntry.visible = true;
+                //if (!tabCard.TabPages.Contains(tpEntry))
+                //   tabCard.TabPages.Add(tpEntry);
                 return true;
             }
             else
+            {
+                //if (tabCard.TabPages.Contains(tpEntry))
+                //    tabCard.TabPages.Remove(tpEntry);
                 return false;
+            }
         }
 
         private void FillProtocols(PriemEntities context)
@@ -567,7 +574,7 @@ namespace Priem
             btnDeleteMark.Enabled = false;
 
             //if (MainClass.dbType != PriemType.PriemMag)
-                WinFormsServ.SetSubControlsEnabled(gbOlymps, true);
+            WinFormsServ.SetSubControlsEnabled(gbOlymps, true);
 
             cbFaculty.Enabled = false;
             btnDocInventory.Enabled = true;
@@ -1002,7 +1009,7 @@ namespace Priem
 
                 if (opInEntry.Count() > 0)
                 {
-                    
+
                 }
             }
         }
@@ -1021,19 +1028,19 @@ namespace Priem
                                     cp.Name
                                 }).Distinct()).ToList().Select(u => new KeyValuePair<string, string>(u.Id.ToString(), u.Name)).ToList();
                     ComboServ.FillCombo(cbOtherCompetition, lst, true, false);
-                        
+
                     lst = ((from cp in context.Competition
-                           where cp.StudyBasisId == StudyBasisId
-                           orderby cp.Name
-                           select new
-                           {
-                               cp.Id,
-                               cp.Name
-                           }).Distinct()).ToList().Select(u => new KeyValuePair<string, string>(u.Id.ToString(), u.Name)).ToList();
+                            where cp.StudyBasisId == StudyBasisId
+                            orderby cp.Name
+                            select new
+                            {
+                                cp.Id,
+                                cp.Name
+                            }).Distinct()).ToList().Select(u => new KeyValuePair<string, string>(u.Id.ToString(), u.Name)).ToList();
 
                     ComboServ.FillCombo(cbCompetition, lst, false, false);
 
-                    
+
 
                     if (StudyBasisId == 1)
                     {
@@ -1053,7 +1060,7 @@ namespace Priem
                         chbIsPaid.Enabled = true;
                         btnPaidData.Enabled = true;
                         ComboServ.SetComboId(cbCompetition, 3);
-                            
+
                         chbIsCommonRussianCompetition.Visible = true;
                         IsCommonRussianCompetition = true;
                     }
@@ -1885,7 +1892,18 @@ namespace Priem
             var OPs = context.ObrazProgramInEntry.Where(x => x.EntryId == EntryId).Count();
 
             if (OPs > 0)
+            {
                 btnObrazProgramInEntry.Visible = true;
+                if (GetInEntryView(context))
+                {
+                    if (!tabCard.TabPages.Contains(tpEntry))
+                    {
+                        tabCard.TabPages.Add(tpEntry);
+
+                    }
+                }
+            }
+
         }
 
         private void btnObrazProgramInEntry_Click(object sender, EventArgs e)
@@ -1894,6 +1912,33 @@ namespace Priem
             {
                 var crd = new CardApplication_ObrazProgramInEntryPriorities(GuidId.Value);
                 crd.Show();
+            }
+        }
+
+        private void FillObrazProgramInEntry()
+        {
+            using (PriemEntities context = new PriemEntities())
+            {
+                List<KeyValuePair<string, string>> ObrazProgramInEntryList =
+                                (from ent in context.ObrazProgramInEntry
+                                 join SP_ObrazProgr in context.SP_ObrazProgram on ent.ObrazProgramId equals SP_ObrazProgr.Id
+                                 where ent.EntryId == EntryId
+                                 select new KeyValuePair<string, string>(ent.Id.ToString(), SP_ObrazProgr.Name))
+                                 .ToList();
+                ComboServ.FillCombo(cbObrazProgramInEntry, ObrazProgramInEntryList, false, false);
+                // set ObrazProgramInEntryId
+                //context.Abiturient_UpdateObrazProgramInEntryId(ObrazProgramInEntryId, Guid.Parse(_Id));
+
+                List<KeyValuePair<string, string>> ProfileInObrazProgramInEntryList =
+                                (from ent in context.ProfileInObrazProgramInEntry
+                                 join SP_Prof in context.SP_Profile on ent.ProfileId equals SP_Prof.Id
+                                 where ent.ObrazProgramInEntryId == ObrazProgramInEntryId
+                                 select new KeyValuePair<string, string>(ent.Id.ToString(), SP_Prof.Name))
+                                 .ToList();
+
+                ComboServ.FillCombo(cbProfileInObrazProgramInEntry, ProfileInObrazProgramInEntryList, false, false);
+                // set ProfileInObrazProgramId
+                //context.Abiturient_UpdateProfileInObrazProgramInEntryId(ProfileInObrazProgramInEntryId, Guid.Parse(_Id));
             }
         }
     }

@@ -23,7 +23,7 @@ namespace Priem
         List<List<KeyValuePair<int, int>>> Coord_Save = new List<List<KeyValuePair<int, int>>>();
         List<KeyValuePair<int, KeyValuePair<int, int>>> DeleteList = new List<KeyValuePair<int, KeyValuePair<int, int>>>();
         Guid ErrorGuid = Guid.Empty;
-        int startrow = 7;
+        int startrow = 8;
         bool btnGreenIsClicked = false;
 
         public MyList()
@@ -103,7 +103,7 @@ namespace Priem
             using (PriemEntities context = new PriemEntities())
             {
                 var ent = MainClass.GetEntry(context);
-                    
+
                 if (FacultyId.HasValue)
                     ent = ent.Where(c => c.FacultyId == FacultyId);
 
@@ -145,6 +145,7 @@ namespace Priem
             DataRow row_ObrazProgramInEntryId = examTable.NewRow();
             DataRow row_StudyForm = examTable.NewRow();
             DataRow row_StudyBasis = examTable.NewRow();
+            DataRow row_Ege = examTable.NewRow();
             DataRow row_KCP = examTable.NewRow();
 
             DataColumn clm;
@@ -155,20 +156,20 @@ namespace Priem
 
             NewWatch wc = new NewWatch();
             wc.Show();
-            
+
             ///// Поиск по Направлениям в QEntry
             string query = @"Select distinct qEntry.LicenseProgramId, qEntry.LicenseProgramName, qEntry.StudyBasisId, qEntry.StudyFormId
                                 from ed.qEntry " + abitFilters + " order by StudyFormId, StudyBasisId, LicenseProgramName ";
             DataTable tbl = MainClass.Bdc.GetDataSet(query).Tables[0];
             string index = "";
-            int cnt = 1; 
+            int cnt = 1;
             foreach (DataRow rwEntry in tbl.Rows)
-            { 
+            {
                 wc.SetText("Получение данных по учебным планам... (Обработано конкурсов: " + (cnt++).ToString() + "/" + tbl.Rows.Count + ")");
                 ///// Поиск ОБРАЗОВАТЕЛЬНЫХ ПРОГРАММ 
                 query = @"Select distinct qEntry.ObrazProgramId, qEntry.ObrazProgramName
-                                from ed.qEntry " + abitFilters + " and LicenseProgramId=" + rwEntry.Field<int>("LicenseProgramId").ToString() +" and StudyBasisId="+ rwEntry.Field<int>("StudyBasisId").ToString()+
-                                                 " and StudyFormId=" + rwEntry.Field<int>("StudyFormId").ToString() +" and IsSecond = 0";
+                                from ed.qEntry " + abitFilters + " and LicenseProgramId=" + rwEntry.Field<int>("LicenseProgramId").ToString() + " and StudyBasisId=" + rwEntry.Field<int>("StudyBasisId").ToString() +
+                                                 " and StudyFormId=" + rwEntry.Field<int>("StudyFormId").ToString() + " and IsSecond = 0";
                 DataTable tbl_LicProg = MainClass.Bdc.GetDataSet(query).Tables[0];
 
                 foreach (DataRow rw_licProg in tbl_LicProg.Rows)
@@ -176,7 +177,7 @@ namespace Priem
                     ///// ДЛЯ КАЖДОЙ ОБРАЗОВАТЕЛЬНОЙ ПРОГРАММЫ ПОИСК ПРОФИЛЕЙ:
                     query = @"select distinct qEntry.Id, KCP, ProfileId, ProfileName from ed.qEntry" + abitFilters + " and LicenseProgramId=" + rwEntry.Field<int>("LicenseProgramId").ToString() +
                             " and ObrazProgramId=" + rw_licProg.Field<int>("ObrazProgramId").ToString() + " and ProfileId is not null and StudyBasisId=" + rwEntry.Field<int>("StudyBasisId").ToString() +
-                                                 " and StudyFormId=" + rwEntry.Field<int>("StudyFormId").ToString() + " and IsSecond = 0"; 
+                                                 " and StudyFormId=" + rwEntry.Field<int>("StudyFormId").ToString() + " and IsSecond = 0";
                     DataTable tbl_ObrProgramProfile = MainClass.Bdc.GetDataSet(query).Tables[0];
                     /////  ЕСЛИ ЕСТЬ НЕНУЛЕВЫЕ ПРОФИЛИ (ПРОБЛЕМА С ИД СТОЛБЦА)
                     ///// НЕ ДОЛЖНО БЫТЬ ЗАГОЛОВКА СЛОБЦА, СТОЛБЕЦ = (НАПР/ОБРПРОГ/ПРОФ)
@@ -185,7 +186,7 @@ namespace Priem
                         foreach (DataRow row_profile in tbl_ObrProgramProfile.Rows)
                         {
                             clm = new DataColumn();
-                            index = rwEntry.Field<int>("StudyFormId").ToString() + "_"+rwEntry.Field<int>("StudyBasisId").ToString() + "_" + rwEntry.Field<int>("LicenseProgramId").ToString() + "_" + rw_licProg.Field<int>("ObrazProgramId").ToString() + "_" + row_profile.Field<Guid>("ProfileId").ToString();
+                            index = rwEntry.Field<int>("StudyFormId").ToString() + "_" + rwEntry.Field<int>("StudyBasisId").ToString() + "_" + rwEntry.Field<int>("LicenseProgramId").ToString() + "_" + rw_licProg.Field<int>("ObrazProgramId").ToString() + "_" + row_profile.Field<Guid>("ProfileId").ToString();
                             clm.ColumnName = index;
                             examTable.Columns.Add(clm);
                             row_LicProg[index] = rwEntry.Field<string>("LicenseProgramName");
@@ -193,7 +194,7 @@ namespace Priem
                             row_EntryId[index] = row_profile.Field<Guid>("Id");
                             row_ObrazProgramInEntryId[index] = "";
                             row_StudyForm[index] = (rwEntry.Field<int>("StudyFormId") == 1) ? "Очная" : "Очно-заочная";
-                            row_StudyBasis[index] = (rwEntry.Field<int>("StudyBasisId") == 1)? "Бюджетная":"Договорная";
+                            row_StudyBasis[index] = (rwEntry.Field<int>("StudyBasisId") == 1) ? "Бюджетная" : "Договорная";
                             row_KCP[index] = row_profile.Field<int>("KCP");
                         }
                     }
@@ -203,15 +204,18 @@ namespace Priem
                         //// нужно получить EntryId 
                         query = @"select distinct qEntry.Id, qEntry.StudyBasisName, KCP from ed.qEntry" + abitFilters + " and LicenseProgramId=" + rwEntry.Field<int>("LicenseProgramId").ToString() +
                             " and ObrazProgramId=" + rw_licProg.Field<int>("ObrazProgramId").ToString() + " and StudyBasisId=" + rwEntry.Field<int>("StudyBasisId").ToString() +
-                                                 " and StudyFormId=" + rwEntry.Field<int>("StudyFormId").ToString() + " and IsSecond = 0"; 
+                                                 " and StudyFormId=" + rwEntry.Field<int>("StudyFormId").ToString() + " and IsSecond = 0";
                         DataSet ds = MainClass.Bdc.GetDataSet(query);
-                        Guid EntryId =  ds.Tables[0].Rows[0].Field<Guid>("Id");
-                        int _KCP =  ds.Tables[0].Rows[0].Field<int>("KCP");
+                        Guid EntryId = ds.Tables[0].Rows[0].Field<Guid>("Id");
+                        int _KCP = ds.Tables[0].Rows[0].Field<int>("KCP");
 
                         /// поиск по EntryId В ОБРАЗОВАТЕЛЬНЫХ ПРОГРАММАХ
-                        query = @"SELECT distinct ObrazProgramInEntry.[Id] as Id, SP_ObrazProgram.Name as Name, SP_ObrazProgram.Id as ObrazProgramId, KCP
+                        query = @"SELECT distinct ObrazProgramInEntry.[Id] as Id, SP_ObrazProgram.Name as Name, SP_ObrazProgram.Id as ObrazProgramId, KCP,
+                                ObrazProgramInEntry.EgeExamNameId , ObrazProgramInEntry.EgeMin, EgeExamName.Name as EgeName
                               FROM [ed].[ObrazProgramInEntry] 
-                             inner join ed.SP_ObrazProgram on ObrazProgramInEntry.ObrazProgramId = SP_ObrazProgram.Id where EntryId ='" + EntryId + @"'
+                             inner join ed.SP_ObrazProgram on ObrazProgramInEntry.ObrazProgramId = SP_ObrazProgram.Id
+                             left join EgeExamName on EgeExamName.Id = ObrazProgramInEntry.EgeExamNameId
+                                where EntryId ='" + EntryId + @"'
                                order by ObrazProgramId";
                         DataTable tbl_ObrProgram = MainClass.Bdc.GetDataSet(query).Tables[0];
                         ///// приоритетов образ.программ нет
@@ -245,6 +249,7 @@ namespace Priem
                                 row_StudyForm[index] = (rwEntry.Field<int>("StudyFormId") == 1) ? "Очная" : "Очно-заочная";
                                 row_StudyBasis[index] = (rwEntry.Field<int>("StudyBasisId") == 1) ? "Бюджетная" : "Договорная";
                                 row_ObrazProgramInEntryId[index] = rw_ObProg.Field<Guid>("Id").ToString();
+                                row_Ege[index] = (!String.IsNullOrEmpty(rw_ObProg.Field<int?>("EgeExamNameId").ToString())) ? rw_ObProg.Field<int?>("EgeExamNameId") + "_" + rw_ObProg.Field<string>("EgeName") + "(" + rw_ObProg.Field<int?>("EgeMin") + ")" : "";
                                 row_KCP[index] = rw_ObProg.Field<int>("KCP");
                             }
                         }
@@ -259,6 +264,7 @@ namespace Priem
             examTable.Rows.Add(row_ObrazProgramInEntryId);
             examTable.Rows.Add(row_StudyForm);
             examTable.Rows.Add(row_StudyBasis);
+            examTable.Rows.Add(row_Ege);
             examTable.Rows.Add(row_KCP);
 
             wc.SetText("Получение данных по абитуриентам...(0/0)");
@@ -281,11 +287,12 @@ namespace Priem
             inner join ed._FirstWave on _FirstWave.AbiturientId = Abiturient.Id
             inner join ed.qEntry on Abiturient.EntryId = qEntry.Id
             where Abiturient.EntryId=@EntryId and Abiturient.BackDoc = 0  and Abiturient.IsGosLine=0 
+            and _FirstWave.IsCrimea != 1
             --order by extAbitMarksSum.TotalSum desc
              order by _FirstWave.SortNum 
             ";
-            wc.SetMax(examTable.Columns.Count-1);
-            wc.SetText("Получение данных по абитуриентам...(0/"+(examTable.Columns.Count-1).ToString()+")");
+            wc.SetMax(examTable.Columns.Count - 1);
+            wc.SetText("Получение данных по абитуриентам...(0/" + (examTable.Columns.Count - 1).ToString() + ")");
             for (int i = 1; i < examTable.Columns.Count; i++)
             {
                 int j = 0;
@@ -296,7 +303,7 @@ namespace Priem
                 {
                     Guid _AbitId = rw.Field<Guid>("Id");
                     Guid _PersonId = rw.Field<Guid>("PersonId");
-                    string FIO = rw.Field<string>("PersonNum")+"_"+rw.Field<string>("FIO");
+                    string FIO = rw.Field<string>("PersonNum") + "_" + rw.Field<string>("FIO");
                     if (!PersonList.Contains(_PersonId))
                     {
                         PersonList.Add(_PersonId);
@@ -335,7 +342,7 @@ namespace Priem
                     j++;
                 }
                 wc.PerformStep();
-                wc.SetText("Получение данных по абитуриентам...(Обработано конкурсов: "+i+"/" + (examTable.Columns.Count-1).ToString() + ")");
+                wc.SetText("Получение данных по абитуриентам...(Обработано конкурсов: " + i + "/" + (examTable.Columns.Count - 1).ToString() + ")");
             }
             for (int j = 0; j < RowList.Count; j++)
             {
@@ -372,7 +379,7 @@ namespace Priem
             //обработали факультет
             if (FacultyId != null)
                 s += " AND ed.qEntry.FacultyId = " + FacultyId;
-           
+
             //обработали Направление
             if (LicenseProgramId != null)
                 s += " AND ed.qEntry.LicenseProgramId = " + LicenseProgramId;
@@ -437,7 +444,7 @@ namespace Priem
         private void PaintGrid()
         {
             /// Раскрашиваем профили
-            for (int colindex = 1; colindex <dgvAbitList.Columns.Count; colindex++)
+            for (int colindex = 1; colindex < dgvAbitList.Columns.Count; colindex++)
             {
                 if (!String.IsNullOrEmpty(dgvAbitList.Rows[3].Cells[colindex].Value.ToString()))
                 {
@@ -445,7 +452,7 @@ namespace Priem
                     DataTable tbl = MainClass.Bdc.GetDataSet(query).Tables[0];
                     if (tbl.Rows.Count < 2)
                         continue;
-                    for (int j = 0; j< startrow-1; j++)
+                    for (int j = 0; j < startrow - 1; j++)
                         dgvAbitList.Rows[j].Cells[colindex].Style.BackColor = Color.Azure;
                 }
             }
@@ -453,7 +460,7 @@ namespace Priem
             for (int colindex = 1; colindex < dgvAbitList.Columns.Count; colindex++)
             {
                 int KCP = 0;
-                int.TryParse(dgvAbitList.Rows[startrow-1].Cells[colindex].Value.ToString(), out KCP);
+                int.TryParse(dgvAbitList.Rows[startrow - 1].Cells[colindex].Value.ToString(), out KCP);
 
                 for (int j = startrow; (j < KCP + startrow) && (j < dgvAbitList.Rows.Count); j++)
                 {
@@ -478,6 +485,52 @@ namespace Priem
                         }
                 }
             }
+
+            // теперь Английские языки
+            for (int colindex = 1; colindex < dgvAbitList.Columns.Count; colindex++)
+            {
+                if (String.IsNullOrEmpty(dgvAbitList.Rows[startrow - 2].Cells[colindex].Value.ToString()))
+                    continue;
+
+                string EgeExamNameId = dgvAbitList.Rows[startrow - 2].Cells[colindex].Value.ToString();
+                EgeExamNameId = EgeExamNameId.Substring(0, EgeExamNameId.IndexOf("_"));
+                string sEgeMin = dgvAbitList.Rows[startrow - 2].Cells[colindex].Value.ToString();
+                sEgeMin = sEgeMin.Substring(sEgeMin.IndexOf("(") + 1);
+                sEgeMin = sEgeMin.Substring(0, sEgeMin.IndexOf(")"));
+                int EgeMin = int.Parse(sEgeMin);
+
+                int KCP_temp = 0;
+                if (int.TryParse(dgvAbitList.Rows[startrow - 1].Cells[colindex].Value.ToString(), out KCP_temp))
+
+                    for (int j = startrow; j < dgvAbitList.Rows.Count; j++)
+                    {
+                        string cellvalue = dgvAbitList.Rows[j].Cells[colindex].Value.ToString();
+                        cellvalue = cellvalue.Substring(cellvalue.IndexOf('_') + 1);
+                        cellvalue = cellvalue.Substring(cellvalue.IndexOf('_') + 1);
+                        cellvalue = cellvalue.Substring(0, cellvalue.IndexOf('_'));
+                        int EgeAbitValue = (int?)MainClass.Bdc.GetValue("select Value from ed.extEgeMark where PersonId = '" + cellvalue + "' and EgeExamNameId=" + EgeExamNameId + " and FBSStatusId=1") ?? 0;
+                        if (EgeAbitValue < EgeMin)
+                        {
+                            if ((dgvAbitList.Rows[j].Cells[colindex].Style.BackColor == Color.LightGreen) || (dgvAbitList.Rows[j].Cells[colindex].Style.BackColor == Color.LightBlue))
+                            {
+                                // сдвинуть зеленку;
+                                for (int row_temp = startrow + KCP_temp; row_temp < dgvAbitList.Rows.Count; row_temp++)
+                                {
+                                    if (String.IsNullOrEmpty(dgvAbitList.Rows[row_temp].Cells[colindex].Value.ToString()))
+                                        break;
+                                    if (dgvAbitList.Rows[row_temp].Cells[colindex].Style.BackColor == Color.Empty)
+                                    {
+                                        dgvAbitList.Rows[row_temp].Cells[colindex].Style.BackColor = Color.LightGreen;
+                                        break;
+                                    }
+                                }
+                            }
+                            dgvAbitList.Rows[j].Cells[colindex].Style.BackColor = Color.Thistle;
+                        }
+                    }
+            }
+
+
             dgvAbitList.Update();
             int prior = 0;
             int innerprior = 0;
@@ -486,33 +539,34 @@ namespace Priem
             wc.Show();
             wc.SetText("Анализируем приоритеты ...");
             wc.SetMax(dgvAbitList.Rows.Count);
+
             while (UpdateResult() || (_step == 0))
             {
                 _step++;
                 wc.PerformStep();
                 if (_step > dgvAbitList.Rows.Count)
                 {
-                    MessageBox.Show("Цикл перерасчета приоритетов был произведен "+dgvAbitList.Rows.Count +" раз, наверно возникла какая-то ошибка. Придется прекратить перерасчет приоритетов. Проблемный Guid: "+ErrorGuid.ToString(), "Вы знаете,..", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Цикл перерасчета приоритетов был произведен " + dgvAbitList.Rows.Count + " раз, наверно возникла какая-то ошибка. Придется прекратить перерасчет приоритетов. Проблемный Guid: " + ErrorGuid.ToString(), "Вы знаете,..", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     break;
                 }
                 for (int colindex = 1; colindex < dgvAbitList.Columns.Count; colindex++)
                 {
                     int KCP = 0;
-                    if (int.TryParse(dgvAbitList.Rows[startrow-1].Cells[colindex].Value.ToString(), out KCP))
+                    if (int.TryParse(dgvAbitList.Rows[startrow - 1].Cells[colindex].Value.ToString(), out KCP))
                     { }
 
 
                     bool hasinnerprior = !String.IsNullOrEmpty((String)dgvAbitList.Rows[3].Cells[colindex].Value);
                     for (int j = startrow; (j < dgvAbitList.Rows.Count); j++)
                     {
-                        if (dgvAbitList.Rows[j].Cells[colindex].Style.BackColor == Color.Empty) 
+                        if (dgvAbitList.Rows[j].Cells[colindex].Style.BackColor == Color.Empty)
                         {
                             break;
                         }
-                        
+
                         if (dgvAbitList.Rows[j].Cells[colindex].Style.BackColor == Color.LightGreen)
                         {
-                            
+
                             string cellvalue = dgvAbitList.Rows[j].Cells[colindex].Value.ToString();
                             // пока только первый приоритет
                             string temp = cellvalue.Substring(0, cellvalue.IndexOf('_'));
@@ -531,7 +585,7 @@ namespace Priem
                             cellvalue = cellvalue.Substring(cellvalue.IndexOf('_') + 1);
                             cellvalue = cellvalue.Substring(0, cellvalue.IndexOf('_'));
                             // пора обновить грид, нашли в списке PersonId
-                            
+
                             int index = PersonList.IndexOf(Guid.Parse(cellvalue));
                             // если он был:
                             if (index > -1)
@@ -547,7 +601,7 @@ namespace Priem
                                     }
 
                                     int KCP_temp = 0;
-                                    if (int.TryParse(dgvAbitList.Rows[startrow-1].Cells[kvp.Key].Value.ToString(), out KCP_temp))
+                                    if (int.TryParse(dgvAbitList.Rows[startrow - 1].Cells[kvp.Key].Value.ToString(), out KCP_temp))
                                     { }
 
                                     cellvalue = dgvAbitList.Rows[kvp.Value + startrow].Cells[kvp.Key].Value.ToString();
@@ -581,7 +635,12 @@ namespace Priem
                                             {
                                                 isGreen = true;
                                             }
-                                            dgvAbitList.Rows[kvp.Value + startrow].Cells[kvp.Key].Style.BackColor = Color.Yellow;
+
+                                            // под вопросом #подумать
+                                            if ((dgvAbitList.Rows[kvp.Value + startrow].Cells[kvp.Key].Style.BackColor == Color.LightGreen) ||
+                                                (dgvAbitList.Rows[kvp.Value + startrow].Cells[kvp.Key].Style.BackColor == Color.LightBlue) ||
+                                                (dgvAbitList.Rows[kvp.Value + startrow].Cells[kvp.Key].Style.BackColor == Color.Empty))
+                                                dgvAbitList.Rows[kvp.Value + startrow].Cells[kvp.Key].Style.BackColor = Color.Yellow;
                                             if (innerprior_temp == innerprior)
                                             {
                                                 dgvAbitList.Rows[kvp.Value + startrow].Cells[kvp.Key].Style.BackColor = Color.Red;
@@ -593,7 +652,7 @@ namespace Priem
                                                 {
                                                     if (String.IsNullOrEmpty(dgvAbitList.Rows[row_temp].Cells[kvp.Key].Value.ToString()))
                                                         break;
-                                                    if (dgvAbitList.Rows[row_temp].Cells[kvp.Key].Style.BackColor == Color.Empty)  
+                                                    if (dgvAbitList.Rows[row_temp].Cells[kvp.Key].Style.BackColor == Color.Empty)
                                                     {
                                                         dgvAbitList.Rows[row_temp].Cells[kvp.Key].Style.BackColor = Color.LightGreen;
                                                         break;
@@ -609,7 +668,7 @@ namespace Priem
                                             if (prior_temp == prior)
                                             {
                                                 string FIO = PersonListFio[index];
-                                                MessageBox.Show(this, "Вы знаете, у абитуриента: "+FIO+" существуют повторяющиеся приоритеты", "Внимание", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                                                MessageBox.Show(this, "Вы знаете, у абитуриента: " + FIO + " существуют повторяющиеся приоритеты", "Внимание", MessageBoxButtons.OK, MessageBoxIcon.Information);
                                             }
                                             bool isGreen = false;
                                             if (dgvAbitList.Rows[kvp.Value + startrow].Cells[kvp.Key].Style.BackColor == Color.LightGreen)
@@ -629,14 +688,14 @@ namespace Priem
                                                 {
                                                     if (String.IsNullOrEmpty(dgvAbitList.Rows[row_temp].Cells[kvp.Key].Value.ToString()))
                                                         break;
-                                                    if (dgvAbitList.Rows[row_temp].Cells[kvp.Key].Style.BackColor == Color.Empty) 
+                                                    if (dgvAbitList.Rows[row_temp].Cells[kvp.Key].Style.BackColor == Color.Empty)
                                                     {
                                                         dgvAbitList.Rows[row_temp].Cells[kvp.Key].Style.BackColor = Color.LightGreen;
                                                         break;
                                                     }
                                                 }
                                             }
-                                        } 
+                                        }
                                     }
                                 }
                                 foreach (KeyValuePair<int, KeyValuePair<int, int>> kvp in DeleteList)
@@ -654,6 +713,12 @@ namespace Priem
         }
         private void CopyTable()
         {
+            for (int j = 1; j < dgvAbitList.Columns.Count; j++)
+            {
+                string value = dgvAbitList.Rows[startrow - 2].Cells[j].Value.ToString();
+                if (!String.IsNullOrEmpty(value))
+                    dgvAbitList.Rows[startrow - 2].Cells[j].Value = value.Substring(value.IndexOf("_") + 1);
+            }
             for (int i = startrow; i < dgvAbitList.Rows.Count; i++)
             {
                 foreach (DataGridViewCell dcell in dgvAbitList.Rows[i].Cells)
@@ -671,7 +736,7 @@ namespace Priem
                     string FIO = dcell_Value.Substring(0, dcell_Value.IndexOf('_'));
                     FIO = PersonListFio[PersonList.IndexOf(Guid.Parse(FIO))];
                     string ball = dcell_Value.Substring(dcell_Value.IndexOf('_') + 1);
-                    dcell.Value = FIO +" ("+_prior+", "+_prior_inner+", "+ball+")";
+                    dcell.Value = FIO + " (" + _prior + ", " + _prior_inner + ", " + ball + ")";
                 }
             }
             dgvAbitList.Rows[2].Visible = false;
@@ -680,7 +745,7 @@ namespace Priem
 
         private void btnToExcel_Click(object sender, EventArgs e)
         {
-            if (dgvAbitList.Rows.Count>startrow)
+            if (dgvAbitList.Rows.Count > startrow)
             {
                 DataTable tbl = ((DataView)dgvAbitList.DataSource).Table.Copy();
 
@@ -695,7 +760,7 @@ namespace Priem
                 tbl.Rows[2].Delete();
 
 
-                
+
 
                 List<string> lstFields = new List<string>();
 
@@ -703,11 +768,11 @@ namespace Priem
                 double colFIOWidth = 50;
 
                 SaveFileDialog sfd = new SaveFileDialog();
-                
+
                 sfd.Filter = "Файлы Excel (.xls)|*.xls";
                 if (sfd.ShowDialog() == DialogResult.OK)
                 {
-                    
+
                     try
                     {
                         Excel.Application exc = new Excel.Application();
@@ -773,14 +838,14 @@ namespace Priem
                             prog.PerformStep();
                         }
                         // тут был раньше профиль. (Если убрать Entry, то тут должно быть КСР)
-                        Excel.Range Range3 = ws.Range[ws.Cells[1, 1], ws.Cells[startrow-2, tbl.Columns.Count]];
+                        Excel.Range Range3 = ws.Range[ws.Cells[1, 1], ws.Cells[startrow - 2, tbl.Columns.Count]];
                         Range3.WrapText = true;
                         Range3.RowHeight = rowHeight;
                         Range3.ColumnWidth = colFIOWidth;
                         Range3.HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter;
                         Range3.VerticalAlignment = Excel.XlHAlign.xlHAlignCenter;
 
-                        Range3 = ws.Range[ws.Cells[startrow-1, 1], ws.Cells[tbl.Rows.Count, tbl.Columns.Count]];
+                        Range3 = ws.Range[ws.Cells[startrow - 1, 1], ws.Cells[tbl.Rows.Count, tbl.Columns.Count]];
                         Range3.HorizontalAlignment = Excel.XlHAlign.xlHAlignLeft;
 
                         // начиная со второй строки (КСР, и далее абитуриенты)
@@ -795,7 +860,7 @@ namespace Priem
                                 Range3 = ws.Cells[i, j];
                                 Color clr = dgvAbitList.Rows[rowindex + 2].Cells[colindex + 1].Style.BackColor;
                                 if (clr != Color.Empty)
-                                    Range3.Interior.Color = dgvAbitList.Rows[rowindex+2].Cells[colindex+1].Style.BackColor;
+                                    Range3.Interior.Color = dgvAbitList.Rows[rowindex + 2].Cells[colindex + 1].Style.BackColor;
                                 j++;
                             }
 
@@ -834,60 +899,60 @@ namespace Priem
                 return;
             if (e.ColumnIndex < 1)
                 return;
-        
-            string FIO = dgvAbitList.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString().Substring(0, dgvAbitList.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString().IndexOf('(') -1);
+
+            string FIO = dgvAbitList.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString().Substring(0, dgvAbitList.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString().IndexOf('(') - 1);
             int index = PersonListFio.IndexOf(FIO);
-            
-            MainClass.OpenCardPerson(PersonList[index].ToString(), this, dgvAbitList.CurrentRow.Index); 
+
+            MainClass.OpenCardPerson(PersonList[index].ToString(), this, dgvAbitList.CurrentRow.Index);
         }
 
         private void dgvAbitList_CellMouseClick(object sender, DataGridViewCellMouseEventArgs e)
         {
-             if (e.ColumnIndex < 1)
+            if (e.ColumnIndex < 1)
                 return;
-             // есть ли профили
-             if (e.RowIndex < startrow)
-             {
-                 if (e.Button == MouseButtons.Right)
-                 {
-                     if (!String.IsNullOrEmpty(dgvAbitList.Rows[3].Cells[e.ColumnIndex].Value.ToString()))
-                     {
-                         string query = @"select Id from ed.ProfileInObrazProgramInEntry where ObrazProgramInEntryId ='"+dgvAbitList.Rows[3].Cells[e.ColumnIndex].Value.ToString()+"'";
-                         DataTable tbl = MainClass.Bdc.GetDataSet(query).Tables[0];
-                         if (tbl.Rows.Count < 2)
-                             return;
+            // есть ли профили
+            if (e.RowIndex < startrow)
+            {
+                if (e.Button == MouseButtons.Right)
+                {
+                    if (!String.IsNullOrEmpty(dgvAbitList.Rows[3].Cells[e.ColumnIndex].Value.ToString()))
+                    {
+                        string query = @"select Id from ed.ProfileInObrazProgramInEntry where ObrazProgramInEntryId ='" + dgvAbitList.Rows[3].Cells[e.ColumnIndex].Value.ToString() + "'";
+                        DataTable tbl = MainClass.Bdc.GetDataSet(query).Tables[0];
+                        if (tbl.Rows.Count < 2)
+                            return;
 
-                         dgvAbitList.CurrentCell = dgvAbitList.Rows[e.RowIndex].Cells[e.ColumnIndex];
-                         ContextMenu m = new ContextMenu();
-                         m.MenuItems.Add(new MenuItem("Открыть распределение по профилям", new EventHandler(this.ContextMenuProfile_OnClick)));
-                         Point pCell = dgvAbitList.GetCellDisplayRectangle(dgvAbitList.CurrentCell.ColumnIndex, dgvAbitList.CurrentCell.RowIndex, true).Location;
-                         Point pGrid = dgvAbitList.Location;
-                         new Point(pCell.X + pGrid.X, pCell.Y + pGrid.Y + dgvAbitList.CurrentRow.Height);
+                        dgvAbitList.CurrentCell = dgvAbitList.Rows[e.RowIndex].Cells[e.ColumnIndex];
+                        ContextMenu m = new ContextMenu();
+                        m.MenuItems.Add(new MenuItem("Открыть распределение по профилям", new EventHandler(this.ContextMenuProfile_OnClick)));
+                        Point pCell = dgvAbitList.GetCellDisplayRectangle(dgvAbitList.CurrentCell.ColumnIndex, dgvAbitList.CurrentCell.RowIndex, true).Location;
+                        Point pGrid = dgvAbitList.Location;
+                        new Point(pCell.X + pGrid.X, pCell.Y + pGrid.Y + dgvAbitList.CurrentRow.Height);
 
-                         m.Show(dgvAbitList, new Point(pCell.X + pGrid.X, pCell.Y + dgvAbitList.CurrentRow.Height));
-                     }
-                 }
-             }
-             // абитуриенты
-             else
+                        m.Show(dgvAbitList, new Point(pCell.X + pGrid.X, pCell.Y + dgvAbitList.CurrentRow.Height));
+                    }
+                }
+            }
+            // абитуриенты
+            else
 
-                 if (e.Button == MouseButtons.Right)
-                 {
-                     dgvAbitList.CurrentCell = dgvAbitList.Rows[e.RowIndex].Cells[e.ColumnIndex];
-                     ContextMenu m = new ContextMenu();
-                     m.MenuItems.Add(new MenuItem("Перейти к зеленой позиции", new EventHandler(this.ContextMenuToGreen_OnClick)));
-                     m.MenuItems.Add(new MenuItem("Открыть карточку абитуриента", new EventHandler(this.ContextMenuOpenCard_OnClick)));
+                if (e.Button == MouseButtons.Right)
+                {
+                    dgvAbitList.CurrentCell = dgvAbitList.Rows[e.RowIndex].Cells[e.ColumnIndex];
+                    ContextMenu m = new ContextMenu();
+                    m.MenuItems.Add(new MenuItem("Перейти к зеленой позиции", new EventHandler(this.ContextMenuToGreen_OnClick)));
+                    m.MenuItems.Add(new MenuItem("Открыть карточку абитуриента", new EventHandler(this.ContextMenuOpenCard_OnClick)));
 
-                     Point pCell = dgvAbitList.GetCellDisplayRectangle(dgvAbitList.CurrentCell.ColumnIndex, dgvAbitList.CurrentCell.RowIndex, true).Location;
-                     Point pGrid = dgvAbitList.Location;
-                     new Point(pCell.X + pGrid.X, pCell.Y + pGrid.Y + dgvAbitList.CurrentRow.Height);
+                    Point pCell = dgvAbitList.GetCellDisplayRectangle(dgvAbitList.CurrentCell.ColumnIndex, dgvAbitList.CurrentCell.RowIndex, true).Location;
+                    Point pGrid = dgvAbitList.Location;
+                    new Point(pCell.X + pGrid.X, pCell.Y + pGrid.Y + dgvAbitList.CurrentRow.Height);
 
-                     m.Show(dgvAbitList, new Point(pCell.X + pGrid.X, pCell.Y + dgvAbitList.CurrentRow.Height));
-                 }
+                    m.Show(dgvAbitList, new Point(pCell.X + pGrid.X, pCell.Y + dgvAbitList.CurrentRow.Height));
+                }
         }
         private void ContextMenuToGreen_OnClick(object sender, EventArgs e)
         {
-            
+
             string FIO = dgvAbitList.CurrentCell.Value.ToString().Substring(0, dgvAbitList.CurrentCell.Value.ToString().IndexOf('(') - 1);
             int index = PersonListFio.IndexOf(FIO);
             if (index > -1)
@@ -904,12 +969,12 @@ namespace Priem
             string FIO = dgvAbitList.CurrentCell.Value.ToString().Substring(0, dgvAbitList.CurrentCell.Value.ToString().IndexOf('(') - 1);
             int index = PersonListFio.IndexOf(FIO);
 
-            MainClass.OpenCardPerson(PersonList[index].ToString(), this, dgvAbitList.CurrentRow.Index); 
+            MainClass.OpenCardPerson(PersonList[index].ToString(), this, dgvAbitList.CurrentRow.Index);
         }
         private void ContextMenuProfile_OnClick(object sender, EventArgs e)
         {
             int columnindex = dgvAbitList.CurrentCell.ColumnIndex;
-            string EntryId = dgvAbitList.Rows[2].Cells[columnindex].Value.ToString(); 
+            string EntryId = dgvAbitList.Rows[2].Cells[columnindex].Value.ToString();
             string ObrazProgramInEntryId = dgvAbitList.Rows[3].Cells[columnindex].Value.ToString();
             if (String.IsNullOrEmpty(ObrazProgramInEntryId))
                 return;
@@ -926,15 +991,15 @@ namespace Priem
                     {
                         break;
                     }
-                    string NUMFIO = value.Substring(0, value.IndexOf("(") -1);
+                    string NUMFIO = value.Substring(0, value.IndexOf("(") - 1);
                     int index = PersonListFio.IndexOf(NUMFIO);
                     if (index > -1)
-                    {    
+                    {
                         PersonNumList.Add(PersonList[index]);
                         PersonFIOList.Add(NUMFIO);
                     }
                     else
-                        MessageBox.Show (this,"SomeError while searching FIO and Person.Id: "+value,"ContextMenuProfile_OnClick");
+                        MessageBox.Show(this, "SomeError while searching FIO and Person.Id: " + value, "ContextMenuProfile_OnClick");
                 }
             }
             new MyListRatingProfileList(ObrazProgramInEntryId, EntryId, PersonNumList, PersonFIOList, btnGreenIsClicked).Show();
@@ -955,7 +1020,7 @@ namespace Priem
                                            where AbiturientId In (select qAbiturient.Id from ed.qAbiturient inner join ed.qEntry on qEntry.Id = EntryId " + GetAbitFilterString() + ")");
             wc.SetText("Добавление новых данных...");
             wc.SetMax(dgvAbitList.Columns.Count);
-            for (int clmn = startcol; clmn < dgvAbitList.Columns.Count; clmn ++)
+            for (int clmn = startcol; clmn < dgvAbitList.Columns.Count; clmn++)
             {
                 // 0 LicenseProgramName
                 // 1 ObrazProgramName
@@ -970,12 +1035,12 @@ namespace Priem
                 string PersonId = "";
                 string AbitId = "";
                 string NumFio = "";
-                string query = @"select Abiturient.Id from ed.Abiturient where BackDoc=0 and NotEnabled = 0 and  EntryId ='"+EntryId+"' and PersonId='";
-                
+                string query = @"select Abiturient.Id from ed.Abiturient where BackDoc=0 and NotEnabled = 0 and  EntryId ='" + EntryId + "' and PersonId='";
+
                 // человеки
                 List<string> AbitIdList = new List<string>();
-                
-                for (int rowindex = startrow; rowindex < dgvAbitList.Rows.Count; rowindex++ )
+
+                for (int rowindex = startrow; rowindex < dgvAbitList.Rows.Count; rowindex++)
                 {
                     string value = dgvAbitList.Rows[rowindex].Cells[clmn].Value.ToString();
                     if (String.IsNullOrEmpty(value))
@@ -986,7 +1051,7 @@ namespace Priem
                     if ((dgvAbitList.Rows[rowindex].Cells[clmn].Style.BackColor == Color.LightGreen) ||
                         (dgvAbitList.Rows[rowindex].Cells[clmn].Style.BackColor == Color.LightBlue))
                     {
-                        NumFio = value.Substring(0,value.IndexOf("(") - 1);
+                        NumFio = value.Substring(0, value.IndexOf("(") - 1);
                         int personIndexInList = PersonListFio.IndexOf(NumFio);
                         if (personIndexInList > -1)
                         {
@@ -1014,15 +1079,15 @@ namespace Priem
                 }
                 // образовательную программу мы добавили, теперь дело за профилем.
                 // если список лиц не пуст, надо понять если там профили
-                if (AbitIdList.Count>0)
+                if (AbitIdList.Count > 0)
                 {
                     if (dgvAbitList.Rows[1].Cells[clmn].Style.BackColor == Color.Azure)
                     {
                         // найдем профили и посчитаем кого и куда
-                        DataTable tbl = MainClass.Bdc.GetDataSet("select Distinct Id, KCP from ed.ProfileInObrazProgramInEntry where ObrazProgramInEntryId ='"+ObrazProgramInEntryId+"'").Tables[0];
+                        DataTable tbl = MainClass.Bdc.GetDataSet("select Distinct Id, KCP from ed.ProfileInObrazProgramInEntry where ObrazProgramInEntryId ='" + ObrazProgramInEntryId + "'").Tables[0];
                         List<List<int>> TablePriorities = new List<List<int>>();
                         List<List<int>> TableGreenYellow = new List<List<int>>();
-                        List<Guid> ProfileList = new List<Guid>(); 
+                        List<Guid> ProfileList = new List<Guid>();
                         foreach (DataRow rw in tbl.Rows)
                         {
                             ProfileList.Add(rw.Field<Guid>("Id"));
@@ -1030,10 +1095,10 @@ namespace Priem
                             List<int> TempPriorList = new List<int>();
                             for (int rowindex = 0; rowindex < AbitIdList.Count; rowindex++)
                             {
-                                int PriorTemp = (int)MainClass.Bdc.GetValue("select Distinct ProfileInObrazProgramInEntryPriority from ed.ApplicationDetails "+
+                                int PriorTemp = (int)MainClass.Bdc.GetValue("select Distinct ProfileInObrazProgramInEntryPriority from ed.ApplicationDetails " +
                                                 " where ApplicationId='" + AbitIdList[rowindex] +
                                                 "' and ObrazProgramInEntryId ='" + ObrazProgramInEntryId +
-                                                "' and ProfileInObrazProgramInEntryId='"+rw.Field<Guid>("Id").ToString()+ "'");
+                                                "' and ProfileInObrazProgramInEntryId='" + rw.Field<Guid>("Id").ToString() + "'");
                                 TempPriorList.Add(PriorTemp);
                             }
                             TablePriorities.Add(TempPriorList);
@@ -1071,16 +1136,16 @@ namespace Priem
                                         {
                                             TableGreenYellow[temp_colindex][rowindex] = -1;
                                             // сдвинуть зеленку
-                                            for (int temp_rowindex = rowindex+1; temp_rowindex < AbitIdList.Count; temp_rowindex++)
+                                            for (int temp_rowindex = rowindex + 1; temp_rowindex < AbitIdList.Count; temp_rowindex++)
                                             {
                                                 if (TableGreenYellow[temp_colindex][temp_rowindex] == 0)
                                                 {
                                                     TableGreenYellow[temp_colindex][temp_rowindex] = 1;
                                                     break;
                                                 }
-                                                       
+
                                             }
-                                            
+
                                         }
                                     }
                                     else
@@ -1096,7 +1161,7 @@ namespace Priem
                                                 TableGreenYellow[colindex][rowindex] = -1;
                                                 abit_profile_priority = temp_priority;
                                                 // сдвинуть зеленку
-                                                for (int temp_rowindex = rowindex+1; temp_rowindex < AbitIdList.Count; temp_rowindex++)
+                                                for (int temp_rowindex = rowindex + 1; temp_rowindex < AbitIdList.Count; temp_rowindex++)
                                                 {
                                                     if (TableGreenYellow[colindex][temp_rowindex] == 0)
                                                     {
@@ -1124,11 +1189,11 @@ namespace Priem
                                 }
                             }
                         }
-                    }                     
+                    }
                 }
 
                 wc.PerformStep();
-                wc.SetText("Добавление новых данных: Обработано конкурсов "+clmn+"/"+(dgvAbitList.Columns.Count-1)+"...");
+                wc.SetText("Добавление новых данных: Обработано конкурсов " + clmn + "/" + (dgvAbitList.Columns.Count - 1) + "...");
             }
             wc.Close();
             btnGreenIsClicked = true;

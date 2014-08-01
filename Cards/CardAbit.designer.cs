@@ -122,15 +122,15 @@
             this.chbPrint = new System.Windows.Forms.CheckBox();
             this.btnPrint = new System.Windows.Forms.Button();
             this.cbPrint = new System.Windows.Forms.ComboBox();
+            this.tpEntry = new System.Windows.Forms.TabPage();
+            this.gbObrazProgramInEntry = new System.Windows.Forms.GroupBox();
+            this.cbObrazProgramInEntry = new System.Windows.Forms.ComboBox();
+            this.label11 = new System.Windows.Forms.Label();
+            this.label10 = new System.Windows.Forms.Label();
+            this.cbProfileInObrazProgramInEntry = new System.Windows.Forms.ComboBox();
             this.lblFIO = new System.Windows.Forms.Label();
             this.btnCardPerson = new System.Windows.Forms.Button();
             this.epErrorInput = new System.Windows.Forms.ErrorProvider(this.components);
-            this.tpEntry = new System.Windows.Forms.TabPage();
-            this.cbObrazProgramInEntry = new System.Windows.Forms.ComboBox();
-            this.label10 = new System.Windows.Forms.Label();
-            this.label11 = new System.Windows.Forms.Label();
-            this.cbProfileInObrazProgramInEntry = new System.Windows.Forms.ComboBox();
-            this.groupBox2 = new System.Windows.Forms.GroupBox();
             ((System.ComponentModel.ISupportInitialize)(this.epError)).BeginInit();
             this.tabCard.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -146,9 +146,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.dgvExams)).BeginInit();
             this.tabPage4.SuspendLayout();
             this.gbPrint.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.epErrorInput)).BeginInit();
             this.tpEntry.SuspendLayout();
-            this.groupBox2.SuspendLayout();
+            this.gbObrazProgramInEntry.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.epErrorInput)).BeginInit();
             this.SuspendLayout();
             // 
             // btnPrev
@@ -1179,6 +1179,67 @@
             this.cbPrint.Size = new System.Drawing.Size(305, 21);
             this.cbPrint.TabIndex = 0;
             // 
+            // tpEntry
+            // 
+            this.tpEntry.Controls.Add(this.gbObrazProgramInEntry);
+            this.tpEntry.Location = new System.Drawing.Point(4, 22);
+            this.tpEntry.Name = "tpEntry";
+            this.tpEntry.Padding = new System.Windows.Forms.Padding(3);
+            this.tpEntry.Size = new System.Drawing.Size(617, 527);
+            this.tpEntry.TabIndex = 5;
+            this.tpEntry.Text = "Зачисление";
+            this.tpEntry.UseVisualStyleBackColor = true;
+            // 
+            // gbObrazProgramInEntry
+            // 
+            this.gbObrazProgramInEntry.Controls.Add(this.cbObrazProgramInEntry);
+            this.gbObrazProgramInEntry.Controls.Add(this.label11);
+            this.gbObrazProgramInEntry.Controls.Add(this.label10);
+            this.gbObrazProgramInEntry.Controls.Add(this.cbProfileInObrazProgramInEntry);
+            this.gbObrazProgramInEntry.Location = new System.Drawing.Point(4, 25);
+            this.gbObrazProgramInEntry.Name = "gbObrazProgramInEntry";
+            this.gbObrazProgramInEntry.Size = new System.Drawing.Size(605, 112);
+            this.gbObrazProgramInEntry.TabIndex = 4;
+            this.gbObrazProgramInEntry.TabStop = false;
+            this.gbObrazProgramInEntry.Text = "Зачислен на";
+            // 
+            // cbObrazProgramInEntry
+            // 
+            this.cbObrazProgramInEntry.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbObrazProgramInEntry.FormattingEnabled = true;
+            this.cbObrazProgramInEntry.Location = new System.Drawing.Point(9, 32);
+            this.cbObrazProgramInEntry.Name = "cbObrazProgramInEntry";
+            this.cbObrazProgramInEntry.Size = new System.Drawing.Size(377, 21);
+            this.cbObrazProgramInEntry.TabIndex = 0;
+            this.cbObrazProgramInEntry.SelectedIndexChanged += new System.EventHandler(this.cbObrazProgramInEntry_SelectedIndexChanged);
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(6, 56);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(53, 13);
+            this.label11.TabIndex = 3;
+            this.label11.Text = "Профиль";
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(6, 16);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(158, 13);
+            this.label10.TabIndex = 1;
+            this.label10.Text = "Образовательная программа";
+            // 
+            // cbProfileInObrazProgramInEntry
+            // 
+            this.cbProfileInObrazProgramInEntry.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbProfileInObrazProgramInEntry.FormattingEnabled = true;
+            this.cbProfileInObrazProgramInEntry.Location = new System.Drawing.Point(9, 72);
+            this.cbProfileInObrazProgramInEntry.Name = "cbProfileInObrazProgramInEntry";
+            this.cbProfileInObrazProgramInEntry.Size = new System.Drawing.Size(377, 21);
+            this.cbProfileInObrazProgramInEntry.TabIndex = 2;
+            // 
             // lblFIO
             // 
             this.lblFIO.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
@@ -1204,66 +1265,6 @@
             // epErrorInput
             // 
             this.epErrorInput.ContainerControl = this;
-            // 
-            // tpEntry
-            // 
-            this.tpEntry.Controls.Add(this.groupBox2);
-            this.tpEntry.Location = new System.Drawing.Point(4, 22);
-            this.tpEntry.Name = "tpEntry";
-            this.tpEntry.Padding = new System.Windows.Forms.Padding(3);
-            this.tpEntry.Size = new System.Drawing.Size(617, 527);
-            this.tpEntry.TabIndex = 5;
-            this.tpEntry.Text = "Зачисление";
-            this.tpEntry.UseVisualStyleBackColor = true;
-            // 
-            // cbObrazProgramInEntry
-            // 
-            this.cbObrazProgramInEntry.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbObrazProgramInEntry.FormattingEnabled = true;
-            this.cbObrazProgramInEntry.Location = new System.Drawing.Point(9, 32);
-            this.cbObrazProgramInEntry.Name = "cbObrazProgramInEntry";
-            this.cbObrazProgramInEntry.Size = new System.Drawing.Size(377, 21);
-            this.cbObrazProgramInEntry.TabIndex = 0;
-            // 
-            // label10
-            // 
-            this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(6, 16);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(158, 13);
-            this.label10.TabIndex = 1;
-            this.label10.Text = "Образовательная программа";
-            // 
-            // label11
-            // 
-            this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(6, 56);
-            this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(53, 13);
-            this.label11.TabIndex = 3;
-            this.label11.Text = "Профиль";
-            // 
-            // cbProfileInObrazProgramInEntry
-            // 
-            this.cbProfileInObrazProgramInEntry.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbProfileInObrazProgramInEntry.FormattingEnabled = true;
-            this.cbProfileInObrazProgramInEntry.Location = new System.Drawing.Point(9, 72);
-            this.cbProfileInObrazProgramInEntry.Name = "cbProfileInObrazProgramInEntry";
-            this.cbProfileInObrazProgramInEntry.Size = new System.Drawing.Size(377, 21);
-            this.cbProfileInObrazProgramInEntry.TabIndex = 2;
-            // 
-            // groupBox2
-            // 
-            this.groupBox2.Controls.Add(this.cbObrazProgramInEntry);
-            this.groupBox2.Controls.Add(this.label11);
-            this.groupBox2.Controls.Add(this.label10);
-            this.groupBox2.Controls.Add(this.cbProfileInObrazProgramInEntry);
-            this.groupBox2.Location = new System.Drawing.Point(4, 25);
-            this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(605, 112);
-            this.groupBox2.TabIndex = 4;
-            this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "Зачислен на";
             // 
             // CardAbit
             // 
@@ -1310,10 +1311,10 @@
             this.tabPage4.ResumeLayout(false);
             this.gbPrint.ResumeLayout(false);
             this.gbPrint.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.epErrorInput)).EndInit();
             this.tpEntry.ResumeLayout(false);
-            this.groupBox2.ResumeLayout(false);
-            this.groupBox2.PerformLayout();
+            this.gbObrazProgramInEntry.ResumeLayout(false);
+            this.gbObrazProgramInEntry.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.epErrorInput)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -1421,6 +1422,6 @@
         private System.Windows.Forms.ComboBox cbProfileInObrazProgramInEntry;
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.ComboBox cbObrazProgramInEntry;
-        private System.Windows.Forms.GroupBox groupBox2;
+        private System.Windows.Forms.GroupBox gbObrazProgramInEntry;
     }
 }

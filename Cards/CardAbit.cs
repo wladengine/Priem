@@ -1386,6 +1386,13 @@ namespace Priem
             context.Abiturient_UpdateEntry(EntryId, id);
 
             context.Abiturient_UpdateIsCommonRussianCompetition(IsCommonRussianCompetition, id);
+
+            // set ObrazProgramInEntryId
+            if (ObrazProgramInEntryId.HasValue)
+                context.Abiturient_UpdateObrazProgramInEntryId(ObrazProgramInEntryId, GuidId);
+            // set ProfileInObrazProgramId
+            if (ProfileInObrazProgramInEntryId.HasValue)
+                context.Abiturient_UpdateProfileInObrazProgramInEntryId(ProfileInObrazProgramInEntryId, GuidId);
         }
 
         protected override void OnSave()
@@ -1899,7 +1906,8 @@ namespace Priem
                     if (!tabCard.TabPages.Contains(tpEntry))
                     {
                         tabCard.TabPages.Add(tpEntry);
-
+                        FillObrazProgramInEntry();
+                        WinFormsServ.SetSubControlsEnabled(gbObrazProgramInEntry, true);
                     }
                 }
             }
@@ -1923,23 +1931,32 @@ namespace Priem
                                 (from ent in context.ObrazProgramInEntry
                                  join SP_ObrazProgr in context.SP_ObrazProgram on ent.ObrazProgramId equals SP_ObrazProgr.Id
                                  where ent.EntryId == EntryId
-                                 select new KeyValuePair<string, string>(ent.Id.ToString(), SP_ObrazProgr.Name))
+                                 select new { ent.Id, SP_ObrazProgr.Name }).ToList()
+                                 .Select(x=> new KeyValuePair<string, string>(x.Id.ToString(), x.Name))
                                  .ToList();
                 ComboServ.FillCombo(cbObrazProgramInEntry, ObrazProgramInEntryList, false, false);
-                // set ObrazProgramInEntryId
-                //context.Abiturient_UpdateObrazProgramInEntryId(ObrazProgramInEntryId, Guid.Parse(_Id));
+            }
+        }
 
+        private void FillProfileInObrazProgramInEntry()
+        {
+            using (PriemEntities context = new PriemEntities())
+            {
                 List<KeyValuePair<string, string>> ProfileInObrazProgramInEntryList =
                                 (from ent in context.ProfileInObrazProgramInEntry
                                  join SP_Prof in context.SP_Profile on ent.ProfileId equals SP_Prof.Id
                                  where ent.ObrazProgramInEntryId == ObrazProgramInEntryId
-                                 select new KeyValuePair<string, string>(ent.Id.ToString(), SP_Prof.Name))
+                                 select new { ent.Id, SP_Prof.Name }).ToList()
+                                 .Select(x => new KeyValuePair<string, string>(x.Id.ToString(), x.Name))
                                  .ToList();
 
                 ComboServ.FillCombo(cbProfileInObrazProgramInEntry, ProfileInObrazProgramInEntryList, false, false);
-                // set ProfileInObrazProgramId
-                //context.Abiturient_UpdateProfileInObrazProgramInEntryId(ProfileInObrazProgramInEntryId, Guid.Parse(_Id));
             }
+        }
+
+        private void cbObrazProgramInEntry_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            FillProfileInObrazProgramInEntry();
         }
     }
 }

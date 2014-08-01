@@ -593,11 +593,7 @@ namespace Priem
                                                 {
                                                     if (String.IsNullOrEmpty(dgvAbitList.Rows[row_temp].Cells[kvp.Key].Value.ToString()))
                                                         break;
-                                                    if (dgvAbitList.Rows[row_temp].Cells[kvp.Key].Style.BackColor == Color.Empty) 
-                                                    /*if ((dgvAbitList.Rows[row_temp].Cells[kvp.Key].Style.BackColor != Color.LightGreen) && 
-                                                        (dgvAbitList.Rows[row_temp].Cells[kvp.Key].Style.BackColor != Color.LightBlue)  &&
-                                                        (dgvAbitList.Rows[row_temp].Cells[kvp.Key].Style.BackColor != Color.Yellow) &&
-                                                        (dgvAbitList.Rows[row_temp].Cells[kvp.Key].Style.BackColor != Color.Red))*/
+                                                    if (dgvAbitList.Rows[row_temp].Cells[kvp.Key].Style.BackColor == Color.Empty)  
                                                     {
                                                         dgvAbitList.Rows[row_temp].Cells[kvp.Key].Style.BackColor = Color.LightGreen;
                                                         break;
@@ -680,29 +676,6 @@ namespace Priem
             }
             dgvAbitList.Rows[2].Visible = false;
             dgvAbitList.Rows[3].Visible = false;
-        }
-
-        private void dgvAbitList_CellContentClick(object sender, DataGridViewCellEventArgs e)
-        {
-            /*
-            if (e.RowIndex < 5)
-                return;
-            if (e.ColumnIndex < 1)
-                return;
-            
-            if (dgvAbitList.Rows[e.RowIndex].Cells[e.ColumnIndex].Style.BackColor == Color.LightGreen)
-                return;
-
-            string FIO = dgvAbitList.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString().Substring(0, dgvAbitList.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString().IndexOf('(')-1);
-            int index = PersonListFio.IndexOf(FIO);
-            if (index>-1)
-                foreach (KeyValuePair<int, int> kvp in Coord_Save[index])
-                {
-                    if (dgvAbitList.Rows[kvp.Value + 5].Cells[kvp.Key].Style.BackColor == Color.LightGreen)
-                    {
-                        dgvAbitList.CurrentCell = dgvAbitList.Rows[kvp.Value + 5].Cells[kvp.Key];
-                    }
-                }*/
         }
 
         private void btnToExcel_Click(object sender, EventArgs e)

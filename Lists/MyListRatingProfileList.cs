@@ -518,5 +518,18 @@ namespace Priem
         {
             //base.OpenCard(itemId);
         }
+
+        private void dgvAbitProfileList_CellContentDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex < startrow)
+                return;
+            if (e.ColumnIndex < 1)
+                return;
+
+            string FIO = dgvAbitProfileList.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString().Substring(0, dgvAbitProfileList.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString().IndexOf('(') - 1);
+            int index = PersonFIOList.IndexOf(FIO);
+
+            MainClass.OpenCardPerson(PersonNumList[index].ToString(), this, dgvAbitProfileList.CurrentRow.Index); 
+        }
     }
 }

@@ -169,6 +169,7 @@
             this.dgvAbitProfileList.Name = "dgvAbitProfileList";
             this.dgvAbitProfileList.Size = new System.Drawing.Size(774, 472);
             this.dgvAbitProfileList.TabIndex = 10;
+            this.dgvAbitProfileList.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvAbitProfileList_CellContentDoubleClick);
             this.dgvAbitProfileList.CellMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dgvAbitProfileList_CellMouseClick);
             // 
             // tbObrazProgramInEntry

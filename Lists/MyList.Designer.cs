@@ -147,8 +147,7 @@
             this.dgvAbitList.Name = "dgvAbitList";
             this.dgvAbitList.Size = new System.Drawing.Size(1075, 425);
             this.dgvAbitList.TabIndex = 5;
-            this.dgvAbitList.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvAbitList_CellContentClick);
-            this.dgvAbitList.CellContentDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvAbitList_CellContentDoubleClick);
+            this.dgvAbitList.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvAbitList_CellContentDoubleClick);
             this.dgvAbitList.CellMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dgvAbitList_CellMouseClick);
             // 
             // groupBox2

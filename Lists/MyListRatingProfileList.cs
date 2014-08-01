@@ -21,7 +21,7 @@ namespace Priem
         Guid _EntryId;
         List<Guid> PersonNumList = new List<Guid>();
         List<string> PersonFIOList = new List<string>();
-        int startrow = 4;
+        int startrow = 3;
         bool IsGreen;
 
         public MyListRatingProfileList(string Id, string EntryId,  List<Guid>List, List<string>ListFio, bool isgr)
@@ -87,10 +87,9 @@ namespace Priem
         }
         private void FillGrid()
         {
-            string query = @"select distinct ProfileInObrazProgramInEntry.Id as Id, SP_Profile.Name as Name, ProfileInObrazProgramInEntry.KCP, ProfileInObrazProgramInEntry.EgeExamNameId ,EgeExamName.Name as EgeName, ProfileInObrazProgramInEntry.EgeMin
+            string query = @"select distinct ProfileInObrazProgramInEntry.Id as Id, SP_Profile.Name as Name, ProfileInObrazProgramInEntry.KCP
                                 from ed.ProfileInObrazProgramInEntry 
                                 inner join ed.SP_Profile on SP_Profile.Id = ProfileInObrazProgramInEntry.ProfileId 
-                                left join ed.EgeExamName on EgeExamName.Id = EgeExamNameId
                                 where 
                                 ObrazProgramInEntryId ='" + _ObrazProgramInEntryId + @"' 
                                 ";
@@ -105,7 +104,6 @@ namespace Priem
             DataRow rowProfileName = examTable.NewRow();
             DataRow rowProfileId = examTable.NewRow();
             DataRow rowKCP = examTable.NewRow();
-            DataRow rowEge = examTable.NewRow();
 
             foreach (DataRow rw_profile in tbl.Rows)
             {
@@ -116,13 +114,10 @@ namespace Priem
                 rowProfileName[ColName] = rw_profile.Field<string>("Name");
                 rowProfileId[ColName] = ColName;
                 rowKCP[ColName] = rw_profile.Field<int>("KCP");
-                rowEge[ColName] =(!String.IsNullOrEmpty(rw_profile.Field<int?>("EgeExamNameId").ToString()))?rw_profile.Field<int?>("EgeExamNameId") + "_" + rw_profile.Field<string>("EgeName") + "(" +rw_profile.Field<int?>("EgeMin")+ ")":"";
             }
             examTable.Rows.Add(rowProfileName);
             examTable.Rows.Add(rowProfileId);
-            examTable.Rows.Add(rowEge);
             examTable.Rows.Add(rowKCP);
-
             // abiturients 
             query = @"select distinct
                           ApplicationDetails.ProfileInObrazProgramInEntryId
@@ -165,7 +160,6 @@ namespace Priem
         private void GridPaint() 
         {
             int startcol = 1;
-            // сначала все КЦП зеленые
             for (int colindex = startcol; colindex < dgvAbitProfileList.Columns.Count; colindex++)
             {
                 int KCP = 0;
@@ -178,7 +172,7 @@ namespace Priem
                     dgvAbitProfileList.Rows[j].Cells[colindex].Style.BackColor = Color.LightGreen;
                 }
             }
-            // лица без приоритетов голубенькие
+
             for (int colindex = startcol; colindex < dgvAbitProfileList.Columns.Count; colindex++)
             { 
                 for (int j = startrow; j < dgvAbitProfileList.Rows.Count; j++)
@@ -189,50 +183,7 @@ namespace Priem
                     } 
                 }
             }
-            // если для профиля есть конкретный язык, нужно сделать отсев
-            for (int colindex = startcol; colindex < dgvAbitProfileList.Columns.Count; colindex++)
-            {
-                if (String.IsNullOrEmpty(dgvAbitProfileList.Rows[startrow - 2].Cells[colindex].Value.ToString()))
-                        continue;
 
-                string EgeExamNameId = dgvAbitProfileList.Rows[startrow - 2].Cells[colindex].Value.ToString();
-                EgeExamNameId = EgeExamNameId.Substring(0, EgeExamNameId.IndexOf("_"));
-                string sEgeMin = dgvAbitProfileList.Rows[startrow - 2].Cells[colindex].Value.ToString();
-                sEgeMin = sEgeMin.Substring(sEgeMin.IndexOf("(")+1);
-                sEgeMin = sEgeMin.Substring(0, sEgeMin.IndexOf(")"));
-                int EgeMin = int.Parse(sEgeMin);
-
-                int KCP_temp = 0;
-                if (int.TryParse(dgvAbitProfileList.Rows[startrow - 1].Cells[colindex].Value.ToString(), out KCP_temp))
-
-                for (int j = startrow; j < dgvAbitProfileList.Rows.Count; j++)
-                {
-                    DataGridViewCell cell = dgvAbitProfileList.Rows[j].Cells[colindex];
-                    string cellvalue = cell.Value.ToString().Substring(0, cell.Value.ToString().IndexOf("_"));
-
-                    int EgeAbitValue = (int?)MainClass.Bdc.GetValue("select Value from ed.extEgeMark where PersonId = '" +cellvalue+ "' and EgeExamNameId=" +EgeExamNameId+ " and FBSStatusId=1") ?? 0;
-                    if (EgeAbitValue < EgeMin)
-                    {
-                        if ((dgvAbitProfileList.Rows[j].Cells[colindex].Style.BackColor == Color.LightGreen) || (dgvAbitProfileList.Rows[j].Cells[colindex].Style.BackColor == Color.LightBlue))
-                        {
-                            // сдвинуть зеленку;
-                            for (int row_temp = startrow + KCP_temp; row_temp < dgvAbitProfileList.Rows.Count; row_temp++)
-                            {
-                                if (String.IsNullOrEmpty(dgvAbitProfileList.Rows[row_temp].Cells[colindex].Value.ToString()))
-                                    break;
-                                if (dgvAbitProfileList.Rows[row_temp].Cells[colindex].Style.BackColor == Color.Empty)
-                                {
-                                    dgvAbitProfileList.Rows[row_temp].Cells[colindex].Style.BackColor = Color.LightGreen;
-                                    break;
-                                }
-                            }
-                        }
-                        dgvAbitProfileList.Rows[j].Cells[colindex].Style.BackColor = Color.Purple;
-                    }
-                }
-            }
-
-            // по готовенькому расставить приоритетики
             for (int rowindex = startrow; rowindex < dgvAbitProfileList.Rows.Count; rowindex++)
             {
                 DataGridViewRow row = dgvAbitProfileList.Rows[rowindex];
@@ -282,8 +233,7 @@ namespace Priem
                                     }
                                 }
                             }
-                            if ((temp_cell.Style.BackColor == Color.LightGreen)||(temp_cell.Style.BackColor == Color.LightBlue)||(temp_cell.Style.BackColor == Color.Empty))
-                                temp_cell.Style.BackColor = Color.Yellow;
+                            temp_cell.Style.BackColor = Color.Yellow;
                         }
                         else
                         {
@@ -316,7 +266,7 @@ namespace Priem
                             } 
                         }
                     }
-                    /*
+
                     foreach (DataGridViewCell cells in row.Cells)
                     {
                         if (cell.ColumnIndex == startcol - 1)
@@ -347,7 +297,7 @@ namespace Priem
                                 cells.Style.BackColor = Color.Yellow;
                             }
                         }
-                    }*/
+                    }
                     break;
                 }
             } 
@@ -356,13 +306,6 @@ namespace Priem
         private void CopyTable()
         {
             int startcol = 1;
-
-            for (int j = startcol; j < dgvAbitProfileList.Columns.Count; j++)
-            {
-                string value = dgvAbitProfileList.Rows[startrow-2].Cells[j].Value.ToString();
-                if (!String.IsNullOrEmpty(value))
-                    dgvAbitProfileList.Rows[startrow - 2].Cells[j].Value = value.Substring(value.IndexOf("_") + 1);
-            }
             for (int i = startrow; i < dgvAbitProfileList.Rows.Count; i++)
             {
                 for (int j = startcol; j < dgvAbitProfileList.Columns.Count; j++)

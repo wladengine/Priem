@@ -23,7 +23,7 @@ namespace Priem
         List<List<KeyValuePair<int, int>>> Coord_Save = new List<List<KeyValuePair<int, int>>>();
         List<KeyValuePair<int, KeyValuePair<int, int>>> DeleteList = new List<KeyValuePair<int, KeyValuePair<int, int>>>();
         Guid ErrorGuid = Guid.Empty;
-        int startrow = 8;
+        int startrow = 7;
         bool btnGreenIsClicked = false;
 
         public MyList()
@@ -145,7 +145,6 @@ namespace Priem
             DataRow row_ObrazProgramInEntryId = examTable.NewRow();
             DataRow row_StudyForm = examTable.NewRow();
             DataRow row_StudyBasis = examTable.NewRow();
-            DataRow row_Ege = examTable.NewRow();
             DataRow row_KCP = examTable.NewRow();
 
             DataColumn clm;
@@ -210,12 +209,9 @@ namespace Priem
                         int _KCP =  ds.Tables[0].Rows[0].Field<int>("KCP");
 
                         /// поиск по EntryId В ОБРАЗОВАТЕЛЬНЫХ ПРОГРАММАХ
-                        query = @"SELECT distinct ObrazProgramInEntry.[Id] as Id, SP_ObrazProgram.Name as Name, SP_ObrazProgram.Id as ObrazProgramId, KCP,
-                                ObrazProgramInEntry.EgeExamNameId , ObrazProgramInEntry.EgeMin, EgeExamName.Name as EgeName
+                        query = @"SELECT distinct ObrazProgramInEntry.[Id] as Id, SP_ObrazProgram.Name as Name, SP_ObrazProgram.Id as ObrazProgramId, KCP
                               FROM [ed].[ObrazProgramInEntry] 
-                             inner join ed.SP_ObrazProgram on ObrazProgramInEntry.ObrazProgramId = SP_ObrazProgram.Id
-                             left join EgeExamName on EgeExamName.Id = ObrazProgramInEntry.EgeExamNameId
-                                where EntryId ='" + EntryId + @"'
+                             inner join ed.SP_ObrazProgram on ObrazProgramInEntry.ObrazProgramId = SP_ObrazProgram.Id where EntryId ='" + EntryId + @"'
                                order by ObrazProgramId";
                         DataTable tbl_ObrProgram = MainClass.Bdc.GetDataSet(query).Tables[0];
                         ///// приоритетов образ.программ нет
@@ -249,7 +245,6 @@ namespace Priem
                                 row_StudyForm[index] = (rwEntry.Field<int>("StudyFormId") == 1) ? "Очная" : "Очно-заочная";
                                 row_StudyBasis[index] = (rwEntry.Field<int>("StudyBasisId") == 1) ? "Бюджетная" : "Договорная";
                                 row_ObrazProgramInEntryId[index] = rw_ObProg.Field<Guid>("Id").ToString();
-                                row_Ege[index] = (!String.IsNullOrEmpty(rw_ObProg.Field<int?>("EgeExamNameId").ToString())) ? rw_ObProg.Field<int?>("EgeExamNameId") + "_" + rw_ObProg.Field<string>("EgeName") + "(" + rw_ObProg.Field<int?>("EgeMin") + ")" : "";
                                 row_KCP[index] = rw_ObProg.Field<int>("KCP");
                             }
                         }
@@ -264,7 +259,6 @@ namespace Priem
             examTable.Rows.Add(row_ObrazProgramInEntryId);
             examTable.Rows.Add(row_StudyForm);
             examTable.Rows.Add(row_StudyBasis);
-            examTable.Rows.Add(row_Ege);
             examTable.Rows.Add(row_KCP);
 
             wc.SetText("Получение данных по абитуриентам...(0/0)");
@@ -287,7 +281,6 @@ namespace Priem
             inner join ed._FirstWave on _FirstWave.AbiturientId = Abiturient.Id
             inner join ed.qEntry on Abiturient.EntryId = qEntry.Id
             where Abiturient.EntryId=@EntryId and Abiturient.BackDoc = 0  and Abiturient.IsGosLine=0 
-            and _FirstWave.IsCrimea != 1
             --order by extAbitMarksSum.TotalSum desc
              order by _FirstWave.SortNum 
             ";
@@ -485,52 +478,6 @@ namespace Priem
                         }
                 }
             }
-
-            // теперь Английские языки
-            for (int colindex = 1; colindex < dgvAbitList.Columns.Count; colindex++)
-            {
-                if (String.IsNullOrEmpty(dgvAbitList.Rows[startrow - 2].Cells[colindex].Value.ToString()))
-                    continue;
-
-                string EgeExamNameId = dgvAbitList.Rows[startrow - 2].Cells[colindex].Value.ToString();
-                EgeExamNameId = EgeExamNameId.Substring(0, EgeExamNameId.IndexOf("_"));
-                string sEgeMin = dgvAbitList.Rows[startrow - 2].Cells[colindex].Value.ToString();
-                sEgeMin = sEgeMin.Substring(sEgeMin.IndexOf("(") + 1);
-                sEgeMin = sEgeMin.Substring(0, sEgeMin.IndexOf(")"));
-                int EgeMin = int.Parse(sEgeMin);
-
-                int KCP_temp = 0;
-                if (int.TryParse(dgvAbitList.Rows[startrow - 1].Cells[colindex].Value.ToString(), out KCP_temp))
-
-                    for (int j = startrow; j < dgvAbitList.Rows.Count; j++)
-                    {
-                        string cellvalue = dgvAbitList.Rows[j].Cells[colindex].Value.ToString();
-                        cellvalue = cellvalue.Substring(cellvalue.IndexOf('_') + 1);
-                        cellvalue = cellvalue.Substring(cellvalue.IndexOf('_') + 1);
-                        cellvalue = cellvalue.Substring(0, cellvalue.IndexOf('_'));
-                        int EgeAbitValue = (int?)MainClass.Bdc.GetValue("select Value from ed.extEgeMark where PersonId = '" + cellvalue + "' and EgeExamNameId=" + EgeExamNameId + " and FBSStatusId=1") ?? 0;
-                        if (EgeAbitValue < EgeMin)
-                        {
-                            if ((dgvAbitList.Rows[j].Cells[colindex].Style.BackColor == Color.LightGreen) || (dgvAbitList.Rows[j].Cells[colindex].Style.BackColor == Color.LightBlue))
-                            {
-                                // сдвинуть зеленку;
-                                for (int row_temp = startrow + KCP_temp; row_temp < dgvAbitList.Rows.Count; row_temp++)
-                                {
-                                    if (String.IsNullOrEmpty(dgvAbitList.Rows[row_temp].Cells[colindex].Value.ToString()))
-                                        break;
-                                    if (dgvAbitList.Rows[row_temp].Cells[colindex].Style.BackColor == Color.Empty)
-                                    {
-                                        dgvAbitList.Rows[row_temp].Cells[colindex].Style.BackColor = Color.LightGreen;
-                                        break;
-                                    }
-                                }
-                            }
-                            dgvAbitList.Rows[j].Cells[colindex].Style.BackColor = Color.Purple;
-                        }
-                    }               
-            }
-
-
             dgvAbitList.Update();
             int prior = 0;
             int innerprior = 0;
@@ -539,7 +486,6 @@ namespace Priem
             wc.Show();
             wc.SetText("Анализируем приоритеты ...");
             wc.SetMax(dgvAbitList.Rows.Count);
-
             while (UpdateResult() || (_step == 0))
             {
                 _step++;
@@ -635,11 +581,6 @@ namespace Priem
                                             {
                                                 isGreen = true;
                                             }
-
-                                            // под вопросом #подумать
-                                            if ((dgvAbitList.Rows[kvp.Value + startrow].Cells[kvp.Key].Style.BackColor == Color.LightGreen) ||
-                                                (dgvAbitList.Rows[kvp.Value + startrow].Cells[kvp.Key].Style.BackColor == Color.LightBlue) ||
-                                                (dgvAbitList.Rows[kvp.Value + startrow].Cells[kvp.Key].Style.BackColor == Color.Empty))
                                             dgvAbitList.Rows[kvp.Value + startrow].Cells[kvp.Key].Style.BackColor = Color.Yellow;
                                             if (innerprior_temp == innerprior)
                                             {

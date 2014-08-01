@@ -123,8 +123,9 @@ namespace Priem
         {
             using (PriemEntities context = new PriemEntities())
             {
-                var src = context.ProfileInObrazProgramInEntry.Where(x => x.ObrazProgramInEntryId == GuidId).Select(x => new { x.SP_Profile.Name, x.KCP }).ToArray();
+                var src = context.ProfileInObrazProgramInEntry.Where(x => x.ObrazProgramInEntryId == GuidId).Select(x => new { x.Id, x.SP_Profile.Name, x.KCP }).ToArray();
                 dgvProfileInObrazProgramInEntry.DataSource = Util.ConvertToDataTable(src);
+                dgvProfileInObrazProgramInEntry.Columns["Id"].Visible = false;
             }
         }
 

@@ -16,6 +16,15 @@ namespace Priem
     public partial class CardProfileInObrazProgramInEntry : BaseForm
     {
         private string Id;
+        private Guid GuidId
+        {
+            get 
+            {
+                Guid gRet;
+                Guid.TryParse(Id, out gRet);
+                return gRet;
+            }
+        }
         public event OnProfileInInObrazProgramInEntrySave OnSave;
         private int ProfileId
         {
@@ -43,6 +52,7 @@ namespace Priem
 
             this.MdiParent = MainClass.mainform;
             InitControls();
+            FillValues();
         }
         
         private void InitControls()
@@ -54,6 +64,22 @@ namespace Priem
             }
         }
 
+        private void FillValues()
+        {
+            if (GuidId != Guid.Empty)
+            {
+                using (PriemEntities context = new PriemEntities())
+                {
+                    var ent = context.ProfileInObrazProgramInEntry.Where(x => x.Id == GuidId).FirstOrDefault();
+
+                    if (ent != null)
+                    {
+                        ProfileId = ent.ProfileId;
+                        KCP = ent.KCP;
+                    }
+                }
+            }
+        }
         private void btnSave_Click(object sender, EventArgs e)
         {
             if (OnSave != null)

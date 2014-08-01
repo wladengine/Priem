@@ -12745,6 +12745,66 @@ namespace Priem
     
             return base.ExecuteFunction("PayDataEntry_Delete", entryIdParameter);
         }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        /// <param name="obrazProgramInEntryId">No Metadata Documentation available.</param>
+        /// <param name="id">No Metadata Documentation available.</param>
+        public int Abiturient_UpdateObrazProgramInEntryId(Nullable<global::System.Guid> obrazProgramInEntryId, Nullable<global::System.Guid> id)
+        {
+            ObjectParameter obrazProgramInEntryIdParameter;
+            if (obrazProgramInEntryId.HasValue)
+            {
+                obrazProgramInEntryIdParameter = new ObjectParameter("ObrazProgramInEntryId", obrazProgramInEntryId);
+            }
+            else
+            {
+                obrazProgramInEntryIdParameter = new ObjectParameter("ObrazProgramInEntryId", typeof(global::System.Guid));
+            }
+    
+            ObjectParameter idParameter;
+            if (id.HasValue)
+            {
+                idParameter = new ObjectParameter("id", id);
+            }
+            else
+            {
+                idParameter = new ObjectParameter("id", typeof(global::System.Guid));
+            }
+    
+            return base.ExecuteFunction("Abiturient_UpdateObrazProgramInEntryId", obrazProgramInEntryIdParameter, idParameter);
+        }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        /// <param name="profileInObrazProgramInEntryId">No Metadata Documentation available.</param>
+        /// <param name="id">No Metadata Documentation available.</param>
+        public int Abiturient_UpdateProfileInObrazProgramInEntryId(Nullable<global::System.Guid> profileInObrazProgramInEntryId, Nullable<global::System.Guid> id)
+        {
+            ObjectParameter profileInObrazProgramInEntryIdParameter;
+            if (profileInObrazProgramInEntryId.HasValue)
+            {
+                profileInObrazProgramInEntryIdParameter = new ObjectParameter("ProfileInObrazProgramInEntryId", profileInObrazProgramInEntryId);
+            }
+            else
+            {
+                profileInObrazProgramInEntryIdParameter = new ObjectParameter("ProfileInObrazProgramInEntryId", typeof(global::System.Guid));
+            }
+    
+            ObjectParameter idParameter;
+            if (id.HasValue)
+            {
+                idParameter = new ObjectParameter("id", id);
+            }
+            else
+            {
+                idParameter = new ObjectParameter("id", typeof(global::System.Guid));
+            }
+    
+            return base.ExecuteFunction("Abiturient_UpdateProfileInObrazProgramInEntryId", profileInObrazProgramInEntryIdParameter, idParameter);
+        }
 
         #endregion
 
@@ -13786,6 +13846,54 @@ namespace Priem
         private global::System.Boolean _IsCommonRussianCompetition;
         partial void OnIsCommonRussianCompetitionChanging(global::System.Boolean value);
         partial void OnIsCommonRussianCompetitionChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Guid> ObrazProgramInEntryId
+        {
+            get
+            {
+                return _ObrazProgramInEntryId;
+            }
+            set
+            {
+                OnObrazProgramInEntryIdChanging(value);
+                ReportPropertyChanging("ObrazProgramInEntryId");
+                _ObrazProgramInEntryId = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("ObrazProgramInEntryId");
+                OnObrazProgramInEntryIdChanged();
+            }
+        }
+        private Nullable<global::System.Guid> _ObrazProgramInEntryId;
+        partial void OnObrazProgramInEntryIdChanging(Nullable<global::System.Guid> value);
+        partial void OnObrazProgramInEntryIdChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Guid> ProfileInObrazProgramInEntryId
+        {
+            get
+            {
+                return _ProfileInObrazProgramInEntryId;
+            }
+            set
+            {
+                OnProfileInObrazProgramInEntryIdChanging(value);
+                ReportPropertyChanging("ProfileInObrazProgramInEntryId");
+                _ProfileInObrazProgramInEntryId = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("ProfileInObrazProgramInEntryId");
+                OnProfileInObrazProgramInEntryIdChanged();
+            }
+        }
+        private Nullable<global::System.Guid> _ProfileInObrazProgramInEntryId;
+        partial void OnProfileInObrazProgramInEntryIdChanging(Nullable<global::System.Guid> value);
+        partial void OnProfileInObrazProgramInEntryIdChanged();
 
         #endregion
 
@@ -26869,7 +26977,9 @@ namespace Priem
         /// <param name="excluded">Initial value of the Excluded property.</param>
         /// <param name="isOld">Initial value of the IsOld property.</param>
         /// <param name="protocolTypeName">Initial value of the ProtocolTypeName property.</param>
-        public static extEntryView CreateextEntryView(global::System.Guid id, global::System.Guid abiturientId, global::System.Boolean excluded, global::System.Boolean isOld, global::System.String protocolTypeName)
+        /// <param name="entryId">Initial value of the EntryId property.</param>
+        /// <param name="protocolHistoryId">Initial value of the ProtocolHistoryId property.</param>
+        public static extEntryView CreateextEntryView(global::System.Guid id, global::System.Guid abiturientId, global::System.Boolean excluded, global::System.Boolean isOld, global::System.String protocolTypeName, global::System.Guid entryId, global::System.Guid protocolHistoryId)
         {
             extEntryView extEntryView = new extEntryView();
             extEntryView.Id = id;
@@ -26877,6 +26987,8 @@ namespace Priem
             extEntryView.Excluded = excluded;
             extEntryView.IsOld = isOld;
             extEntryView.ProtocolTypeName = protocolTypeName;
+            extEntryView.EntryId = entryId;
+            extEntryView.ProtocolHistoryId = protocolHistoryId;
             return extEntryView;
         }
 
@@ -27546,6 +27658,60 @@ namespace Priem
         private global::System.String _SignerPosition;
         partial void OnSignerPositionChanging(global::System.String value);
         partial void OnSignerPositionChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Guid EntryId
+        {
+            get
+            {
+                return _EntryId;
+            }
+            set
+            {
+                if (_EntryId != value)
+                {
+                    OnEntryIdChanging(value);
+                    ReportPropertyChanging("EntryId");
+                    _EntryId = StructuralObject.SetValidValue(value);
+                    ReportPropertyChanged("EntryId");
+                    OnEntryIdChanged();
+                }
+            }
+        }
+        private global::System.Guid _EntryId;
+        partial void OnEntryIdChanging(global::System.Guid value);
+        partial void OnEntryIdChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Guid ProtocolHistoryId
+        {
+            get
+            {
+                return _ProtocolHistoryId;
+            }
+            set
+            {
+                if (_ProtocolHistoryId != value)
+                {
+                    OnProtocolHistoryIdChanging(value);
+                    ReportPropertyChanging("ProtocolHistoryId");
+                    _ProtocolHistoryId = StructuralObject.SetValidValue(value);
+                    ReportPropertyChanged("ProtocolHistoryId");
+                    OnProtocolHistoryIdChanged();
+                }
+            }
+        }
+        private global::System.Guid _ProtocolHistoryId;
+        partial void OnProtocolHistoryIdChanging(global::System.Guid value);
+        partial void OnProtocolHistoryIdChanged();
 
         #endregion
 
@@ -35128,7 +35294,8 @@ namespace Priem
         /// <param name="protocolTypeName">Initial value of the ProtocolTypeName property.</param>
         /// <param name="studyBasis">Initial value of the StudyBasis property.</param>
         /// <param name="studyForm">Initial value of the StudyForm property.</param>
-        public static extProtocol CreateextProtocol(global::System.Guid id, global::System.Guid abiturientId, global::System.Boolean excluded, global::System.Boolean isOld, global::System.String protocolTypeName, global::System.String studyBasis, global::System.String studyForm)
+        /// <param name="protocolHistoryId">Initial value of the ProtocolHistoryId property.</param>
+        public static extProtocol CreateextProtocol(global::System.Guid id, global::System.Guid abiturientId, global::System.Boolean excluded, global::System.Boolean isOld, global::System.String protocolTypeName, global::System.String studyBasis, global::System.String studyForm, global::System.Guid protocolHistoryId)
         {
             extProtocol extProtocol = new extProtocol();
             extProtocol.Id = id;
@@ -35138,6 +35305,7 @@ namespace Priem
             extProtocol.ProtocolTypeName = protocolTypeName;
             extProtocol.StudyBasis = studyBasis;
             extProtocol.StudyForm = studyForm;
+            extProtocol.ProtocolHistoryId = protocolHistoryId;
             return extProtocol;
         }
 
@@ -35861,6 +36029,33 @@ namespace Priem
         private global::System.String _StudyFormRodName;
         partial void OnStudyFormRodNameChanging(global::System.String value);
         partial void OnStudyFormRodNameChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Guid ProtocolHistoryId
+        {
+            get
+            {
+                return _ProtocolHistoryId;
+            }
+            set
+            {
+                if (_ProtocolHistoryId != value)
+                {
+                    OnProtocolHistoryIdChanging(value);
+                    ReportPropertyChanging("ProtocolHistoryId");
+                    _ProtocolHistoryId = StructuralObject.SetValidValue(value);
+                    ReportPropertyChanged("ProtocolHistoryId");
+                    OnProtocolHistoryIdChanged();
+                }
+            }
+        }
+        private global::System.Guid _ProtocolHistoryId;
+        partial void OnProtocolHistoryIdChanging(global::System.Guid value);
+        partial void OnProtocolHistoryIdChanged();
 
         #endregion
 
@@ -37283,6 +37478,30 @@ namespace Priem
         private Nullable<global::System.Int32> _Prof;
         partial void OnProfChanging(Nullable<global::System.Int32> value);
         partial void OnProfChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Byte> ProfFiveGrade
+        {
+            get
+            {
+                return _ProfFiveGrade;
+            }
+            set
+            {
+                OnProfFiveGradeChanging(value);
+                ReportPropertyChanging("ProfFiveGrade");
+                _ProfFiveGrade = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("ProfFiveGrade");
+                OnProfFiveGradeChanged();
+            }
+        }
+        private Nullable<global::System.Byte> _ProfFiveGrade;
+        partial void OnProfFiveGradeChanging(Nullable<global::System.Byte> value);
+        partial void OnProfFiveGradeChanged();
 
         #endregion
 
@@ -53737,6 +53956,30 @@ namespace Priem
         private Nullable<global::System.Byte> _OrderNumber;
         partial void OnOrderNumberChanging(Nullable<global::System.Byte> value);
         partial void OnOrderNumberChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Byte> FiveGradeValue
+        {
+            get
+            {
+                return _FiveGradeValue;
+            }
+            set
+            {
+                OnFiveGradeValueChanging(value);
+                ReportPropertyChanging("FiveGradeValue");
+                _FiveGradeValue = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("FiveGradeValue");
+                OnFiveGradeValueChanged();
+            }
+        }
+        private Nullable<global::System.Byte> _FiveGradeValue;
+        partial void OnFiveGradeValueChanging(Nullable<global::System.Byte> value);
+        partial void OnFiveGradeValueChanged();
 
         #endregion
 

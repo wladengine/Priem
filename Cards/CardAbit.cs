@@ -485,7 +485,10 @@ namespace Priem
                            select ph).Count();
 
             if (cntProt > 0)
+            {
+                tpEntry.visible = true;
                 return true;
+            }
             else
                 return false;
         }

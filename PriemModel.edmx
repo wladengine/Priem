@@ -381,7 +381,9 @@
       [extEntryView].[OrderNumFor] AS [OrderNumFor], 
       [extEntryView].[OrderDateFor] AS [OrderDateFor], 
       [extEntryView].[SignerName] AS [SignerName], 
-      [extEntryView].[SignerPosition] AS [SignerPosition]
+      [extEntryView].[SignerPosition] AS [SignerPosition], 
+      [extEntryView].[EntryId] AS [EntryId], 
+      [extEntryView].[ProtocolHistoryId] AS [ProtocolHistoryId]
       FROM [ed].[extEntryView] AS [extEntryView]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="extEntryView_ForDisEntered" EntityType="Priem2012Model.Store.extEntryView_ForDisEntered" store:Type="Views" store:Schema="ed" store:Name="extEntryView_ForDisEntered">
@@ -743,7 +745,8 @@
       [extProtocol].[FacultyRodName] AS [FacultyRodName], 
       [extProtocol].[FacultyDatName] AS [FacultyDatName], 
       [extProtocol].[StudyFormAcr] AS [StudyFormAcr], 
-      [extProtocol].[StudyFormRodName] AS [StudyFormRodName]
+      [extProtocol].[StudyFormRodName] AS [StudyFormRodName], 
+      [extProtocol].[ProtocolHistoryId] AS [ProtocolHistoryId]
       FROM [ed].[extProtocol] AS [extProtocol]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="hlpAbiturientActionLog" EntityType="Priem2012Model.Store.hlpAbiturientActionLog" store:Type="Views" store:Schema="ed" store:Name="hlpAbiturientActionLog">
@@ -773,7 +776,8 @@
           <EntitySet Name="hlpAbiturientProf" EntityType="Priem2012Model.Store.hlpAbiturientProf" store:Type="Views" store:Schema="ed" store:Name="hlpAbiturientProf">
             <DefiningQuery>SELECT 
       [hlpAbiturientProf].[Id] AS [Id], 
-      [hlpAbiturientProf].[Prof] AS [Prof]
+      [hlpAbiturientProf].[Prof] AS [Prof], 
+      [hlpAbiturientProf].[ProfFiveGrade] AS [ProfFiveGrade]
       FROM [ed].[hlpAbiturientProf] AS [hlpAbiturientProf]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="hlpAbiturientProfAdd" EntityType="Priem2012Model.Store.hlpAbiturientProfAdd" store:Type="Views" store:Schema="ed" store:Name="hlpAbiturientProfAdd">
@@ -1052,7 +1056,8 @@
       [qMark].[EntranceTestType] AS [EntranceTestType], 
       [qMark].[OlympiadId] AS [OlympiadId], 
       [qMark].[EgeCertificateId] AS [EgeCertificateId], 
-      [qMark].[OrderNumber] AS [OrderNumber]
+      [qMark].[OrderNumber] AS [OrderNumber], 
+      [qMark].[FiveGradeValue] AS [FiveGradeValue]
       FROM [ed].[qMark] AS [qMark]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="qObrazProgram" EntityType="Priem2012Model.Store.qObrazProgram" store:Type="Views" store:Schema="ed" store:Name="qObrazProgram">
@@ -1533,6 +1538,8 @@
           <Property Name="IsGosLine" Type="bit" Nullable="false" />
           <Property Name="IsViewed" Type="bit" Nullable="false" />
           <Property Name="IsCommonRussianCompetition" Type="bit" Nullable="false" />
+          <Property Name="ObrazProgramInEntryId" Type="uniqueidentifier" />
+          <Property Name="ProfileInObrazProgramInEntryId" Type="uniqueidentifier" />
         </EntityType>
         <EntityType Name="Age">
           <Key>
@@ -2821,6 +2828,8 @@
             <PropertyRef Name="Excluded" />
             <PropertyRef Name="IsOld" />
             <PropertyRef Name="ProtocolTypeName" />
+            <PropertyRef Name="EntryId" />
+            <PropertyRef Name="ProtocolHistoryId" />
           </Key>
           <Property Name="Id" Type="uniqueidentifier" Nullable="false" />
           <Property Name="AbiturientId" Type="uniqueidentifier" Nullable="false" />
@@ -2849,6 +2858,8 @@
           <Property Name="OrderDateFor" Type="datetime" />
           <Property Name="SignerName" Type="nvarchar" MaxLength="100" />
           <Property Name="SignerPosition" Type="nvarchar" MaxLength="100" />
+          <Property Name="EntryId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="ProtocolHistoryId" Type="uniqueidentifier" Nullable="false" />
         </EntityType>
         <!--Errors Found During Generation:
       warning 6002: The table/view 'Priem.ed.extEntryView_ForDisEntered' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.
@@ -3282,6 +3293,7 @@
             <PropertyRef Name="ProtocolTypeName" />
             <PropertyRef Name="StudyBasis" />
             <PropertyRef Name="StudyForm" />
+            <PropertyRef Name="ProtocolHistoryId" />
           </Key>
           <Property Name="Id" Type="uniqueidentifier" Nullable="false" />
           <Property Name="AbiturientId" Type="uniqueidentifier" Nullable="false" />
@@ -3293,7 +3305,7 @@
           <Property Name="LicenseProgramId" Type="int" />
           <Property Name="StudyFormId" Type="int" />
           <Property Name="StudyBasisId" Type="int" />
-          <Property Name="Number" Type="nvarchar" MaxLength="10" />
+          <Property Name="Number" Type="nvarchar" MaxLength="15" />
           <Property Name="Date" Type="datetime" />
           <Property Name="ProtocolTypeId" Type="int" />
           <Property Name="Reason" Type="nvarchar" MaxLength="1000" />
@@ -3312,6 +3324,7 @@
           <Property Name="FacultyDatName" Type="nvarchar" MaxLength="100" />
           <Property Name="StudyFormAcr" Type="nvarchar" MaxLength="50" />
           <Property Name="StudyFormRodName" Type="nvarchar" MaxLength="50" />
+          <Property Name="ProtocolHistoryId" Type="uniqueidentifier" Nullable="false" />
         </EntityType>
         <!--Errors Found During Generation:
       warning 6002: The table/view 'Priem.ed.hlpAbiturientActionLog' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.
@@ -3361,6 +3374,7 @@
           </Key>
           <Property Name="Id" Type="uniqueidentifier" Nullable="false" />
           <Property Name="Prof" Type="int" />
+          <Property Name="ProfFiveGrade" Type="tinyint" />
         </EntityType>
         <!--Errors Found During Generation:
       warning 6002: The table/view 'Priem.ed.hlpAbiturientProfAdd' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.
@@ -3793,6 +3807,7 @@
           <Property Name="OlympiadId" Type="uniqueidentifier" />
           <Property Name="EgeCertificateId" Type="uniqueidentifier" />
           <Property Name="OrderNumber" Type="tinyint" />
+          <Property Name="FiveGradeValue" Type="tinyint" />
         </EntityType>
         <!--Errors Found During Generation:
       warning 6002: The table/view 'Priem.ed.qObrazProgram' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.
@@ -5036,6 +5051,10 @@
         <Function Name="Abiturient_UpdateIsViewed" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="ed">
           <Parameter Name="id" Type="uniqueidentifier" Mode="In" />
         </Function>
+        <Function Name="Abiturient_UpdateObrazProgramInEntryId" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="ed">
+          <Parameter Name="ObrazProgramInEntryId" Type="uniqueidentifier" Mode="In" />
+          <Parameter Name="id" Type="uniqueidentifier" Mode="In" />
+        </Function>
         <Function Name="Abiturient_UpdateObrazProgramInEntryPriority" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="ed">
           <Parameter Name="ObrazProgramInEntryId" Type="uniqueidentifier" Mode="In" />
           <Parameter Name="Priority" Type="int" Mode="In" />
@@ -5043,6 +5062,10 @@
         </Function>
         <Function Name="Abiturient_UpdatePriority" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="ed">
           <Parameter Name="Priority" Type="float" Mode="In" />
+          <Parameter Name="id" Type="uniqueidentifier" Mode="In" />
+        </Function>
+        <Function Name="Abiturient_UpdateProfileInObrazProgramInEntryId" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="ed">
+          <Parameter Name="ProfileInObrazProgramInEntryId" Type="uniqueidentifier" Mode="In" />
           <Parameter Name="id" Type="uniqueidentifier" Mode="In" />
         </Function>
         <Function Name="Abiturient_UpdateProfileInObrazProgramInEntryPriority" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="ed">
@@ -7626,7 +7649,15 @@
             <End Role="OlympSubjectToExam" EntitySet="OlympSubjectToExam" />
           </AssociationSet>
           <FunctionImport Name="PayDataEntry_Delete">
-            <Parameter Name="EntryId" Mode="In" Type="Guid" />
+          <Parameter Name="EntryId" Mode="In" Type="Guid" />
+          </FunctionImport>
+          <FunctionImport Name="Abiturient_UpdateObrazProgramInEntryId">
+            <Parameter Name="ObrazProgramInEntryId" Mode="In" Type="Guid" />
+            <Parameter Name="id" Mode="In" Type="Guid" />
+          </FunctionImport>
+          <FunctionImport Name="Abiturient_UpdateProfileInObrazProgramInEntryId">
+            <Parameter Name="ProfileInObrazProgramInEntryId" Mode="In" Type="Guid" />
+            <Parameter Name="id" Mode="In" Type="Guid" />
           </FunctionImport>
           </EntityContainer>
         <EntityType Name="Age">
@@ -8599,6 +8630,8 @@
           <NavigationProperty Name="Entry" Relationship="Priem2012Model.FK_Abiturient_Entry" FromRole="Abiturient" ToRole="Entry" />
           <Property Type="Boolean" Name="IsViewed" Nullable="false" />
           <Property Type="Boolean" Name="IsCommonRussianCompetition" Nullable="false" />
+          <Property Type="Guid" Name="ObrazProgramInEntryId" />
+          <Property Type="Guid" Name="ProfileInObrazProgramInEntryId" />
         </EntityType>
         <EntityType Name="Protocol">
           <Key>
@@ -9173,6 +9206,8 @@
             <PropertyRef Name="Excluded" />
             <PropertyRef Name="IsOld" />
             <PropertyRef Name="ProtocolTypeName" />
+            <PropertyRef Name="EntryId" />
+            <PropertyRef Name="ProtocolHistoryId" />
           </Key>
           <Property Type="Guid" Name="Id" Nullable="false" />
           <Property Type="Guid" Name="AbiturientId" Nullable="false" />
@@ -9201,6 +9236,8 @@
           <Property Type="DateTime" Name="OrderDateFor" Precision="3" />
           <Property Type="String" Name="SignerName" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Type="String" Name="SignerPosition" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Type="Guid" Name="EntryId" Nullable="false" />
+          <Property Type="Guid" Name="ProtocolHistoryId" Nullable="false" />
         </EntityType>
         <EntityType Name="extProtocol">
           <Key>
@@ -9211,6 +9248,7 @@
             <PropertyRef Name="ProtocolTypeName" />
             <PropertyRef Name="StudyBasis" />
             <PropertyRef Name="StudyForm" />
+            <PropertyRef Name="ProtocolHistoryId" />
           </Key>
           <Property Type="Guid" Name="Id" Nullable="false" />
           <Property Type="Guid" Name="AbiturientId" Nullable="false" />
@@ -9222,7 +9260,7 @@
           <Property Type="Int32" Name="LicenseProgramId" />
           <Property Type="Int32" Name="StudyFormId" />
           <Property Type="Int32" Name="StudyBasisId" />
-          <Property Type="String" Name="Number" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Number" MaxLength="15" FixedLength="false" Unicode="true" />
           <Property Type="DateTime" Name="Date" Precision="3" />
           <Property Type="Int32" Name="ProtocolTypeId" />
           <Property Type="String" Name="Reason" MaxLength="1000" FixedLength="false" Unicode="true" />
@@ -9241,6 +9279,7 @@
           <Property Type="String" Name="FacultyDatName" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Type="String" Name="StudyFormAcr" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Type="String" Name="StudyFormRodName" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="Guid" Name="ProtocolHistoryId" Nullable="false" />
         </EntityType>
         <EntityType Name="extEnableProtocol">
           <Key>
@@ -9999,6 +10038,7 @@
           <Property Type="Guid" Name="OlympiadId" />
           <Property Type="Guid" Name="EgeCertificateId" />
           <Property Type="Byte" Name="OrderNumber" />
+          <Property Type="Byte" Name="FiveGradeValue" />
         </EntityType>
         <EntityType Name="hlpAbiturientProf">
           <Key>
@@ -10006,6 +10046,7 @@
           </Key>
           <Property Type="Guid" Name="Id" Nullable="false" />
           <Property Type="Int32" Name="Prof" />
+          <Property Type="Byte" Name="ProfFiveGrade" />
         </EntityType>
         <EntityType Name="hlpAbiturientProfAdd">
           <Key>
@@ -11734,6 +11775,8 @@
           <EntitySetMapping Name="Abiturient">
             <EntityTypeMapping TypeName="Priem2012Model.Abiturient">
               <MappingFragment StoreEntitySet="Abiturient">
+                <ScalarProperty Name="ProfileInObrazProgramInEntryId" ColumnName="ProfileInObrazProgramInEntryId" />
+                <ScalarProperty Name="ObrazProgramInEntryId" ColumnName="ObrazProgramInEntryId" />
                 <ScalarProperty Name="IsCommonRussianCompetition" ColumnName="IsCommonRussianCompetition" />
                 <ScalarProperty Name="IsViewed" ColumnName="IsViewed" />
                 <ScalarProperty Name="IsGosLine" ColumnName="IsGosLine" />
@@ -12100,6 +12143,8 @@
           <EntitySetMapping Name="extEntryView">
             <EntityTypeMapping TypeName="Priem2012Model.extEntryView">
               <MappingFragment StoreEntitySet="extEntryView">
+                <ScalarProperty Name="ProtocolHistoryId" ColumnName="ProtocolHistoryId" />
+                <ScalarProperty Name="EntryId" ColumnName="EntryId" />
                 <ScalarProperty Name="SignerPosition" ColumnName="SignerPosition" />
                 <ScalarProperty Name="SignerName" ColumnName="SignerName" />
                 <ScalarProperty Name="OrderDateFor" ColumnName="OrderDateFor" />
@@ -12133,6 +12178,7 @@
           <EntitySetMapping Name="extProtocol">
             <EntityTypeMapping TypeName="Priem2012Model.extProtocol">
               <MappingFragment StoreEntitySet="extProtocol">
+                <ScalarProperty Name="ProtocolHistoryId" ColumnName="ProtocolHistoryId" />
                 <ScalarProperty Name="StudyFormRodName" ColumnName="StudyFormRodName" />
                 <ScalarProperty Name="StudyFormAcr" ColumnName="StudyFormAcr" />
                 <ScalarProperty Name="FacultyDatName" ColumnName="FacultyDatName" />
@@ -12617,6 +12663,7 @@
           <EntitySetMapping Name="qMark">
             <EntityTypeMapping TypeName="Priem2012Model.qMark">
               <MappingFragment StoreEntitySet="qMark">
+                <ScalarProperty Name="FiveGradeValue" ColumnName="FiveGradeValue" />
                 <ScalarProperty Name="OrderNumber" ColumnName="OrderNumber" />
                 <ScalarProperty Name="EgeCertificateId" ColumnName="EgeCertificateId" />
                 <ScalarProperty Name="OlympiadId" ColumnName="OlympiadId" />
@@ -12643,6 +12690,7 @@
           <EntitySetMapping Name="hlpAbiturientProf">
             <EntityTypeMapping TypeName="Priem2012Model.hlpAbiturientProf">
               <MappingFragment StoreEntitySet="hlpAbiturientProf">
+                <ScalarProperty Name="ProfFiveGrade" ColumnName="ProfFiveGrade" />
                 <ScalarProperty Name="Prof" ColumnName="Prof" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
@@ -13326,6 +13374,8 @@
           <FunctionImportMapping FunctionImportName="OlympSubjectToExam_Insert" FunctionName="Priem2012Model.Store.OlympSubjectToExam_Insert" />
           <FunctionImportMapping FunctionImportName="OlympSubjectToExam_Update" FunctionName="Priem2012Model.Store.OlympSubjectToExam_Update" />
           <FunctionImportMapping FunctionImportName="PayDataEntry_Delete" FunctionName="Priem2012Model.Store.PayDataEntry_Delete" />
+          <FunctionImportMapping FunctionImportName="Abiturient_UpdateObrazProgramInEntryId" FunctionName="Priem2012Model.Store.Abiturient_UpdateObrazProgramInEntryId" />
+          <FunctionImportMapping FunctionImportName="Abiturient_UpdateProfileInObrazProgramInEntryId" FunctionName="Priem2012Model.Store.Abiturient_UpdateProfileInObrazProgramInEntryId" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

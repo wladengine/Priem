@@ -294,10 +294,10 @@ namespace Priem
                     " (case when ed.extPerson.SchoolTypeId = 1 then ed.extPerson.AttestatRegion + ' ' + ed.extPerson.AttestatSeries + '  №' + ed.extPerson.AttestatNum else ed.extPerson.DiplomSeries + '  №' + ed.extPerson.DiplomNum end) as Документ_об_образовании, " +
                     " ed.extPerson.PassportSeries + ' №' + ed.extPerson.PassportNumber as Паспорт, " +
                     " LicenseProgramCode + ' ' + LicenseProgramName + ' ' +(Case when NOT ed.qAbiturient.ProfileId IS NULL then ProfileName else ObrazProgramName end) as Направление, " +
-                    " Competition.NAme as Конкурс, ed.qAbiturient.BackDoc, ed._FirstWave.SortNum " +
+                    " Competition.NAme as Конкурс, ed.qAbiturient.BackDoc, _FirstWave.SortNum " +
                     " FROM ed.qAbiturient INNER JOIN ed.extPerson ON ed.qAbiturient.PErsonId =  ed.extPerson.Id " +
                     " INNER JOIN ed.extEnableProtocol ON ed.qAbiturient.Id=ed.extEnableProtocol.AbiturientId " +
-                    " INNER JOIN ed._FirstWave ON ed.qAbiturient.Id=ed._FirstWave.AbiturientId " +
+                    " INNER JOIN ed._FirstWaveBackUp AS _FirstWave ON ed.qAbiturient.Id = _FirstWave.AbiturientId " +
                     //((_studyBasisId == 2 && MainClass.dbType == PriemType.Priem) ? " INNER JOIN ed._FirstWaveGreen ON ed.qAbiturient.Id=ed._FirstWaveGreen.AbiturientId " : "") +
                     " LEFT JOIN ed.extAbitMarksSum ON ed.qAbiturient.Id=ed.extAbitMarksSum.Id " +
                     " LEFT JOIN ed.Competition ON ed.Competition.Id = ed.qAbiturient.CompetitionId ", kcRest);

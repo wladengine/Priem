@@ -4159,11 +4159,605 @@ namespace Priem
             }
         }
 
+        //public static void PrintOrder(Guid protocolId, bool isRus, bool isCel)
+        //{
+        //    try
+        //    {
+        //        WordDoc wd = new WordDoc(string.Format(@"{0}\EntryOrder.dot", MainClass.dirTemplates));
+        //        TableDoc td = wd.Tables[0];
+        //        /*
+        //        string query = string.Format("SELECT extAbit.Id as Id, extAbit.RegNum as Рег_Номер, " +
+        //            " extAbit.PersonNum as 'Ид. номер', " +
+        //            " (Case when competitionid in (1,8) then '' else CAST(extAbitMarksSum.TotalSum AS nvarchar(4)) end) AS TotalSum, " +
+        //            " extAbit.FIO as ФИО,
+        //         * CelCompetition.TvorName AS CelCompName, " +
+        //            " extAbit.LicenseProgramName, 
+        //         * extAbit.LicenseProgramCode,
+        //         * extAbit.ProfileName, " +
+        //            " replace(replace(extAbit.ObrazProgramName, '(очно-заочная)', ''), ' ВВ', '')  as ObrazProgram, " +
+        //            " extAbit.ObrazProgramId, " +
+        //            " EntryHeader.Id as EntryHeaderId,
+        //         * 
+        //         * EntryHeader.SortNum,
+        //         * EntryHeader.Name as EntryHeaderName,
+        //         * Country.NameRod " +
+
+        //            " FROM ed.extAbit " +
+        //            " INNER JOIN ed.extEntryView ON extEntryView.AbiturientId=extAbit.Id " +
+        //            " INNER JOIN ed.extPerson ON Person.Id = extAbit.PersonId " +
+        //            " INNER JOIN ed.Country ON Person.NationalityId = Country.Id " +
+        //            " INNER JOIN ed.Competition ON Competition.Id = extAbit.CompetitionId " +
+        //            " LEFT JOIN ed.EntryHeader ON EntryHeader.Id = extEntryView.EntryHeaderId " +
+        //            " LEFT JOIN ed.CelCompetition ON CelCompetition.Id = extAbit.CelCompetitionId " +
+        //            " LEFT JOIN ed.extAbitMarksSum ON extAbit.Id = extAbitMarksSum.Id");
+
+        //        string where = " WHERE extEntryView.Id = @protocolId ";
+        //        where += " AND Person.NationalityId" + (isRus ? "=1 " : "<>1 ");
+        //        string orderby = " ORDER BY CelCompetition.TvorName, ObrazProgram, extAbit.ProfileName, NameRod ,EntryHeader.SortNum, ФИО ";
+
+        //        SortedList<string, object> slDel = new SortedList<string, object>();
+
+        //        slDel.Add("@protocolId", protocolId);
+
+        //        DataSet ds = MainClass.Bdc.GetDataSet(query + where + orderby, slDel);
+        //        */
+
+        //        string docNum;// = MainClass.Bdc.GetStringValue("SELECT TOP 1 [Number] FROM ed.Protocol WHERE Id = @protocolId  ", slDel);
+        //        DateTime docDate;// = DateTime.Parse(MainClass.Bdc.GetStringValue("SELECT TOP 1 [Date] FROM ed.Protocol WHERE Id = @protocolId  ", slDel));
+        //        string formId;// = MainClass.Bdc.GetStringValue("SELECT StudyForm.Id FROM ed.Protocol INNER JOIN ed.StudyForm ON Protocol.StudyFormId=StudyForm.Id WHERE Protocol.Id= @protocolId", slDel);
+        //        string facDat;// = MainClass.Bdc.GetStringValue("SELECT SP_Faculty.DatName FROM ed.Protocol INNER JOIN ed.SP_Faculty ON Protocol.FacultyId=SP_Faculty.Id WHERE Protocol.Id= @protocolId", slDel);
+
+        //        bool? isSec;// = (bool?)MainClass.Bdc.GetValue("SELECT IsSecond FROM ed.Protocol WHERE Protocol.Id= @protocolId", slDel);
+        //        bool? isParallel;// = (bool?)MainClass.Bdc.GetValue("SELECT IsParallel FROM ed.Protocol WHERE Protocol.Id= @protocolId", slDel);
+        //        bool? isReduced;// = (bool?)MainClass.Bdc.GetValue("SELECT IsReduced FROM ed.Protocol WHERE Protocol.Id= @protocolId", slDel);
+        //        bool? isList;// = (bool?)MainClass.Bdc.GetValue("SELECT IsListener FROM ed.Protocol WHERE Protocol.Id= @protocolId", slDel);
+
+        //        string basisId;// = MainClass.Bdc.GetStringValue("SELECT StudyBasis.Id FROM ed.Protocol INNER JOIN ed.StudyBasis ON Protocol.StudyBasisId=StudyBasis.Id WHERE Protocol.Id= @protocolId", slDel);
+        //        string basis = string.Empty;
+        //        string basis2 = string.Empty;
+        //        string form = string.Empty;
+        //        string form2 = string.Empty;
+
+        //        string LicenseProgramName;// = MainClass.Bdc.GetStringValue("SELECT LicenseProgramName FROM ed.Entry INNER JOIN ed.extEntryView ON Entry.LicenseProgramId=extEntryView.LicenseProgramId WHERE extEntryView.Id= @protocolId", slDel);
+        //        string LicenseProgramCode;// = MainClass.Bdc.GetStringValue("SELECT LicenseProgramCode FROM ed.Entry INNER JOIN ed.extEntryView ON Entry.LicenseProgramId=extEntryView.LicenseProgramId WHERE extEntryView.Id= @protocolId", slDel);
+
+        //        using (PriemEntities ctx = new PriemEntities())
+        //        {
+
+        //            docNum = (from protocol in ctx.Protocol
+        //                      where protocol.Id == protocolId
+        //                      select protocol.Number).FirstOrDefault();
+
+        //            docDate = (DateTime)(from protocol in ctx.Protocol
+        //                                 where protocol.Id == protocolId
+        //                                 select protocol.Date).FirstOrDefault();
+
+        //            formId = (from protocol in ctx.Protocol
+        //                      join studyForm in ctx.StudyForm on protocol.StudyFormId equals studyForm.Id
+        //                      where protocol.Id == protocolId
+        //                      select studyForm.Id).FirstOrDefault().ToString();
+
+        //            facDat = (from protocol in ctx.Protocol
+        //                      join sP_Faculty in ctx.SP_Faculty on protocol.FacultyId equals sP_Faculty.Id
+        //                      where protocol.Id == protocolId
+        //                      select sP_Faculty.DatName).FirstOrDefault();
+
+        //            isSec = (from protocol in ctx.Protocol
+        //                     where protocol.Id == protocolId
+        //                     select protocol.IsSecond).FirstOrDefault();
+
+        //            isParallel = (from protocol in ctx.Protocol
+        //                          where protocol.Id == protocolId
+        //                          select protocol.IsParallel).FirstOrDefault();
+
+        //            isReduced = (from protocol in ctx.Protocol
+        //                         where protocol.Id == protocolId
+        //                         select protocol.IsReduced).FirstOrDefault();
+
+        //            isList = (from protocol in ctx.Protocol
+        //                      where protocol.Id == protocolId
+        //                      select protocol.IsListener).FirstOrDefault();
+
+        //            basisId = (from protocol in ctx.Protocol
+        //                       join studyBasis in ctx.StudyBasis on protocol.StudyBasisId equals studyBasis.Id
+        //                       where protocol.Id == protocolId
+        //                       select studyBasis.Id).FirstOrDefault().ToString();
+
+        //            LicenseProgramName = (from entry in ctx.Entry
+        //                                  join extentryView in ctx.extEntryView on entry.LicenseProgramId equals extentryView.LicenseProgramId
+        //                                  where extentryView.Id == protocolId
+        //                                  select entry.SP_LicenseProgram.Name).FirstOrDefault();
+
+        //            LicenseProgramCode = (from entry in ctx.Entry
+        //                                  join extentryView in ctx.extEntryView on entry.LicenseProgramId equals extentryView.LicenseProgramId
+        //                                  where extentryView.Id == protocolId
+        //                                  select entry.SP_LicenseProgram.Code).FirstOrDefault();
+        //        }
+
+        //        switch (formId)
+        //        {
+        //            case "1":
+        //                form = "очная форма обучения";
+        //                form2 = "по очной форме";
+        //                break;
+        //            case "2":
+        //                form = "очно-заочная (вечерняя) форма обучения";
+        //                form2 = "по очно-заочной (вечерней) форме";
+        //                break;
+        //        }
+
+        //        string bakspec = "", bakspecRod = "", naprspec = "", naprspecRod = "", profspec = "", naprobProgRod = "", educDoc = "";
+        //        string list = "", sec = "";
+
+        //        naprobProgRod = "образовательной программе"; ;
+
+        //        if (MainClass.dbType == PriemType.PriemMag)
+        //        {
+        //            bakspec = "магистра";
+        //            bakspecRod = "магистратуры";
+        //            naprspec = "направление";
+        //            naprspecRod = "направлению подготовки";
+        //            profspec = "по профилю";
+        //            educDoc = "о высшем профессиональном образовании";
+        //        }
+        //        else
+        //        {
+        //            if (LicenseProgramCode.EndsWith("00"))
+        //            {
+        //                bakspec = "бакалавра";
+        //                bakspecRod = "бакалавриата";
+        //            }
+        //            else
+        //            {
+        //                bakspec = "специалиста";
+        //                bakspecRod = "подготовки специалиста";
+        //            }
+
+        //            naprspec = "направление";
+        //            naprspecRod = "направлению подготовки";
+        //            profspec = "по профилю";
+        //            educDoc = "об образовании";
+
+        //        }
+
+        //        string copyDoc = "оригиналы";
+        //        if (isList.HasValue && isList.Value)
+        //        {
+        //            list = " в качестве слушателя";
+        //            copyDoc = "заверенные ксерокопии";
+        //        }
+
+        //        if (isSec.HasValue && isSec.Value)
+        //            sec = " (для лиц с ВО)";
+
+        //        if (isParallel.HasValue && isParallel.Value)
+        //            sec = " (параллельное обучение)";
+
+        //        if (isReduced.HasValue && isReduced.Value)
+        //            sec = " (сокращенной)";
+
+        //        string dogovorDoc = "";
+        //        switch (basisId)
+        //        {
+        //            case "1":
+        //                basis = "обучение за счет средств\n федерального бюджета";
+        //                basis2 = "обучения за счет средств\n федерального бюджета";
+        //                dogovorDoc = "";
+        //                break;
+        //            case "2":
+        //                basis = string.Format("по договорам оказания государственной услуги по обучению по основной{0} образовательной программе высшего профессионального образования", sec);
+        //                basis2 = string.Format("обучения по договорам оказания государственной услуги по обучению по основной{0} образовательной программе высшего профессионального образования", sec);
+        //                dogovorDoc = string.Format(", договор оказания государственной услуги по обучению по основной{0} образовательной программе высшего профессионального образования", sec);
+        //                break;
+        //        }
+
+        //        wd.SetFields("Граждан", isRus ? "граждан Российской Федерации" : "иностранных граждан");
+        //        wd.SetFields("Граждан2", isRus ? "граждан Российской Федерации" : "");
+        //        wd.SetFields("Стипендия", (basisId == "2" || formId == "2") ? "" : "и назначении стипендии");
+        //        wd.SetFields("Факультет", facDat);
+        //        wd.SetFields("Форма", form);
+        //        wd.SetFields("Форма2", form2);
+        //        wd.SetFields("Основа", basis);
+        //        wd.SetFields("Основа2", basis2);
+        //        wd.SetFields("БакСпец", bakspecRod);
+        //        wd.SetFields("БакСпецРод", bakspecRod);
+        //        wd.SetFields("НапрСпец", string.Format(" {0} {1} «{2}»", naprspecRod, LicenseProgramCode, LicenseProgramName));
+        //        wd.SetFields("Слушатель", list);
+        //        wd.SetFields("Сокращ", sec);
+        //        wd.SetFields("Сокращ1", sec);
+        //        wd.SetFields("CopyDoc", copyDoc);
+        //        wd.SetFields("DogovorDoc", dogovorDoc);
+        //        wd.SetFields("EducDoc", educDoc);
+
+        //        int curRow = 4, counter = 0;
+        //        string curProfileName = "нет";
+        //        string curObProg = "-";
+        //        string curHeader = "-";
+        //        string curCountry = "-";
+        //        string curLPHeader = "-";
+        //        string curMotivation = "-";
+        //        string Motivation = string.Empty;
+
+        //        using (PriemEntities ctx = new PriemEntities())
+        //        {
+        //            var lst = (from extabit in ctx.extAbit
+
+        //                       join extentryView in ctx.extEntryView on extabit.Id equals extentryView.AbiturientId
+        //                       join extperson in ctx.extPerson on extabit.PersonId equals extperson.Id
+        //                       join country in ctx.Country on extperson.NationalityId equals country.Id
+        //                       join competition in ctx.Competition on extabit.CompetitionId equals competition.Id
+        //                       join extabitMarksSum in ctx.extAbitMarksSum on extabit.Id equals extabitMarksSum.Id into extabitMarksSum2
+        //                       from extabitMarksSum in extabitMarksSum2.DefaultIfEmpty()
+        //                       join entryHeader in ctx.EntryHeader on extentryView.EntryHeaderId equals entryHeader.Id into entryHeader2
+        //                       from entryHeader in entryHeader2.DefaultIfEmpty()
+        //                       join celCompetition in ctx.CelCompetition on extabit.CelCompetitionId equals celCompetition.Id into celCompetition2
+        //                       from celCompetition in celCompetition2.DefaultIfEmpty()
+        //                       where extentryView.Id == protocolId && (isRus ? extperson.NationalityId == 1 : extperson.NationalityId != 1)
+        //                       orderby celCompetition.TvorName, extabit.ObrazProgramName, extabit.ProfileName, country.NameRod, entryHeader.SortNum, extabit.FIO
+        //                       select new
+        //                       {
+        //                           Id = extabit.Id,
+        //                           Рег_Номер = extabit.RegNum,
+        //                           Ид_номер = extabit.PersonNum,
+        //                           TotalSum = (extabit.CompetitionId == 8 || extabit.CompetitionId == 1) ? null : extabitMarksSum.TotalSum,
+        //                           ФИО = extabit.FIO,
+        //                           CelCompName = celCompetition.TvorName,
+        //                           LicenseProgramName = extabit.LicenseProgramName,
+        //                           LicenseProgramCode = extabit.LicenseProgramCode,
+        //                           ProfileName = extabit.ProfileName,
+        //                           ObrazProgram = extabit.ObrazProgramName,
+        //                           ObrazProgramId = extabit.ObrazProgramId,
+        //                           EntryHeaderId = entryHeader.Id,
+        //                           SortNum = entryHeader.SortNum,
+        //                           EntryHeaderName = entryHeader.Name,
+        //                           NameRod = country.NameRod
+        //                       }).ToList().Distinct().Select(x =>
+        //                           new
+        //                           {
+        //                               Id = x.Id.ToString(),
+        //                               Рег_Номер = x.Рег_Номер,
+        //                               Ид_номер = x.Ид_номер,
+        //                               TotalSum = x.TotalSum.ToString(),
+        //                               ФИО = x.ФИО,
+        //                               CelCompName = x.CelCompName,
+        //                               LicenseProgramName = x.LicenseProgramName,
+        //                               LicenseProgramCode = x.LicenseProgramCode,
+        //                               ProfileName = x.ProfileName,
+        //                               ObrazProgram = x.ObrazProgram.Replace("(очно-заочная)", "").Replace(" ВВ", ""),
+        //                               ObrazProgramId = x.ObrazProgramId,
+        //                               EntryHeaderId = x.EntryHeaderId,
+        //                               SortNum = x.SortNum,
+        //                               EntryHeaderName = x.EntryHeaderName,
+        //                               NameRod = x.NameRod
+        //                           }
+        //                       );
+
+        //            bool bFirstRun = true;
+
+        //            foreach (var v in lst)
+        //            {
+        //                ++counter;
+
+        //                string header = v.EntryHeaderName;
+
+        //                if (!isCel && !bFirstRun)
+        //                {
+        //                    if (header != curHeader)
+        //                    {
+        //                        td.AddRow(1);
+        //                        curRow++;
+        //                        td[0, curRow] = string.Format("\t{0}:", header);
+
+        //                        curHeader = header;
+        //                    }
+        //                }
+
+        //                bFirstRun = false;
+
+        //                string LP = v.LicenseProgramName;
+        //                string LPCode = v.LicenseProgramCode;
+        //                if (curLPHeader != LP)
+        //                {
+        //                    td.AddRow(1);
+        //                    curRow++;
+        //                    td[0, curRow] = string.Format("{3}\tпо {0} {1} \"{2}\"", naprspecRod, LPCode, LP, curObProg == "-" ? "" : "\r\n");
+        //                    curLPHeader = LP;
+        //                }
+
+        //                string ObrazProgramId = v.ObrazProgramId.ToString();
+        //                string obProg = v.ObrazProgram;
+
+        //                //string obProgCode = MainClass.Bdc.GetStringValue(string.Format("SELECT ObrazProgramCrypt FROM ed.Entry WHERE ObrazProgramId = {0}", v.ObrazProgramId.ToString()));
+        //                string obProgCode = (from entry in ctx.Entry
+        //                                     where entry.ObrazProgramId == v.ObrazProgramId
+        //                                     select entry.StudyLevel.Acronym + "." + entry.SP_ObrazProgram.Number + "." + MainClass.sPriemYear).FirstOrDefault();
+
+        //                if (ObrazProgramId != curObProg)
+        //                {
+        //                    if (!string.IsNullOrEmpty(obProg))
+        //                    {
+        //                        td.AddRow(1);
+        //                        curRow++;
+        //                        td[0, curRow] = string.Format("\tпо {0} {1} \"{2}\"", naprobProgRod, obProgCode, obProg);
+        //                    }
+
+        //                    string profileName = v.ProfileName;
+        //                    //if (spez != curSpez)
+        //                    //{
+        //                    if (!string.IsNullOrEmpty(profileName) && profileName != "нет")
+        //                    {
+        //                        td.AddRow(1);
+        //                        curRow++;
+        //                        td[0, curRow] = string.Format("\t{0} \"{1}\"", profspec, profileName);
+        //                    }
+
+        //                    curProfileName = profileName;
+        //                    //}
+
+        //                    curObProg = ObrazProgramId;
+
+        //                    if (!isCel)
+        //                    {
+        //                        if (header != curHeader)
+        //                        {
+        //                            td.AddRow(1);
+        //                            curRow++;
+        //                            td[0, curRow] = string.Format("\t{0}:", header);
+
+        //                            curHeader = header;
+        //                        }
+        //                    }
+
+        //                    //if (!isCel)
+        //                    //{
+        //                    //    td.AddRow(1);
+        //                    //    curRow++;
+        //                    //    td[0, curRow] = string.Format("\t{0}:", header);
+        //                    //}
+        //                }
+        //                else
+        //                {
+        //                    string profileName = v.ProfileName;
+        //                    if (profileName != curProfileName)
+        //                    {
+        //                        //td.AddRow(1);
+        //                        //curRow++;
+        //                        //td[0, curRow] = string.Format("{3}\tпо {0} {1} \"{2}\"", naprspecRod, professionCode, profession, curObProg == "-" ? "" : "\r\n");
+
+        //                        //if (!string.IsNullOrEmpty(obProg))
+        //                        //{
+        //                        //    td.AddRow(1);
+        //                        //    curRow++;
+        //                        //    td[0, curRow] = string.Format("\tпо {0} {1} \"{2}\"", naprobProgRod, obProgCode, obProg);
+        //                        //}
+
+        //                        if (!string.IsNullOrEmpty(profileName) && profileName != "нет")
+        //                        {
+        //                            td.AddRow(1);
+        //                            curRow++;
+        //                            td[0, curRow] = string.Format("\t{0} \"{1}\"", profspec, profileName);
+        //                        }
+
+        //                        curProfileName = profileName;
+        //                        if (!isCel)
+        //                        {
+        //                            td.AddRow(1);
+        //                            curRow++;
+        //                            td[0, curRow] = string.Format("\t{0}:", header);
+        //                        }
+        //                    }
+        //                }
+
+
+        //                if (!isRus)
+        //                {
+        //                    string country = v.NameRod;
+        //                    if (country != curCountry)
+        //                    {
+        //                        td.AddRow(1);
+        //                        curRow++;
+        //                        td[0, curRow] = string.Format("\r\n граждан {0}:", country);
+
+        //                        curCountry = country;
+        //                    }
+        //                }
+
+        //                string balls = v.TotalSum;
+        //                string ballToStr = " балл";
+
+        //                if (balls.Length == 0)
+        //                    ballToStr = "";
+        //                else if (balls.EndsWith("1"))
+        //                    ballToStr += "";
+        //                else if (balls.EndsWith("2") || balls.EndsWith("3") || balls.EndsWith("4"))
+        //                    ballToStr += "а";
+        //                else
+        //                    ballToStr += "ов";
+
+        //                if (isCel && curMotivation == "-")
+        //                    curMotivation = string.Format("ОСНОВАНИЕ: договор об организации целевого приема с {0} от … № …, Протокол заседания Приемной комиссии СПбГУ от 30.07.2013 № ..., личное заявление, оригинал документа государственного образца об образовании.", v.CelCompName);
+        //                string tmpMotiv = curMotivation;
+        //                Motivation = string.Format("ОСНОВАНИЕ: договор об организации целевого приема с {0} от … № …, Протокол заседания Приемной комиссии СПбГУ от 30.07.2013 № ..., личное заявление, оригинал документа государственного образца об образовании.", v.CelCompName);
+
+        //                if (isCel && curMotivation != Motivation)
+        //                {
+        //                    string CelCompText = v.CelCompName;
+        //                    Motivation = string.Format("ОСНОВАНИЕ: договор об организации целевого приема с {0} от … № …, Протокол заседания Приемной комиссии СПбГУ от 30.07.2013 № .., личное заявление, оригинал документа государственного образца об образовании.", CelCompText);
+        //                    curMotivation = Motivation;
+        //                }
+        //                else
+        //                    Motivation = string.Empty;
+
+        //                td.AddRow(1);
+        //                curRow++;
+        //                td[0, curRow] = string.Format("\t\t1.{0}. {1} {2} {3}", counter, v.ФИО, balls + ballToStr, string.IsNullOrEmpty(Motivation) ? "" : ("\n\n\t\t" + tmpMotiv + "\n"));
+        //            }
+        //        }
+
+        //        /*
+        //        foreach (DataRow r in ds.Tables[0].Rows)
+        //        {
+        //            ++counter;
+                    
+        //            string header = r["EntryHeaderName"].ToString();
+                    
+        //            if (isCel)
+        //            {
+        //                if (header != curHeader)
+        //                {
+        //                    td.AddRow(1);
+        //                    curRow++;
+        //                    td[0, curRow] = string.Format("\t{0}:", header);
+
+        //                    curHeader = header;
+        //                }
+        //            }
+
+        //            string LP = r["LicenseProgramName"].ToString();
+        //            string LPCode = r["LicenseProgramCode"].ToString();
+        //            if (curLPHeader != LP)
+        //            {
+        //                td.AddRow(1);
+        //                curRow++;
+        //                td[0, curRow] = string.Format("{3}\tпо {0} {1} \"{2}\"", naprspecRod, LPCode, LP, curObProg == "-" ? "" : "\r\n");
+        //                curLPHeader = LP;
+        //            }
+
+        //            string ObrazProgramId = r["ObrazProgramId"].ToString();
+        //            string obProg = r["ObrazProgram"].ToString();
+        //            string obProgCode = MainClass.Bdc.GetStringValue(string.Format("SELECT ObrazProgramCrypt FROM ed.Entry WHERE ObrazProgramId = {0}", r["ObrazProgramId"].ToString()));
+        //            if (ObrazProgramId != curObProg)
+        //            {
+        //                if (!string.IsNullOrEmpty(obProg))
+        //                {
+        //                    td.AddRow(1);
+        //                    curRow++;
+        //                    td[0, curRow] = string.Format("\tпо {0} {1} \"{2}\"", naprobProgRod, obProgCode, obProg);
+        //                }
+
+        //                string profileName = r["ProfileName"].ToString();
+        //                //if (spez != curSpez)
+        //                //{
+        //                if (!string.IsNullOrEmpty(profileName) && profileName != "нет")
+        //                {
+        //                    td.AddRow(1);
+        //                    curRow++;
+        //                    td[0, curRow] = string.Format("\t{0} \"{1}\"", profspec, profileName);
+        //                }
+
+        //                curProfileName = profileName;
+        //                //}
+
+        //                curObProg = ObrazProgramId;
+                        
+        //                if (!isCel)
+        //                {
+        //                    td.AddRow(1);
+        //                    curRow++;
+        //                    td[0, curRow] = string.Format("\t{0}:", header);
+        //                }
+        //            }
+        //            else
+        //            {
+        //                string profileName = r["ProfileName"].ToString();
+        //                if (profileName != curProfileName)
+        //                {
+        //                    //td.AddRow(1);
+        //                    //curRow++;
+        //                    //td[0, curRow] = string.Format("{3}\tпо {0} {1} \"{2}\"", naprspecRod, professionCode, profession, curObProg == "-" ? "" : "\r\n");
+
+        //                    //if (!string.IsNullOrEmpty(obProg))
+        //                    //{
+        //                    //    td.AddRow(1);
+        //                    //    curRow++;
+        //                    //    td[0, curRow] = string.Format("\tпо {0} {1} \"{2}\"", naprobProgRod, obProgCode, obProg);
+        //                    //}
+
+        //                    if (!string.IsNullOrEmpty(profileName) && profileName != "нет")
+        //                    {
+        //                        td.AddRow(1);
+        //                        curRow++;
+        //                        td[0, curRow] = string.Format("\t{0} \"{1}\"", profspec, profileName);
+        //                    }
+
+        //                    curProfileName = profileName;
+        //                    if (!isCel)
+        //                    {
+        //                        td.AddRow(1);
+        //                        curRow++;
+        //                        td[0, curRow] = string.Format("\t{0}:", header);
+        //                    }
+        //                }
+        //            }
+
+        //            if (!isRus)
+        //            {
+        //                string country = r["NameRod"].ToString();
+        //                if (country != curCountry)
+        //                {
+        //                    td.AddRow(1);
+        //                    curRow++;
+        //                    td[0, curRow] = string.Format("\r\n граждан {0}:", country);
+
+        //                    curCountry = country;
+        //                }
+        //            }
+                    
+        //            string balls = r["TotalSum"].ToString();
+        //            string ballToStr = " балл";
+
+        //            if (balls.Length == 0)
+        //                ballToStr = "";
+        //            else if (balls.EndsWith("1"))
+        //                ballToStr += "";
+        //            else if (balls.EndsWith("2") || balls.EndsWith("3") || balls.EndsWith("4"))
+        //                ballToStr += "а";
+        //            else
+        //                ballToStr += "ов";
+                    
+        //            if (isCel && curMotivation == "-")
+        //                curMotivation = string.Format("ОСНОВАНИЕ: договор об организации целевого приема с {0} от … № …, Протокол заседания Приемной комиссии СПбГУ от 30.07.2012 № 13, личное заявление, оригинал документа государственного образца об образовании.", r["CelCompName"].ToString());
+        //            string tmpMotiv = curMotivation;
+        //            Motivation = string.Format("ОСНОВАНИЕ: договор об организации целевого приема с {0} от … № …, Протокол заседания Приемной комиссии СПбГУ от 30.07.2012 № 13, личное заявление, оригинал документа государственного образца об образовании.", r["CelCompName"].ToString());
+                    
+        //            if (isCel && curMotivation != Motivation)
+        //            {
+        //                string CelCompText = r["CelCompName"].ToString();
+        //                Motivation = string.Format("ОСНОВАНИЕ: договор об организации целевого приема с {0} от … № …, Протокол заседания Приемной комиссии СПбГУ от 30.07.2012 № 13, личное заявление, оригинал документа государственного образца об образовании.", CelCompText);
+        //                curMotivation = Motivation;
+        //            }
+        //            else
+        //                Motivation = string.Empty;
+
+        //            td.AddRow(1);
+        //            curRow++;
+        //            td[0, curRow] = string.Format("\t\t1.{0}. {1} {2} {3}", counter, r["ФИО"].ToString(), balls + ballToStr, string.IsNullOrEmpty(Motivation) ? "": ("\n\n\t\t" + tmpMotiv + "\n"));
+        //        }/* */
+
+        //        if (!string.IsNullOrEmpty(curMotivation) && isCel)
+        //            td[0, curRow] += "\n\t\t" + curMotivation + "\n";
+
+        //        if (basisId != "2" && formId != "2")//платникам и всем очно-заочникам стипендия не платится
+        //        {
+        //            td.AddRow(1);
+        //            curRow++;
+        //            td[0, curRow] = "\r\n2.      Назначить лицам, указанным в п. 1 настоящего Приказа, стипендию в размере 1272 рубля ежемесячно с 01.09.2013 по 31.01.2014.";
+        //        }
+        //    }
+        //    catch (WordException we)
+        //    {
+        //        WinFormsServ.Error(we.Message);
+        //    }
+        //    catch (Exception exc)
+        //    {
+        //        WinFormsServ.Error(exc.Message);
+        //    }
+        //}
         public static void PrintOrder(Guid protocolId, bool isRus, bool isCel)
         {
             try
             {
-                WordDoc wd = new WordDoc(string.Format(@"{0}\EntryOrder1.dot", MainClass.dirTemplates));
+                WordDoc wd = new WordDoc(string.Format(@"{0}\EntryOrder.dot", MainClass.dirTemplates));
                 TableDoc td = wd.Tables[0];
                 /*
                 string query = string.Format("SELECT extAbit.Id as Id, extAbit.RegNum as Рег_Номер, " +
@@ -4355,16 +4949,16 @@ namespace Priem
                 wd.SetFields("Граждан2", isRus ? "граждан Российской Федерации" : "");
                 wd.SetFields("Стипендия", (basisId == "2" || formId == "2") ? "" : "и назначении стипендии");
                 wd.SetFields("Факультет", facDat);
-                wd.SetFields("Форма", form);
+                //wd.SetFields("Форма", form);
                 wd.SetFields("Форма2", form2);
-                wd.SetFields("Основа", basis);
+               //wd.SetFields("Основа", basis);
                 wd.SetFields("Основа2", basis2);
-                wd.SetFields("БакСпец", bakspecRod);
+                //wd.SetFields("БакСпец", bakspecRod);
                 wd.SetFields("БакСпецРод", bakspecRod);
-                wd.SetFields("НапрСпец", string.Format(" {0} {1} «{2}»", naprspecRod, LicenseProgramCode, LicenseProgramName));
+                //wd.SetFields("НапрСпец", string.Format(" {0} {1} «{2}»", naprspecRod, LicenseProgramCode, LicenseProgramName));
                 wd.SetFields("Слушатель", list);
                 wd.SetFields("Сокращ", sec);
-                wd.SetFields("Сокращ1", sec);
+                //wd.SetFields("Сокращ1", sec);
                 wd.SetFields("CopyDoc", copyDoc);
                 wd.SetFields("DogovorDoc", dogovorDoc);
                 wd.SetFields("EducDoc", educDoc);
@@ -4381,7 +4975,7 @@ namespace Priem
                 using (PriemEntities ctx = new PriemEntities())
                 {
                     var lst = (from extabit in ctx.extAbit
-                               
+
                                join extentryView in ctx.extEntryView on extabit.Id equals extentryView.AbiturientId
                                join extperson in ctx.extPerson on extabit.PersonId equals extperson.Id
                                join country in ctx.Country on extperson.NationalityId equals country.Id
@@ -4547,7 +5141,7 @@ namespace Priem
                                 }
                             }
                         }
-                        
+
 
                         if (!isRus)
                         {
@@ -4741,7 +5335,7 @@ namespace Priem
                 {
                     td.AddRow(1);
                     curRow++;
-                    td[0, curRow] = "\r\n2.      Назначить лицам, указанным в п. 1 настоящего Приказа, стипендию в размере 1272 рубля ежемесячно с 01.09.2013 по 31.01.2014.";
+                    td[0, curRow] = "\r\n2.    Назначить лицам, указанным в п. 1 настоящего приказа, стипендию в размере 1340 рублей ежемесячно с 01.09.2014 по 31.01.2015.";
                 }
             }
             catch (WordException we)

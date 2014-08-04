@@ -214,7 +214,7 @@ namespace Priem
                                 ObrazProgramInEntry.EgeExamNameId , ObrazProgramInEntry.EgeMin, EgeExamName.Name as EgeName
                               FROM [ed].[ObrazProgramInEntry] 
                              inner join ed.SP_ObrazProgram on ObrazProgramInEntry.ObrazProgramId = SP_ObrazProgram.Id
-                             left join EgeExamName on EgeExamName.Id = ObrazProgramInEntry.EgeExamNameId
+                             left join ed.EgeExamName on EgeExamName.Id = ObrazProgramInEntry.EgeExamNameId
                                 where EntryId ='" + EntryId + @"'
                                order by ObrazProgramId";
                         DataTable tbl_ObrProgram = MainClass.Bdc.GetDataSet(query).Tables[0];

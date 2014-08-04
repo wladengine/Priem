@@ -276,7 +276,8 @@
       [extEgeMark].[Number] AS [Number], 
       [extEgeMark].[PersonId] AS [PersonId], 
       [extEgeMark].[Year] AS [Year], 
-      [extEgeMark].[FISName] AS [FISName]
+      [extEgeMark].[FISName] AS [FISName], 
+      [extEgeMark].[FBSStatusId] AS [FBSStatusId]
       FROM [ed].[extEgeMark] AS [extEgeMark]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="extEgeMarkMax" EntityType="Priem2012Model.Store.extEgeMarkMax" store:Type="Views" store:Schema="ed" store:Name="extEgeMarkMax">
@@ -932,7 +933,9 @@
       [qAbiturient].[CommitNumber] AS [CommitNumber], 
       [qAbiturient].[IsGosLine] AS [IsGosLine], 
       [qAbiturient].[IsViewed] AS [IsViewed], 
-      [qAbiturient].[IsCommonRussianCompetition] AS [IsCommonRussianCompetition]
+      [qAbiturient].[IsCommonRussianCompetition] AS [IsCommonRussianCompetition], 
+      [qAbiturient].[ObrazProgramInEntryId] AS [ObrazProgramInEntryId], 
+      [qAbiturient].[ProfileInObrazProgramInEntryId] AS [ProfileInObrazProgramInEntryId]
       FROM [ed].[qAbiturient] AS [qAbiturient]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="qAbiturient_WhoSetBackDoc" EntityType="Priem2012Model.Store.qAbiturient_WhoSetBackDoc" store:Type="Views" store:Schema="ed" store:Name="qAbiturient_WhoSetBackDoc">
@@ -1959,6 +1962,8 @@
           <Property Name="EntryId" Type="uniqueidentifier" Nullable="false" />
           <Property Name="ObrazProgramId" Type="int" Nullable="false" />
           <Property Name="KCP" Type="int" Nullable="false" />
+          <Property Name="EgeExamNameId" Type="int" />
+          <Property Name="EgeMin" Type="int" />
         </EntityType>
         <EntityType Name="OlympBook">
           <Key>
@@ -2302,6 +2307,8 @@
           <Property Name="ObrazProgramInEntryId" Type="uniqueidentifier" Nullable="false" />
           <Property Name="ProfileId" Type="int" Nullable="false" />
           <Property Name="KCP" Type="int" Nullable="false" />
+          <Property Name="EgeExamNameId" Type="int" />
+          <Property Name="EgeMin" Type="int" />
         </EntityType>
         <EntityType Name="Prorektor">
           <Key>
@@ -2691,6 +2698,7 @@
             <PropertyRef Name="EgeExamName" />
             <PropertyRef Name="Number" />
             <PropertyRef Name="PersonId" />
+            <PropertyRef Name="FBSStatusId" />
           </Key>
           <Property Name="Id" Type="uniqueidentifier" Nullable="false" />
           <Property Name="Value" Type="int" Nullable="false" />
@@ -2703,6 +2711,7 @@
           <Property Name="PersonId" Type="uniqueidentifier" Nullable="false" />
           <Property Name="Year" Type="nvarchar" MaxLength="4" />
           <Property Name="FISName" Type="nvarchar" MaxLength="50" />
+          <Property Name="FBSStatusId" Type="int" Nullable="false" />
         </EntityType>
         <!--Errors Found During Generation:
       warning 6002: The table/view 'Priem.ed.extEgeMarkMax' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.
@@ -3611,6 +3620,8 @@
           <Property Name="IsGosLine" Type="bit" Nullable="false" />
           <Property Name="IsViewed" Type="bit" Nullable="false" />
           <Property Name="IsCommonRussianCompetition" Type="bit" Nullable="false" />
+          <Property Name="ObrazProgramInEntryId" Type="uniqueidentifier" />
+          <Property Name="ProfileInObrazProgramInEntryId" Type="uniqueidentifier" />
         </EntityType>
         <!--Errors Found During Generation:
       warning 6002: The table/view 'Priem.ed.qAbiturient_WhoSetBackDoc' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.
@@ -8247,6 +8258,7 @@
             <PropertyRef Name="EgeExamName" />
             <PropertyRef Name="Number" />
             <PropertyRef Name="PersonId" />
+            <PropertyRef Name="FBSStatusId" />
           </Key>
           <Property Type="Guid" Name="Id" Nullable="false" />
           <Property Type="Int32" Name="Value" Nullable="false" />
@@ -8259,6 +8271,7 @@
           <Property Type="Guid" Name="PersonId" Nullable="false" />
           <Property Type="String" Name="Year" MaxLength="4" FixedLength="false" Unicode="true" />
           <Property Type="String" Name="FISName" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="Int32" Name="FBSStatusId" Nullable="false" />
         </EntityType>
         <EntityType Name="EgeToExam">
           <Key>
@@ -10371,6 +10384,8 @@
           <NavigationProperty Name="ApplicationDetails" Relationship="Priem2012Model.FK_ApplicationDetails_ObrazProgramInEntry" FromRole="ObrazProgramInEntry" ToRole="ApplicationDetails" />
           <NavigationProperty Name="ApplicationVersionDetails" Relationship="Priem2012Model.FK_ApplicationVersionDetails_ObrazProgramInEntry" FromRole="ObrazProgramInEntry" ToRole="ApplicationVersionDetails" />
           <NavigationProperty Name="Entry" Relationship="Priem2012Model.FK_ObrazProgramInEntry_Entry" FromRole="ObrazProgramInEntry" ToRole="Entry" />
+          <Property Type="Int32" Name="EgeExamNameId" />
+          <Property Type="Int32" Name="EgeMin" />
         </EntityType>
         <EntityType Name="ProfileInObrazProgramInEntry">
           <Key>
@@ -10384,6 +10399,8 @@
           <NavigationProperty Name="SP_Profile" Relationship="Priem2012Model.FK_ProfileInObrazProgramInEntry_SP_Profile" FromRole="ProfileInObrazProgramInEntry" ToRole="SP_Profile" />
           <NavigationProperty Name="ApplicationDetails" Relationship="Priem2012Model.FK_ApplicationDetails_ProfileInObrazProgramInEntry" FromRole="ProfileInObrazProgramInEntry" ToRole="ApplicationDetails" />
           <NavigationProperty Name="ApplicationVersionDetails" Relationship="Priem2012Model.FK_ApplicationVersionDetails_ProfileInObrazProgramInEntry" FromRole="ProfileInObrazProgramInEntry" ToRole="ApplicationVersionDetails" />
+          <Property Type="Int32" Name="EgeExamNameId" />
+          <Property Type="Int32" Name="EgeMin" />
         </EntityType>
         <Association Name="FK_ObrazProgramInEntry_SP_ObrazProgram">
           <End Type="Priem2012Model.SP_ObrazProgram" Role="SP_ObrazProgram" Multiplicity="1" />
@@ -10863,6 +10880,8 @@
           <Property Type="Boolean" Name="IsGosLine" Nullable="false" />
           <Property Type="Boolean" Name="IsViewed" Nullable="false" />
           <Property Type="Boolean" Name="IsCommonRussianCompetition" Nullable="false" />
+          <Property Type="Guid" Name="ObrazProgramInEntryId" />
+          <Property Type="Guid" Name="ProfileInObrazProgramInEntryId" />
         </EntityType>
         <Association Name="FK_Entry_SP_LicenseProgram">
           <End Type="Priem2012Model.SP_LicenseProgram" Role="SP_LicenseProgram" Multiplicity="1" />
@@ -11528,6 +11547,7 @@
           <EntitySetMapping Name="extEgeMark">
             <EntityTypeMapping TypeName="Priem2012Model.extEgeMark">
               <MappingFragment StoreEntitySet="extEgeMark">
+                <ScalarProperty Name="FBSStatusId" ColumnName="FBSStatusId" />
                 <ScalarProperty Name="FISName" ColumnName="FISName" />
                 <ScalarProperty Name="Year" ColumnName="Year" />
                 <ScalarProperty Name="PersonId" ColumnName="PersonId" />
@@ -12963,6 +12983,8 @@
           <EntitySetMapping Name="ObrazProgramInEntry">
             <EntityTypeMapping TypeName="Priem2012Model.ObrazProgramInEntry">
               <MappingFragment StoreEntitySet="ObrazProgramInEntry">
+                <ScalarProperty Name="EgeMin" ColumnName="EgeMin" />
+                <ScalarProperty Name="EgeExamNameId" ColumnName="EgeExamNameId" />
                 <ScalarProperty Name="KCP" ColumnName="KCP" />
                 <ScalarProperty Name="ObrazProgramId" ColumnName="ObrazProgramId" />
                 <ScalarProperty Name="EntryId" ColumnName="EntryId" />
@@ -12973,6 +12995,8 @@
           <EntitySetMapping Name="ProfileInObrazProgramInEntry">
             <EntityTypeMapping TypeName="Priem2012Model.ProfileInObrazProgramInEntry">
               <MappingFragment StoreEntitySet="ProfileInObrazProgramInEntry">
+                <ScalarProperty Name="EgeMin" ColumnName="EgeMin" />
+                <ScalarProperty Name="EgeExamNameId" ColumnName="EgeExamNameId" />
                 <ScalarProperty Name="KCP" ColumnName="KCP" />
                 <ScalarProperty Name="ProfileId" ColumnName="ProfileId" />
                 <ScalarProperty Name="ObrazProgramInEntryId" ColumnName="ObrazProgramInEntryId" />
@@ -13094,6 +13118,8 @@
           <EntitySetMapping Name="qAbiturient">
             <EntityTypeMapping TypeName="Priem2012Model.qAbiturient">
               <MappingFragment StoreEntitySet="qAbiturient">
+                <ScalarProperty Name="ProfileInObrazProgramInEntryId" ColumnName="ProfileInObrazProgramInEntryId" />
+                <ScalarProperty Name="ObrazProgramInEntryId" ColumnName="ObrazProgramInEntryId" />
                 <ScalarProperty Name="IsCommonRussianCompetition" ColumnName="IsCommonRussianCompetition" />
                 <ScalarProperty Name="IsViewed" ColumnName="IsViewed" />
                 <ScalarProperty Name="IsGosLine" ColumnName="IsGosLine" />

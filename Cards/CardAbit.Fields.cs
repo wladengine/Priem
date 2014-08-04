@@ -299,13 +299,13 @@ namespace Priem
         }
         public Guid? ObrazProgramInEntryId
         {
-            get { return (Guid?)cbObrazProgramInEntry.SelectedValue; }
-            set { cbObrazProgramInEntry.SelectedValue = value; }
+            get { return ComboServ.GetComboIdGuid(cbObrazProgramInEntry); }
+            set { ComboServ.SetComboId(cbObrazProgramInEntry, value); }
         }
         public Guid? ProfileInObrazProgramInEntryId
         {
-            get { return (Guid?)cbProfileInObrazProgramInEntry.SelectedValue; }
-            set { cbProfileInObrazProgramInEntry.SelectedValue = value; }
+            get { return ComboServ.GetComboIdGuid(cbProfileInObrazProgramInEntry); }
+            set { ComboServ.SetComboId(cbProfileInObrazProgramInEntry, value); }
         }
     }
 }

@@ -25000,7 +25000,8 @@ namespace Priem
         /// <param name="egeExamName">Initial value of the EgeExamName property.</param>
         /// <param name="number">Initial value of the Number property.</param>
         /// <param name="personId">Initial value of the PersonId property.</param>
-        public static extEgeMark CreateextEgeMark(global::System.Guid id, global::System.Int32 value, global::System.Int32 egeExamNameId, global::System.Guid egeCertificateId, global::System.Boolean isAppeal, global::System.Boolean isCurrent, global::System.String egeExamName, global::System.String number, global::System.Guid personId)
+        /// <param name="fBSStatusId">Initial value of the FBSStatusId property.</param>
+        public static extEgeMark CreateextEgeMark(global::System.Guid id, global::System.Int32 value, global::System.Int32 egeExamNameId, global::System.Guid egeCertificateId, global::System.Boolean isAppeal, global::System.Boolean isCurrent, global::System.String egeExamName, global::System.String number, global::System.Guid personId, global::System.Int32 fBSStatusId)
         {
             extEgeMark extEgeMark = new extEgeMark();
             extEgeMark.Id = id;
@@ -25012,6 +25013,7 @@ namespace Priem
             extEgeMark.EgeExamName = egeExamName;
             extEgeMark.Number = number;
             extEgeMark.PersonId = personId;
+            extEgeMark.FBSStatusId = fBSStatusId;
             return extEgeMark;
         }
 
@@ -25309,6 +25311,33 @@ namespace Priem
         private global::System.String _FISName;
         partial void OnFISNameChanging(global::System.String value);
         partial void OnFISNameChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 FBSStatusId
+        {
+            get
+            {
+                return _FBSStatusId;
+            }
+            set
+            {
+                if (_FBSStatusId != value)
+                {
+                    OnFBSStatusIdChanging(value);
+                    ReportPropertyChanging("FBSStatusId");
+                    _FBSStatusId = StructuralObject.SetValidValue(value);
+                    ReportPropertyChanged("FBSStatusId");
+                    OnFBSStatusIdChanged();
+                }
+            }
+        }
+        private global::System.Int32 _FBSStatusId;
+        partial void OnFBSStatusIdChanging(global::System.Int32 value);
+        partial void OnFBSStatusIdChanged();
 
         #endregion
 
@@ -38837,6 +38866,54 @@ namespace Priem
         private global::System.Int32 _KCP;
         partial void OnKCPChanging(global::System.Int32 value);
         partial void OnKCPChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Int32> EgeExamNameId
+        {
+            get
+            {
+                return _EgeExamNameId;
+            }
+            set
+            {
+                OnEgeExamNameIdChanging(value);
+                ReportPropertyChanging("EgeExamNameId");
+                _EgeExamNameId = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("EgeExamNameId");
+                OnEgeExamNameIdChanged();
+            }
+        }
+        private Nullable<global::System.Int32> _EgeExamNameId;
+        partial void OnEgeExamNameIdChanging(Nullable<global::System.Int32> value);
+        partial void OnEgeExamNameIdChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Int32> EgeMin
+        {
+            get
+            {
+                return _EgeMin;
+            }
+            set
+            {
+                OnEgeMinChanging(value);
+                ReportPropertyChanging("EgeMin");
+                _EgeMin = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("EgeMin");
+                OnEgeMinChanged();
+            }
+        }
+        private Nullable<global::System.Int32> _EgeMin;
+        partial void OnEgeMinChanging(Nullable<global::System.Int32> value);
+        partial void OnEgeMinChanged();
 
         #endregion
 
@@ -47069,6 +47146,54 @@ namespace Priem
         private global::System.Int32 _KCP;
         partial void OnKCPChanging(global::System.Int32 value);
         partial void OnKCPChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Int32> EgeExamNameId
+        {
+            get
+            {
+                return _EgeExamNameId;
+            }
+            set
+            {
+                OnEgeExamNameIdChanging(value);
+                ReportPropertyChanging("EgeExamNameId");
+                _EgeExamNameId = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("EgeExamNameId");
+                OnEgeExamNameIdChanged();
+            }
+        }
+        private Nullable<global::System.Int32> _EgeExamNameId;
+        partial void OnEgeExamNameIdChanging(Nullable<global::System.Int32> value);
+        partial void OnEgeExamNameIdChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Int32> EgeMin
+        {
+            get
+            {
+                return _EgeMin;
+            }
+            set
+            {
+                OnEgeMinChanging(value);
+                ReportPropertyChanging("EgeMin");
+                _EgeMin = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("EgeMin");
+                OnEgeMinChanged();
+            }
+        }
+        private Nullable<global::System.Int32> _EgeMin;
+        partial void OnEgeMinChanging(Nullable<global::System.Int32> value);
+        partial void OnEgeMinChanged();
 
         #endregion
 
@@ -51379,6 +51504,54 @@ namespace Priem
         private global::System.Boolean _IsCommonRussianCompetition;
         partial void OnIsCommonRussianCompetitionChanging(global::System.Boolean value);
         partial void OnIsCommonRussianCompetitionChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Guid> ObrazProgramInEntryId
+        {
+            get
+            {
+                return _ObrazProgramInEntryId;
+            }
+            set
+            {
+                OnObrazProgramInEntryIdChanging(value);
+                ReportPropertyChanging("ObrazProgramInEntryId");
+                _ObrazProgramInEntryId = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("ObrazProgramInEntryId");
+                OnObrazProgramInEntryIdChanged();
+            }
+        }
+        private Nullable<global::System.Guid> _ObrazProgramInEntryId;
+        partial void OnObrazProgramInEntryIdChanging(Nullable<global::System.Guid> value);
+        partial void OnObrazProgramInEntryIdChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Guid> ProfileInObrazProgramInEntryId
+        {
+            get
+            {
+                return _ProfileInObrazProgramInEntryId;
+            }
+            set
+            {
+                OnProfileInObrazProgramInEntryIdChanging(value);
+                ReportPropertyChanging("ProfileInObrazProgramInEntryId");
+                _ProfileInObrazProgramInEntryId = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("ProfileInObrazProgramInEntryId");
+                OnProfileInObrazProgramInEntryIdChanged();
+            }
+        }
+        private Nullable<global::System.Guid> _ProfileInObrazProgramInEntryId;
+        partial void OnProfileInObrazProgramInEntryIdChanging(Nullable<global::System.Guid> value);
+        partial void OnProfileInObrazProgramInEntryIdChanged();
 
         #endregion
 

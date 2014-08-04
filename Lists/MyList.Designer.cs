@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.cbFaculty = new System.Windows.Forms.ComboBox();
             this.cbStudyBasis = new System.Windows.Forms.ComboBox();
             this.cbStudyForm = new System.Windows.Forms.ComboBox();
@@ -56,6 +57,7 @@
             this.btn_GreenList = new System.Windows.Forms.Button();
             this.pictureBox5 = new System.Windows.Forms.PictureBox();
             this.label11 = new System.Windows.Forms.Label();
+            this.ttextEntryView = new System.Windows.Forms.ToolTip(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.dgvAbitList)).BeginInit();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
@@ -152,6 +154,7 @@
             this.dgvAbitList.TabIndex = 5;
             this.dgvAbitList.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvAbitList_CellContentDoubleClick);
             this.dgvAbitList.CellMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dgvAbitList_CellMouseClick);
+            this.dgvAbitList.CellMouseEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvAbitList_CellMouseEnter);
             // 
             // groupBox2
             // 
@@ -465,5 +468,6 @@
         private System.Windows.Forms.Button btn_GreenList;
         private System.Windows.Forms.PictureBox pictureBox5;
         private System.Windows.Forms.Label label11;
+        private System.Windows.Forms.ToolTip ttextEntryView;
     }
 }

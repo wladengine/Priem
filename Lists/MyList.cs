@@ -1232,5 +1232,35 @@ namespace Priem
             btnGreenIsClicked = true;
             MessageBox.Show(this, "Done", "", MessageBoxButtons.OK);
         }
+
+        private void dgvAbitList_CellMouseEnter(object sender, DataGridViewCellEventArgs e)
+        {/*
+            if (e.RowIndex == startrow - 1)
+            {
+                string query = @"select extPerson.FIO, Competition.Name
+                                  from ed.extEntryView
+                                  inner join ed.Abiturient on AbiturientId = Abiturient.Id
+                                  inner join extPerson on extPerson.Id = Abiturient.PersonId
+                                  inner join Competition on Competition.Id = Abiturient.CompetitionId
+                                  where Abiturient.EntryId = '"+dgvAbitList.Rows[2].Cells[e.ColumnIndex].Value.ToString()+@"' and ";
+                if (!String.IsNullOrEmpty(dgvAbitList.Rows[3].Cells[e.ColumnIndex].Value.ToString()))
+                    query += @" Abiturient.ObrazProgramInEntryId = '" + dgvAbitList.Rows[3].Cells[e.ColumnIndex].Value.ToString() + @"' and  ";
+
+                query += @" Excluded = 0 and 
+                                  Abiturient.Id not in (select AbiturientId from ed.extEntryView where Excluded = 1) ";
+                DataTable tbl = MainClass.Bdc.GetDataSet(query).Tables[0];
+                if (tbl.Rows.Count == 0)
+                    ttextEntryView.SetToolTip(dgvAbitList, "Зачисленных нет");
+                else
+                {
+                    string answ = "Список зачисленных абитуриентов:\r\n";
+                    foreach (DataRow rw in tbl.Rows)
+                    {
+                        answ += rw.Field<string>("FIO") + "(" + rw.Field<string>("Name") + ")\r\n";
+                    }
+                    ttextEntryView.SetToolTip(dgvAbitList, answ);
+                }
+            }*/
+        }
     }
 }

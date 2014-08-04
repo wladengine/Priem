@@ -213,6 +213,7 @@
             this.chbCher = new System.Windows.Forms.CheckBox();
             this.chbSir = new System.Windows.Forms.CheckBox();
             this.tabPage6 = new System.Windows.Forms.TabPage();
+            this.lblSearchingOriginals = new System.Windows.Forms.Label();
             this.lblHasOriginalsUser = new System.Windows.Forms.Label();
             this.chbHasOriginals = new System.Windows.Forms.CheckBox();
             this.gbEnter = new System.Windows.Forms.GroupBox();
@@ -256,7 +257,9 @@
             this.btnAddAbit = new System.Windows.Forms.Button();
             this.btnDocs = new System.Windows.Forms.Button();
             this.sfdPrint = new System.Windows.Forms.SaveFileDialog();
-            this.lblSearchingOriginals = new System.Windows.Forms.Label();
+            this.lblHasDogovorUser = new System.Windows.Forms.Label();
+            this.lblSearchingDogovor = new System.Windows.Forms.Label();
+            this.chbHasDogovor = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.epError)).BeginInit();
             this.tabCard.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -2123,6 +2126,9 @@
             // 
             // tabPage6
             // 
+            this.tabPage6.Controls.Add(this.lblSearchingDogovor);
+            this.tabPage6.Controls.Add(this.chbHasDogovor);
+            this.tabPage6.Controls.Add(this.lblHasDogovorUser);
             this.tabPage6.Controls.Add(this.lblSearchingOriginals);
             this.tabPage6.Controls.Add(this.lblHasOriginalsUser);
             this.tabPage6.Controls.Add(this.chbHasOriginals);
@@ -2138,10 +2144,20 @@
             this.tabPage6.Text = "Конкурсы";
             this.tabPage6.UseVisualStyleBackColor = true;
             // 
+            // lblSearchingOriginals
+            // 
+            this.lblSearchingOriginals.AutoSize = true;
+            this.lblSearchingOriginals.Location = new System.Drawing.Point(8, 186);
+            this.lblSearchingOriginals.Name = "lblSearchingOriginals";
+            this.lblSearchingOriginals.Size = new System.Drawing.Size(135, 13);
+            this.lblSearchingOriginals.TabIndex = 127;
+            this.lblSearchingOriginals.Text = "Идёт поиск, подождите...";
+            this.lblSearchingOriginals.Visible = false;
+            // 
             // lblHasOriginalsUser
             // 
             this.lblHasOriginalsUser.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.lblHasOriginalsUser.Location = new System.Drawing.Point(192, 185);
+            this.lblHasOriginalsUser.Location = new System.Drawing.Point(200, 164);
             this.lblHasOriginalsUser.Name = "lblHasOriginalsUser";
             this.lblHasOriginalsUser.Size = new System.Drawing.Size(349, 50);
             this.lblHasOriginalsUser.TabIndex = 126;
@@ -2151,7 +2167,7 @@
             // chbHasOriginals
             // 
             this.chbHasOriginals.AutoSize = true;
-            this.chbHasOriginals.Location = new System.Drawing.Point(8, 188);
+            this.chbHasOriginals.Location = new System.Drawing.Point(8, 167);
             this.chbHasOriginals.Name = "chbHasOriginals";
             this.chbHasOriginals.Size = new System.Drawing.Size(165, 17);
             this.chbHasOriginals.TabIndex = 6;
@@ -2168,7 +2184,7 @@
             this.gbEnter.Controls.Add(this.lblFaculty);
             this.gbEnter.Controls.Add(this.lblProfession);
             this.gbEnter.Controls.Add(this.lblStudyBasis);
-            this.gbEnter.Location = new System.Drawing.Point(8, 403);
+            this.gbEnter.Location = new System.Drawing.Point(8, 418);
             this.gbEnter.Name = "gbEnter";
             this.gbEnter.Size = new System.Drawing.Size(541, 110);
             this.gbEnter.TabIndex = 5;
@@ -2242,7 +2258,7 @@
             // label37
             // 
             this.label37.AutoSize = true;
-            this.label37.Location = new System.Drawing.Point(8, 222);
+            this.label37.Location = new System.Drawing.Point(5, 257);
             this.label37.Name = "label37";
             this.label37.Size = new System.Drawing.Size(173, 13);
             this.label37.TabIndex = 2;
@@ -2274,7 +2290,7 @@
             dataGridViewCellStyle5.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
             dataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
             this.dgvOtherAppl.DefaultCellStyle = dataGridViewCellStyle5;
-            this.dgvOtherAppl.Location = new System.Drawing.Point(8, 238);
+            this.dgvOtherAppl.Location = new System.Drawing.Point(8, 273);
             this.dgvOtherAppl.Name = "dgvOtherAppl";
             this.dgvOtherAppl.ReadOnly = true;
             dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
@@ -2287,7 +2303,7 @@
             this.dgvOtherAppl.RowHeadersDefaultCellStyle = dataGridViewCellStyle6;
             this.dgvOtherAppl.RowHeadersVisible = false;
             this.dgvOtherAppl.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvOtherAppl.Size = new System.Drawing.Size(541, 159);
+            this.dgvOtherAppl.Size = new System.Drawing.Size(541, 139);
             this.dgvOtherAppl.TabIndex = 1;
             // 
             // dgvApplications
@@ -2330,7 +2346,7 @@
             this.dgvApplications.RowHeadersDefaultCellStyle = dataGridViewCellStyle9;
             this.dgvApplications.RowHeadersVisible = false;
             this.dgvApplications.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvApplications.Size = new System.Drawing.Size(541, 159);
+            this.dgvApplications.Size = new System.Drawing.Size(541, 138);
             this.dgvApplications.TabIndex = 0;
             this.dgvApplications.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvApplications_CellDoubleClick);
             this.dgvApplications.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.dgvApplications_CellFormatting);
@@ -2632,15 +2648,35 @@
             this.btnDocs.Visible = false;
             this.btnDocs.Click += new System.EventHandler(this.btnDocs_Click);
             // 
-            // lblSearchingOriginals
+            // lblHasDogovorUser
             // 
-            this.lblSearchingOriginals.AutoSize = true;
-            this.lblSearchingOriginals.Location = new System.Drawing.Point(8, 207);
-            this.lblSearchingOriginals.Name = "lblSearchingOriginals";
-            this.lblSearchingOriginals.Size = new System.Drawing.Size(135, 13);
-            this.lblSearchingOriginals.TabIndex = 127;
-            this.lblSearchingOriginals.Text = "Идёт поиск, подождите...";
-            this.lblSearchingOriginals.Visible = false;
+            this.lblHasDogovorUser.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.lblHasDogovorUser.Location = new System.Drawing.Point(200, 214);
+            this.lblHasDogovorUser.Name = "lblHasDogovorUser";
+            this.lblHasDogovorUser.Size = new System.Drawing.Size(349, 50);
+            this.lblHasDogovorUser.TabIndex = 128;
+            this.lblHasDogovorUser.Text = "UserId";
+            this.lblHasDogovorUser.Visible = false;
+            // 
+            // lblSearchingDogovor
+            // 
+            this.lblSearchingDogovor.AutoSize = true;
+            this.lblSearchingDogovor.Location = new System.Drawing.Point(8, 221);
+            this.lblSearchingDogovor.Name = "lblSearchingDogovor";
+            this.lblSearchingDogovor.Size = new System.Drawing.Size(135, 13);
+            this.lblSearchingDogovor.TabIndex = 130;
+            this.lblSearchingDogovor.Text = "Идёт поиск, подождите...";
+            this.lblSearchingDogovor.Visible = false;
+            // 
+            // chbHasDogovor
+            // 
+            this.chbHasDogovor.AutoSize = true;
+            this.chbHasDogovor.Location = new System.Drawing.Point(8, 202);
+            this.chbHasDogovor.Name = "chbHasDogovor";
+            this.chbHasDogovor.Size = new System.Drawing.Size(121, 17);
+            this.chbHasDogovor.TabIndex = 129;
+            this.chbHasDogovor.Text = "Договор подписан";
+            this.chbHasDogovor.UseVisualStyleBackColor = true;
             // 
             // CardPerson
             // 
@@ -2946,6 +2982,9 @@
         private System.Windows.Forms.CheckBox chbHasOriginals;
         private System.Windows.Forms.Label lblHasOriginalsUser;
         private System.Windows.Forms.Label lblSearchingOriginals;
+        private System.Windows.Forms.Label lblSearchingDogovor;
+        private System.Windows.Forms.CheckBox chbHasDogovor;
+        private System.Windows.Forms.Label lblHasDogovorUser;
 
     }
 }

@@ -267,9 +267,7 @@ namespace Priem
                                 from ed.extEntryView
                                 inner join ed.Abiturient on AbiturientId = Abiturient.Id
                                 where Abiturient.EntryId = '"+row_EntryId[i].ToString()+@"' and 
-                                Abiturient.ObrazProgramInEntryId = '" + row_ObrazProgramInEntryId[i].ToString() + @"' and 
-                                Excluded = 0 and 
-                                Abiturient.Id not in (select AbiturientId from ed.extEntryView where Excluded = 1)"));
+                                Abiturient.ObrazProgramInEntryId = '" + row_ObrazProgramInEntryId[i].ToString() + @"'"));
                 }
                 else
                 {
@@ -277,11 +275,9 @@ namespace Priem
                                 select COUNT(extEntryView.Id) 
                                 from ed.extEntryView
                                 inner join ed.Abiturient on AbiturientId = Abiturient.Id
-                                where Abiturient.EntryId = '" + row_EntryId[i].ToString() + @"' and  
-                                Excluded = 0 and 
-                                Abiturient.Id not in (select AbiturientId from ed.extEntryView where Excluded = 1)"));
+                                where Abiturient.EntryId = '" + row_EntryId[i].ToString() + @"'"));
                 }
-            } 
+            }
             examTable.Rows.Add(row_LicProg);
             examTable.Rows.Add(row_ObrazProg);
             examTable.Rows.Add(row_EntryId);

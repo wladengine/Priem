@@ -131,7 +131,6 @@
             this.label5.Size = new System.Drawing.Size(90, 13);
             this.label5.TabIndex = 4;
             this.label5.Text = "Обр. программа";
-            this.label5.Visible = false;
             // 
             // tbFaculty
             // 
@@ -199,9 +198,10 @@
             // label7
             // 
             this.label7.AutoSize = true;
+            this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.label7.Location = new System.Drawing.Point(330, 35);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(199, 13);
+            this.label7.Size = new System.Drawing.Size(231, 13);
             this.label7.TabIndex = 29;
             this.label7.Text = "Ид.Номер_ФИО (приоритет профиля)";
             // 
@@ -218,18 +218,20 @@
             // label6
             // 
             this.label6.AutoSize = true;
+            this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.label6.Location = new System.Drawing.Point(330, 7);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(53, 13);
+            this.label6.Size = new System.Drawing.Size(60, 13);
             this.label6.TabIndex = 31;
             this.label6.Text = "Профиль";
             // 
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(330, 20);
+            this.label8.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label8.Location = new System.Drawing.Point(330, 21);
             this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(234, 13);
+            this.label8.Size = new System.Drawing.Size(275, 13);
             this.label8.TabIndex = 32;
             this.label8.Text = "Профильный предмет (если есть) (мин.балл)\r\n";
             // 

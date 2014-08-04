@@ -1,4 +1,4 @@
-﻿namespace Priem.Lists
+﻿namespace Priem
 {
     partial class ListRatingWithEGE
     {
@@ -43,10 +43,10 @@
             this.label36 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.label37 = new System.Windows.Forms.Label();
-            this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.dgvData = new System.Windows.Forms.DataGridView();
             this.btnSaveToExcel = new System.Windows.Forms.Button();
             this.btnStartCount = new System.Windows.Forms.Button();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvData)).BeginInit();
             this.SuspendLayout();
             // 
             // chbIsSecond
@@ -199,25 +199,34 @@
             this.label37.TabIndex = 135;
             this.label37.Text = "Форма обучения";
             // 
-            // dataGridView1
+            // dgvData
             // 
-            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Location = new System.Drawing.Point(12, 132);
-            this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.Size = new System.Drawing.Size(926, 271);
-            this.dataGridView1.TabIndex = 150;
+            this.dgvData.AllowUserToAddRows = false;
+            this.dgvData.AllowUserToDeleteRows = false;
+            this.dgvData.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.dgvData.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvData.Location = new System.Drawing.Point(12, 132);
+            this.dgvData.Name = "dgvData";
+            this.dgvData.ReadOnly = true;
+            this.dgvData.Size = new System.Drawing.Size(926, 271);
+            this.dgvData.TabIndex = 150;
             // 
             // btnSaveToExcel
             // 
+            this.btnSaveToExcel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btnSaveToExcel.Location = new System.Drawing.Point(12, 409);
             this.btnSaveToExcel.Name = "btnSaveToExcel";
             this.btnSaveToExcel.Size = new System.Drawing.Size(75, 23);
             this.btnSaveToExcel.TabIndex = 151;
             this.btnSaveToExcel.Text = "B Excel";
             this.btnSaveToExcel.UseVisualStyleBackColor = true;
+            this.btnSaveToExcel.Click += new System.EventHandler(this.btnSaveToExcel_Click);
             // 
             // btnStartCount
             // 
+            this.btnStartCount.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnStartCount.Location = new System.Drawing.Point(863, 23);
             this.btnStartCount.Name = "btnStartCount";
             this.btnStartCount.Size = new System.Drawing.Size(75, 23);
@@ -233,7 +242,7 @@
             this.ClientSize = new System.Drawing.Size(950, 444);
             this.Controls.Add(this.btnStartCount);
             this.Controls.Add(this.btnSaveToExcel);
-            this.Controls.Add(this.dataGridView1);
+            this.Controls.Add(this.dgvData);
             this.Controls.Add(this.chbIsSecond);
             this.Controls.Add(this.chbIsReduced);
             this.Controls.Add(this.chbIsParallel);
@@ -251,7 +260,7 @@
             this.Controls.Add(this.label37);
             this.Name = "ListRatingWithEGE";
             this.Text = "Рейтинг с ЕГЭ";
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvData)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -274,7 +283,7 @@
         private System.Windows.Forms.Label label36;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label37;
-        private System.Windows.Forms.DataGridView dataGridView1;
+        private System.Windows.Forms.DataGridView dgvData;
         private System.Windows.Forms.Button btnSaveToExcel;
         private System.Windows.Forms.Button btnStartCount;
     }

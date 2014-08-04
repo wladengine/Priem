@@ -309,6 +309,11 @@ namespace Priem
                     }
 
                     GetHasInnerPriorities(context);
+
+                    if (ObrazProgramInEntryId.HasValue)
+                        ObrazProgramInEntryId = abit.ObrazProgramInEntryId;
+                    if (ProfileInObrazProgramInEntryId.HasValue)
+                        ProfileInObrazProgramInEntryId = abit.ProfileInObrazProgramInEntryId;
                 }
             }
             catch (Exception ex)
@@ -608,6 +613,8 @@ namespace Priem
             btnClose.Enabled = true;
             btnSaveChange.Enabled = true;
             btnObrazProgramInEntry.Enabled = true;
+
+            WinFormsServ.SetSubControlsEnabled(tpEntry, true);
 
             if (MainClass.IsFacMain())
             {

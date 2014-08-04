@@ -140,18 +140,36 @@ namespace Priem
                 try
                 {
                     Guid gId = Guid.NewGuid();
-                    context.ProfileInObrazProgramInEntry.AddObject(new ProfileInObrazProgramInEntry() { ObrazProgramInEntryId = GuidId.Value, ProfileId = ProfileId, KCP = KCP, Id = gId });
-                    context.SaveChanges();
 
-                    string query = "INSERT INTO ProfileInObrazProgramInEntry (Id, ObrazProgramInEntryId, ProfileId, KCP) VALUES (@Id, @ObrazProgramInEntryId, @ProfileId, @KCP)";
-                    SortedList<string, object> slParams = new SortedList<string, object>();
-                    slParams.Add("@Id", gId);
-                    slParams.Add("@ObrazProgramInEntryId", GuidId.Value);
-                    slParams.Add("@ProfileId", ProfileId);
-                    slParams.Add("@KCP", KCP);
+                    int cnt = context.ProfileInObrazProgramInEntry.Where(x => x.ObrazProgramInEntryId == GuidId.Value && x.ProfileId == ProfileId).Count();
+                    if (cnt == 0)
+                    {
+                        context.ProfileInObrazProgramInEntry.AddObject(new ProfileInObrazProgramInEntry() { ObrazProgramInEntryId = GuidId.Value, ProfileId = ProfileId, KCP = KCP, Id = gId });
+                        context.SaveChanges();
 
-                    MainClass.BdcOnlineReadWrite.ExecuteQuery(query, slParams);
-                    tran.Complete();
+                        string query = "INSERT INTO ProfileInObrazProgramInEntry (Id, ObrazProgramInEntryId, ProfileId, KCP) VALUES (@Id, @ObrazProgramInEntryId, @ProfileId, @KCP)";
+                        SortedList<string, object> slParams = new SortedList<string, object>();
+                        slParams.Add("@Id", gId);
+                        slParams.Add("@ObrazProgramInEntryId", GuidId.Value);
+                        slParams.Add("@ProfileId", ProfileId);
+                        slParams.Add("@KCP", KCP);
+                        MainClass.BdcOnlineReadWrite.ExecuteQuery(query, slParams);
+                        tran.Complete();
+                    }
+                    else
+                    {
+                        var ent = context.ProfileInObrazProgramInEntry.Where(x => x.ObrazProgramInEntryId == GuidId.Value && x.ProfileId == ProfileId).First();
+                        ent.KCP = KCP;
+                        context.SaveChanges();
+
+                        string query = "UPDATE ProfileInObrazProgramInEntry SET KCP=@KCP WHERE ObrazProgramInEntryId=@ObrazProgramInEntryId AND ProfileId=@ProfileId";
+                        SortedList<string, object> slParams = new SortedList<string, object>();
+                        slParams.Add("@ObrazProgramInEntryId", GuidId.Value);
+                        slParams.Add("@ProfileId", ProfileId);
+                        slParams.Add("@KCP", KCP);
+                        MainClass.BdcOnlineReadWrite.ExecuteQuery(query, slParams);
+                        tran.Complete();
+                    }
                 }
                 catch (Exception ex)
                 {

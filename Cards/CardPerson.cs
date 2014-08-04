@@ -329,6 +329,7 @@ namespace Priem
                     UpdateGridBenefits();
 
                     GetHasOriginals(context);
+                    GetIsPaid();
 
                     inEnableProtocol = GetInEnableProtocol(context);
                     inEntryView = GetInEntryView(context);
@@ -526,7 +527,6 @@ namespace Priem
             //    chbHasOriginals.Checked = false;
             //}
         }
-
         void bw_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             lblSearchingOriginals.Visible = false;
@@ -553,7 +553,6 @@ namespace Priem
                 chbHasOriginals.Checked = false;
             }
         }
-
         void bw_DoWork(object sender, DoWorkEventArgs e)
         {
             using (PriemEntities context = new PriemEntities())
@@ -567,7 +566,56 @@ namespace Priem
             }
         }
 
+        BackgroundWorker bw_ispaid;
+        private void GetIsPaid()
+        {
+            bw_ispaid = new BackgroundWorker();
+            bw_ispaid.DoWork += bw_ispaid_DoWork;
+            bw_ispaid.RunWorkerCompleted += bw_ispaid_RunWorkerCompleted;
 
+            var arg = GuidId;
+
+            bw_ispaid.RunWorkerAsync(arg);
+            lblSearchingOriginals.Visible = true;
+        }
+        void bw_ispaid_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            lblSearchingDogovor.Visible = false;
+
+            if (e.Result == null)
+                return;
+
+            var _who = ((qAbiturient_WhoSetIsPaid)e.Result);
+            string who = _who.UserId;
+            string whoFac = _who.FacultyName;
+            string whoDate = _who.ActionTime.ToShortDateString() + " " + _who.ActionTime.ToShortTimeString();
+            who = MainClass.GetADUserName(who);
+
+            if (!string.IsNullOrEmpty(who))
+            {
+                lblHasDogovorUser.Text = "Проставлено: " + who + " (" + whoDate + " " + whoFac + ")";
+                lblHasDogovorUser.Visible = true;
+                chbHasDogovor.Checked = true;
+            }
+            else
+            {
+                lblHasDogovorUser.Text = "";
+                lblHasDogovorUser.Visible = false;
+                chbHasDogovor.Checked = false;
+            }
+        }
+        void bw_ispaid_DoWork(object sender, DoWorkEventArgs e)
+        {
+            using (PriemEntities context = new PriemEntities())
+            {
+                Guid gId = (Guid)(e.Argument);
+
+                e.Result = (from paid in context.qAbiturient_WhoSetIsPaid
+                            join Abit in context.Abiturient on paid.Id equals Abit.Id
+                            where paid.PersonId == gId && !Abit.BackDoc
+                            select paid).FirstOrDefault();
+            }
+        }
 
         #region ReadOnly & IsOpen
 

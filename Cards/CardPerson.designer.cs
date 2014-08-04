@@ -213,6 +213,9 @@
             this.chbCher = new System.Windows.Forms.CheckBox();
             this.chbSir = new System.Windows.Forms.CheckBox();
             this.tabPage6 = new System.Windows.Forms.TabPage();
+            this.lblSearchingDogovor = new System.Windows.Forms.Label();
+            this.chbHasDogovor = new System.Windows.Forms.CheckBox();
+            this.lblHasDogovorUser = new System.Windows.Forms.Label();
             this.lblSearchingOriginals = new System.Windows.Forms.Label();
             this.lblHasOriginalsUser = new System.Windows.Forms.Label();
             this.chbHasOriginals = new System.Windows.Forms.CheckBox();
@@ -257,9 +260,6 @@
             this.btnAddAbit = new System.Windows.Forms.Button();
             this.btnDocs = new System.Windows.Forms.Button();
             this.sfdPrint = new System.Windows.Forms.SaveFileDialog();
-            this.lblHasDogovorUser = new System.Windows.Forms.Label();
-            this.lblSearchingDogovor = new System.Windows.Forms.Label();
-            this.chbHasDogovor = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.epError)).BeginInit();
             this.tabCard.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -2144,6 +2144,36 @@
             this.tabPage6.Text = "Конкурсы";
             this.tabPage6.UseVisualStyleBackColor = true;
             // 
+            // lblSearchingDogovor
+            // 
+            this.lblSearchingDogovor.AutoSize = true;
+            this.lblSearchingDogovor.Location = new System.Drawing.Point(8, 233);
+            this.lblSearchingDogovor.Name = "lblSearchingDogovor";
+            this.lblSearchingDogovor.Size = new System.Drawing.Size(135, 13);
+            this.lblSearchingDogovor.TabIndex = 130;
+            this.lblSearchingDogovor.Text = "Идёт поиск, подождите...";
+            this.lblSearchingDogovor.Visible = false;
+            // 
+            // chbHasDogovor
+            // 
+            this.chbHasDogovor.AutoSize = true;
+            this.chbHasDogovor.Location = new System.Drawing.Point(8, 214);
+            this.chbHasDogovor.Name = "chbHasDogovor";
+            this.chbHasDogovor.Size = new System.Drawing.Size(121, 17);
+            this.chbHasDogovor.TabIndex = 129;
+            this.chbHasDogovor.Text = "Договор подписан";
+            this.chbHasDogovor.UseVisualStyleBackColor = true;
+            // 
+            // lblHasDogovorUser
+            // 
+            this.lblHasDogovorUser.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.lblHasDogovorUser.Location = new System.Drawing.Point(200, 214);
+            this.lblHasDogovorUser.Name = "lblHasDogovorUser";
+            this.lblHasDogovorUser.Size = new System.Drawing.Size(349, 50);
+            this.lblHasDogovorUser.TabIndex = 128;
+            this.lblHasDogovorUser.Text = "UserId";
+            this.lblHasDogovorUser.Visible = false;
+            // 
             // lblSearchingOriginals
             // 
             this.lblSearchingOriginals.AutoSize = true;
@@ -2647,36 +2677,6 @@
             this.btnDocs.UseVisualStyleBackColor = true;
             this.btnDocs.Visible = false;
             this.btnDocs.Click += new System.EventHandler(this.btnDocs_Click);
-            // 
-            // lblHasDogovorUser
-            // 
-            this.lblHasDogovorUser.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.lblHasDogovorUser.Location = new System.Drawing.Point(200, 214);
-            this.lblHasDogovorUser.Name = "lblHasDogovorUser";
-            this.lblHasDogovorUser.Size = new System.Drawing.Size(349, 50);
-            this.lblHasDogovorUser.TabIndex = 128;
-            this.lblHasDogovorUser.Text = "UserId";
-            this.lblHasDogovorUser.Visible = false;
-            // 
-            // lblSearchingDogovor
-            // 
-            this.lblSearchingDogovor.AutoSize = true;
-            this.lblSearchingDogovor.Location = new System.Drawing.Point(8, 221);
-            this.lblSearchingDogovor.Name = "lblSearchingDogovor";
-            this.lblSearchingDogovor.Size = new System.Drawing.Size(135, 13);
-            this.lblSearchingDogovor.TabIndex = 130;
-            this.lblSearchingDogovor.Text = "Идёт поиск, подождите...";
-            this.lblSearchingDogovor.Visible = false;
-            // 
-            // chbHasDogovor
-            // 
-            this.chbHasDogovor.AutoSize = true;
-            this.chbHasDogovor.Location = new System.Drawing.Point(8, 202);
-            this.chbHasDogovor.Name = "chbHasDogovor";
-            this.chbHasDogovor.Size = new System.Drawing.Size(121, 17);
-            this.chbHasDogovor.TabIndex = 129;
-            this.chbHasDogovor.Text = "Договор подписан";
-            this.chbHasDogovor.UseVisualStyleBackColor = true;
             // 
             // CardPerson
             // 

@@ -146,7 +146,7 @@ namespace Priem
             DataRow row_StudyForm = examTable.NewRow();
             DataRow row_StudyBasis = examTable.NewRow();
             DataRow row_Ege = examTable.NewRow();
-            DataRow row_KCP = examTable.NewRow();
+            DataRow row_KCP = examTable.NewRow(); 
 
             DataColumn clm;
 
@@ -257,7 +257,31 @@ namespace Priem
                 }
                 // ЗАКОНЧИЛСЯ ПОИСК ВНУТРИ ОБРАЗОВАТЕЛЬНОЙ ПРОГРАММЫ
             }
-
+            for (int i = 1; i < examTable.Columns.Count; i++)
+            {
+                int kcp_new = int.Parse(row_KCP[i].ToString());
+                if (!String.IsNullOrEmpty(row_ObrazProgramInEntryId[i].ToString()))
+                {
+                    row_KCP[i] = kcp_new - int.Parse(MainClass.Bdc.GetStringValue(@"
+                                select COUNT(extEntryView.Id) 
+                                from ed.extEntryView
+                                inner join ed.Abiturient on AbiturientId = Abiturient.Id
+                                where Abiturient.EntryId = '"+row_EntryId[i].ToString()+@"' and 
+                                Abiturient.ObrazProgramInEntryId = '" + row_ObrazProgramInEntryId[i].ToString() + @"' and 
+                                Excluded = 0 and 
+                                Abiturient.Id not in (select AbiturientId from ed.extEntryView where Excluded = 1)"));
+                }
+                else
+                {
+                    row_KCP[i] = kcp_new - int.Parse(MainClass.Bdc.GetStringValue(@"
+                                select COUNT(extEntryView.Id) 
+                                from ed.extEntryView
+                                inner join ed.Abiturient on AbiturientId = Abiturient.Id
+                                where Abiturient.EntryId = '" + row_EntryId[i].ToString() + @"' and  
+                                Excluded = 0 and 
+                                Abiturient.Id not in (select AbiturientId from ed.extEntryView where Excluded = 1)"));
+                }
+            } 
             examTable.Rows.Add(row_LicProg);
             examTable.Rows.Add(row_ObrazProg);
             examTable.Rows.Add(row_EntryId);
@@ -1102,13 +1126,23 @@ namespace Priem
                                 TempPriorList.Add(PriorTemp);
                             }
                             TablePriorities.Add(TempPriorList);
+                            int KCP = rw.Field<int>("KCP");
+                            KCP = KCP - int.Parse(MainClass.Bdc.GetStringValue(@"
+                                select COUNT(extEntryView.Id) 
+                                from ed.extEntryView
+                                inner join ed.Abiturient on AbiturientId = Abiturient.Id
+                                where Abiturient.EntryId = '" + EntryId + @"' and 
+                                Abiturient.ObrazProgramInEntryId = '" + ObrazProgramInEntryId + @"' and 
+                                Abiturient.ProfileInObrazProgramInEntryId = '" + rw.Field<Guid>("Id").ToString() + @"' and 
+                                Excluded = 0 and 
+                                Abiturient.Id not in (select AbiturientId from ed.extEntryView where Excluded = 1)"));
 
                             TempPriorList = new List<int>();
-                            for (int rowindex = 0; (rowindex < rw.Field<int>("KCP")) && (rowindex < AbitIdList.Count); rowindex++)
+                            for (int rowindex = 0; (rowindex < KCP) && (rowindex < AbitIdList.Count); rowindex++)
                             {
                                 TempPriorList.Add(1);
                             }
-                            for (int rowindex = rw.Field<int>("KCP"); rowindex < AbitIdList.Count; rowindex++)
+                            for (int rowindex = KCP; rowindex < AbitIdList.Count; rowindex++)
                             {
                                 TempPriorList.Add(0);
                             }
@@ -1119,7 +1153,6 @@ namespace Priem
                         // для каждого абитуриента
                         for (int rowindex = 0; rowindex < AbitIdList.Count; rowindex++)
                         {
-                            //List<int> MyPriorList = TablePriorities[rowindex];
                             for (int colindex = 0; colindex < ProfileList.Count; colindex++)
                             {
                                 if (TableGreenYellow[colindex][rowindex] != 1)

@@ -54,12 +54,15 @@
             this.label9 = new System.Windows.Forms.Label();
             this.label10 = new System.Windows.Forms.Label();
             this.btn_GreenList = new System.Windows.Forms.Button();
+            this.pictureBox5 = new System.Windows.Forms.PictureBox();
+            this.label11 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dgvAbitList)).BeginInit();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox4)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox5)).BeginInit();
             this.SuspendLayout();
             // 
             // lblCount
@@ -241,7 +244,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(690, 14);
+            this.label5.Location = new System.Drawing.Point(690, 6);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(396, 13);
             this.label5.TabIndex = 73;
@@ -250,7 +253,7 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(690, 32);
+            this.label6.Location = new System.Drawing.Point(690, 23);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(329, 13);
             this.label6.TabIndex = 74;
@@ -259,7 +262,7 @@
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(690, 49);
+            this.label7.Location = new System.Drawing.Point(690, 40);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(261, 13);
             this.label7.TabIndex = 75;
@@ -268,7 +271,7 @@
             // pictureBox1
             // 
             this.pictureBox1.BackColor = System.Drawing.Color.Yellow;
-            this.pictureBox1.Location = new System.Drawing.Point(664, 12);
+            this.pictureBox1.Location = new System.Drawing.Point(664, 5);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(25, 15);
             this.pictureBox1.TabIndex = 76;
@@ -277,7 +280,7 @@
             // pictureBox2
             // 
             this.pictureBox2.BackColor = System.Drawing.Color.LightGreen;
-            this.pictureBox2.Location = new System.Drawing.Point(664, 30);
+            this.pictureBox2.Location = new System.Drawing.Point(664, 22);
             this.pictureBox2.Name = "pictureBox2";
             this.pictureBox2.Size = new System.Drawing.Size(25, 15);
             this.pictureBox2.TabIndex = 77;
@@ -286,7 +289,7 @@
             // pictureBox3
             // 
             this.pictureBox3.BackColor = System.Drawing.Color.LightBlue;
-            this.pictureBox3.Location = new System.Drawing.Point(664, 48);
+            this.pictureBox3.Location = new System.Drawing.Point(664, 39);
             this.pictureBox3.Name = "pictureBox3";
             this.pictureBox3.Size = new System.Drawing.Size(25, 15);
             this.pictureBox3.TabIndex = 78;
@@ -295,7 +298,7 @@
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(661, 84);
+            this.label8.Location = new System.Drawing.Point(661, 90);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(422, 13);
             this.label8.TabIndex = 79;
@@ -304,7 +307,7 @@
             // pictureBox4
             // 
             this.pictureBox4.BackColor = System.Drawing.Color.White;
-            this.pictureBox4.Location = new System.Drawing.Point(664, 66);
+            this.pictureBox4.Location = new System.Drawing.Point(664, 73);
             this.pictureBox4.Name = "pictureBox4";
             this.pictureBox4.Size = new System.Drawing.Size(25, 15);
             this.pictureBox4.TabIndex = 81;
@@ -313,7 +316,7 @@
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(690, 67);
+            this.label9.Location = new System.Drawing.Point(690, 74);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(294, 13);
             this.label9.TabIndex = 80;
@@ -323,7 +326,7 @@
             // 
             this.label10.AutoSize = true;
             this.label10.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label10.Location = new System.Drawing.Point(661, 99);
+            this.label10.Location = new System.Drawing.Point(661, 103);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(413, 15);
             this.label10.TabIndex = 82;
@@ -339,11 +342,31 @@
             this.btn_GreenList.UseVisualStyleBackColor = true;
             this.btn_GreenList.Click += new System.EventHandler(this.btn_GreenList_Click);
             // 
+            // pictureBox5
+            // 
+            this.pictureBox5.BackColor = System.Drawing.Color.Thistle;
+            this.pictureBox5.Location = new System.Drawing.Point(664, 56);
+            this.pictureBox5.Name = "pictureBox5";
+            this.pictureBox5.Size = new System.Drawing.Size(25, 15);
+            this.pictureBox5.TabIndex = 85;
+            this.pictureBox5.TabStop = false;
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(690, 58);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(374, 13);
+            this.label11.TabIndex = 84;
+            this.label11.Text = "У абитуриента нет необходимого ЕГЭ для образовательной программы";
+            // 
             // MyList
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1100, 553);
+            this.Controls.Add(this.pictureBox5);
+            this.Controls.Add(this.label11);
             this.Controls.Add(this.btn_GreenList);
             this.Controls.Add(this.label10);
             this.Controls.Add(this.pictureBox4);
@@ -397,6 +420,8 @@
             this.Controls.SetChildIndex(this.pictureBox4, 0);
             this.Controls.SetChildIndex(this.label10, 0);
             this.Controls.SetChildIndex(this.btn_GreenList, 0);
+            this.Controls.SetChildIndex(this.label11, 0);
+            this.Controls.SetChildIndex(this.pictureBox5, 0);
             ((System.ComponentModel.ISupportInitialize)(this.dgvAbitList)).EndInit();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
@@ -404,6 +429,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox4)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox5)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -437,5 +463,7 @@
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.Button btn_GreenList;
+        private System.Windows.Forms.PictureBox pictureBox5;
+        private System.Windows.Forms.Label label11;
     }
 }

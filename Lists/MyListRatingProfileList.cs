@@ -54,9 +54,10 @@ namespace Priem
             _title = "Рейтинговый список с внутренними приоритетами";
             try
             {
-                string query = @" select FacultyName, LicenseProgramName, ObrazProgramName, StudyBasisName, StudyFormName  
+                string query = @" select qEntry.FacultyName, qEntry.LicenseProgramName, qEntry.StudyBasisName, qEntry.StudyFormName, SP_ObrazProgram.Name  
                                   from ed.ObrazProgramInEntry 
                                   inner join ed.qEntry on qEntry.Id = EntryId
+                                  inner join ed.SP_ObrazProgram on ObrazProgramInEntry.ObrazProgramId= SP_ObrazProgram.Id
                                   where ObrazProgramInEntry.Id = '" + _ObrazProgramInEntryId + "'";
                 DataTable tbl = MainClass.Bdc.GetDataSet(query).Tables[0];
                 if (tbl.Rows.Count == 1)
@@ -64,20 +65,10 @@ namespace Priem
                     DataRow rw = tbl.Rows[0];
                     tbFaculty.Text = rw.Field<string>("FacultyName");
                     tbLicenseProgram.Text = rw.Field<string>("LicenseProgramName");
-                    tbObrazProgram.Text = rw.Field<string>("ObrazProgramName");
                     tbStudyBasis.Text = rw.Field<string>("StudyBasisName");
-                    tbStudyForm.Text = rw.Field<string>("StudyFormName");
-                }
-                query = @"select SP_ObrazProgram.Name
-                          from   ed.ObrazProgramInEntry
-                          inner join ed.SP_ObrazProgram on ObrazProgramId= SP_ObrazProgram.Id
-                          where ObrazProgramInEntry.Id = '" + _ObrazProgramInEntryId + "'";
-                tbl = MainClass.Bdc.GetDataSet(query).Tables[0];
-                if (tbl.Rows.Count == 1)
-                {
-                    DataRow rw = tbl.Rows[0];
                     tbObrazProgramInEntry.Text = rw.Field<string>("Name");
-                }
+                    tbStudyForm.Text = rw.Field<string>("StudyFormName");
+                } 
                 FillGrid();
             }
             catch (Exception exc)
@@ -118,6 +109,22 @@ namespace Priem
                 rowKCP[ColName] = rw_profile.Field<int>("KCP");
                 rowEge[ColName] = (!String.IsNullOrEmpty(rw_profile.Field<int?>("EgeExamNameId").ToString())) ? rw_profile.Field<int?>("EgeExamNameId") + "_" + rw_profile.Field<string>("EgeName") + "(" + rw_profile.Field<int?>("EgeMin") + ")" : "";
             }
+
+
+            for (int i = 1; i < examTable.Columns.Count; i++)
+            {
+                int kcp_new = int.Parse(rowKCP[i].ToString());
+                rowKCP[i] = kcp_new - int.Parse(MainClass.Bdc.GetStringValue(@"
+                                select COUNT(extEntryView.Id) 
+                                from ed.extEntryView
+                                inner join ed.Abiturient on AbiturientId = Abiturient.Id
+                                where Abiturient.EntryId = '" + _EntryId + @"' and 
+                                Abiturient.ObrazProgramInEntryId = '" + _ObrazProgramInEntryId + @"' and 
+                                Abiturient.ProfileInObrazProgramInEntryId = '" + rowProfileId[i].ToString() + @"' and 
+                                Excluded = 0 and 
+                                Abiturient.Id not in (select AbiturientId from ed.extEntryView where Excluded = 1)"));
+            } 
+
             examTable.Rows.Add(rowProfileName);
             examTable.Rows.Add(rowProfileId);
             examTable.Rows.Add(rowEge);
@@ -315,8 +322,7 @@ namespace Priem
                                 cell = row.Cells[j];
                             }
                         }
-                    }
-                    /*
+                    } 
                     foreach (DataGridViewCell cells in row.Cells)
                     {
                         if (cell.ColumnIndex == startcol - 1)
@@ -324,30 +330,12 @@ namespace Priem
 
                         if (cells != cell)
                         {
-                            if (cells.Style.BackColor != Color.LightBlue)
-                            {
-                                if (cells.Style.BackColor == Color.LightGreen)
-                                {
-                                    //  спустить зеленку;
-                                    int KCP_temp = 0;
-                                    if (int.TryParse(dgvAbitProfileList.Rows[startrow-1].Cells[cells.ColumnIndex].Value.ToString(), out KCP_temp))
-                                    {
-                                        for (int row_temp = startrow + KCP_temp; row_temp < dgvAbitProfileList.Rows.Count; row_temp++)
-                                        {
-                                            if (String.IsNullOrEmpty(dgvAbitProfileList.Rows[row_temp].Cells[cells.ColumnIndex].Value.ToString()))
-                                                break;
-                                            if  (dgvAbitProfileList.Rows[row_temp].Cells[cells.ColumnIndex].Style.BackColor == Color.Empty) 
-                                            {
-                                                dgvAbitProfileList.Rows[row_temp].Cells[cells.ColumnIndex].Style.BackColor = Color.LightGreen;
-                                                break;
-                                            }
-                                        }
-                                    }
-                                }
+                            if (cells.Style.BackColor == Color.Empty)
+                            { 
                                 cells.Style.BackColor = Color.Yellow;
                             }
                         }
-                    }*/
+                    } 
                     break;
                 }
             }

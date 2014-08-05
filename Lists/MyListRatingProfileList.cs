@@ -51,6 +51,19 @@ namespace Priem
 
             if (MainClass.IsOwner())
                 btnGreenList.Visible = true;
+
+            if (MainClass.dbType == PriemType.PriemMag)
+            {
+                pictureBoxYellow.Location = pictureBoxLightGreen.Location;
+                pictureBoxLightGreen.Location = pictureBoxLightBlue.Location;
+                pictureBoxLightBlue.Location = pictureBoxThistle.Location;
+                pictureBoxThistle.Visible = false;
+                labelYellow.Location = labelLightGreen.Location;
+                labelLightGreen.Location = labelLightBlue.Location;
+                labelLightBlue.Location = labelThistle.Location;
+                labelThistle.Visible = false;
+            }
+            
             _title = "Рейтинговый список с внутренними приоритетами";
             try
             {
@@ -120,9 +133,7 @@ namespace Priem
                                 inner join ed.Abiturient on AbiturientId = Abiturient.Id
                                 where Abiturient.EntryId = '" + _EntryId + @"' and 
                                 Abiturient.ObrazProgramInEntryId = '" + _ObrazProgramInEntryId + @"' and 
-                                Abiturient.ProfileInObrazProgramInEntryId = '" + rowProfileId[i].ToString() + @"' and 
-                                Excluded = 0 and 
-                                Abiturient.Id not in (select AbiturientId from ed.extEntryView where Excluded = 1)"));
+                                Abiturient.ProfileInObrazProgramInEntryId = '" + rowProfileId[i].ToString() + @"'"));
             } 
 
             examTable.Rows.Add(rowProfileName);
@@ -243,7 +254,7 @@ namespace Priem
             for (int rowindex = startrow; rowindex < dgvAbitProfileList.Rows.Count; rowindex++)
             {
                 DataGridViewRow row = dgvAbitProfileList.Rows[rowindex];
-                if (String.IsNullOrEmpty(row.Cells[startrow - 1].Value.ToString()))
+                if (String.IsNullOrEmpty(row.Cells[1].Value.ToString()))
                     break;
                 for (int i = startcol; i < dgvAbitProfileList.Columns.Count; i++)
                 {

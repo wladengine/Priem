@@ -44,22 +44,22 @@
             this.btnGreenList = new System.Windows.Forms.Button();
             this.label6 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
-            this.pictureBox5 = new System.Windows.Forms.PictureBox();
-            this.label11 = new System.Windows.Forms.Label();
-            this.pictureBox4 = new System.Windows.Forms.PictureBox();
-            this.label9 = new System.Windows.Forms.Label();
-            this.pictureBox3 = new System.Windows.Forms.PictureBox();
-            this.pictureBox2 = new System.Windows.Forms.PictureBox();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.label10 = new System.Windows.Forms.Label();
-            this.label12 = new System.Windows.Forms.Label();
-            this.label13 = new System.Windows.Forms.Label();
+            this.pictureBoxThistle = new System.Windows.Forms.PictureBox();
+            this.labelThistle = new System.Windows.Forms.Label();
+            this.pictureBoxWhite = new System.Windows.Forms.PictureBox();
+            this.labelWhite = new System.Windows.Forms.Label();
+            this.pictureBoxLightBlue = new System.Windows.Forms.PictureBox();
+            this.pictureBoxLightGreen = new System.Windows.Forms.PictureBox();
+            this.pictureBoxYellow = new System.Windows.Forms.PictureBox();
+            this.labelLightBlue = new System.Windows.Forms.Label();
+            this.labelLightGreen = new System.Windows.Forms.Label();
+            this.labelYellow = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dgvAbitProfileList)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox5)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox4)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxThistle)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxWhite)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxLightBlue)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxLightGreen)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxYellow)).BeginInit();
             this.SuspendLayout();
             // 
             // lblCount
@@ -235,111 +235,111 @@
             this.label8.TabIndex = 32;
             this.label8.Text = "Профильный предмет (если есть) (мин.балл)\r\n";
             // 
-            // pictureBox5
+            // pictureBoxThistle
             // 
-            this.pictureBox5.BackColor = System.Drawing.Color.Thistle;
-            this.pictureBox5.Location = new System.Drawing.Point(333, 101);
-            this.pictureBox5.Name = "pictureBox5";
-            this.pictureBox5.Size = new System.Drawing.Size(25, 15);
-            this.pictureBox5.TabIndex = 95;
-            this.pictureBox5.TabStop = false;
+            this.pictureBoxThistle.BackColor = System.Drawing.Color.Thistle;
+            this.pictureBoxThistle.Location = new System.Drawing.Point(333, 101);
+            this.pictureBoxThistle.Name = "pictureBoxThistle";
+            this.pictureBoxThistle.Size = new System.Drawing.Size(25, 15);
+            this.pictureBoxThistle.TabIndex = 95;
+            this.pictureBoxThistle.TabStop = false;
             // 
-            // label11
+            // labelThistle
             // 
-            this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(359, 103);
-            this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(199, 13);
-            this.label11.TabIndex = 94;
-            this.label11.Text = "У абитуриента нет необходимого ЕГЭ\r\n";
+            this.labelThistle.AutoSize = true;
+            this.labelThistle.Location = new System.Drawing.Point(359, 103);
+            this.labelThistle.Name = "labelThistle";
+            this.labelThistle.Size = new System.Drawing.Size(199, 13);
+            this.labelThistle.TabIndex = 94;
+            this.labelThistle.Text = "У абитуриента нет необходимого ЕГЭ\r\n";
             // 
-            // pictureBox4
+            // pictureBoxWhite
             // 
-            this.pictureBox4.BackColor = System.Drawing.Color.White;
-            this.pictureBox4.Location = new System.Drawing.Point(333, 119);
-            this.pictureBox4.Name = "pictureBox4";
-            this.pictureBox4.Size = new System.Drawing.Size(25, 15);
-            this.pictureBox4.TabIndex = 93;
-            this.pictureBox4.TabStop = false;
+            this.pictureBoxWhite.BackColor = System.Drawing.Color.White;
+            this.pictureBoxWhite.Location = new System.Drawing.Point(333, 119);
+            this.pictureBoxWhite.Name = "pictureBoxWhite";
+            this.pictureBoxWhite.Size = new System.Drawing.Size(25, 15);
+            this.pictureBoxWhite.TabIndex = 93;
+            this.pictureBoxWhite.TabStop = false;
             // 
-            // label9
+            // labelWhite
             // 
-            this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(358, 119);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(290, 13);
-            this.label9.TabIndex = 92;
-            this.label9.Text = "Не рекомендован к зачислению ни по одному профилю";
+            this.labelWhite.AutoSize = true;
+            this.labelWhite.Location = new System.Drawing.Point(358, 119);
+            this.labelWhite.Name = "labelWhite";
+            this.labelWhite.Size = new System.Drawing.Size(290, 13);
+            this.labelWhite.TabIndex = 92;
+            this.labelWhite.Text = "Не рекомендован к зачислению ни по одному профилю";
             // 
-            // pictureBox3
+            // pictureBoxLightBlue
             // 
-            this.pictureBox3.BackColor = System.Drawing.Color.LightBlue;
-            this.pictureBox3.Location = new System.Drawing.Point(333, 84);
-            this.pictureBox3.Name = "pictureBox3";
-            this.pictureBox3.Size = new System.Drawing.Size(25, 15);
-            this.pictureBox3.TabIndex = 91;
-            this.pictureBox3.TabStop = false;
+            this.pictureBoxLightBlue.BackColor = System.Drawing.Color.LightBlue;
+            this.pictureBoxLightBlue.Location = new System.Drawing.Point(333, 84);
+            this.pictureBoxLightBlue.Name = "pictureBoxLightBlue";
+            this.pictureBoxLightBlue.Size = new System.Drawing.Size(25, 15);
+            this.pictureBoxLightBlue.TabIndex = 91;
+            this.pictureBoxLightBlue.TabStop = false;
             // 
-            // pictureBox2
+            // pictureBoxLightGreen
             // 
-            this.pictureBox2.BackColor = System.Drawing.Color.LightGreen;
-            this.pictureBox2.Location = new System.Drawing.Point(333, 67);
-            this.pictureBox2.Name = "pictureBox2";
-            this.pictureBox2.Size = new System.Drawing.Size(25, 15);
-            this.pictureBox2.TabIndex = 90;
-            this.pictureBox2.TabStop = false;
+            this.pictureBoxLightGreen.BackColor = System.Drawing.Color.LightGreen;
+            this.pictureBoxLightGreen.Location = new System.Drawing.Point(333, 67);
+            this.pictureBoxLightGreen.Name = "pictureBoxLightGreen";
+            this.pictureBoxLightGreen.Size = new System.Drawing.Size(25, 15);
+            this.pictureBoxLightGreen.TabIndex = 90;
+            this.pictureBoxLightGreen.TabStop = false;
             // 
-            // pictureBox1
+            // pictureBoxYellow
             // 
-            this.pictureBox1.BackColor = System.Drawing.Color.Yellow;
-            this.pictureBox1.Location = new System.Drawing.Point(333, 50);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(25, 15);
-            this.pictureBox1.TabIndex = 89;
-            this.pictureBox1.TabStop = false;
+            this.pictureBoxYellow.BackColor = System.Drawing.Color.Yellow;
+            this.pictureBoxYellow.Location = new System.Drawing.Point(333, 50);
+            this.pictureBoxYellow.Name = "pictureBoxYellow";
+            this.pictureBoxYellow.Size = new System.Drawing.Size(25, 15);
+            this.pictureBoxYellow.TabIndex = 89;
+            this.pictureBoxYellow.TabStop = false;
             // 
-            // label10
+            // labelLightBlue
             // 
-            this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(359, 85);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(261, 13);
-            this.label10.TabIndex = 88;
-            this.label10.Text = "Отсутствует приоритет или внутренний приоритет";
+            this.labelLightBlue.AutoSize = true;
+            this.labelLightBlue.Location = new System.Drawing.Point(359, 85);
+            this.labelLightBlue.Name = "labelLightBlue";
+            this.labelLightBlue.Size = new System.Drawing.Size(261, 13);
+            this.labelLightBlue.TabIndex = 88;
+            this.labelLightBlue.Text = "Отсутствует приоритет или внутренний приоритет";
             // 
-            // label12
+            // labelLightGreen
             // 
-            this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(359, 68);
-            this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(318, 13);
-            this.label12.TabIndex = 87;
-            this.label12.Text = "Абитуриент рекомендован к зачислению на данный профиль\r\n";
+            this.labelLightGreen.AutoSize = true;
+            this.labelLightGreen.Location = new System.Drawing.Point(359, 68);
+            this.labelLightGreen.Name = "labelLightGreen";
+            this.labelLightGreen.Size = new System.Drawing.Size(318, 13);
+            this.labelLightGreen.TabIndex = 87;
+            this.labelLightGreen.Text = "Абитуриент рекомендован к зачислению на данный профиль\r\n";
             // 
-            // label13
+            // labelYellow
             // 
-            this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(359, 51);
-            this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(385, 13);
-            this.label13.TabIndex = 86;
-            this.label13.Text = "Абитуриент рекомендован к зачислению на более приоритетный профиль\r\n";
+            this.labelYellow.AutoSize = true;
+            this.labelYellow.Location = new System.Drawing.Point(359, 51);
+            this.labelYellow.Name = "labelYellow";
+            this.labelYellow.Size = new System.Drawing.Size(385, 13);
+            this.labelYellow.TabIndex = 86;
+            this.labelYellow.Text = "Абитуриент рекомендован к зачислению на более приоритетный профиль\r\n";
             // 
             // MyListRatingProfileList
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(908, 651);
-            this.Controls.Add(this.pictureBox5);
-            this.Controls.Add(this.label11);
-            this.Controls.Add(this.pictureBox4);
-            this.Controls.Add(this.label9);
-            this.Controls.Add(this.pictureBox3);
-            this.Controls.Add(this.pictureBox2);
-            this.Controls.Add(this.pictureBox1);
-            this.Controls.Add(this.label10);
-            this.Controls.Add(this.label12);
-            this.Controls.Add(this.label13);
+            this.Controls.Add(this.pictureBoxThistle);
+            this.Controls.Add(this.labelThistle);
+            this.Controls.Add(this.pictureBoxWhite);
+            this.Controls.Add(this.labelWhite);
+            this.Controls.Add(this.pictureBoxLightBlue);
+            this.Controls.Add(this.pictureBoxLightGreen);
+            this.Controls.Add(this.pictureBoxYellow);
+            this.Controls.Add(this.labelLightBlue);
+            this.Controls.Add(this.labelLightGreen);
+            this.Controls.Add(this.labelYellow);
             this.Controls.Add(this.label8);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.btnGreenList);
@@ -380,22 +380,22 @@
             this.Controls.SetChildIndex(this.btnGreenList, 0);
             this.Controls.SetChildIndex(this.label6, 0);
             this.Controls.SetChildIndex(this.label8, 0);
-            this.Controls.SetChildIndex(this.label13, 0);
-            this.Controls.SetChildIndex(this.label12, 0);
-            this.Controls.SetChildIndex(this.label10, 0);
-            this.Controls.SetChildIndex(this.pictureBox1, 0);
-            this.Controls.SetChildIndex(this.pictureBox2, 0);
-            this.Controls.SetChildIndex(this.pictureBox3, 0);
-            this.Controls.SetChildIndex(this.label9, 0);
-            this.Controls.SetChildIndex(this.pictureBox4, 0);
-            this.Controls.SetChildIndex(this.label11, 0);
-            this.Controls.SetChildIndex(this.pictureBox5, 0);
+            this.Controls.SetChildIndex(this.labelYellow, 0);
+            this.Controls.SetChildIndex(this.labelLightGreen, 0);
+            this.Controls.SetChildIndex(this.labelLightBlue, 0);
+            this.Controls.SetChildIndex(this.pictureBoxYellow, 0);
+            this.Controls.SetChildIndex(this.pictureBoxLightGreen, 0);
+            this.Controls.SetChildIndex(this.pictureBoxLightBlue, 0);
+            this.Controls.SetChildIndex(this.labelWhite, 0);
+            this.Controls.SetChildIndex(this.pictureBoxWhite, 0);
+            this.Controls.SetChildIndex(this.labelThistle, 0);
+            this.Controls.SetChildIndex(this.pictureBoxThistle, 0);
             ((System.ComponentModel.ISupportInitialize)(this.dgvAbitProfileList)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox5)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox4)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxThistle)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxWhite)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxLightBlue)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxLightGreen)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxYellow)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -419,15 +419,15 @@
         private System.Windows.Forms.Button btnGreenList;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Label label8;
-        private System.Windows.Forms.PictureBox pictureBox5;
-        private System.Windows.Forms.Label label11;
-        private System.Windows.Forms.PictureBox pictureBox4;
-        private System.Windows.Forms.Label label9;
-        private System.Windows.Forms.PictureBox pictureBox3;
-        private System.Windows.Forms.PictureBox pictureBox2;
-        private System.Windows.Forms.PictureBox pictureBox1;
-        private System.Windows.Forms.Label label10;
-        private System.Windows.Forms.Label label12;
-        private System.Windows.Forms.Label label13;
+        private System.Windows.Forms.PictureBox pictureBoxThistle;
+        private System.Windows.Forms.Label labelThistle;
+        private System.Windows.Forms.PictureBox pictureBoxWhite;
+        private System.Windows.Forms.Label labelWhite;
+        private System.Windows.Forms.PictureBox pictureBoxLightBlue;
+        private System.Windows.Forms.PictureBox pictureBoxLightGreen;
+        private System.Windows.Forms.PictureBox pictureBoxYellow;
+        private System.Windows.Forms.Label labelLightBlue;
+        private System.Windows.Forms.Label labelLightGreen;
+        private System.Windows.Forms.Label labelYellow;
     }
 }

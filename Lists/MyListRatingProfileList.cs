@@ -254,7 +254,7 @@ namespace Priem
             for (int rowindex = startrow; rowindex < dgvAbitProfileList.Rows.Count; rowindex++)
             {
                 DataGridViewRow row = dgvAbitProfileList.Rows[rowindex];
-                if (String.IsNullOrEmpty(row.Cells[1].Value.ToString()))
+                if (String.IsNullOrEmpty(row.Cells[startcol].Value.ToString()))
                     break;
                 for (int i = startcol; i < dgvAbitProfileList.Columns.Count; i++)
                 {

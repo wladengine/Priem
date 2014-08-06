@@ -1815,6 +1815,8 @@ namespace Priem
                                    && fv.StudyFormId == abit.StudyFormId
                                    && fv.StudyBasisId == abit.StudyBasisId
                                    && fv.IsCel == (abit.CompetitionId == 6)
+                                   && fv.IsCrimea == (abit.CompetitionId == 11 || abit.CompetitionId == 12)
+                                   && fv.IsQuota == (abit.CompetitionId == 2 || abit.CompetitionId == 7)
                                    select fv.Id).FirstOrDefault();
 
                 int cnt = (from fx in context.Fixieren

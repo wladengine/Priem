@@ -19,8 +19,6 @@ namespace Priem
     {
         Dictionary<int?, List<string>> lstSelected;
   
-        
-
         public EntryViewProtocol(ProtocolList owner, int sFac, int sSection, int sForm, int? sProf, bool? isSec, bool? isReduced, bool? isParal, bool? isList, bool isCel)
             : this(owner, sFac, sSection, sForm, sProf, isSec, isReduced, isParal, isList, isCel, null)
         {
@@ -93,7 +91,7 @@ namespace Priem
         {
             get { return ComboServ.GetComboIdInt(cbHeaders); }
             set { ComboServ.SetComboId(cbHeaders, value); }
-        }        
+        }
 
         string GetTotalFilter()
         {
@@ -123,7 +121,7 @@ namespace Priem
 
             sFilter += " AND (ed.qAbiturient.Id NOT IN (SELECT AbiturientId FROM ed.extEntryView WHERE IsListener = 0) OR ed.qAbiturient.IsListener = 1)";
 
-            sFilter += "AND ((ed.qAbiturient.IsListener = 0 AND ed.qAbiturient.IsSecond = 0 AND ed.qAbiturient.IsReduced = 0 AND ed.qAbiturient.IsParallel = 0 AND ed.qAbiturient.HasOriginals > 0) OR ed.qAbiturient.IsListener = 1 OR ed.qAbiturient.IsSecond = 1 OR ed.qAbiturient.IsReduced = 1 OR ed.qAbiturient.IsParallel = 1)";
+            sFilter += "AND ((ed.qAbiturient.IsListener = 0 AND ed.qAbiturient.IsSecond = 0 AND ed.qAbiturient.IsReduced = 0 AND ed.qAbiturient.IsParallel = 0 AND EXISTS (SELECT * FROM ed.Abiturient AB WHERE AB.HasOriginals > 0 AND AB.PersonId = qAbiturient.PersonId)) OR ed.qAbiturient.IsListener = 1 OR ed.qAbiturient.IsSecond = 1 OR ed.qAbiturient.IsReduced = 1 OR ed.qAbiturient.IsParallel = 1 OR ed.qAbiturient.IsPaid = 1)";
       
             if (_studyBasisId == 2)
             {
@@ -298,7 +296,7 @@ namespace Priem
                     " FROM ed.qAbiturient INNER JOIN ed.extPerson ON ed.qAbiturient.PErsonId =  ed.extPerson.Id " +
                     " INNER JOIN ed.extEnableProtocol ON ed.qAbiturient.Id=ed.extEnableProtocol.AbiturientId " +
                     " INNER JOIN ed._FirstWaveBackUp AS _FirstWave ON ed.qAbiturient.Id = _FirstWave.AbiturientId " +
-                    //((_studyBasisId == 2 && MainClass.dbType == PriemType.Priem) ? " INNER JOIN ed._FirstWaveGreen ON ed.qAbiturient.Id=ed._FirstWaveGreen.AbiturientId " : "") +
+                    ((MainClass.dbType == PriemType.Priem) ? " INNER JOIN ed._FirstWaveGreen ON ed.qAbiturient.Id=ed._FirstWaveGreen.AbiturientId " : "") +
                     " LEFT JOIN ed.extAbitMarksSum ON ed.qAbiturient.Id=ed.extAbitMarksSum.Id " +
                     " LEFT JOIN ed.Competition ON ed.Competition.Id = ed.qAbiturient.CompetitionId ", kcRest);
 

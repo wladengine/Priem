@@ -14,6 +14,7 @@ namespace Priem
         public FormB()
         {
             InitializeComponent();
+            this.MdiParent = MainClass.mainform;
             Recalculate();
         }
 
@@ -28,6 +29,7 @@ namespace Priem
                                  join Abit in context.Abiturient on Entered.AbiturientId equals Abit.Id
                                  where Abit.Entry.StudyLevel.LevelGroupId == 1 && Abit.Entry.StudyFormId == 1
                                  && Entered.Date <= dtpDate.Value
+                                 && Abit.CompetitionId != 11 && Abit.CompetitionId != 12
                                  select new
                                  {
                                      Abit.CompetitionId,

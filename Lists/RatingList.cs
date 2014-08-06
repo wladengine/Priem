@@ -612,8 +612,8 @@ AND ed.FixierenView.IsSecond = {7} AND ed.FixierenView.IsReduced = {8} AND ed.Fi
                                            AND ed.qAbiturient.Id NOT IN (SELECT abiturientid from ed.Mark where IsFromEge = 1) /*and ed.extPerson.EgeInSPbgu = 0 */and ed.qAbiturient.IsSecond = 0 and ed.qAbiturient.IsReduced = 0 and ed.qAbiturient.IsParallel = 0) 
                                         OR ed.extAbitMarksSum.TotalCount = " + examsCnt + " ) ";
                         
-                        if (StudyBasisId == 2)
-                            sFilters += " AND qAbiturient.Id NOT IN (SELECT AbiturientId FROM ed._FirstWaveGreen)";
+                        //if (StudyBasisId == 2)
+                        //    sFilters += " AND qAbiturient.Id NOT IN (SELECT AbiturientId FROM ed._FirstWaveGreen)";
 
                         totalQuery = _queryBody + (chbWithOlymps.Checked ? _queryOlymps : "") + _queryOrange + _queryFrom + sFilters + sOrderBy;
                     }
@@ -1131,6 +1131,11 @@ AND ed.FixierenView.IsSecond = {7} AND ed.FixierenView.IsReduced = {8} AND ed.Fi
                 chbCel.Checked = false;
             if (IsCrimea)
                 chbIsCrimea.Checked = false;
+        }
+
+        private void btnToExcel_Click(object sender, EventArgs e)
+        {
+            PrintClass.PrintAllToExcel(dgvAbits);
         }             
     }
 }

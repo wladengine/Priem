@@ -45,6 +45,13 @@ namespace Priem
                 btn_GreenList.Visible = true;
             }
             btn_GreenList.Enabled = false;
+            if (MainClass.dbType == PriemType.PriemMag)
+            {
+                labelWhite.Location = labelThistle.Location;
+                pictureBoxWhite.Location = pictureBoxThistle.Location;
+                labelThistle.Visible = false;
+                pictureBoxThistle.Visible = false;
+            }
             _title = "Рейтинговый список с внутренними приоритетами";
             try
             {
@@ -1005,6 +1012,7 @@ namespace Priem
             for (int i = startrow; i < dgvAbitList.Rows.Count; i++)
             {
                 if (dgvAbitList.Rows[i].Cells[columnindex].Style.BackColor == Color.LightGreen)
+                   // (dgvAbitList.Rows[i].Cells[columnindex].Style.BackColor == Color.LightBlue))
                 {
                     value = dgvAbitList.Rows[i].Cells[columnindex].Value.ToString();
                     if (String.IsNullOrEmpty(value))
@@ -1068,8 +1076,8 @@ namespace Priem
                     if (dgvAbitList.Rows[rowindex].Cells[clmn].Style.BackColor == Color.Empty)
                         break;
 
-                    if ((dgvAbitList.Rows[rowindex].Cells[clmn].Style.BackColor == Color.LightGreen) ||
-                        (dgvAbitList.Rows[rowindex].Cells[clmn].Style.BackColor == Color.LightBlue))
+                    if (dgvAbitList.Rows[rowindex].Cells[clmn].Style.BackColor == Color.LightGreen) 
+                       // (dgvAbitList.Rows[rowindex].Cells[clmn].Style.BackColor == Color.LightBlue))
                     {
                         NumFio = value.Substring(0, value.IndexOf("(") - 1);
                         int personIndexInList = PersonListFio.IndexOf(NumFio);

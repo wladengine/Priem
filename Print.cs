@@ -5152,9 +5152,19 @@ namespace Priem
                         if (balls.Length == 0)
                             ballToStr = "";
                         else if (balls.EndsWith("1"))
-                            ballToStr += "";
+                        { 
+                            if (balls.EndsWith("11"))
+                                ballToStr +="ов";
+                            else
+                                ballToStr += ""; 
+                        }
                         else if (balls.EndsWith("2") || balls.EndsWith("3") || balls.EndsWith("4"))
-                            ballToStr += "а";
+                            {
+                                if ((balls.EndsWith("12") || balls.EndsWith("13") || balls.EndsWith("14")))
+                                    ballToStr +="ов";
+                                else
+                                    ballToStr += "а";
+                            }    
                         else
                             ballToStr += "ов";
 

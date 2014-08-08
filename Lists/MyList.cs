@@ -274,7 +274,8 @@ namespace Priem
                                 from ed.extEntryView
                                 inner join ed.Abiturient on AbiturientId = Abiturient.Id
                                 where Abiturient.EntryId = '"+row_EntryId[i].ToString()+@"' and 
-                                Abiturient.ObrazProgramInEntryId = '" + row_ObrazProgramInEntryId[i].ToString() + @"'"));
+                                Abiturient.ObrazProgramInEntryId = '" + row_ObrazProgramInEntryId[i].ToString() + @"'
+                                and Abiturient.CompetitionId NOT IN (12,11)"));
                 }
                 else
                 {
@@ -282,7 +283,8 @@ namespace Priem
                                 select COUNT(extEntryView.Id) 
                                 from ed.extEntryView
                                 inner join ed.Abiturient on AbiturientId = Abiturient.Id
-                                where Abiturient.EntryId = '" + row_EntryId[i].ToString() + @"'"));
+                                where Abiturient.EntryId = '" + row_EntryId[i].ToString() + @"'
+                                and Abiturient.CompetitionId NOT IN (12,11)"));
                 }
             }
             examTable.Rows.Add(row_LicProg);
@@ -1138,8 +1140,7 @@ namespace Priem
                                 where Abiturient.EntryId = '" + EntryId + @"' and 
                                 Abiturient.ObrazProgramInEntryId = '" + ObrazProgramInEntryId + @"' and 
                                 Abiturient.ProfileInObrazProgramInEntryId = '" + rw.Field<Guid>("Id").ToString() + @"' and 
-                                Excluded = 0 and 
-                                Abiturient.Id not in (select AbiturientId from ed.extEntryView where Excluded = 1)"));
+                                Abiturient.CompetitionId Not in (11,12)"));
 
                             TempPriorList = new List<int>();
                             for (int rowindex = 0; (rowindex < KCP) && (rowindex < AbitIdList.Count); rowindex++)

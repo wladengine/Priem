@@ -133,7 +133,8 @@ namespace Priem
                                 inner join ed.Abiturient on AbiturientId = Abiturient.Id
                                 where Abiturient.EntryId = '" + _EntryId + @"' and 
                                 Abiturient.ObrazProgramInEntryId = '" + _ObrazProgramInEntryId + @"' and 
-                                Abiturient.ProfileInObrazProgramInEntryId = '" + rowProfileId[i].ToString() + @"'"));
+                                Abiturient.ProfileInObrazProgramInEntryId = '" + rowProfileId[i].ToString() + @"'
+                                and Abiturient.CompetitionId NOT IN (11,12)"));
             } 
 
             examTable.Rows.Add(rowProfileName);

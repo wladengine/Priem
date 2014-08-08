@@ -119,7 +119,7 @@ namespace Priem
 
             sFilter += " AND ed.qAbiturient.BackDoc = 0 ";
 
-            sFilter += string.Format(" AND (ed.qAbiturient.PersonId NOT IN (SELECT PersonId FROM ed.extEntryView WHERE IsListener = 0 AND StudyLevelGroupId = {0}) OR ed.qAbiturient.IsListener = 1 OR ed.qAbiturient.IsPaid = 1)", MainClass.studyLevelGroupId);
+            sFilter += string.Format(" AND ed.qAbiturient.PersonId NOT IN (SELECT PersonId FROM ed.extEntryView WHERE StudyLevelGroupId = {0} AND StudyBasisId = 1)", MainClass.studyLevelGroupId);
 
             sFilter += "AND ((ed.qAbiturient.IsListener = 0 AND ed.qAbiturient.IsSecond = 0 AND ed.qAbiturient.IsReduced = 0 AND ed.qAbiturient.IsParallel = 0 AND EXISTS (SELECT * FROM ed.Abiturient AB WHERE AB.HasOriginals > 0 AND AB.PersonId = qAbiturient.PersonId)) OR ed.qAbiturient.IsListener = 1 OR ed.qAbiturient.IsSecond = 1 OR ed.qAbiturient.IsReduced = 1 OR ed.qAbiturient.IsParallel = 1 OR ed.qAbiturient.IsPaid = 1)";
       

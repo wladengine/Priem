@@ -377,7 +377,9 @@
     <Compile Include="Cards\CardObrazProgramInEntryInCompetitionInInet.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Cards\CardObrazProgramInEntryInCompetitionInInet.Designer.cs" />
+    <Compile Include="Cards\CardObrazProgramInEntryInCompetitionInInet.Designer.cs">
+      <DependentUpon>CardObrazProgramInEntryInCompetitionInInet.cs</DependentUpon>
+    </Compile>
     <Compile Include="Cards\CardPaidData.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -399,7 +401,9 @@
     <Compile Include="Cards\CardProfileInObrazProgramInEntryInCompetition.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Cards\CardProfileInObrazProgramInEntryInCompetition.Designer.cs" />
+    <Compile Include="Cards\CardProfileInObrazProgramInEntryInCompetition.Designer.cs">
+      <DependentUpon>CardProfileInObrazProgramInEntryInCompetition.cs</DependentUpon>
+    </Compile>
     <Compile Include="Cards\DocCard.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -637,6 +641,12 @@
     </Compile>
     <Compile Include="Lists\ListPersonFilter.designer.cs">
       <DependentUpon>ListPersonFilter.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Lists\ListRatingWithEGE.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Lists\ListRatingWithEGE.Designer.cs">
+      <DependentUpon>ListRatingWithEGE.cs</DependentUpon>
     </Compile>
     <Compile Include="Lists\MyList.cs">
       <SubType>Form</SubType>
@@ -1064,11 +1074,17 @@
     <EmbeddedResource Include="Cards\CardFromInet.resx">
       <DependentUpon>CardFromInet.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Cards\CardObrazProgramInEntryInCompetitionInInet.resx">
+      <DependentUpon>CardObrazProgramInEntryInCompetitionInInet.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Cards\CardPaidData.resx">
       <DependentUpon>CardPaidData.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Cards\CardPerson.resx">
       <DependentUpon>CardPerson.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Cards\CardProfileInObrazProgramInEntryInCompetition.resx">
+      <DependentUpon>CardProfileInObrazProgramInEntryInCompetition.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Cards\DocCard.resx">
       <DependentUpon>DocCard.cs</DependentUpon>
@@ -1172,8 +1188,9 @@
     <EmbeddedResource Include="Lists\ListPersonFilter.resx">
       <DependentUpon>ListPersonFilter.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Lists\MyList.resx" />
-    <EmbeddedResource Include="Lists\MyListRatingProfileList.resx" />
+    <EmbeddedResource Include="Lists\ListRatingWithEGE.resx">
+      <DependentUpon>ListRatingWithEGE.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Lists\OlympAbitList.resx">
       <DependentUpon>OlympAbitList.cs</DependentUpon>
     </EmbeddedResource>

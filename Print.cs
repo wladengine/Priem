@@ -4759,47 +4759,12 @@ namespace Priem
             {
                 WordDoc wd = new WordDoc(string.Format(@"{0}\EntryOrder.dot", MainClass.dirTemplates));
                 TableDoc td = wd.Tables[0];
-                /*
-                string query = string.Format("SELECT extAbit.Id as Id, extAbit.RegNum as Рег_Номер, " +
-                    " extAbit.PersonNum as 'Ид. номер', " +
-                    " (Case when competitionid in (1,8) then '' else CAST(extAbitMarksSum.TotalSum AS nvarchar(4)) end) AS TotalSum, " +
-                    " extAbit.FIO as ФИО,
-                 * CelCompetition.TvorName AS CelCompName, " +
-                    " extAbit.LicenseProgramName, 
-                 * extAbit.LicenseProgramCode,
-                 * extAbit.ProfileName, " +
-                    " replace(replace(extAbit.ObrazProgramName, '(очно-заочная)', ''), ' ВВ', '')  as ObrazProgram, " +
-                    " extAbit.ObrazProgramId, " +
-                    " EntryHeader.Id as EntryHeaderId,
-                 * 
-                 * EntryHeader.SortNum,
-                 * EntryHeader.Name as EntryHeaderName,
-                 * Country.NameRod " +
+  
 
-                    " FROM ed.extAbit " +
-                    " INNER JOIN ed.extEntryView ON extEntryView.AbiturientId=extAbit.Id " +
-                    " INNER JOIN ed.extPerson ON Person.Id = extAbit.PersonId " +
-                    " INNER JOIN ed.Country ON Person.NationalityId = Country.Id " +
-                    " INNER JOIN ed.Competition ON Competition.Id = extAbit.CompetitionId " +
-                    " LEFT JOIN ed.EntryHeader ON EntryHeader.Id = extEntryView.EntryHeaderId " +
-                    " LEFT JOIN ed.CelCompetition ON CelCompetition.Id = extAbit.CelCompetitionId " +
-                    " LEFT JOIN ed.extAbitMarksSum ON extAbit.Id = extAbitMarksSum.Id");
-
-                string where = " WHERE extEntryView.Id = @protocolId ";
-                where += " AND Person.NationalityId" + (isRus ? "=1 " : "<>1 ");
-                string orderby = " ORDER BY CelCompetition.TvorName, ObrazProgram, extAbit.ProfileName, NameRod ,EntryHeader.SortNum, ФИО ";
-
-                SortedList<string, object> slDel = new SortedList<string, object>();
-
-                slDel.Add("@protocolId", protocolId);
-
-                DataSet ds = MainClass.Bdc.GetDataSet(query + where + orderby, slDel);
-                */
-
-                string docNum;// = MainClass.Bdc.GetStringValue("SELECT TOP 1 [Number] FROM ed.Protocol WHERE Id = @protocolId  ", slDel);
-                DateTime docDate;// = DateTime.Parse(MainClass.Bdc.GetStringValue("SELECT TOP 1 [Date] FROM ed.Protocol WHERE Id = @protocolId  ", slDel));
-                string formId;// = MainClass.Bdc.GetStringValue("SELECT StudyForm.Id FROM ed.Protocol INNER JOIN ed.StudyForm ON Protocol.StudyFormId=StudyForm.Id WHERE Protocol.Id= @protocolId", slDel);
-                string facDat;// = MainClass.Bdc.GetStringValue("SELECT SP_Faculty.DatName FROM ed.Protocol INNER JOIN ed.SP_Faculty ON Protocol.FacultyId=SP_Faculty.Id WHERE Protocol.Id= @protocolId", slDel);
+                string docNum;
+                DateTime docDate;
+                string formId;
+                string facDat;
 
                 bool? isSec;// = (bool?)MainClass.Bdc.GetValue("SELECT IsSecond FROM ed.Protocol WHERE Protocol.Id= @protocolId", slDel);
                 bool? isParallel;// = (bool?)MainClass.Bdc.GetValue("SELECT IsParallel FROM ed.Protocol WHERE Protocol.Id= @protocolId", slDel);
@@ -4898,7 +4863,7 @@ namespace Priem
                     naprspec = "направление";
                     naprspecRod = "направлению подготовки";
                     profspec = "по профилю";
-                    educDoc = "о высшем профессиональном образовании";
+                    
                 }
                 else
                 {
@@ -4917,15 +4882,12 @@ namespace Priem
                     naprspec = "направление";
                     naprspecRod = "направлению подготовки";
                     profspec = "по профилю";
-                    educDoc = "об образовании";
 
                 }
 
-                string copyDoc = "оригиналы";
                 if (isList.HasValue && isList.Value)
                 {
                     list = " в качестве слушателя";
-                    copyDoc = "заверенные ксерокопии";
                 }
 
                 if (isSec.HasValue && isSec.Value)
@@ -4941,32 +4903,25 @@ namespace Priem
                 switch (basisId)
                 {
                     case "1":
-                        basis = "обучение за счет средств\n федерального бюджета";
-                        basis2 = "обучения за счет средств\n федерального бюджета";
+                        basis2 = "обучения за счет бюджетных ассигнований федерального бюджета";
                         dogovorDoc = "";
+                        educDoc = ", оригиналы документа установленного образца об образовании";
                         break;
                     case "2":
-                        basis = string.Format("по договорам оказания государственной услуги по обучению по основной{0} образовательной программе высшего профессионального образования", sec);
-                        basis2 = string.Format("обучения по договорам оказания государственной услуги по обучению по основной{0} образовательной программе высшего профессионального образования", sec);
-                        dogovorDoc = string.Format(", договор оказания государственной услуги по обучению по основной{0} образовательной программе высшего профессионального образования", sec);
+                        basis2 = "обучения по договорам об образовании";
+                        dogovorDoc = ", договоры об образовании";
+                        educDoc = "";
                         break;
                 }
 
                 wd.SetFields("Граждан", isRus ? "граждан Российской Федерации" : "иностранных граждан");
                 wd.SetFields("Граждан2", isRus ? "граждан Российской Федерации" : "");
                 wd.SetFields("Стипендия", (basisId == "2" || formId == "2") ? "" : "и назначении стипендии");
-                //wd.SetFields("Факультет", facDat);
-                //wd.SetFields("Форма", form);
                 wd.SetFields("Форма2", form2);
-               //wd.SetFields("Основа", basis);
                 wd.SetFields("Основа2", basis2);
-                //wd.SetFields("БакСпец", bakspecRod);
                 wd.SetFields("БакСпецРод", bakspecRod);
-                //wd.SetFields("НапрСпец", string.Format(" {0} {1} «{2}»", naprspecRod, LicenseProgramCode, LicenseProgramName));
                 wd.SetFields("Слушатель", list);
                 wd.SetFields("Сокращ", sec);
-                //wd.SetFields("Сокращ1", sec);
-                wd.SetFields("CopyDoc", copyDoc);
                 wd.SetFields("DogovorDoc", dogovorDoc);
                 wd.SetFields("EducDoc", educDoc);
 
@@ -5047,6 +5002,9 @@ namespace Priem
 
                     bool bFirstRun = true;
 
+                    //bool HeaderIsPrinted_Dogovor = false;
+                    
+
                     foreach (var v in lst)
                     {
                         ++counter;
@@ -5085,6 +5043,18 @@ namespace Priem
                                              where entry.ObrazProgramId == v.ObrazProgramId
                                              select entry.StudyLevel.Acronym + "." + entry.SP_ObrazProgram.Number + "." + MainClass.sPriemYear).FirstOrDefault();
 
+                        /* 
+                        if (!HeaderIsPrinted_Dogovor)
+                            if (basisId == 2)
+                            {
+                                td.AddRow(1);
+                               curRow++;
+                               td[0, curRow] = string.Format("\t{0}:", header);
+                                HeaderIsPrinted_Dogovor = true;
+                            }
+                        */
+
+
                         if (ObrazProgramId != curObProg)
                         {
                             if (!string.IsNullOrEmpty(obProg))
@@ -5109,17 +5079,18 @@ namespace Priem
 
                             curObProg = ObrazProgramId;
 
-                            if (!isCel)
-                            {
-                                if (header != curHeader)
+                            //if (!HeaderIsPrinted_Dogovor)
+                                if (!isCel)
                                 {
-                                    td.AddRow(1);
-                                    curRow++;
-                                    td[0, curRow] = string.Format("\t{0}:", header);
+                                    if (header != curHeader)
+                                    {
+                                        td.AddRow(1);
+                                        curRow++;
+                                        td[0, curRow] = string.Format("\t{0}:", header);
 
-                                    curHeader = header;
+                                        curHeader = header;
+                                    }
                                 }
-                            }
 
                             //if (!isCel)
                             //{

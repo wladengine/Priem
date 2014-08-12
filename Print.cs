@@ -4922,6 +4922,7 @@ namespace Priem
                 wd.SetFields("БакСпецРод", bakspecRod);
                 wd.SetFields("Слушатель", list);
                 wd.SetFields("Сокращ", sec);
+                
                 wd.SetFields("DogovorDoc", dogovorDoc);
                 wd.SetFields("EducDoc", educDoc);
 
@@ -5212,12 +5213,13 @@ namespace Priem
         {
             try
             {
-                WordDoc wd = new WordDoc(string.Format(@"{0}\EntryOrderList.dotx", MainClass.dirTemplates));
+                WordDoc wd = new WordDoc(string.Format(@"{0}\EntryOrderList.dot", MainClass.dirTemplates));
 
                 string formId;
                 string facDat;
 
                 string basisId;
+                string educDoc = "";
                 string basis = string.Empty;
                 string form2 = string.Empty;
 
@@ -5262,9 +5264,11 @@ namespace Priem
                     {
                         case "1":
                             basis = "за счет бюджетных ассигнований федерального бюджета";
+                            educDoc = ", оригиналы документа установленного образца об образовании";
                             break;
                         case "2":
                             basis = "по договорам об образовании";
+                            educDoc = ", договоры об образовании";
                             break;
                     }
 
@@ -5283,7 +5287,7 @@ namespace Priem
 
                     if (MainClass.dbType == PriemType.PriemMag)
                     {
-                        bakspec = "магистра";
+                        bakspec = "магистратуры";
                         profspec = "профилю";
                     }
                     else
@@ -5419,6 +5423,9 @@ namespace Priem
                         wd.SetFields("SignerPosition", v.SignerPosition);
                         //SetFields("ДатаПечати", DateTime.Now.Date.ToShortDateString());
 
+                        
+                        wd.SetFields("Основание", educDoc);
+
                         string curSpez = "-";
                         string curObProg = "-";
                         string curHeader = "-";
@@ -5518,7 +5525,7 @@ namespace Priem
                         {
                             td.AddRow(1);
                             curRow++;
-                            td[0, curRow] = "\r\n2.      Назначить указанным лицам стипендию в размере 1340 рубля ежемесячно до 31 января 2014 г.";
+                            td[0, curRow] = "\r\n2.      Назначить указанным лицам стипендию в размере 1340 рубля ежемесячно до 31 января 2015 г.";
                         }
                     }
                 }

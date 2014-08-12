@@ -52,6 +52,10 @@ namespace Priem
                 labelThistle.Visible = false;
                 pictureBoxThistle.Visible = false;
             }
+            else
+            {
+                cbZeroWave.Visible = false;
+            }
             _title = "Рейтинговый список с внутренними приоритетами";
             try
             {
@@ -267,25 +271,27 @@ namespace Priem
             for (int i = 1; i < examTable.Columns.Count; i++)
             {
                 int kcp_new = int.Parse(row_KCP[i].ToString());
-                if (!String.IsNullOrEmpty(row_ObrazProgramInEntryId[i].ToString()))
-                {
-                    row_KCP[i] = kcp_new - int.Parse(MainClass.Bdc.GetStringValue(@"
-                                select COUNT(extEntryView.Id) 
-                                from ed.extEntryView
-                                inner join ed.Abiturient on AbiturientId = Abiturient.Id
-                                where Abiturient.EntryId = '"+row_EntryId[i].ToString()+@"' and 
-                                Abiturient.ObrazProgramInEntryId = '" + row_ObrazProgramInEntryId[i].ToString() + @"'
-                                and Abiturient.CompetitionId NOT IN (12,11)"));
-                }
-                else
-                {
-                    row_KCP[i] = kcp_new - int.Parse(MainClass.Bdc.GetStringValue(@"
-                                select COUNT(extEntryView.Id) 
-                                from ed.extEntryView
-                                inner join ed.Abiturient on AbiturientId = Abiturient.Id
-                                where Abiturient.EntryId = '" + row_EntryId[i].ToString() + @"'
-                                and Abiturient.CompetitionId NOT IN (12,11)"));
-                }
+                if (!cbZeroWave.Checked) 
+                    if (!String.IsNullOrEmpty(row_ObrazProgramInEntryId[i].ToString()))
+                    {
+                        row_KCP[i] = kcp_new - int.Parse(MainClass.Bdc.GetStringValue(@"
+                                    select COUNT(extEntryView.Id) 
+                                    from ed.extEntryView
+                                    inner join ed.Abiturient on AbiturientId = Abiturient.Id
+                                    where Abiturient.EntryId = '"+row_EntryId[i].ToString()+@"' and 
+                                    Abiturient.ObrazProgramInEntryId = '" + row_ObrazProgramInEntryId[i].ToString() + @"'
+                                    and Abiturient.CompetitionId NOT IN (12,11)"));
+                    }
+                    else
+                    {
+                        row_KCP[i] = kcp_new - int.Parse(MainClass.Bdc.GetStringValue(@"
+                                    select COUNT(extEntryView.Id) 
+                                    from ed.extEntryView
+                                    inner join ed.Abiturient on AbiturientId = Abiturient.Id
+                                    where Abiturient.EntryId = '" + row_EntryId[i].ToString() + @"'
+                                    and Abiturient.CompetitionId NOT IN (12,11)"));
+                    } 
+
             }
             examTable.Rows.Add(row_LicProg);
             examTable.Rows.Add(row_ObrazProg);
@@ -309,16 +315,21 @@ namespace Priem
              * надо бы вытащить для каждого Entry (cтолбца) вытащить столбец данных с Abiturient учитывая ранжирование, и указывая баллы
              */
             List<DataRow> RowList = new List<DataRow>();
-            query = @"select " + toplist + @" Abiturient.Id, PersonNum, PersonId, Priority, extAbitMarksSum.TotalSum, extPerson.FIO as FIO
+            string Wave = "_FirstWave";
+            if (cbZeroWave.Checked)
+                Wave = "_ZeroWave";
+            query = @"select " + toplist + @" Abiturient.Id, extPerson.PersonNum, Abiturient.PersonId, Abiturient.Priority, extAbitMarksSum.TotalSum, extPerson.FIO as FIO
             from ed.Abiturient
             inner join ed.extPerson on Abiturient.PersonId = extPerson.Id
             left join ed.extAbitMarksSum on extAbitMarksSum.Id = Abiturient.Id
-            inner join ed._FirstWave on _FirstWave.AbiturientId = Abiturient.Id
+            inner join ed." +Wave+ @" on "+Wave+ @".AbiturientId = Abiturient.Id
             inner join ed.qEntry on Abiturient.EntryId = qEntry.Id
+            " + ((cbZeroWave.Checked) ? "inner join ed.extEntryView on extEntryView.AbiturientId = Abiturient.Id" : "") + 
+            @"
             where Abiturient.EntryId=@EntryId and Abiturient.BackDoc = 0  and Abiturient.IsGosLine=0 
-            and _FirstWave.IsCrimea != 1
+            and Abiturient.CompetitionId NOT IN (12,11)
             --order by extAbitMarksSum.TotalSum desc
-             order by _FirstWave.SortNum 
+             order by  " + Wave + @".SortNum 
             ";
             wc.SetMax(examTable.Columns.Count - 1);
             wc.SetText("Получение данных по абитуриентам...(0/" + (examTable.Columns.Count - 1).ToString() + ")");
@@ -1266,6 +1277,10 @@ namespace Priem
                     ttextEntryView.SetToolTip(dgvAbitList, answ);
                 }
             }*/
+        }
+
+        private void cbZeroWave_CheckedChanged(object sender, EventArgs e)
+        {
         }
     }
 }

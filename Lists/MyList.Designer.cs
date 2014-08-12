@@ -58,6 +58,7 @@
             this.pictureBoxThistle = new System.Windows.Forms.PictureBox();
             this.labelThistle = new System.Windows.Forms.Label();
             this.ttextEntryView = new System.Windows.Forms.ToolTip(this.components);
+            this.cbZeroWave = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.dgvAbitList)).BeginInit();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
@@ -106,7 +107,7 @@
             // 
             this.cbStudyBasis.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbStudyBasis.FormattingEnabled = true;
-            this.cbStudyBasis.Location = new System.Drawing.Point(109, 39);
+            this.cbStudyBasis.Location = new System.Drawing.Point(109, 40);
             this.cbStudyBasis.Name = "cbStudyBasis";
             this.cbStudyBasis.Size = new System.Drawing.Size(207, 21);
             this.cbStudyBasis.TabIndex = 1;
@@ -116,7 +117,7 @@
             // 
             this.cbStudyForm.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbStudyForm.FormattingEnabled = true;
-            this.cbStudyForm.Location = new System.Drawing.Point(109, 67);
+            this.cbStudyForm.Location = new System.Drawing.Point(109, 69);
             this.cbStudyForm.Name = "cbStudyForm";
             this.cbStudyForm.Size = new System.Drawing.Size(207, 21);
             this.cbStudyForm.TabIndex = 2;
@@ -126,7 +127,7 @@
             // 
             this.cbLicenseProgram.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbLicenseProgram.FormattingEnabled = true;
-            this.cbLicenseProgram.Location = new System.Drawing.Point(109, 94);
+            this.cbLicenseProgram.Location = new System.Drawing.Point(109, 97);
             this.cbLicenseProgram.Name = "cbLicenseProgram";
             this.cbLicenseProgram.Size = new System.Drawing.Size(207, 21);
             this.cbLicenseProgram.TabIndex = 3;
@@ -134,7 +135,7 @@
             // 
             // btnFillGrid
             // 
-            this.btnFillGrid.Location = new System.Drawing.Point(342, 65);
+            this.btnFillGrid.Location = new System.Drawing.Point(342, 73);
             this.btnFillGrid.Name = "btnFillGrid";
             this.btnFillGrid.Size = new System.Drawing.Size(189, 23);
             this.btnFillGrid.TabIndex = 4;
@@ -148,9 +149,9 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.dgvAbitList.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvAbitList.Location = new System.Drawing.Point(13, 122);
+            this.dgvAbitList.Location = new System.Drawing.Point(13, 131);
             this.dgvAbitList.Name = "dgvAbitList";
-            this.dgvAbitList.Size = new System.Drawing.Size(1075, 425);
+            this.dgvAbitList.Size = new System.Drawing.Size(1075, 416);
             this.dgvAbitList.TabIndex = 5;
             this.dgvAbitList.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvAbitList_CellContentDoubleClick);
             this.dgvAbitList.CellMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dgvAbitList_CellMouseClick);
@@ -158,19 +159,20 @@
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.cbZeroWave);
             this.groupBox2.Controls.Add(this.tbAbitsTop);
             this.groupBox2.Controls.Add(this.rbAbitsTop);
             this.groupBox2.Controls.Add(this.rbAbitsAll);
             this.groupBox2.Location = new System.Drawing.Point(331, 9);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(320, 51);
+            this.groupBox2.Size = new System.Drawing.Size(320, 62);
             this.groupBox2.TabIndex = 67;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Количество абитуриентов для отображения";
             // 
             // tbAbitsTop
             // 
-            this.tbAbitsTop.Location = new System.Drawing.Point(261, 21);
+            this.tbAbitsTop.Location = new System.Drawing.Point(261, 16);
             this.tbAbitsTop.Name = "tbAbitsTop";
             this.tbAbitsTop.Size = new System.Drawing.Size(53, 20);
             this.tbAbitsTop.TabIndex = 2;
@@ -179,7 +181,7 @@
             // rbAbitsTop
             // 
             this.rbAbitsTop.AutoSize = true;
-            this.rbAbitsTop.Location = new System.Drawing.Point(130, 22);
+            this.rbAbitsTop.Location = new System.Drawing.Point(130, 17);
             this.rbAbitsTop.Name = "rbAbitsTop";
             this.rbAbitsTop.Size = new System.Drawing.Size(128, 17);
             this.rbAbitsTop.TabIndex = 1;
@@ -190,7 +192,7 @@
             // rbAbitsAll
             // 
             this.rbAbitsAll.AutoSize = true;
-            this.rbAbitsAll.Location = new System.Drawing.Point(11, 22);
+            this.rbAbitsAll.Location = new System.Drawing.Point(11, 17);
             this.rbAbitsAll.Name = "rbAbitsAll";
             this.rbAbitsAll.Size = new System.Drawing.Size(113, 17);
             this.rbAbitsAll.TabIndex = 0;
@@ -210,7 +212,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(10, 42);
+            this.label2.Location = new System.Drawing.Point(10, 43);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(94, 13);
             this.label2.TabIndex = 69;
@@ -219,7 +221,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(10, 70);
+            this.label3.Location = new System.Drawing.Point(10, 72);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(93, 13);
             this.label3.TabIndex = 70;
@@ -228,7 +230,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(10, 94);
+            this.label4.Location = new System.Drawing.Point(10, 97);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(75, 13);
             this.label4.TabIndex = 71;
@@ -236,9 +238,9 @@
             // 
             // btnToExcel
             // 
-            this.btnToExcel.Location = new System.Drawing.Point(342, 92);
+            this.btnToExcel.Location = new System.Drawing.Point(342, 97);
             this.btnToExcel.Name = "btnToExcel";
-            this.btnToExcel.Size = new System.Drawing.Size(189, 23);
+            this.btnToExcel.Size = new System.Drawing.Size(189, 21);
             this.btnToExcel.TabIndex = 72;
             this.btnToExcel.Text = "Распечатать в Excel";
             this.btnToExcel.UseVisualStyleBackColor = true;
@@ -301,7 +303,7 @@
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(661, 90);
+            this.label8.Location = new System.Drawing.Point(661, 92);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(422, 13);
             this.label8.TabIndex = 79;
@@ -329,7 +331,7 @@
             // 
             this.label10.AutoSize = true;
             this.label10.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label10.Location = new System.Drawing.Point(661, 103);
+            this.label10.Location = new System.Drawing.Point(661, 106);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(413, 15);
             this.label10.TabIndex = 82;
@@ -337,9 +339,9 @@
             // 
             // btn_GreenList
             // 
-            this.btn_GreenList.Location = new System.Drawing.Point(537, 66);
+            this.btn_GreenList.Location = new System.Drawing.Point(537, 74);
             this.btn_GreenList.Name = "btn_GreenList";
-            this.btn_GreenList.Size = new System.Drawing.Size(108, 50);
+            this.btn_GreenList.Size = new System.Drawing.Size(108, 44);
             this.btn_GreenList.TabIndex = 83;
             this.btn_GreenList.Text = "GreenList";
             this.btn_GreenList.UseVisualStyleBackColor = true;
@@ -362,6 +364,17 @@
             this.labelThistle.Size = new System.Drawing.Size(374, 13);
             this.labelThistle.TabIndex = 84;
             this.labelThistle.Text = "У абитуриента нет необходимого ЕГЭ для образовательной программы";
+            // 
+            // cbZeroWave
+            // 
+            this.cbZeroWave.AutoSize = true;
+            this.cbZeroWave.Location = new System.Drawing.Point(11, 40);
+            this.cbZeroWave.Name = "cbZeroWave";
+            this.cbZeroWave.Size = new System.Drawing.Size(183, 17);
+            this.cbZeroWave.TabIndex = 86;
+            this.cbZeroWave.Text = "Выводить только зачисленных";
+            this.cbZeroWave.UseVisualStyleBackColor = true;
+            this.cbZeroWave.CheckedChanged += new System.EventHandler(this.cbZeroWave_CheckedChanged);
             // 
             // MyList
             // 
@@ -469,5 +482,6 @@
         private System.Windows.Forms.PictureBox pictureBoxThistle;
         private System.Windows.Forms.Label labelThistle;
         private System.Windows.Forms.ToolTip ttextEntryView;
+        private System.Windows.Forms.CheckBox cbZeroWave;
     }
 }

@@ -34,6 +34,11 @@ namespace Priem
             get { return ComboServ.GetComboIdInt(cbStudyLevel).Value; }
             set { ComboServ.SetComboId(cbStudyLevel, value); }
         }
+        private string GSGUCode
+        {
+            get { return tbGSGUCode.Text.Trim(); }
+            set { tbGSGUCode.Text = value; }
+        }
         public CardLicenseProgram(string id) : base(id)
         {
             InitializeComponent();
@@ -70,6 +75,7 @@ namespace Priem
                         EntityNameEng = LP.NameEng;
                         Code = LP.Code;
                         StudyLevelId = LP.StudyLevelId;
+                        GSGUCode = LP.GSGUCode;
                     }
                 }
             }
@@ -77,7 +83,7 @@ namespace Priem
 
         protected override void InsertRec(PriemEntities context, System.Data.Objects.ObjectParameter idParam)
         {
-            context.SP_LicenseProgram_Insert(EntityName, EntityNameEng, Code, StudyLevelId, idParam);
+            context.SP_LicenseProgram_Insert(EntityName, EntityNameEng, Code, StudyLevelId, GSGUCode, idParam);
             int iVal = (int)idParam.Value;
             string query = "INSERT INTO SP_LicenseProgram (Id, Name, NameEng, Code, StudyLevelId) VALUES (@Id, @Name, @NameEng, @Code, @StudyLevelId)";
             SortedList<string, object> slParams = new SortedList<string, object>();
@@ -91,7 +97,7 @@ namespace Priem
 
         protected override void UpdateRec(PriemEntities context, int id)
         {
-            context.SP_LicenseProgram_Update(EntityName, EntityNameEng, Code, StudyLevelId, id);
+            context.SP_LicenseProgram_Update(EntityName, EntityNameEng, Code, StudyLevelId, GSGUCode, id);
             string query = "UPDATE SP_LicenseProgram SET Name=@Name, NameEng=@NameEng, Code=@Code, StudyLevelId=@StudyLevelId WHERE Id=@Id";
             SortedList<string, object> slParams = new SortedList<string, object>();
             slParams.Add("@Id", id);

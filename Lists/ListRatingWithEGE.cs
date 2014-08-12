@@ -281,10 +281,10 @@ FROM ed.Abiturient AS extAbit
 INNER JOIN ed.extEntry ON extEntry.Id = extAbit.EntryId
 INNER JOIN ed.extPerson ON extPerson.Id = extAbit.PersonId
 INNER JOIN ed.extAbitMarksSum ON extAbit.Id = extAbitMarksSum.Id
-INNER JOIN ed._FirstWaveGreen ON extAbit.Id = _FirstWaveGreen.AbiturientId
+/*INNER JOIN ed._FirstWaveGreen ON extAbit.Id = _FirstWaveGreen.AbiturientId*/
 INNER JOIN ed._FirstWave FW ON FW.AbiturientId = extAbit.Id
 ";
-                string where = @" WHERE extEntry.Id = @EntryId ";
+                string where = @" WHERE extEntry.Id = @EntryId AND extAbit.BackDoc = 0 ";
                 string orderby = " ORDER BY FW.SortNum";
 
                 DataTable tbl = MainClass.Bdc.GetDataSet(query + where + orderby, new SortedList<string, object>() { { "@EntryId", EntryId } }).Tables[0];

@@ -36,6 +36,8 @@
             this.label3 = new System.Windows.Forms.Label();
             this.cbStudyLevel = new System.Windows.Forms.ComboBox();
             this.label4 = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
+            this.tbGSGUCode = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.epError)).BeginInit();
             this.SuspendLayout();
             // 
@@ -119,11 +121,29 @@
             this.label4.TabIndex = 32;
             this.label4.Text = "Уровень";
             // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(259, 67);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(80, 13);
+            this.label5.TabIndex = 34;
+            this.label5.Text = "Номер в ГЗГУ";
+            // 
+            // tbGSGUCode
+            // 
+            this.tbGSGUCode.Location = new System.Drawing.Point(345, 64);
+            this.tbGSGUCode.Name = "tbGSGUCode";
+            this.tbGSGUCode.Size = new System.Drawing.Size(78, 20);
+            this.tbGSGUCode.TabIndex = 33;
+            // 
             // CardLicenseProgram
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(450, 167);
+            this.Controls.Add(this.label5);
+            this.Controls.Add(this.tbGSGUCode);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.cbStudyLevel);
             this.Controls.Add(this.label3);
@@ -145,6 +165,8 @@
             this.Controls.SetChildIndex(this.label3, 0);
             this.Controls.SetChildIndex(this.cbStudyLevel, 0);
             this.Controls.SetChildIndex(this.label4, 0);
+            this.Controls.SetChildIndex(this.tbGSGUCode, 0);
+            this.Controls.SetChildIndex(this.label5, 0);
             ((System.ComponentModel.ISupportInitialize)(this.epError)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -161,5 +183,7 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.ComboBox cbStudyLevel;
         private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.TextBox tbGSGUCode;
     }
 }

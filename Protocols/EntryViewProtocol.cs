@@ -106,20 +106,21 @@ namespace Priem
             if (_licenseProgramId != null)
                 sFilter += " AND ed.qAbiturient.LicenseProgramId = " + _licenseProgramId;
                         
-            if (_isSecond.HasValue)           
+            if (_isSecond.HasValue)
                 sFilter += " AND ed.qAbiturient.IsSecond = " + QueryServ.StringParseFromBool(_isSecond.Value);
             if (_isReduced.HasValue)
                 sFilter += " AND ed.qAbiturient.IsReduced = " + QueryServ.StringParseFromBool(_isReduced.Value);
             if (_isParallel.HasValue)
                 sFilter += " AND ed.qAbiturient.IsParallel = " + QueryServ.StringParseFromBool(_isParallel.Value);
 
-            //обработали слушатель           
+            //обработали слушатель
             if (_isListener.HasValue)
                 sFilter += " AND ed.qAbiturient.IsListener = " + QueryServ.StringParseFromBool(_isListener.Value);
 
             sFilter += " AND ed.qAbiturient.BackDoc = 0 ";
 
-            sFilter += string.Format(" AND ed.qAbiturient.PersonId NOT IN (SELECT PersonId FROM ed.extEntryView WHERE StudyLevelGroupId = {0} AND StudyBasisId = 1)", MainClass.studyLevelGroupId);
+            if (_studyBasisId == 1)
+                sFilter += string.Format(" AND ed.qAbiturient.PersonId NOT IN (SELECT PersonId FROM ed.extEntryView WHERE StudyLevelGroupId = {0} AND StudyBasisId = 1)", MainClass.studyLevelGroupId);
 
             sFilter += "AND ((ed.qAbiturient.IsListener = 0 AND ed.qAbiturient.IsSecond = 0 AND ed.qAbiturient.IsReduced = 0 AND ed.qAbiturient.IsParallel = 0 AND EXISTS (SELECT * FROM ed.Abiturient AB WHERE AB.HasOriginals > 0 AND AB.PersonId = qAbiturient.PersonId)) OR ed.qAbiturient.IsListener = 1 OR ed.qAbiturient.IsSecond = 1 OR ed.qAbiturient.IsReduced = 1 OR ed.qAbiturient.IsParallel = 1 OR ed.qAbiturient.IsPaid = 1)";
       
@@ -310,7 +311,7 @@ namespace Priem
                     " FROM ed.qAbiturient INNER JOIN ed.extPerson ON ed.qAbiturient.PErsonId =  ed.extPerson.Id " +
                     " INNER JOIN ed.extEnableProtocol ON ed.qAbiturient.Id=ed.extEnableProtocol.AbiturientId " +
                     " INNER JOIN ed._FirstWave AS _FirstWave ON ed.qAbiturient.Id = _FirstWave.AbiturientId " +
-                    ((MainClass.dbType == PriemType.Priem) ? " INNER JOIN ed._FirstWaveGreen ON qAbiturient.Id= _FirstWaveGreen.AbiturientId " : "") +
+                    //((MainClass.dbType == PriemType.Priem) ? " INNER JOIN ed._FirstWaveGreen ON qAbiturient.Id= _FirstWaveGreen.AbiturientId " : "") +
                     " LEFT JOIN ed.extAbitMarksSum ON qAbiturient.Id= extAbitMarksSum.Id " +
                     " LEFT JOIN ed.Competition ON Competition.Id = qAbiturient.CompetitionId ", kcRest);
 
@@ -320,7 +321,7 @@ namespace Priem
                 sFilter += " AND qAbiturient.ObrazProgramId = " + obProg;
                 sFilter += string.IsNullOrEmpty(spec) ? " AND qAbiturient.ProfileId IS NULL " : " AND qAbiturient.ProfileId='" + spec + "'";
 
-                if (MainClass.dbType == PriemType.PriemMag && _studyBasisId == 1)
+                if (_studyBasisId == 1)
                     sFilter += "AND (qAbiturient.Id IN (SELECT AbiturientId FROM ed._FirstWaveGreen) OR qAbiturient.Id IN (SELECT AbiturientId FROM ed._FirstWaveYellow))";
 
                 string orderBy = " ORDER BY SortNum";

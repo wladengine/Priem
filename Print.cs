@@ -5399,7 +5399,7 @@ namespace Priem
                         else
                             wd.InsertAutoTextInEnd("выписка", true);
 
-                        wd.GetLastFields(15);
+                        wd.GetLastFields(11);
                         td = wd.Tables[counter];
 
                         wd.SetFields("Граждан", isRus ? "граждан РФ" : "иностранных граждан");

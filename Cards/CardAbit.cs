@@ -380,10 +380,23 @@ namespace Priem
 
         void bw_whoBackDoc_DoWork(object sender, DoWorkEventArgs e)
         {
-            Guid _Id = (Guid)e.Argument;
-            using (PriemEntities context = new PriemEntities())
+            if (e.Argument == null)
             {
-                e.Result = context.qAbiturient_WhoSetBackDoc.Where(x => x.Id == GuidId).FirstOrDefault();
+                e.Result = new qAbiturient_WhoSetBackDoc();
+                return;
+            }
+            
+            try
+            {
+                Guid _Id = (Guid)e.Argument;
+                using (PriemEntities context = new PriemEntities())
+                {
+                    e.Result = context.qAbiturient_WhoSetBackDoc.Where(x => x.Id == GuidId).FirstOrDefault();
+                }
+            }
+            catch
+            {
+                e.Result = new qAbiturient_WhoSetBackDoc();
             }
         }
         void bw_whoBackDoc_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
@@ -1660,14 +1673,15 @@ namespace Priem
                     Print.PrintStikerOne(AbitId, chbPrint.Checked);
                     break;
                 case 2:
-                    Print.PrintStikerAll(_personId, AbitId, chbPrint.Checked);
-                    break;
-                case 3:
+                    //Print.PrintStikerAll(_personId, AbitId, chbPrint.Checked);
+                    //break;
                     Print.PrintSprav(AbitId, chbPrint.Checked);
                     break;
-                case 4:
+                case 3:
                     PrintExamList();
                     break;
+                //case 4:
+                    
             }
         }
 

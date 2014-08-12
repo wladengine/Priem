@@ -359,7 +359,8 @@
       [extEntryView].[SignerName] AS [SignerName], 
       [extEntryView].[SignerPosition] AS [SignerPosition], 
       [extEntryView].[EntryId] AS [EntryId], 
-      [extEntryView].[ProtocolHistoryId] AS [ProtocolHistoryId]
+      [extEntryView].[ProtocolHistoryId] AS [ProtocolHistoryId], 
+      [extEntryView].[PersonId] AS [PersonId]
       FROM [ed].[extEntryView] AS [extEntryView]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="extEntryView_ForDisEntered" EntityType="Priem2012Model.Store.extEntryView_ForDisEntered" store:Type="Views" store:Schema="ed" store:Name="extEntryView_ForDisEntered">
@@ -2383,6 +2384,7 @@
           <Property Name="AggregateGroupId" Type="int" Nullable="false" />
           <Property Name="IsOpen" Type="bit" Nullable="false" />
           <Property Name="Holder" Type="nvarchar" MaxLength="100" />
+          <Property Name="GSGUCode" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="SP_ObrazProgram">
           <Key>
@@ -2580,9 +2582,6 @@
           <Property Name="TotalCount" Type="int" />
         </EntityType>
         <!--Errors Found During Generation:
-      warning 6002: The table/view 'Priem.ed.extCompetitiveGroup' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.
-      -->
-        <!--Errors Found During Generation:
       warning 6002: The table/view 'Priem.ed.extDisEntryView' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.
       -->
         <EntityType Name="extDisEntryView">
@@ -2770,6 +2769,7 @@
             <PropertyRef Name="ProtocolTypeName" />
             <PropertyRef Name="EntryId" />
             <PropertyRef Name="ProtocolHistoryId" />
+            <PropertyRef Name="PersonId" />
           </Key>
           <Property Name="Id" Type="uniqueidentifier" Nullable="false" />
           <Property Name="AbiturientId" Type="uniqueidentifier" Nullable="false" />
@@ -2800,6 +2800,7 @@
           <Property Name="SignerPosition" Type="nvarchar" MaxLength="100" />
           <Property Name="EntryId" Type="uniqueidentifier" Nullable="false" />
           <Property Name="ProtocolHistoryId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="PersonId" Type="uniqueidentifier" Nullable="false" />
         </EntityType>
         <!--Errors Found During Generation:
       warning 6002: The table/view 'Priem.ed.extEntryView_ForDisEntered' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.
@@ -3267,9 +3268,6 @@
           <Property Name="ProtocolHistoryId" Type="uniqueidentifier" Nullable="false" />
         </EntityType>
         <!--Errors Found During Generation:
-      warning 6002: The table/view 'Priem.ed.hlpAbitIsPaid' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.
-      -->
-        <!--Errors Found During Generation:
       warning 6002: The table/view 'Priem.ed.hlpAbiturientActionLog' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.
       -->
         <EntityType Name="hlpAbiturientActionLog">
@@ -3692,9 +3690,6 @@
           <Property Name="CompetitiveGroupId" Type="uniqueidentifier" Nullable="false" />
           <Property Name="CompetitiveGroupName" Type="nvarchar" MaxLength="250" />
         </EntityType>
-        <!--Errors Found During Generation:
-      warning 6002: The table/view 'Priem.ed.qExamPackMark' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.
-      -->
         <!--Errors Found During Generation:
       warning 6002: The table/view 'Priem.ed.qFaculty' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.
       -->
@@ -5988,6 +5983,7 @@
           <Parameter Name="NameEng" Type="nvarchar" Mode="In" />
           <Parameter Name="Code" Type="nvarchar" Mode="In" />
           <Parameter Name="StudyLevelId" Type="int" Mode="In" />
+          <Parameter Name="GSGUCode" Type="nvarchar" Mode="In" />
           <Parameter Name="id" Type="int" Mode="InOut" />
         </Function>
         <Function Name="SP_LicenseProgram_Update" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="ed">
@@ -5995,6 +5991,7 @@
           <Parameter Name="NameEng" Type="nvarchar" Mode="In" />
           <Parameter Name="Code" Type="nvarchar" Mode="In" />
           <Parameter Name="StudyLevelId" Type="int" Mode="In" />
+          <Parameter Name="GSGUCode" Type="nvarchar" Mode="In" />
           <Parameter Name="id" Type="int" Mode="In" />
         </Function>
         <Function Name="SP_ObrazProgram_Delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="ed">
@@ -7326,6 +7323,7 @@
             <Parameter Name="NameEng" Mode="In" Type="String" />
             <Parameter Name="Code" Mode="In" Type="String" />
             <Parameter Name="StudyLevelId" Mode="In" Type="Int32" />
+            <Parameter Name="GSGUCode" Mode="In" Type="String" />
             <Parameter Name="id" Mode="InOut" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="SP_LicenseProgram_Update">
@@ -7333,6 +7331,7 @@
             <Parameter Name="NameEng" Mode="In" Type="String" />
             <Parameter Name="Code" Mode="In" Type="String" />
             <Parameter Name="StudyLevelId" Mode="In" Type="Int32" />
+            <Parameter Name="GSGUCode" Mode="In" Type="String" />
             <Parameter Name="id" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="SP_ObrazProgram_Delete">
@@ -9136,6 +9135,7 @@
             <PropertyRef Name="ProtocolTypeName" />
             <PropertyRef Name="EntryId" />
             <PropertyRef Name="ProtocolHistoryId" />
+            <PropertyRef Name="PersonId" />
           </Key>
           <Property Type="Guid" Name="Id" Nullable="false" />
           <Property Type="Guid" Name="AbiturientId" Nullable="false" />
@@ -9166,6 +9166,7 @@
           <Property Type="String" Name="SignerPosition" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Type="Guid" Name="EntryId" Nullable="false" />
           <Property Type="Guid" Name="ProtocolHistoryId" Nullable="false" />
+          <Property Type="Guid" Name="PersonId" Nullable="false" />
         </EntityType>
         <EntityType Name="extProtocol">
           <Key>
@@ -10146,6 +10147,7 @@
           <NavigationProperty Name="StudyLevel" Relationship="Priem2012Model.FK_SP_LicenseProgram_StudyLevel" FromRole="SP_LicenseProgram" ToRole="StudyLevel" />
           <NavigationProperty Name="SP_ObrazProgram" Relationship="Priem2012Model.FK_SP_ObrazProgram_SP_LicenseProgram" FromRole="SP_LicenseProgram" ToRole="SP_ObrazProgram" />
           <NavigationProperty Name="Entry" Relationship="Priem2012Model.FK_Entry_SP_LicenseProgram" FromRole="SP_LicenseProgram" ToRole="Entry" />
+          <Property Type="String" Name="GSGUCode" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="SP_ObrazProgram">
           <Key>
@@ -12025,6 +12027,7 @@
           <EntitySetMapping Name="extEntryView">
             <EntityTypeMapping TypeName="Priem2012Model.extEntryView">
               <MappingFragment StoreEntitySet="extEntryView">
+                <ScalarProperty Name="PersonId" ColumnName="PersonId" />
                 <ScalarProperty Name="ProtocolHistoryId" ColumnName="ProtocolHistoryId" />
                 <ScalarProperty Name="EntryId" ColumnName="EntryId" />
                 <ScalarProperty Name="SignerPosition" ColumnName="SignerPosition" />
@@ -12742,6 +12745,7 @@
           <EntitySetMapping Name="SP_LicenseProgram">
             <EntityTypeMapping TypeName="Priem2012Model.SP_LicenseProgram">
               <MappingFragment StoreEntitySet="SP_LicenseProgram">
+                <ScalarProperty Name="GSGUCode" ColumnName="GSGUCode" />
                 <ScalarProperty Name="Holder" ColumnName="Holder" />
                 <ScalarProperty Name="IsOpen" ColumnName="IsOpen" />
                 <ScalarProperty Name="AggregateGroupId" ColumnName="AggregateGroupId" />

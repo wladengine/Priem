@@ -927,6 +927,12 @@
     <Compile Include="Statistics\RegionFacultyAbitCountStatistics.Designer.cs">
       <DependentUpon>RegionFacultyAbitCountStatistics.cs</DependentUpon>
     </Compile>
+    <Compile Include="Statistics\StatFormGSGU.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Statistics\StatFormGSGU.Designer.cs">
+      <DependentUpon>StatFormGSGU.cs</DependentUpon>
+    </Compile>
     <Compile Include="Statistics\Watch.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -1308,6 +1314,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Statistics\RegionFacultyAbitCountStatistics.resx">
       <DependentUpon>RegionFacultyAbitCountStatistics.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Statistics\StatFormGSGU.resx">
+      <DependentUpon>StatFormGSGU.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Statistics\Watch.resx">
       <DependentUpon>Watch.cs</DependentUpon>

@@ -42,7 +42,7 @@ namespace Priem
             _queryBody = @"SELECT DISTINCT ed.qAbiturient.Id as Id, ed.qAbiturient.RegNum as Рег_Номер, 
                     ed.extPerson.PersonNum as 'Ид. номер', ed.extPerson.FIO as ФИО, 
                     ed.extAbitMarksSum.TotalSum as 'Сумма баллов', ed.extAbitMarksSum.TotalCount as 'Кол-во оценок', 
-                    case when ed.qAbiturient.HasOriginals>0 then 'Да' else 'Нет' end as 'Подлинники документов', 
+                    case when EXISTS (SELECT * FROM ed.Abiturient AB WHERE AB.HasOriginals>0 AND AB.PersonId = qAbiturient.PersonId AND AB.BackDoc = 0) then 'Да' else 'Нет' end as 'Подлинники документов', 
                     ed.qAbiturient.Coefficient as 'Рейтинговый коэффициент', 
                     ed.Competition.Name as Конкурс, ed.hlpAbiturientProf.Prof AS 'Проф. экзамен', 
                     ed.hlpAbiturientProfAdd.ProfAdd AS 'Доп. экзамен',

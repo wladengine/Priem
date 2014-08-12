@@ -557,12 +557,16 @@ namespace Priem
         {
             using (PriemEntities context = new PriemEntities())
             {
-                Guid gId = ((dynamic)(e.Argument)).GuidId;
+                try
+                {
+                    Guid gId = ((dynamic)(e.Argument)).GuidId;
 
-                e.Result = (from orig in context.qAbiturient_WhoSetHasOriginals
-                            join Abit in context.Abiturient on orig.Id equals Abit.Id
-                            where orig.PersonId == GuidId && !Abit.BackDoc
-                            select orig).FirstOrDefault();
+                    e.Result = (from orig in context.qAbiturient_WhoSetHasOriginals
+                                join Abit in context.Abiturient on orig.Id equals Abit.Id
+                                where orig.PersonId == GuidId && !Abit.BackDoc
+                                select orig).FirstOrDefault();
+                }
+                catch { e.Result = new qAbiturient_WhoSetHasOriginals(); }
             }
         }
 

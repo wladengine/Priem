@@ -4766,6 +4766,9 @@ namespace Priem
                 string formId;
                 string facDat;
 
+                string _docNum="";
+                string _docDate="";
+
                 bool? isSec;// = (bool?)MainClass.Bdc.GetValue("SELECT IsSecond FROM ed.Protocol WHERE Protocol.Id= @protocolId", slDel);
                 bool? isParallel;// = (bool?)MainClass.Bdc.GetValue("SELECT IsParallel FROM ed.Protocol WHERE Protocol.Id= @protocolId", slDel);
                 bool? isReduced;// = (bool?)MainClass.Bdc.GetValue("SELECT IsReduced FROM ed.Protocol WHERE Protocol.Id= @protocolId", slDel);
@@ -4906,11 +4909,15 @@ namespace Priem
                         basis2 = "обучения за счет бюджетных ассигнований федерального бюджета";
                         dogovorDoc = "";
                         educDoc = ", оригиналы документа установленного образца об образовании";
+                        _docDate = "31.07.2014";
+                        _docNum = "35";
                         break;
                     case "2":
                         basis2 = "обучения по договорам об образовании";
                         dogovorDoc = ", договоры об образовании";
                         educDoc = "";
+                        _docDate = "13.08.2014";
+                        _docNum = "41";
                         break;
                 }
 
@@ -4922,6 +4929,11 @@ namespace Priem
                 wd.SetFields("БакСпецРод", bakspecRod);
                 wd.SetFields("Слушатель", list);
                 wd.SetFields("Сокращ", sec);
+
+                wd.SetFields("ДатаПриказа", _docDate);
+                wd.SetFields("НомерПриказа", _docNum);
+
+
                 
                 wd.SetFields("DogovorDoc", dogovorDoc);
                 wd.SetFields("EducDoc", educDoc);

@@ -105,6 +105,7 @@ using System.Xml.Serialization;
 [assembly: EdmRelationshipAttribute("Priem2012Model", "FK_Mark_EgeCertificate", "EgeCertificate", System.Data.Metadata.Edm.RelationshipMultiplicity.ZeroOrOne, typeof(Priem.EgeCertificate), "Mark", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(Priem.Mark), true)]
 [assembly: EdmRelationshipAttribute("Priem2012Model", "FK_OlympSubjectToExam_Exam", "Exam", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(Priem.Exam), "OlympSubjectToExam", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(Priem.OlympSubjectToExam), true)]
 [assembly: EdmRelationshipAttribute("Priem2012Model", "FK_OlympSubjectToExam_OlympSubject", "OlympSubject", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(Priem.OlympSubject), "OlympSubjectToExam", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(Priem.OlympSubjectToExam), true)]
+[assembly: EdmRelationshipAttribute("Priem2012Model", "FK_OrderNumbers_Signer", "Signer", System.Data.Metadata.Edm.RelationshipMultiplicity.ZeroOrOne, typeof(Priem.Signer), "OrderNumbers", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(Priem.OrderNumbers), true)]
 
 #endregion
 
@@ -2011,6 +2012,22 @@ namespace Priem
             }
         }
         private ObjectSet<qAbiturient_WhoSetIsPaid> _qAbiturient_WhoSetIsPaid;
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        public ObjectSet<Signer> Signer
+        {
+            get
+            {
+                if ((_Signer == null))
+                {
+                    _Signer = base.CreateObjectSet<Signer>("Signer");
+                }
+                return _Signer;
+            }
+        }
+        private ObjectSet<Signer> _Signer;
 
         #endregion
 
@@ -2942,6 +2959,14 @@ namespace Priem
         public void AddToqAbiturient_WhoSetIsPaid(qAbiturient_WhoSetIsPaid qAbiturient_WhoSetIsPaid)
         {
             base.AddObject("qAbiturient_WhoSetIsPaid", qAbiturient_WhoSetIsPaid);
+        }
+    
+        /// <summary>
+        /// Deprecated Method for adding a new object to the Signer EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// </summary>
+        public void AddToSigner(Signer signer)
+        {
+            base.AddObject("Signer", signer);
         }
 
         #endregion
@@ -10084,7 +10109,10 @@ namespace Priem
         /// <param name="ordernum">No Metadata Documentation available.</param>
         /// <param name="orderdateFor">No Metadata Documentation available.</param>
         /// <param name="ordernumFor">No Metadata Documentation available.</param>
-        public int OrderNumbers_Insert(Nullable<global::System.Guid> protocolId, Nullable<global::System.DateTime> orderdate, global::System.String ordernum, Nullable<global::System.DateTime> orderdateFor, global::System.String ordernumFor)
+        /// <param name="signerId">No Metadata Documentation available.</param>
+        /// <param name="comissionDate">No Metadata Documentation available.</param>
+        /// <param name="comissionNumber">No Metadata Documentation available.</param>
+        public int OrderNumbers_Insert(Nullable<global::System.Guid> protocolId, Nullable<global::System.DateTime> orderdate, global::System.String ordernum, Nullable<global::System.DateTime> orderdateFor, global::System.String ordernumFor, Nullable<global::System.Int32> signerId, Nullable<global::System.DateTime> comissionDate, global::System.String comissionNumber)
         {
             ObjectParameter protocolIdParameter;
             if (protocolId.HasValue)
@@ -10136,7 +10164,37 @@ namespace Priem
                 ordernumForParameter = new ObjectParameter("ordernumFor", typeof(global::System.String));
             }
     
-            return base.ExecuteFunction("OrderNumbers_Insert", protocolIdParameter, orderdateParameter, ordernumParameter, orderdateForParameter, ordernumForParameter);
+            ObjectParameter signerIdParameter;
+            if (signerId.HasValue)
+            {
+                signerIdParameter = new ObjectParameter("SignerId", signerId);
+            }
+            else
+            {
+                signerIdParameter = new ObjectParameter("SignerId", typeof(global::System.Int32));
+            }
+    
+            ObjectParameter comissionDateParameter;
+            if (comissionDate.HasValue)
+            {
+                comissionDateParameter = new ObjectParameter("ComissionDate", comissionDate);
+            }
+            else
+            {
+                comissionDateParameter = new ObjectParameter("ComissionDate", typeof(global::System.DateTime));
+            }
+    
+            ObjectParameter comissionNumberParameter;
+            if (comissionNumber != null)
+            {
+                comissionNumberParameter = new ObjectParameter("ComissionNumber", comissionNumber);
+            }
+            else
+            {
+                comissionNumberParameter = new ObjectParameter("ComissionNumber", typeof(global::System.String));
+            }
+    
+            return base.ExecuteFunction("OrderNumbers_Insert", protocolIdParameter, orderdateParameter, ordernumParameter, orderdateForParameter, ordernumForParameter, signerIdParameter, comissionDateParameter, comissionNumberParameter);
         }
     
         /// <summary>
@@ -10147,7 +10205,10 @@ namespace Priem
         /// <param name="ordernum">No Metadata Documentation available.</param>
         /// <param name="orderdateFor">No Metadata Documentation available.</param>
         /// <param name="ordernumFor">No Metadata Documentation available.</param>
-        public int OrderNumbers_Update(Nullable<global::System.Guid> protocolId, Nullable<global::System.DateTime> orderdate, global::System.String ordernum, Nullable<global::System.DateTime> orderdateFor, global::System.String ordernumFor)
+        /// <param name="signerId">No Metadata Documentation available.</param>
+        /// <param name="comissionDate">No Metadata Documentation available.</param>
+        /// <param name="comissionNumber">No Metadata Documentation available.</param>
+        public int OrderNumbers_Update(Nullable<global::System.Guid> protocolId, Nullable<global::System.DateTime> orderdate, global::System.String ordernum, Nullable<global::System.DateTime> orderdateFor, global::System.String ordernumFor, Nullable<global::System.Int32> signerId, Nullable<global::System.DateTime> comissionDate, global::System.String comissionNumber)
         {
             ObjectParameter protocolIdParameter;
             if (protocolId.HasValue)
@@ -10199,7 +10260,37 @@ namespace Priem
                 ordernumForParameter = new ObjectParameter("ordernumFor", typeof(global::System.String));
             }
     
-            return base.ExecuteFunction("OrderNumbers_Update", protocolIdParameter, orderdateParameter, ordernumParameter, orderdateForParameter, ordernumForParameter);
+            ObjectParameter signerIdParameter;
+            if (signerId.HasValue)
+            {
+                signerIdParameter = new ObjectParameter("SignerId", signerId);
+            }
+            else
+            {
+                signerIdParameter = new ObjectParameter("SignerId", typeof(global::System.Int32));
+            }
+    
+            ObjectParameter comissionDateParameter;
+            if (comissionDate.HasValue)
+            {
+                comissionDateParameter = new ObjectParameter("ComissionDate", comissionDate);
+            }
+            else
+            {
+                comissionDateParameter = new ObjectParameter("ComissionDate", typeof(global::System.DateTime));
+            }
+    
+            ObjectParameter comissionNumberParameter;
+            if (comissionNumber != null)
+            {
+                comissionNumberParameter = new ObjectParameter("ComissionNumber", comissionNumber);
+            }
+            else
+            {
+                comissionNumberParameter = new ObjectParameter("ComissionNumber", typeof(global::System.String));
+            }
+    
+            return base.ExecuteFunction("OrderNumbers_Update", protocolIdParameter, orderdateParameter, ordernumParameter, orderdateForParameter, ordernumForParameter, signerIdParameter, comissionDateParameter, comissionNumberParameter);
         }
     
         /// <summary>
@@ -26335,7 +26426,11 @@ namespace Priem
         /// <param name="entryId">Initial value of the EntryId property.</param>
         /// <param name="protocolHistoryId">Initial value of the ProtocolHistoryId property.</param>
         /// <param name="personId">Initial value of the PersonId property.</param>
-        public static extEntryView CreateextEntryView(global::System.Guid id, global::System.Guid abiturientId, global::System.Boolean excluded, global::System.Boolean isOld, global::System.String protocolTypeName, global::System.Guid entryId, global::System.Guid protocolHistoryId, global::System.Guid personId)
+        /// <param name="isCrimea">Initial value of the IsCrimea property.</param>
+        /// <param name="isQuota">Initial value of the IsQuota property.</param>
+        /// <param name="isCel">Initial value of the IsCel property.</param>
+        /// <param name="isBE">Initial value of the IsBE property.</param>
+        public static extEntryView CreateextEntryView(global::System.Guid id, global::System.Guid abiturientId, global::System.Boolean excluded, global::System.Boolean isOld, global::System.String protocolTypeName, global::System.Guid entryId, global::System.Guid protocolHistoryId, global::System.Guid personId, global::System.Int32 isCrimea, global::System.Int32 isQuota, global::System.Int32 isCel, global::System.Int32 isBE)
         {
             extEntryView extEntryView = new extEntryView();
             extEntryView.Id = id;
@@ -26346,6 +26441,10 @@ namespace Priem
             extEntryView.EntryId = entryId;
             extEntryView.ProtocolHistoryId = protocolHistoryId;
             extEntryView.PersonId = personId;
+            extEntryView.IsCrimea = isCrimea;
+            extEntryView.IsQuota = isQuota;
+            extEntryView.IsCel = isCel;
+            extEntryView.IsBE = isBE;
             return extEntryView;
         }
 
@@ -27096,6 +27195,114 @@ namespace Priem
         private global::System.Guid _PersonId;
         partial void OnPersonIdChanging(global::System.Guid value);
         partial void OnPersonIdChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 IsCrimea
+        {
+            get
+            {
+                return _IsCrimea;
+            }
+            set
+            {
+                if (_IsCrimea != value)
+                {
+                    OnIsCrimeaChanging(value);
+                    ReportPropertyChanging("IsCrimea");
+                    _IsCrimea = StructuralObject.SetValidValue(value);
+                    ReportPropertyChanged("IsCrimea");
+                    OnIsCrimeaChanged();
+                }
+            }
+        }
+        private global::System.Int32 _IsCrimea;
+        partial void OnIsCrimeaChanging(global::System.Int32 value);
+        partial void OnIsCrimeaChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 IsQuota
+        {
+            get
+            {
+                return _IsQuota;
+            }
+            set
+            {
+                if (_IsQuota != value)
+                {
+                    OnIsQuotaChanging(value);
+                    ReportPropertyChanging("IsQuota");
+                    _IsQuota = StructuralObject.SetValidValue(value);
+                    ReportPropertyChanged("IsQuota");
+                    OnIsQuotaChanged();
+                }
+            }
+        }
+        private global::System.Int32 _IsQuota;
+        partial void OnIsQuotaChanging(global::System.Int32 value);
+        partial void OnIsQuotaChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 IsCel
+        {
+            get
+            {
+                return _IsCel;
+            }
+            set
+            {
+                if (_IsCel != value)
+                {
+                    OnIsCelChanging(value);
+                    ReportPropertyChanging("IsCel");
+                    _IsCel = StructuralObject.SetValidValue(value);
+                    ReportPropertyChanged("IsCel");
+                    OnIsCelChanged();
+                }
+            }
+        }
+        private global::System.Int32 _IsCel;
+        partial void OnIsCelChanging(global::System.Int32 value);
+        partial void OnIsCelChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 IsBE
+        {
+            get
+            {
+                return _IsBE;
+            }
+            set
+            {
+                if (_IsBE != value)
+                {
+                    OnIsBEChanging(value);
+                    ReportPropertyChanging("IsBE");
+                    _IsBE = StructuralObject.SetValidValue(value);
+                    ReportPropertyChanged("IsBE");
+                    OnIsBEChanged();
+                }
+            }
+        }
+        private global::System.Int32 _IsBE;
+        partial void OnIsBEChanging(global::System.Int32 value);
+        partial void OnIsBEChanged();
 
         #endregion
 
@@ -40935,10 +41142,100 @@ namespace Priem
         private Nullable<global::System.Int32> _SignerId;
         partial void OnSignerIdChanging(Nullable<global::System.Int32> value);
         partial void OnSignerIdChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.DateTime> ComissionDate
+        {
+            get
+            {
+                return _ComissionDate;
+            }
+            set
+            {
+                OnComissionDateChanging(value);
+                ReportPropertyChanging("ComissionDate");
+                _ComissionDate = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("ComissionDate");
+                OnComissionDateChanged();
+            }
+        }
+        private Nullable<global::System.DateTime> _ComissionDate;
+        partial void OnComissionDateChanging(Nullable<global::System.DateTime> value);
+        partial void OnComissionDateChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String ComissionNumber
+        {
+            get
+            {
+                return _ComissionNumber;
+            }
+            set
+            {
+                OnComissionNumberChanging(value);
+                ReportPropertyChanging("ComissionNumber");
+                _ComissionNumber = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("ComissionNumber");
+                OnComissionNumberChanged();
+            }
+        }
+        private global::System.String _ComissionNumber;
+        partial void OnComissionNumberChanging(global::System.String value);
+        partial void OnComissionNumberChanged();
 
         #endregion
 
     
+        #region Navigation Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("Priem2012Model", "FK_OrderNumbers_Signer", "Signer")]
+        public Signer Signer
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<Signer>("Priem2012Model.FK_OrderNumbers_Signer", "Signer").Value;
+            }
+            set
+            {
+                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<Signer>("Priem2012Model.FK_OrderNumbers_Signer", "Signer").Value = value;
+            }
+        }
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [BrowsableAttribute(false)]
+        [DataMemberAttribute()]
+        public EntityReference<Signer> SignerReference
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<Signer>("Priem2012Model.FK_OrderNumbers_Signer", "Signer");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<Signer>("Priem2012Model.FK_OrderNumbers_Signer", "Signer", value);
+                }
+            }
+        }
+
+        #endregion
+
     }
     
     /// <summary>
@@ -55405,6 +55702,137 @@ namespace Priem
                 if ((value != null))
                 {
                     ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<Person_EducationInfo>("Priem2012Model.FK_Person_EducationInfo_SchoolType", "Person_EducationInfo", value);
+                }
+            }
+        }
+
+        #endregion
+
+    }
+    
+    /// <summary>
+    /// No Metadata Documentation available.
+    /// </summary>
+    [EdmEntityTypeAttribute(NamespaceName="Priem2012Model", Name="Signer")]
+    [Serializable()]
+    [DataContractAttribute(IsReference=true)]
+    public partial class Signer : EntityObject
+    {
+        #region Factory Method
+    
+        /// <summary>
+        /// Create a new Signer object.
+        /// </summary>
+        /// <param name="id">Initial value of the Id property.</param>
+        public static Signer CreateSigner(global::System.Int32 id)
+        {
+            Signer signer = new Signer();
+            signer.Id = id;
+            return signer;
+        }
+
+        #endregion
+
+        #region Primitive Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 Id
+        {
+            get
+            {
+                return _Id;
+            }
+            set
+            {
+                if (_Id != value)
+                {
+                    OnIdChanging(value);
+                    ReportPropertyChanging("Id");
+                    _Id = StructuralObject.SetValidValue(value);
+                    ReportPropertyChanged("Id");
+                    OnIdChanged();
+                }
+            }
+        }
+        private global::System.Int32 _Id;
+        partial void OnIdChanging(global::System.Int32 value);
+        partial void OnIdChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String Name
+        {
+            get
+            {
+                return _Name;
+            }
+            set
+            {
+                OnNameChanging(value);
+                ReportPropertyChanging("Name");
+                _Name = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("Name");
+                OnNameChanged();
+            }
+        }
+        private global::System.String _Name;
+        partial void OnNameChanging(global::System.String value);
+        partial void OnNameChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String Position
+        {
+            get
+            {
+                return _Position;
+            }
+            set
+            {
+                OnPositionChanging(value);
+                ReportPropertyChanging("Position");
+                _Position = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("Position");
+                OnPositionChanged();
+            }
+        }
+        private global::System.String _Position;
+        partial void OnPositionChanging(global::System.String value);
+        partial void OnPositionChanged();
+
+        #endregion
+
+    
+        #region Navigation Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("Priem2012Model", "FK_OrderNumbers_Signer", "OrderNumbers")]
+        public EntityCollection<OrderNumbers> OrderNumbers
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<OrderNumbers>("Priem2012Model.FK_OrderNumbers_Signer", "OrderNumbers");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<OrderNumbers>("Priem2012Model.FK_OrderNumbers_Signer", "OrderNumbers", value);
                 }
             }
         }

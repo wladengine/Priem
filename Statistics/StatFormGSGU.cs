@@ -17,6 +17,8 @@ namespace Priem
         public StatFormGSGU()
         {
             InitializeComponent();
+            this.MdiParent = MainClass.mainform;
+            FillCombos();
         }
 
         private int? StudyLevelId
@@ -116,9 +118,88 @@ namespace Priem
                     node = rwNode.AppendChild(doc.CreateNode(XmlNodeType.Element, "p2_4", ""));
                     node.InnerText = CountAbit_After2507.ToString();
 
-                    var ss = context.extEntryView.Where(x => x.LicenseProgramId == LP.LicenseProgramId && x.StudyFormId == LP.StudyFormId && x.StudyBasisId == LP.StudyBasisId);
+                    var EV = context.extEntryView.Where(x => x.LicenseProgramId == LP.LicenseProgramId && x.StudyFormId == LP.StudyFormId && x.StudyBasisId == LP.StudyBasisId && x.IsCrimea == 0);
+
+                    //зачисленных абитуриентов 31.07
+                    int cnt_31072014 = EV.Where(x => x.Date < new DateTime(2014, 8, 1)).Count();
+                    node = rwNode.AppendChild(doc.CreateNode(XmlNodeType.Element, "p3_1", ""));
+                    node.InnerText = cnt_31072014.ToString();
+
+                    //зачисленных абитуриентов 05.08
+                    int cnt_05082014 = EV.Where(x => x.Date < new DateTime(2014, 8, 6) && x.Date > new DateTime(2014, 8, 1)).Count();
+                    node = rwNode.AppendChild(doc.CreateNode(XmlNodeType.Element, "p3_2", ""));
+                    node.InnerText = cnt_05082014.ToString();
+
+                    //зачисленных абитуриентов 11.08
+                    int cnt_11082014 = EV.Where(x => x.Date < new DateTime(2014, 8, 12) && x.Date > new DateTime(2014, 8, 7)).Count();
+                    node = rwNode.AppendChild(doc.CreateNode(XmlNodeType.Element, "p3_3", ""));
+                    node.InnerText = cnt_11082014.ToString();
+
+                    //зачисленных абитуриентов после 11.08
+                    int cnt_after_11082014 = EV.Where(x => x.Date >= new DateTime(2014, 8, 12)).Count();
+                    node = rwNode.AppendChild(doc.CreateNode(XmlNodeType.Element, "p3_4", ""));
+                    node.InnerText = cnt_after_11082014.ToString();
+
+                    int cntCommonComp = EV.Where(x => x.IsCrimea == 0 && x.IsCel == 0 && x.IsQuota == 0 && x.IsBE == 0).Count();
+                    int cntQuotaComp = EV.Where(x => x.IsCrimea == 0 && x.IsCel == 0 && x.IsQuota == 1 && x.IsBE == 0).Count();
+                    int cntCelComp = EV.Where(x => x.IsCrimea == 0 && x.IsCel == 1 && x.IsQuota == 0 && x.IsBE == 0).Count();
+                    int cntBEComp = EV.Where(x => x.IsCrimea == 0 && x.IsCel == 0 && x.IsQuota == 0 && x.IsBE == 1).Count();
+                    int cntOlympLike100Balls = 
+                        (from exEV in context.extEntryView
+                        join mrk in context.Mark on exEV.AbiturientId equals mrk.AbiturientId
+                        where mrk.IsFromOlymp 
+                        && exEV.LicenseProgramId == LP.LicenseProgramId 
+                        && exEV.StudyFormId == LP.StudyFormId 
+                        && exEV.StudyBasisId == LP.StudyBasisId
+                        && exEV.IsCrimea == 0 && exEV.IsCel == 0 && exEV.IsQuota == 0 && exEV.IsBE == 0
+                        select exEV.AbiturientId).Count();
+
+                    //зачисленных абитуриентов по общему конкурсу (без учёта получивших 100 баллов за олимпиаду)
+                    int cnt_common_no_100_balls = cntCommonComp - cntOlympLike100Balls;
+                    node = rwNode.AppendChild(doc.CreateNode(XmlNodeType.Element, "p4_2", ""));
+                    node.InnerText = cnt_common_no_100_balls.ToString();
+
+                    //зачисленных абитуриентов по общему конкурсу, получивших 100 баллов за олимпиаду
+                    node = rwNode.AppendChild(doc.CreateNode(XmlNodeType.Element, "p4_3", ""));
+                    node.InnerText = cntOlympLike100Balls.ToString();
+
+                    //зачисленных абитуриентов по квоте в/к
+                    node = rwNode.AppendChild(doc.CreateNode(XmlNodeType.Element, "p4_4", ""));
+                    node.InnerText = cntQuotaComp.ToString();
+
+                    //зачисленных абитуриентов целевиков цел
+                    node = rwNode.AppendChild(doc.CreateNode(XmlNodeType.Element, "p4_5", ""));
+                    node.InnerText = cntCelComp.ToString();
+
+                    //зачисленных абитуриентов без экзаменов б/э (чемпионы Олимпийских игр (всегда = 0 для СПбГУ))
+                    node = rwNode.AppendChild(doc.CreateNode(XmlNodeType.Element, "p4_6", ""));
+                    node.InnerText = "0";
+
+                    //зачисленных абитуриентов без экзаменов б/э (всеросс. и междунар. олимпиады)
+                    int cntOlympVseross =
+                        (from exEV in context.extEntryView
+                         join mrk in context.Olympiads on exEV.AbiturientId equals mrk.AbiturientId
+                         where mrk.OlympTypeId <= 2 //всеросс и международные
+                         && exEV.LicenseProgramId == LP.LicenseProgramId
+                         && exEV.StudyFormId == LP.StudyFormId
+                         && exEV.StudyBasisId == LP.StudyBasisId
+                         && exEV.IsCrimea == 0 && exEV.IsCel == 0 && exEV.IsQuota == 0 && exEV.IsBE == 0
+                         select exEV.AbiturientId).Count();
+                    node = rwNode.AppendChild(doc.CreateNode(XmlNodeType.Element, "p4_7", ""));
+                    node.InnerText = cntOlympVseross.ToString();
+
+                    //зачисленных абитуриентов без экзаменов б/э (прочие олимпиады)
+                    node = rwNode.AppendChild(doc.CreateNode(XmlNodeType.Element, "p4_8", ""));
+                    node.InnerText = (cntBEComp - cntOlympVseross).ToString();
                 }
 
+                SaveFileDialog sfd = new SaveFileDialog();
+                sfd.Filter = "XML files|*.xml";
+                if (sfd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                {
+                    doc.Save(sfd.FileName);
+                }
+                
                 //var declaration = doc.CreateXmlDeclaration("1.0", "utf-8", "");
 
                 //retString = declaration.OuterXml + doc.InnerXml;

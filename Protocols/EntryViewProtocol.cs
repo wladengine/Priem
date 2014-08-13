@@ -119,6 +119,8 @@ namespace Priem
 
             sFilter += " AND ed.qAbiturient.BackDoc = 0 ";
 
+            sFilter += " AND ed.qAbiturient.Id NOT IN (SELECT AbiturientId FROM ed.extEntryView) ";
+
             if (_studyBasisId == 1)
                 sFilter += string.Format(" AND ed.qAbiturient.PersonId NOT IN (SELECT PersonId FROM ed.extEntryView WHERE StudyLevelGroupId = {0} AND StudyBasisId = 1)", MainClass.studyLevelGroupId);
 

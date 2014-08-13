@@ -251,6 +251,8 @@ namespace Priem
                     smiAbitFacultyIntesection.Visible = true;
                     smiRegionStat.Visible = true;
                     smiOlympStatistics.Visible = true;
+                    smiForm2.Visible = true;
+                    smiStatGSGU.Visible = true;
                 }
 
                 if (MainClass.IsSovetnik() || MainClass.IsSovetnikMain())
@@ -849,6 +851,11 @@ namespace Priem
         private void smiRatingWithEGE_Click(object sender, EventArgs e)
         {
             new ListRatingWithEGE().Show();
+        }
+
+        private void smiStatGSGU_Click(object sender, EventArgs e)
+        {
+            new StatFormGSGU().Show();
         }
     }
 }

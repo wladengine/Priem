@@ -77,23 +77,49 @@ namespace Priem
             get { return ComboServ.GetComboIdInt(cbFaculty); }
             set { ComboServ.SetComboId(cbFaculty, value); }
         }
-
         public int? LicenseProgramId
         {
             get { return ComboServ.GetComboIdInt(cbLicenseProgram); }
             set { ComboServ.SetComboId(cbLicenseProgram, value); }
         }
-
         public int? StudyBasisId
         {
             get { return ComboServ.GetComboIdInt(cbStudyBasis); }
             set { ComboServ.SetComboId(cbStudyBasis, value); }
         }
-
         public int? StudyFormId
         {
             get { return ComboServ.GetComboIdInt(cbStudyForm); }
             set { ComboServ.SetComboId(cbStudyForm, value); }
+        }
+
+        public int? SignerId
+        {
+            get { return ComboServ.GetComboIdInt(cbSigner); }
+            set { ComboServ.SetComboId(cbSigner, value); }
+        }
+        public string ComissionNumber
+        {
+            get { return tbComissionNumber.Text.Trim(); }
+            set { tbComissionNumber.Text = value; }
+        }
+        public DateTime? ComissionDate
+        {
+            get 
+            { 
+                return dtpComissionDate.Value.Date; 
+            }
+            set 
+            {
+                if (value.HasValue)
+                {
+                    try
+                    {
+                        dtpComissionDate.Value = value.Value;
+                    }
+                    catch { }
+                }
+            }
         }
 
         public bool IsSecond
@@ -101,19 +127,16 @@ namespace Priem
             get { return chbIsSecond.Checked; }
             set { chbIsSecond.Checked = value; }
         }
-
         public bool IsReduced
         {
             get { return chbIsReduced.Checked; }
             set { chbIsReduced.Checked = value; }
         }
-
         public bool IsParallel
         {
             get { return chbIsParallel.Checked; }
             set { chbIsParallel.Checked = value; }
         }
-
         public bool IsListener
         {
             get { return chbIsListener.Checked; }
@@ -131,6 +154,15 @@ namespace Priem
                 List<KeyValuePair<string, string>> lst = ent.ToList().Select(u => new KeyValuePair<string, string>(u.StudyFormId.ToString(), u.StudyFormName)).Distinct().ToList();
 
                 ComboServ.FillCombo(cbStudyForm, lst, false, false);
+            }
+        }
+
+        private void FillSigner()
+        {
+            using (PriemEntities context = new PriemEntities())
+            {
+                var lst = context.Signer.Select(x => new { x.Id, x.Name }).ToList().Select(x => new KeyValuePair<string, string>(x.Id.ToString(), x.Name)).ToList();
+                ComboServ.FillCombo(cbSigner, lst, false, false);
             }
         }
 
@@ -208,7 +240,7 @@ namespace Priem
 
         private void FillOrders(string protId)
         {
-            DataSet ds = _bdc.GetDataSet(string.Format(@"SELECT ed.OrderNumbers.OrderDateFor, ed.OrderNumbers.OrderNumFor, ed.OrderNumbers.OrderDate, ed.OrderNumbers.OrderNum 
+            DataSet ds = _bdc.GetDataSet(string.Format(@"SELECT ed.OrderNumbers.OrderDateFor, ed.OrderNumbers.OrderNumFor, ed.OrderNumbers.OrderDate, ed.OrderNumbers.OrderNum, SignerId, ComissionDate, ComissionNumber 
                                                         FROM ed.OrderNumbers WHERE ed.OrderNumbers.ProtocolId = '{0}'", protId));
                        
             if (ds.Tables[0].Rows.Count == 0)
@@ -225,15 +257,23 @@ namespace Priem
                     dtOrderDate.Value = DateTime.Parse(rw["OrderDate"].ToString());
                 if ((rw["OrderDateFor"].ToString()).Length > 0)
                     dtOrderDateFor.Value = DateTime.Parse(rw["OrderDateFor"].ToString());
+                if ((rw["ComissionDate"].ToString()).Length > 0)
+                    dtpComissionDate.Value = DateTime.Parse(rw["ComissionDate"].ToString());
+
+                int tmp = 0;
+                if (int.TryParse(rw["SignerId"].ToString(), out tmp))
+                    SignerId = tmp;
                 
                 tbOrderNum.Text = rw["OrderNum"].ToString();
                 tbOrderNumFor.Text = rw["OrderNumFor"].ToString();
+                tbComissionNumber.Text = rw["ComissionNumber"].ToString();
+
 
                 SetReadOnly();
             } 
         }
 
-        private void SetReadOnly()        
+        private void SetReadOnly()
         {
             dtOrderDate.Enabled = false;
             dtOrderDateFor.Enabled = false;
@@ -266,9 +306,9 @@ namespace Priem
                     Guid? protId = new Guid(dgvViews.CurrentRow.Cells["Id"].Value.ToString());
 
                     if (forUpdate)                   
-                        context.OrderNumbers_Update(protId, dtOrderDate.Value.Date, tbOrderNum.Text.Trim(), dtOrderDateFor.Value.Date, tbOrderNumFor.Text.Trim());                    
+                        context.OrderNumbers_Update(protId, dtOrderDate.Value.Date, tbOrderNum.Text.Trim(), dtOrderDateFor.Value.Date, tbOrderNumFor.Text.Trim(), SignerId, ComissionDate, ComissionNumber);                    
                     else
-                        context.OrderNumbers_Insert(protId, dtOrderDate.Value.Date, tbOrderNum.Text.Trim(), dtOrderDateFor.Value.Date, tbOrderNumFor.Text.Trim());
+                        context.OrderNumbers_Insert(protId, dtOrderDate.Value.Date, tbOrderNum.Text.Trim(), dtOrderDateFor.Value.Date, tbOrderNumFor.Text.Trim(), SignerId, ComissionDate, ComissionNumber);
                    
                     forUpdate = true;
                     SetReadOnly();
@@ -280,17 +320,14 @@ namespace Priem
         {
             UpdateDataGrid();
         }
-
         private void chbIsSecond_CheckedChanged(object sender, EventArgs e)
         {
             FillStudyForm();
         }
-
         private void chbIsReduced_CheckedChanged(object sender, EventArgs e)
         {
             FillStudyForm();
         }
-
         private void chbIsParallel_CheckedChanged(object sender, EventArgs e)
         {
             FillStudyForm();

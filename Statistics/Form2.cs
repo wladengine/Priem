@@ -27,7 +27,7 @@ namespace Priem
 
             //Подано заявлений на 1 курс, всего
             query = @"SELECT StudyBasisId, COUNT(qAbiturient.Id) AS CNT 
-FROM ed.qAbiturient WHERE qAbiturient.StudyLevelGroupId=1 AND StudyFormId='1' GROUP BY StudyBasisId";
+FROM ed.qAbiturient WHERE qAbiturient.StudyLevelGroupId=1 AND StudyFormId='1' AND CompetitionId NOT IN (11, 12) GROUP BY StudyBasisId";
             DataTable tbl = MainClass.Bdc.GetDataSet(query).Tables[0];
             tbCnt_Abit_1K_B.Text = tbl.Rows[0].Field<int>("CNT").ToString();
             tbCnt_Abit_1K_P.Text = tbl.Rows[1].Field<int>("CNT").ToString();
@@ -35,7 +35,7 @@ FROM ed.qAbiturient WHERE qAbiturient.StudyLevelGroupId=1 AND StudyFormId='1' GR
             //Подано заявлений на 1 курс, СПб
             query = @"SELECT qAbiturient.StudyBasisId, COUNT(qAbiturient.Id) AS CNT 
 FROM ed.qAbiturient INNER JOIN ed.extPerson ON extPerson.Id=qAbiturient.PersonId 
-WHERE qAbiturient.StudyLevelGroupId=1 AND qAbiturient.StudyFormId='1' AND extPerson.RegionId=1 
+WHERE qAbiturient.StudyLevelGroupId=1 AND qAbiturient.StudyFormId='1' AND extPerson.RegionId=1 AND CompetitionId NOT IN (11, 12)
 GROUP BY qAbiturient.StudyBasisId";
             tbl = MainClass.Bdc.GetDataSet(query).Tables[0];
             tbCnt_Abit_1K_B_SPB.Text = tbl.Rows[0].Field<int>("CNT").ToString();
@@ -45,7 +45,7 @@ GROUP BY qAbiturient.StudyBasisId";
             query = @"SELECT qAbiturient.StudyBasisId, COUNT(qAbiturient.Id) AS CNT
 FROM ed.qAbiturient 
 INNER JOIN ed.extEntryView ON extEntryView.AbiturientId=qAbiturient.Id
-WHERE qAbiturient.StudyLevelGroupId=1 AND qAbiturient.StudyFormId='1' GROUP BY qAbiturient.StudyBasisId";
+WHERE qAbiturient.StudyLevelGroupId=1 AND qAbiturient.StudyFormId='1' AND CompetitionId NOT IN (11, 12) GROUP BY qAbiturient.StudyBasisId";
             tbl = MainClass.Bdc.GetDataSet(query).Tables[0];
             var EntView = from DataRow rw in tbl.Rows
                               select new
@@ -65,7 +65,7 @@ WHERE qAbiturient.StudyLevelGroupId=1 AND qAbiturient.StudyFormId='1' GROUP BY q
 FROM ed.qAbiturient 
 INNER JOIN ed.extEntryView ON extEntryView.AbiturientId=qAbiturient.Id 
 INNER JOIN ed.extPerson ON extPerson.Id=qAbiturient.PersonId 
-WHERE qAbiturient.StudyLevelGroupId=1 AND qAbiturient.StudyFormId='1' AND extPerson.RegionId=1 GROUP BY qAbiturient.StudyBasisId";
+WHERE qAbiturient.StudyLevelGroupId=1 AND qAbiturient.StudyFormId='1' AND extPerson.RegionId=1 AND CompetitionId NOT IN (11, 12) GROUP BY qAbiturient.StudyBasisId";
             tbl = MainClass.Bdc.GetDataSet(query).Tables[0];
             var EntView_SPB = from DataRow rw in tbl.Rows
                               select new
@@ -85,7 +85,7 @@ WHERE qAbiturient.StudyLevelGroupId=1 AND qAbiturient.StudyFormId='1' AND extPer
 FROM ed.qAbiturient 
 INNER JOIN ed.extEntryView ON extEntryView.AbiturientId=qAbiturient.Id 
 INNER JOIN ed.extPerson ON extPerson.Id=qAbiturient.PersonId 
-WHERE qAbiturient.StudyLevelGroupId=1 AND qAbiturient.StudyFormId='1' AND extPerson.Sex='True' GROUP BY qAbiturient.StudyBasisId";
+WHERE qAbiturient.StudyLevelGroupId=1 AND qAbiturient.StudyFormId='1' AND extPerson.Sex='True' AND CompetitionId NOT IN (11, 12) GROUP BY qAbiturient.StudyBasisId";
             tbl = MainClass.Bdc.GetDataSet(query).Tables[0];
             var Male = from DataRow rw in tbl.Rows
                        select new
@@ -101,7 +101,7 @@ WHERE qAbiturient.StudyLevelGroupId=1 AND qAbiturient.StudyFormId='1' AND extPer
 FROM ed.qAbiturient 
 INNER JOIN ed.extEntryView ON extEntryView.AbiturientId=qAbiturient.Id 
 INNER JOIN ed.extPerson ON extPerson.Id=qAbiturient.PersonId 
-WHERE qAbiturient.StudyLevelGroupId=1 AND qAbiturient.StudyFormId='1' AND extPerson.Sex='True' AND extPerson.RegionId=1 
+WHERE qAbiturient.StudyLevelGroupId=1 AND qAbiturient.StudyFormId='1' AND extPerson.Sex='True' AND CompetitionId NOT IN (11, 12) AND extPerson.RegionId=1 
 GROUP BY qAbiturient.StudyBasisId";
             tbl = MainClass.Bdc.GetDataSet(query).Tables[0];
             var Male_SPB = from DataRow rw in tbl.Rows
@@ -118,7 +118,7 @@ GROUP BY qAbiturient.StudyBasisId";
 FROM ed.qAbiturient 
 INNER JOIN ed.extEntryView ON extEntryView.AbiturientId=qAbiturient.Id 
 INNER JOIN ed.extPerson ON extPerson.Id=qAbiturient.PersonId 
-WHERE qAbiturient.StudyLevelGroupId=1 AND qAbiturient.StudyFormId='1' AND extPerson.SchoolTypeId=1 
+WHERE qAbiturient.StudyLevelGroupId=1 AND qAbiturient.StudyFormId='1' AND extPerson.SchoolTypeId=1 AND CompetitionId NOT IN (11, 12) 
 GROUP BY qAbiturient.StudyBasisId";
             tbl = MainClass.Bdc.GetDataSet(query).Tables[0];
             var School = from DataRow rw in tbl.Rows
@@ -137,7 +137,7 @@ GROUP BY qAbiturient.StudyBasisId";
 FROM ed.qAbiturient 
 INNER JOIN ed.extEntryView ON extEntryView.AbiturientId=qAbiturient.Id 
 INNER JOIN ed.extPerson ON extPerson.Id=qAbiturient.PersonId 
-WHERE qAbiturient.StudyLevelGroupId=1 AND qAbiturient.StudyFormId='1' AND extPerson.SchoolTypeId=1 AND extPerson.RegionId=1 
+WHERE qAbiturient.StudyLevelGroupId=1 AND qAbiturient.StudyFormId='1' AND extPerson.SchoolTypeId=1 AND extPerson.RegionId=1 AND CompetitionId NOT IN (11, 12) 
 GROUP BY qAbiturient.StudyBasisId";
             tbl = MainClass.Bdc.GetDataSet(query).Tables[0];
             var School_SPB = from DataRow rw in tbl.Rows
@@ -155,7 +155,7 @@ GROUP BY qAbiturient.StudyBasisId";
 FROM ed.qAbiturient 
 INNER JOIN ed.extEntryView ON extEntryView.AbiturientId=qAbiturient.Id 
 INNER JOIN ed.extPerson ON extPerson.Id=qAbiturient.PersonId 
-WHERE qAbiturient.StudyLevelGroupId=1 AND qAbiturient.StudyFormId='1' AND extPerson.SchoolTypeId NOT IN (1,3)
+WHERE qAbiturient.StudyLevelGroupId=1 AND qAbiturient.StudyFormId='1' AND extPerson.SchoolTypeId NOT IN (1,3) AND CompetitionId NOT IN (11, 12)
 GROUP BY qAbiturient.StudyBasisId";
             tbl = MainClass.Bdc.GetDataSet(query).Tables[0];
             var Prof = from DataRow rw in tbl.Rows
@@ -174,7 +174,7 @@ GROUP BY qAbiturient.StudyBasisId";
 FROM ed.qAbiturient 
 INNER JOIN ed.extEntryView ON extEntryView.AbiturientId=qAbiturient.Id 
 INNER JOIN ed.extPerson ON extPerson.Id=qAbiturient.PersonId 
-WHERE qAbiturient.StudyLevelGroupId=1 AND qAbiturient.StudyFormId='1' AND extPerson.SchoolTypeId NOT IN (1,3) AND extPerson.RegionId=1 
+WHERE qAbiturient.StudyLevelGroupId=1 AND qAbiturient.StudyFormId='1' AND extPerson.SchoolTypeId NOT IN (1,3) AND extPerson.RegionId=1 AND CompetitionId NOT IN (11, 12) 
 GROUP BY qAbiturient.StudyBasisId";
             tbl = MainClass.Bdc.GetDataSet(query).Tables[0];
             var Prof_SPB = from DataRow rw in tbl.Rows
@@ -191,7 +191,7 @@ GROUP BY qAbiturient.StudyBasisId";
 FROM ed.qAbiturient 
 INNER JOIN ed.extEntryView ON extEntryView.AbiturientId=qAbiturient.Id 
 INNER JOIN ed.extPerson ON extPerson.Id=qAbiturient.PersonId 
-WHERE qAbiturient.StudyLevelGroupId=1 AND qAbiturient.StudyFormId='1' AND extPerson.SchoolTypeId=3
+WHERE qAbiturient.StudyLevelGroupId=1 AND qAbiturient.StudyFormId='1' AND extPerson.SchoolTypeId=3 AND CompetitionId NOT IN (11, 12)
 GROUP BY qAbiturient.StudyBasisId";
             tbl = MainClass.Bdc.GetDataSet(query).Tables[0];
             var NPOs = (from DataRow rw in tbl.Rows
@@ -208,7 +208,7 @@ GROUP BY qAbiturient.StudyBasisId";
 FROM ed.qAbiturient 
 INNER JOIN ed.extEntryView ON extEntryView.AbiturientId=qAbiturient.Id 
 INNER JOIN ed.extPerson ON extPerson.Id=qAbiturient.PersonId 
-WHERE qAbiturient.StudyLevelGroupId=1 AND qAbiturient.StudyFormId='1' AND extPerson.SchoolTypeId=3 AND extPerson.RegionId=1 
+WHERE qAbiturient.StudyLevelGroupId=1 AND qAbiturient.StudyFormId='1' AND extPerson.SchoolTypeId=3 AND extPerson.RegionId=1 AND CompetitionId NOT IN (11, 12) 
 GROUP BY qAbiturient.StudyBasisId";
             tbl = MainClass.Bdc.GetDataSet(query).Tables[0];
             var NPO_SPB = (from DataRow rw in tbl.Rows
@@ -258,7 +258,7 @@ GROUP BY qAbiturient.StudyBasisId";
 FROM ed.qAbiturient 
 INNER JOIN ed.extEntryView ON extEntryView.AbiturientId=qAbiturient.Id 
 INNER JOIN ed.Olympiads ON Olympiads.AbiturientId = qAbiturient.Id 
-WHERE qAbiturient.StudyLevelGroupId=1 AND qAbiturient.StudyFormId='1' AND Olympiads.OlympValueId>4 AND Olympiads.OlympTypeId IN (3,4)
+WHERE qAbiturient.StudyLevelGroupId=1 AND qAbiturient.StudyFormId='1' AND Olympiads.OlympValueId>4 AND Olympiads.OlympTypeId IN (3,4) AND CompetitionId NOT IN (11, 12)
 GROUP BY qAbiturient.StudyBasisId";
             tbl = MainClass.Bdc.GetDataSet(query).Tables[0];
             var Olymp = from DataRow rw in tbl.Rows
@@ -276,7 +276,7 @@ FROM ed.qAbiturient
 INNER JOIN ed.extEntryView ON extEntryView.AbiturientId=qAbiturient.Id 
 INNER JOIN ed.extPerson ON extPerson.Id=qAbiturient.PersonId 
 INNER JOIN ed.Olympiads ON Olympiads.AbiturientId = qAbiturient.Id 
-WHERE qAbiturient.StudyLevelGroupId=1 AND qAbiturient.StudyFormId='1' AND Olympiads.OlympValueId>4 AND Olympiads.OlympTypeId IN (3,4) AND extPerson.RegionId=1 
+WHERE qAbiturient.StudyLevelGroupId=1 AND qAbiturient.StudyFormId='1' AND Olympiads.OlympValueId>4 AND Olympiads.OlympTypeId IN (3,4) AND extPerson.RegionId=1 AND CompetitionId NOT IN (11, 12) 
 GROUP BY qAbiturient.StudyBasisId";
             tbl = MainClass.Bdc.GetDataSet(query).Tables[0];
             var Olymp_SPB = from DataRow rw in tbl.Rows
@@ -293,7 +293,7 @@ GROUP BY qAbiturient.StudyBasisId";
 FROM ed.qAbiturient 
 INNER JOIN ed.extEntryView ON extEntryView.AbiturientId=qAbiturient.Id 
 INNER JOIN ed.extPerson ON extPerson.Id=qAbiturient.PersonId 
-WHERE qAbiturient.StudyLevelGroupId=1 AND qAbiturient.StudyFormId='1' AND extPerson.CountryId <> 1 
+WHERE qAbiturient.StudyLevelGroupId=1 AND qAbiturient.StudyFormId='1' AND extPerson.CountryId <> 1 AND CompetitionId NOT IN (11, 12) 
 GROUP BY qAbiturient.StudyBasisId";
             tbl = MainClass.Bdc.GetDataSet(query).Tables[0];
             var Foreigners = from DataRow rw in tbl.Rows
@@ -313,7 +313,7 @@ GROUP BY qAbiturient.StudyBasisId";
 FROM ed.qAbiturient 
 INNER JOIN ed.extEntryView ON extEntryView.AbiturientId=qAbiturient.Id 
 INNER JOIN ed.extPerson ON extPerson.Id=qAbiturient.PersonId 
-WHERE qAbiturient.StudyLevelGroupId=1 AND qAbiturient.StudyFormId='1' AND extPerson.CountryId NOT IN (1,6)
+WHERE qAbiturient.StudyLevelGroupId=1 AND qAbiturient.StudyFormId='1' AND extPerson.CountryId NOT IN (1,6) AND CompetitionId NOT IN (11, 12)
 GROUP BY qAbiturient.StudyBasisId";
             tbl = MainClass.Bdc.GetDataSet(query).Tables[0];
             var USSR = from DataRow rw in tbl.Rows
@@ -337,7 +337,7 @@ GROUP BY qAbiturient.StudyBasisId";
             query = @"SELECT COUNT(extAbit.Id) 
 FROM ed.extAbit 
 INNER JOIN ed.extEntryView ON extEntryView.AbiturientId=extAbit.Id 
-WHERE extAbit.StudyLevelGroupId=2 AND extAbit.StudyFormId=1 AND extAbit.StudyBasisId=1";
+WHERE extAbit.StudyLevelGroupId=2 AND extAbit.StudyFormId=1 AND extAbit.StudyBasisId=1  AND CompetitionId NOT IN (11, 12)";
             int iCNT_Mag = (int)MainClass.Bdc.GetValue(query);
             tbCnt_Stud_MAG_All.Text = iCNT_Mag.ToString();
 
@@ -346,7 +346,7 @@ WHERE extAbit.StudyLevelGroupId=2 AND extAbit.StudyFormId=1 AND extAbit.StudyBas
 FROM ed.extAbit 
 INNER JOIN ed.extEntryView ON extEntryView.AbiturientId=extAbit.Id
 INNER JOIN ed.extPerson ON extPerson.Id=extAbit.PersonId
-WHERE extAbit.StudyLevelGroupId=2 AND extAbit.StudyFormId=1 AND extAbit.StudyBasisId=1 AND extPerson.RegionId = 1";
+WHERE extAbit.StudyLevelGroupId=2 AND extAbit.StudyFormId=1 AND extAbit.StudyBasisId=1 AND extPerson.RegionId = 1 AND CompetitionId NOT IN (11, 12)";
             int iCNT_Mag_SPB = (int)MainClass.Bdc.GetValue(query);
             tbCnt_Stud_MAG_All_SPB.Text = iCNT_Mag_SPB.ToString();
         }

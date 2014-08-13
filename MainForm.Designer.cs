@@ -82,6 +82,7 @@
             this.smiOlympLevelAbitRating = new System.Windows.Forms.ToolStripMenuItem();
             this.smiOlympAbitBallsAndRatings = new System.Windows.Forms.ToolStripMenuItem();
             this.smiPriemResults_AbitExamResults = new System.Windows.Forms.ToolStripMenuItem();
+            this.smiRatingWithEGE = new System.Windows.Forms.ToolStripMenuItem();
             this.smiChanges = new System.Windows.Forms.ToolStripMenuItem();
             this.smiPersonChangesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.smiAbitLogChangesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -142,7 +143,7 @@
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.lblDBPath = new System.Windows.Forms.ToolStripStatusLabel();
             this.tsslMain = new System.Windows.Forms.ToolStripStatusLabel();
-            this.smiRatingWithEGE = new System.Windows.Forms.ToolStripMenuItem();
+            this.smiStatGSGU = new System.Windows.Forms.ToolStripMenuItem();
             this.msMainMenu.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -420,7 +421,8 @@
             this.smiRegionStat,
             this.smiOlympStatistics,
             this.smiPriemResults_AbitExamResults,
-            this.smiRatingWithEGE});
+            this.smiRatingWithEGE,
+            this.smiStatGSGU});
             this.smiStatistics.Name = "smiStatistics";
             this.smiStatistics.Size = new System.Drawing.Size(80, 20);
             this.smiStatistics.Text = "Статистика";
@@ -581,6 +583,13 @@
             this.smiPriemResults_AbitExamResults.Size = new System.Drawing.Size(274, 22);
             this.smiPriemResults_AbitExamResults.Text = "Информационная прозрачность";
             this.smiPriemResults_AbitExamResults.Click += new System.EventHandler(this.smiPriemResults_AbitExamResults_Click);
+            // 
+            // smiRatingWithEGE
+            // 
+            this.smiRatingWithEGE.Name = "smiRatingWithEGE";
+            this.smiRatingWithEGE.Size = new System.Drawing.Size(274, 22);
+            this.smiRatingWithEGE.Text = "Расчёт для филологии/лингвистики";
+            this.smiRatingWithEGE.Click += new System.EventHandler(this.smiRatingWithEGE_Click);
             // 
             // smiChanges
             // 
@@ -1053,12 +1062,12 @@
             this.tsslMain.Name = "tsslMain";
             this.tsslMain.Size = new System.Drawing.Size(0, 17);
             // 
-            // smiRatingWithEGE
+            // smiStatGSGU
             // 
-            this.smiRatingWithEGE.Name = "smiRatingWithEGE";
-            this.smiRatingWithEGE.Size = new System.Drawing.Size(274, 22);
-            this.smiRatingWithEGE.Text = "Расчёт для филологии/лингвистики";
-            this.smiRatingWithEGE.Click += new System.EventHandler(this.smiRatingWithEGE_Click);
+            this.smiStatGSGU.Name = "smiStatGSGU";
+            this.smiStatGSGU.Size = new System.Drawing.Size(274, 22);
+            this.smiStatGSGU.Text = "Статистика для ГЗГУ";
+            this.smiStatGSGU.Click += new System.EventHandler(this.smiStatGSGU_Click);
             // 
             // MainForm
             // 
@@ -1197,6 +1206,7 @@
         private System.Windows.Forms.ToolStripMenuItem smiListAbitWithInnerPriorities;
         private System.Windows.Forms.ToolStripMenuItem smiMyList;
         private System.Windows.Forms.ToolStripMenuItem smiRatingWithEGE;
+        private System.Windows.Forms.ToolStripMenuItem smiStatGSGU;
 
     }
 }

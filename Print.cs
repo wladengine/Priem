@@ -4766,8 +4766,8 @@ namespace Priem
                 string formId;
                 string facDat;
 
-                string _docNum="";
-                string _docDate="";
+                //string _docNum="";
+                //string _docDate="";
 
                 bool? isSec;// = (bool?)MainClass.Bdc.GetValue("SELECT IsSecond FROM ed.Protocol WHERE Protocol.Id= @protocolId", slDel);
                 bool? isParallel;// = (bool?)MainClass.Bdc.GetValue("SELECT IsParallel FROM ed.Protocol WHERE Protocol.Id= @protocolId", slDel);
@@ -4787,13 +4787,13 @@ namespace Priem
                 using (PriemEntities ctx = new PriemEntities())
                 {
 
-                    docNum = (from protocol in ctx.Protocol
-                              where protocol.Id == protocolId
-                              select protocol.Number).FirstOrDefault();
+                    docNum = (from protocol in ctx.OrderNumbers
+                              where protocol.ProtocolId == protocolId
+                              select protocol.ComissionNumber).DefaultIfEmpty("НЕ УКАЗАН").FirstOrDefault();
 
-                    docDate = (DateTime)(from protocol in ctx.Protocol
-                                         where protocol.Id == protocolId
-                                         select protocol.Date).FirstOrDefault();
+                    docDate = (DateTime)(from protocol in ctx.OrderNumbers
+                                         where protocol.ProtocolId == protocolId
+                                         select protocol.ComissionDate ?? DateTime.Now).FirstOrDefault();
 
                     formId = (from protocol in ctx.Protocol
                               join studyForm in ctx.StudyForm on protocol.StudyFormId equals studyForm.Id
@@ -4909,15 +4909,15 @@ namespace Priem
                         basis2 = "обучения за счет бюджетных ассигнований федерального бюджета";
                         dogovorDoc = "";
                         educDoc = ", оригиналы документа установленного образца об образовании";
-                        _docDate = "31.07.2014";
-                        _docNum = "35";
+                        //_docDate = "31.07.2014";
+                        //_docNum = "35";
                         break;
                     case "2":
                         basis2 = "обучения по договорам об образовании";
                         dogovorDoc = ", договоры об образовании";
                         educDoc = "";
-                        _docDate = "13.08.2014";
-                        _docNum = "41";
+                        //_docDate = "13.08.2014";
+                        //_docNum = "41";
                         break;
                 }
 
@@ -4930,11 +4930,9 @@ namespace Priem
                 wd.SetFields("Слушатель", list);
                 wd.SetFields("Сокращ", sec);
 
-                wd.SetFields("ДатаПриказа", _docDate);
-                wd.SetFields("НомерПриказа", _docNum);
+                wd.SetFields("ДатаПриказа", docDate.ToShortDateString());
+                wd.SetFields("НомерПриказа", docNum);
 
-
-                
                 wd.SetFields("DogovorDoc", dogovorDoc);
                 wd.SetFields("EducDoc", educDoc);
 

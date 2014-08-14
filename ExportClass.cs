@@ -25,36 +25,77 @@ namespace Priem
             
             using (PriemEntities context = new PriemEntities())
             {
-                //взять максимум номера, если еще ничего не назначено
-                string num = (from ab in context.extAbit
-                              where ab.StudyLevelGroupId == MainClass.studyLevelGroupId
-                              select ab.StudyNumber).Max();
-               
-
-                var abits = from ab in context.extAbit
-                            join ev in context.extEntryView
-                            on ab.Id equals ev.AbiturientId
-                            where ab.StudyLevelGroupId == MainClass.studyLevelGroupId && (ab.StudyNumber == null || ab.StudyNumber.Length == 0)
-                            orderby ab.FacultyId, ab.FIO
-                            select ab;
-
-                List<Guid> lstAbits = (from a in abits select a.Id).ToList();
-
-                int stNum = 0;
-
-                if (num != null && num.Length != 0)
-                    stNum = int.Parse(num.Substring(3));
-
-                stNum++;
-
-                foreach (Guid abitId in lstAbits)
+                // префиксы
+                // 1 - бакалавриат
+                // 2 - магистратура
+                // 3 - СПО
+                // 4 - иностранцы
+                // 5 - аспиранты
+                for (int SLGr = 1; SLGr <= 4; SLGr++)
                 {
-                    string sNum = "0000" + stNum.ToString();
-                    sNum = sNum.Substring(sNum.Length - 4, 4);
-                    sNum = "13" + MainClass.studyLevelGroupId + sNum;                
+                    //взять максимум номера, если еще ничего не назначено
+                    string num = (from ab in context.extAbit
+                                  join abF in context.qAbiturientForeignApplicationsOnly on ab.Id equals abF.Id into abF2
+                                  from abF in abF2.DefaultIfEmpty()
+                                  where ab.StudyLevelGroupId == SLGr && abF == null
+                                  select ab.StudyNumber).Max();
 
-                    context.Abiturient_UpdateStudyNumber(sNum, abitId);                    
+                    string numFor = (from ab in context.extAbit
+                                  join abF in context.qAbiturientForeignApplicationsOnly on ab.Id equals abF.Id
+                                  where ab.StudyLevelGroupId == SLGr
+                                  select ab.StudyNumber).Max();
+
+                    var abits = (from ab in context.extAbit
+                                join ev in context.extEntryView
+                                on ab.Id equals ev.AbiturientId
+                                where ab.StudyLevelGroupId == SLGr && (ab.StudyNumber == null || ab.StudyNumber.Length == 0)
+                                orderby ab.FacultyId, ab.FIO
+                                select ab.Id).ToList();
+
+                    var foreignAbits = (from ab in context.extAbit
+                                       join ev in context.extEntryView
+                                       on ab.Id equals ev.AbiturientId
+                                       join abF in context.qAbiturientForeignApplicationsOnly on ab.Id equals abF.Id
+                                       where ab.StudyLevelGroupId == SLGr && (ab.StudyNumber == null || ab.StudyNumber.Length == 0)
+                                       orderby ab.FacultyId, ab.FIO
+                                       select ab.Id).ToList();
+
+                    List<Guid> lstAbits = abits.Except(foreignAbits).ToList();
+
+                    int stNum = 0;
+                    if (num != null && num.Length != 0)
+                        stNum = int.Parse(num.Substring(3));
+
+                    int stNumFor = 0;
+                    if (numFor != null && numFor.Length != 0)
+                        stNumFor = int.Parse(numFor.Substring(3));
+
                     stNum++;
+                    stNumFor++;
+
+                    int Pref = SLGr;
+                    if (Pref == 4)
+                        Pref = 5;
+
+                    foreach (Guid abitId in lstAbits)
+                    {
+                        string sNum = "0000" + stNum.ToString();
+                        sNum = sNum.Substring(sNum.Length - 4, 4);
+                        sNum = (DateTime.Now.Year % 100).ToString() + SLGr + sNum;
+
+                        context.Abiturient_UpdateStudyNumber(sNum, abitId);
+                        stNum++;
+                    }
+
+                    foreach (Guid abitId in foreignAbits)
+                    {
+                        string sNum = "0000" + stNumFor.ToString();
+                        sNum = sNum.Substring(sNum.Length - 4, 4);
+                        sNum = (DateTime.Now.Year % 100).ToString() + "4" + sNum;
+
+                        context.Abiturient_UpdateStudyNumber(sNum, abitId);
+                        stNumFor++;
+                    }
                 }
                 MessageBox.Show("Done");
             }            

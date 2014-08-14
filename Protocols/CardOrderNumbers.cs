@@ -38,6 +38,7 @@ namespace Priem
 
             ComboServ.FillCombo(cbFaculty, HelpClass.GetComboListByTable("ed.qFaculty", "ORDER BY Acronym"), false, false);
             ComboServ.FillCombo(cbStudyBasis, HelpClass.GetComboListByTable("ed.StudyBasis", "ORDER BY Name"), false, false);
+            ComboServ.FillCombo(cbSigner, HelpClass.GetComboListByTable("ed.Signer", "ORDER BY Name"), false, false);
 
             cbStudyBasis.SelectedIndex = 0;
             FillStudyForm();

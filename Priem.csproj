@@ -930,8 +930,14 @@
     <Compile Include="Statistics\StatFormGSGU.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Statistics\StatFormGSGUForm2.Designer.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Statistics\StatFormGSGU.Designer.cs">
       <DependentUpon>StatFormGSGU.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Statistics\StatFormGSGUForm2.cs">
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="Statistics\Watch.cs">
       <SubType>Form</SubType>
@@ -1317,6 +1323,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Statistics\StatFormGSGU.resx">
       <DependentUpon>StatFormGSGU.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Statistics\StatFormGSGUForm2.resx">
+      <DependentUpon>StatFormGSGUForm2.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Statistics\Watch.resx">
       <DependentUpon>Watch.cs</DependentUpon>

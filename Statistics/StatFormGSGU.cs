@@ -50,6 +50,7 @@ namespace Priem
                 int rowNum = 0;
                 var ListLP = context.Entry.Where(x => x.KCP.HasValue && x.KCP > 0 && x.StudyLevel.Id == StudyLevelId).Select(x => new { x.StudyFormId, x.StudyBasisId, x.LicenseProgramId, x.SP_LicenseProgram.GSGUCode, x.SP_LicenseProgram.Name, x.SP_LicenseProgram.Code }).Distinct().ToList();
                 ProgressForm pf = new ProgressForm();
+                pf.SetProgressText("Загрузка данных...");
                 pf.MaxPrBarValue = ListLP.Count;
                 pf.Show();
                 try
@@ -205,7 +206,7 @@ namespace Priem
                         node = rwNode.AppendChild(doc.CreateNode(XmlNodeType.Element, "p4_8", ""));
                         node.InnerText = (cntBEComp - cntOlympVseross).ToString();
 
-                        //зачисленных абитуриентов без экзаменов б/э (прочие олимпиады)
+                        //
                         node = rwNode.AppendChild(doc.CreateNode(XmlNodeType.Element, "p5", ""));
                         node.InnerText = "";
                     }

@@ -143,7 +143,10 @@
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.lblDBPath = new System.Windows.Forms.ToolStripStatusLabel();
             this.tsslMain = new System.Windows.Forms.ToolStripStatusLabel();
+            this.статистикаДляГЗГУToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.smiStatGSGU = new System.Windows.Forms.ToolStripMenuItem();
+            this.smiStatGSGUForm1A = new System.Windows.Forms.ToolStripMenuItem();
+            this.smiStatGSGUForm2 = new System.Windows.Forms.ToolStripMenuItem();
             this.msMainMenu.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -422,7 +425,7 @@
             this.smiOlympStatistics,
             this.smiPriemResults_AbitExamResults,
             this.smiRatingWithEGE,
-            this.smiStatGSGU});
+            this.статистикаДляГЗГУToolStripMenuItem});
             this.smiStatistics.Name = "smiStatistics";
             this.smiStatistics.Size = new System.Drawing.Size(80, 20);
             this.smiStatistics.Text = "Статистика";
@@ -1062,12 +1065,36 @@
             this.tsslMain.Name = "tsslMain";
             this.tsslMain.Size = new System.Drawing.Size(0, 17);
             // 
+            // статистикаДляГЗГУToolStripMenuItem
+            // 
+            this.статистикаДляГЗГУToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.smiStatGSGU,
+            this.smiStatGSGUForm1A,
+            this.smiStatGSGUForm2});
+            this.статистикаДляГЗГУToolStripMenuItem.Name = "статистикаДляГЗГУToolStripMenuItem";
+            this.статистикаДляГЗГУToolStripMenuItem.Size = new System.Drawing.Size(274, 22);
+            this.статистикаДляГЗГУToolStripMenuItem.Text = "Статистика для ГЗГУ";
+            // 
             // smiStatGSGU
             // 
             this.smiStatGSGU.Name = "smiStatGSGU";
-            this.smiStatGSGU.Size = new System.Drawing.Size(274, 22);
-            this.smiStatGSGU.Text = "Статистика для ГЗГУ";
+            this.smiStatGSGU.Size = new System.Drawing.Size(152, 22);
+            this.smiStatGSGU.Text = "Форма 1";
             this.smiStatGSGU.Click += new System.EventHandler(this.smiStatGSGU_Click);
+            // 
+            // smiStatGSGUForm1A
+            // 
+            this.smiStatGSGUForm1A.Name = "smiStatGSGUForm1A";
+            this.smiStatGSGUForm1A.Size = new System.Drawing.Size(152, 22);
+            this.smiStatGSGUForm1A.Text = "Форма 1а";
+            this.smiStatGSGUForm1A.Click += new System.EventHandler(this.smiStatGSGUForm1A_Click);
+            // 
+            // smiStatGSGUForm2
+            // 
+            this.smiStatGSGUForm2.Name = "smiStatGSGUForm2";
+            this.smiStatGSGUForm2.Size = new System.Drawing.Size(152, 22);
+            this.smiStatGSGUForm2.Text = "Форма 2";
+            this.smiStatGSGUForm2.Click += new System.EventHandler(this.smiStatGSGUForm2_Click);
             // 
             // MainForm
             // 
@@ -1206,7 +1233,10 @@
         private System.Windows.Forms.ToolStripMenuItem smiListAbitWithInnerPriorities;
         private System.Windows.Forms.ToolStripMenuItem smiMyList;
         private System.Windows.Forms.ToolStripMenuItem smiRatingWithEGE;
+        private System.Windows.Forms.ToolStripMenuItem статистикаДляГЗГУToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem smiStatGSGU;
+        private System.Windows.Forms.ToolStripMenuItem smiStatGSGUForm1A;
+        private System.Windows.Forms.ToolStripMenuItem smiStatGSGUForm2;
 
     }
 }

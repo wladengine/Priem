@@ -1,6 +1,6 @@
 ﻿namespace Priem
 {
-    partial class StatFormGSGUForm2
+    partial class StatFormGSGUForm1A
     {
         /// <summary>
         /// Required designer variable.
@@ -28,10 +28,28 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.cbStudyLevel = new System.Windows.Forms.ComboBox();
-            this.label1 = new System.Windows.Forms.Label();
             this.btnStartImport = new System.Windows.Forms.Button();
+            this.label1 = new System.Windows.Forms.Label();
+            this.cbStudyLevel = new System.Windows.Forms.ComboBox();
             this.SuspendLayout();
+            // 
+            // btnStartImport
+            // 
+            this.btnStartImport.Location = new System.Drawing.Point(404, 23);
+            this.btnStartImport.Name = "btnStartImport";
+            this.btnStartImport.Size = new System.Drawing.Size(75, 23);
+            this.btnStartImport.TabIndex = 5;
+            this.btnStartImport.Text = "Рассчитать";
+            this.btnStartImport.UseVisualStyleBackColor = true;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(12, 9);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(51, 13);
+            this.label1.TabIndex = 4;
+            this.label1.Text = "Уровень";
             // 
             // cbStudyLevel
             // 
@@ -40,37 +58,18 @@
             this.cbStudyLevel.Location = new System.Drawing.Point(15, 25);
             this.cbStudyLevel.Name = "cbStudyLevel";
             this.cbStudyLevel.Size = new System.Drawing.Size(383, 21);
-            this.cbStudyLevel.TabIndex = 0;
+            this.cbStudyLevel.TabIndex = 3;
             // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(12, 9);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(51, 13);
-            this.label1.TabIndex = 1;
-            this.label1.Text = "Уровень";
-            // 
-            // btnStartImport
-            // 
-            this.btnStartImport.Location = new System.Drawing.Point(404, 23);
-            this.btnStartImport.Name = "btnStartImport";
-            this.btnStartImport.Size = new System.Drawing.Size(75, 23);
-            this.btnStartImport.TabIndex = 2;
-            this.btnStartImport.Text = "Рассчитать";
-            this.btnStartImport.UseVisualStyleBackColor = true;
-            this.btnStartImport.Click += new System.EventHandler(this.btnStartImport_Click);
-            // 
-            // StatFormGSGUForm2
+            // StatFormGSGUForm1A
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(491, 73);
+            this.ClientSize = new System.Drawing.Size(491, 62);
             this.Controls.Add(this.btnStartImport);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.cbStudyLevel);
-            this.Name = "StatFormGSGUForm2";
-            this.Text = "Статистика ГЗГУ Форма 2 (экспорт xml)";
+            this.Name = "StatFormGSGUForm1A";
+            this.Text = "Статистика ГЗГУ Форма 1а (экспорт xml)";
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -78,8 +77,8 @@
 
         #endregion
 
-        private System.Windows.Forms.ComboBox cbStudyLevel;
-        private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button btnStartImport;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.ComboBox cbStudyLevel;
     }
 }

@@ -53,8 +53,8 @@ namespace Priem
                 pf.SetProgressText("Загрузка данных...");
                 pf.MaxPrBarValue = ListLP.Count;
                 pf.Show();
-                //try
-                //{
+                try
+                {
                     foreach (var LP in ListLP)
                     {
                         pf.PerformStep();
@@ -283,14 +283,14 @@ namespace Priem
                             node.InnerText = (AVGMarkEGE_Quota).ToString(); 
 
                         //р8 Проходной балл по направлению подготовки (специальности), приведенный к 100-бальной шкале
-                            double MinMark =
+                            int MinMark =
                                 (from ev in EV
                                  join mark in context.Mark on ev.AbiturientId equals mark.AbiturientId
                                  where ev.IsCel == 0 && ev.IsQuota == 0 && ev.IsCrimea == 0 && ev.IsBE == 0
                                  select new { mark.Value, mark.AbiturientId })
                                  .GroupBy(x => x.AbiturientId)
-                                 .Select(x => x.Where(y => y.AbiturientId == x.Key).Select(y => (int)y.Value).DefaultIfEmpty(0).Average()
-                                 ).DefaultIfEmpty(0d).Min();
+                                 .Select(x => x.Where(y => y.AbiturientId == x.Key).Select(y => (int)y.Value).DefaultIfEmpty(0).Sum()
+                                 ).DefaultIfEmpty(0).Min();
                             node = rwNode.AppendChild(doc.CreateNode(XmlNodeType.Element, "p8", ""));
                             node.InnerText = (MinMark).ToString();
                     }
@@ -302,15 +302,15 @@ namespace Priem
                         XmlWriter w = XmlWriter.Create(sfd.FileName, new XmlWriterSettings() { NewLineHandling = NewLineHandling.Entitize, NewLineChars = "" });
                         doc.Save(w);
                     }
-                //}
-                //catch (Exception ex)
-                //{
-                //    WinFormsServ.Error(ex);
-                //}
-                //finally
-                //{
+                }
+                catch (Exception ex)
+                {
+                    WinFormsServ.Error(ex);
+                }
+                finally
+                {
                     pf.Close();
-                //}
+                }
                 
 
                 //retString = declaration.OuterXml + doc.InnerXml;

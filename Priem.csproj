@@ -930,14 +930,21 @@
     <Compile Include="Statistics\StatFormGSGU.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Statistics\StatFormGSGUForm2.Designer.cs">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Include="Statistics\StatFormGSGU.Designer.cs">
       <DependentUpon>StatFormGSGU.cs</DependentUpon>
     </Compile>
+    <Compile Include="Statistics\StatFormGSGUForm1A.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Statistics\StatFormGSGUForm1A.Designer.cs">
+      <DependentUpon>StatFormGSGUForm1A.cs</DependentUpon>
+    </Compile>
     <Compile Include="Statistics\StatFormGSGUForm2.cs">
       <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Statistics\StatFormGSGUForm2.Designer.cs">
+      <SubType>Form</SubType>
+      <DependentUpon>StatFormGSGUForm2.cs</DependentUpon>
     </Compile>
     <Compile Include="Statistics\Watch.cs">
       <SubType>Form</SubType>
@@ -1323,6 +1330,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Statistics\StatFormGSGU.resx">
       <DependentUpon>StatFormGSGU.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Statistics\StatFormGSGUForm1A.resx">
+      <DependentUpon>StatFormGSGUForm1A.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Statistics\StatFormGSGUForm2.resx">
       <DependentUpon>StatFormGSGUForm2.cs</DependentUpon>

@@ -860,7 +860,7 @@ namespace Priem
 
         private void smiStatGSGUForm2_Click(object sender, EventArgs e)
         {
-
+            new StatFormGSGUForm2().Show();
         }
 
         private void smiStatGSGUForm1A_Click(object sender, EventArgs e)

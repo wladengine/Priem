@@ -201,75 +201,75 @@ namespace Priem
                 int.TryParse(FacultyId, out iFacultyId);
 
                 var abitList =
-                    from Ab in context.Abiturient
-                    join Ent in context.qEntry on Ab.EntryId equals Ent.Id
-                    join extEV in context.extEntryView on Ab.Id equals extEV.AbiturientId
-                    where Ab.Entry.StudyLevel.LevelGroupId == MainClass.studyLevelGroupId &&
-                    (iFacultyId == 0 ? true : Ab.Entry.FacultyId == iFacultyId)
-                    && extEV.Date > new DateTime(2013, 9, 18)
-                    select new
-                    {
-                        Ab.Id,
-                        Ab.RegNum,
-                        Ab.Person.Surname,
-                        Ab.Person.Name,
-                        Ab.Person.SecondName,
-                        Ab.Person.BirthDate,
-                        Ab.Person.BirthPlace,
-                        Ab.Person.Sex,
-                        Ab.Person.PassportTypeId,
-                        Ab.Person.PassportSeries,
-                        Ab.Person.PassportNumber,
-                        Ab.Person.PassportAuthor,
-                        Ab.Person.PassportDate,
-                        Ab.Person.NationalityId,
-                        Ab.Person.Person_Contacts.RegionId,
-                        Ab.Person.Person_Contacts.Phone,
-                        Ab.Person.Person_Contacts.Mobiles,
-                        Ab.LanguageId,
-                        Ab.Person.Person_AdditionalInfo.Privileges,
-                        Ab.Person.Person_Contacts.Code,
-                        Ab.Person.Person_Contacts.City,
-                        Ab.Person.Person_Contacts.Street,
-                        Ab.Person.Person_Contacts.House,
-                        Ab.Person.Person_Contacts.Korpus,
-                        Ab.Person.Person_Contacts.Flat,
-                        Ab.Person.Person_Contacts.CodeReal,
-                        Ab.Person.Person_Contacts.CityReal,
-                        Ab.Person.Person_Contacts.StreetReal,
-                        Ab.Person.Person_Contacts.HouseReal,
-                        Ab.Person.Person_Contacts.KorpusReal,
-                        Ab.Person.Person_Contacts.FlatReal,
-                        Ab.Person.Person_EducationInfo.SchoolTypeId,
-                        Ab.Person.Person_EducationInfo.SchoolCity,
-                        Ab.Person.Person_EducationInfo.SchoolName,
-                        Ab.Person.Person_EducationInfo.SchoolNum,
-                        Ab.Person.Person_EducationInfo.SchoolExitYear,
-                        Ab.Person.Person_EducationInfo.AttestatRegion,
-                        Ab.Person.Person_EducationInfo.AttestatSeries,
-                        Ab.Person.Person_EducationInfo.AttestatNum,
-                        Ab.Person.Person_EducationInfo.DiplomSeries,
-                        Ab.Person.Person_EducationInfo.DiplomNum,
-                        Ab.Person.Person_EducationInfo.IsExcellent,
-                        Nation = Ab.Person.Person_Contacts.Country.Name,
-                        Ab.Entry.FacultyId,
-                        Ab.Entry.StudyFormId,
-                        Ab.Entry.StudyBasisId,
-                        Ab.Entry.LicenseProgramId,
-                        Ab.Entry.ProfileId,
-                        Ab.CompetitionId,
-                        Ab.StudyNumber,
-                        ObrazProgramName = Ab.Entry.SP_ObrazProgram.Name,
-                        ObrazProgramCrypt = Ab.Entry.StudyLevel.Acronym + "." + Ab.Entry.SP_ObrazProgram.Number + "." + MainClass.sPriemYear,
-                        Ab.DocDate,
-                        Ab.IsListener,
-                        Ab.Entry.StudyPlanNumber,
-                        ListenerTypeId = Ab.Entry.IsSecond ? 1 : (Ab.Entry.IsReduced ? 2 : (Ab.Entry.IsParallel ? 3 : 0)),
-                        EntryProtId = extEV.Id,
-                        Ab.Person.Person_EducationInfo.HEExitYear,
-                        Ab.Person.Person_AdditionalInfo.HostelEduc,
-                        Ab.HasOriginals
-                    };
+                    (from Ab in context.Abiturient
+                     join Ent in context.extEntry on Ab.EntryId equals Ent.Id
+                     join extEV in context.extEntryView on Ab.Id equals extEV.AbiturientId
+                     where Ab.Entry.StudyLevel.LevelGroupId == MainClass.studyLevelGroupId &&
+                     (iFacultyId == 0 ? true : Ab.Entry.FacultyId == iFacultyId)
+                     //&& extEV.Date > new DateTime(2013, 9, 18)
+                     select new
+                     {
+                         Ab.Id,
+                         Ab.RegNum,
+                         Ab.Person.Surname,
+                         Ab.Person.Name,
+                         Ab.Person.SecondName,
+                         Ab.Person.BirthDate,
+                         Ab.Person.BirthPlace,
+                         Ab.Person.Sex,
+                         Ab.Person.PassportTypeId,
+                         Ab.Person.PassportSeries,
+                         Ab.Person.PassportNumber,
+                         Ab.Person.PassportAuthor,
+                         Ab.Person.PassportDate,
+                         Ab.Person.NationalityId,
+                         Ab.Person.Person_Contacts.RegionId,
+                         Ab.Person.Person_Contacts.Phone,
+                         Ab.Person.Person_Contacts.Mobiles,
+                         Ab.LanguageId,
+                         Ab.Person.Person_AdditionalInfo.Privileges,
+                         Ab.Person.Person_Contacts.Code,
+                         Ab.Person.Person_Contacts.City,
+                         Ab.Person.Person_Contacts.Street,
+                         Ab.Person.Person_Contacts.House,
+                         Ab.Person.Person_Contacts.Korpus,
+                         Ab.Person.Person_Contacts.Flat,
+                         Ab.Person.Person_Contacts.CodeReal,
+                         Ab.Person.Person_Contacts.CityReal,
+                         Ab.Person.Person_Contacts.StreetReal,
+                         Ab.Person.Person_Contacts.HouseReal,
+                         Ab.Person.Person_Contacts.KorpusReal,
+                         Ab.Person.Person_Contacts.FlatReal,
+                         Ab.Person.Person_EducationInfo.SchoolTypeId,
+                         Ab.Person.Person_EducationInfo.SchoolCity,
+                         Ab.Person.Person_EducationInfo.SchoolName,
+                         Ab.Person.Person_EducationInfo.SchoolNum,
+                         Ab.Person.Person_EducationInfo.SchoolExitYear,
+                         Ab.Person.Person_EducationInfo.AttestatRegion,
+                         Ab.Person.Person_EducationInfo.AttestatSeries,
+                         Ab.Person.Person_EducationInfo.AttestatNum,
+                         Ab.Person.Person_EducationInfo.DiplomSeries,
+                         Ab.Person.Person_EducationInfo.DiplomNum,
+                         Ab.Person.Person_EducationInfo.IsExcellent,
+                         Nation = Ab.Person.Person_Contacts.Country.Name,
+                         Ab.Entry.FacultyId,
+                         Ab.Entry.StudyFormId,
+                         Ab.Entry.StudyBasisId,
+                         Ab.Entry.LicenseProgramId,
+                         Ab.Entry.ProfileId,
+                         Ab.CompetitionId,
+                         Ab.StudyNumber,
+                         ObrazProgramName = Ab.Entry.SP_ObrazProgram.Name,
+                         ObrazProgramCrypt = Ab.Entry.StudyLevel.Acronym + "." + Ab.Entry.SP_ObrazProgram.Number + "." + MainClass.sPriemYear,
+                         Ab.DocDate,
+                         Ab.IsListener,
+                         Ab.Entry.StudyPlanNumber,
+                         ListenerTypeId = Ab.Entry.IsSecond ? 1 : (Ab.Entry.IsReduced ? 2 : (Ab.Entry.IsParallel ? 3 : 0)),
+                         //EntryProtId = extEV.Id,
+                         Ab.Person.Person_EducationInfo.HEExitYear,
+                         Ab.Person.Person_AdditionalInfo.HostelEduc,
+                         Ab.HasOriginals
+                     }).ToList();
 
 
                 if (abitList.Count() == 0)
@@ -277,6 +277,14 @@ namespace Priem
 
                 wc.SetMax(abitList.Count());
                 wc.SetText("Импорт данных...");
+
+                var notApplicableList = abitList.Select(x => x.Id).Except(_slIds.Keys.Select(x => Guid.Parse(x))).ToList();
+
+                if (notApplicableList.Count() > 0)
+                {
+                    WinFormsServ.Error("Not found orders for " + notApplicableList.Count() + " Ids");
+                    return;
+                }
 
                 foreach (var Abit in abitList.ToList())
                 {
@@ -357,7 +365,7 @@ namespace Priem
                         Abit.BirthDate.ToString(), QueryServ.QueryForBool(Abit.Sex.ToString()),
                         Abit.PassportTypeId.ToString(), Abit.PassportSeries, Abit.PassportNumber, Abit.PassportDate.ToString(), pa,
                         Abit.StudyNumber, abId, 
-                        (Abit.ObrazProgramName.Length > 128 ? Abit.ObrazProgramName.Substring(0, 128) : Abit.ObrazProgramName), Abit.ObrazProgramCrypt, Abit.StudyPlanNumber.ToString());
+                        (Abit.ObrazProgramName.Length > 128 ? Abit.ObrazProgramName.Substring(0, 128) : Abit.ObrazProgramName), Abit.ObrazProgramCrypt, (Abit.StudyPlanNumber ?? ""));
 
                     _odc.ExecuteQuery(s);
 

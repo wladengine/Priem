@@ -48,7 +48,7 @@ namespace Priem
             using (PriemEntities context = new PriemEntities())
             {
                 int rowNum = 0;
-                var ListLP = context.Entry.Where(x => x.KCP.HasValue && x.KCP > 0 && x.StudyLevel.Id == StudyLevelId).Select(x => new { x.StudyFormId, x.StudyBasisId, x.LicenseProgramId, x.SP_LicenseProgram.GSGUCode, x.SP_LicenseProgram.Name, x.SP_LicenseProgram.Code }).Distinct().ToList();
+                var ListLP = context.Entry.Where(x => x.KCP.HasValue && x.KCP > 0 && (StudyLevelId.HasValue ? x.StudyLevel.Id == StudyLevelId : (x.StudyLevel.LevelGroupId == 1 || x.StudyLevel.LevelGroupId == 2))).Select(x => new { x.StudyFormId, x.StudyBasisId, x.LicenseProgramId, x.SP_LicenseProgram.GSGUCode, x.SP_LicenseProgram.Name, x.SP_LicenseProgram.Code }).Distinct().ToList();
                 ProgressForm pf = new ProgressForm();
                 pf.SetProgressText("Загрузка данных...");
                 pf.MaxPrBarValue = ListLP.Count;

@@ -5238,18 +5238,8 @@ namespace Priem
                 int StudyLevelId;
 
                 string naprspecRod = "";
-                string docNum = "НОМЕР";
-                DateTime docDate;
                 using (PriemEntities ctx = new PriemEntities())
                 {
-
-                    docNum = (from protocol in ctx.OrderNumbers
-                              where protocol.ProtocolId == protocolId
-                              select protocol.ComissionNumber).DefaultIfEmpty("НЕ УКАЗАН").FirstOrDefault();
-
-                    docDate = (DateTime)(from protocol in ctx.OrderNumbers
-                                         where protocol.ProtocolId == protocolId
-                                         select protocol.ComissionDate ?? DateTime.Now).FirstOrDefault();
 
                     formId = (from protocol in ctx.Protocol
                               join studyForm in ctx.StudyForm on protocol.StudyFormId equals studyForm.Id
@@ -5331,17 +5321,45 @@ namespace Priem
                     int curRow = 5, counter = 0;
                     TableDoc td = null;
 
-                    DateTime protocolDate;// = (DateTime)MainClass.Bdc.GetValue(string.Format("SELECT Protocol.Date FROM ed.Protocol WHERE Protocol.Id='{0}'", protocolId));
-                    protocolDate = (DateTime)(from protocol in ctx.Protocol
-                                              where protocol.Id == protocolId
-                                              select protocol.Date).FirstOrDefault();
+                    DateTime? protocolDate;
+                    protocolDate = (DateTime?)(from protocol in ctx.OrderNumbers
+                                              where protocol.ProtocolId == protocolId
+                                              select protocol.ComissionDate).FirstOrDefault();
 
-                    string protocolNum;// = MainClass.Bdc.GetStringValue(string.Format("SELECT Protocol.Number FROM ed.Protocol WHERE Protocol.Id='{0}'", protocolId));
-                    protocolNum = (from protocol in ctx.Protocol
-                                   where protocol.Id == protocolId
-                                   select protocol.Number).FirstOrDefault();
+                    string protocolNum;
+                    protocolNum = (from protocol in ctx.OrderNumbers
+                                   where protocol.ProtocolId == protocolId
+                                   select protocol.ComissionNumber).DefaultIfEmpty("НЕ УКАЗАН").FirstOrDefault();
 
- 
+                    string docNum = "НОМЕР";
+                    string docDate = "ДАТА";
+                    DateTime tempDate;
+                    if (isRus)
+                    {
+                        //docNum = MainClass.Bdc.GetStringValue(string.Format("SELECT OrderNum FROM ed.OrderNumbers WHERE ProtocolId='{0}'", protocolId));
+                        docNum = (from orderNumbers in ctx.OrderNumbers
+                                  where orderNumbers.ProtocolId == protocolId
+                                  select orderNumbers.OrderNum).FirstOrDefault();
+
+                        //DateTime.TryParse( MainClass.Bdc.GetStringValue(string.Format("SELECT OrderDate FROM ed.OrderNumbers WHERE ProtocolId='{0}'", protocolId)), out tempDate);
+                        tempDate = (DateTime)(from orderNumbers in ctx.OrderNumbers where orderNumbers.ProtocolId == protocolId select orderNumbers.OrderDate).FirstOrDefault();
+
+                        docDate = tempDate.ToShortDateString();
+                    }
+                    else
+                    {
+                        //docNum = MainClass.Bdc.GetStringValue(string.Format("SELECT OrderNumFor FROM ed.OrderNumbers WHERE ProtocolId='{0}'", protocolId));
+                        docNum = (from orderNumbers in ctx.OrderNumbers
+                                  where orderNumbers.ProtocolId == protocolId
+                                  select orderNumbers.OrderNumFor).FirstOrDefault();
+
+                        //DateTime.TryParse(MainClass.Bdc.GetStringValue(string.Format("SELECT OrderDateFor FROM ed.OrderNumbers WHERE ProtocolId='{0}'", protocolId)), out tempDate);
+                        tempDate = (DateTime)(from orderNumbers in ctx.OrderNumbers
+                                              where orderNumbers.ProtocolId == protocolId
+                                              select orderNumbers.OrderDateFor).FirstOrDefault();
+
+                        docDate = tempDate.ToShortDateString();
+                    }
                     
                     var lst = (from extabit in ctx.extAbit
                                join extentryView in ctx.extEntryView on extabit.Id equals extentryView.AbiturientId
@@ -5402,7 +5420,7 @@ namespace Priem
                         else
                             wd.InsertAutoTextInEnd("выписка", true);
 
-                        wd.GetLastFields(11);
+                        wd.GetLastFields(13);
                         td = wd.Tables[counter];
 
                         wd.SetFields("Граждан", isRus ? "граждан РФ" : "иностранных граждан");
@@ -5416,16 +5434,20 @@ namespace Priem
                        // wd.SetFields("БакСпец", bakspec);
                         wd.SetFields("БакСпецРод", bakspec);
                        // wd.SetFields("НапрСпец", string.Format(" {0} {1} «{2}»", naprspecRod, professionCode, profession));
-                        //wd.SetFields("ПриказДата", docDate);
-                        //wd.SetFields("ПриказНомер", "№ " + docNum);
+                        wd.SetFields("ПриказДата", docDate);
+                        wd.SetFields("ПриказНомер", "№ " + docNum);
                         wd.SetFields("SignerName", v.SignerName);
                         wd.SetFields("SignerPosition", v.SignerPosition);
                         //SetFields("ДатаПечати", DateTime.Now.Date.ToShortDateString());
 
                         
                         wd.SetFields("Основание", educDoc);
-                        wd.SetFields("ДатаОснования", docDate.ToShortDateString() ?? "ДАТА");
-                        wd.SetFields("НомерОснования", docNum ?? "НОМЕР");
+                        if (protocolDate.HasValue)
+                            wd.SetFields("ДатаОснования", ((DateTime)protocolDate).ToShortDateString());
+                        else
+                            wd.SetFields("ДатаОснования", "ДАТА");
+                        wd.SetFields("НомерОснования", protocolNum ?? "НОМЕР");
+
 
                         string curLPHeader = "-";
                         string curSpez = "-";

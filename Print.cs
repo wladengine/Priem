@@ -4857,7 +4857,7 @@ namespace Priem
                 string bakspec = "", bakspecRod = "", naprspec = "", naprspecRod = "", profspec = "", naprobProgRod = "", educDoc = "";
                 string list = "", sec = "";
 
-                naprobProgRod = "образовательной программе"; ;
+                naprobProgRod = "образовательной программе"; 
 
                 if (MainClass.dbType == PriemType.PriemMag)
                 {
@@ -5237,6 +5237,7 @@ namespace Priem
                 string professionCode;
                 int StudyLevelId;
 
+                string naprspecRod = "";
                 using (PriemEntities ctx = new PriemEntities())
                 {
 
@@ -5299,6 +5300,8 @@ namespace Priem
                     {
                         bakspec = "магистратуры";
                         profspec = "профилю";
+                        naprspecRod = "направлению подготовки";
+
                     }
                     else
                     {
@@ -5311,6 +5314,8 @@ namespace Priem
                             bakspec = "специалитета";
                         }
                         profspec = "профилю";
+                        naprspecRod = "направлению подготовки";
+
                     }
 
                     int curRow = 5, counter = 0;
@@ -5331,15 +5336,14 @@ namespace Priem
                     DateTime tempDate;
                     if (isRus)
                     {
-                        //docNum = MainClass.Bdc.GetStringValue(string.Format("SELECT OrderNum FROM ed.OrderNumbers WHERE ProtocolId='{0}'", protocolId));
-                        docNum = (from orderNumbers in ctx.OrderNumbers
-                                  where orderNumbers.ProtocolId == protocolId
-                                  select orderNumbers.OrderNum).FirstOrDefault();
+                        
+                        docNum = (from protocol in ctx.OrderNumbers
+                                  where protocol.ProtocolId == protocolId
+                                  select protocol.ComissionNumber).DefaultIfEmpty("НЕ УКАЗАН").FirstOrDefault();
 
-                        //DateTime.TryParse( MainClass.Bdc.GetStringValue(string.Format("SELECT OrderDate FROM ed.OrderNumbers WHERE ProtocolId='{0}'", protocolId)), out tempDate);
-                        tempDate = (DateTime)(from orderNumbers in ctx.OrderNumbers where orderNumbers.ProtocolId == protocolId select orderNumbers.OrderDate).FirstOrDefault();
-
-                        docDate = tempDate.ToShortDateString();
+                        docDate = (from protocol in ctx.OrderNumbers
+                                             where protocol.ProtocolId == protocolId
+                                             select protocol.ComissionDate ?? DateTime.Now).FirstOrDefault().ToShortDateString();
                     }
                     else
                     {
@@ -5373,12 +5377,12 @@ namespace Priem
                                    Рег_Номер = extabit.RegNum,
                                    Ид_номер = extabit.PersonNum,
                                    TotalSum = extabitMarksSum.TotalSum,
-                                   ObrazProgramAdd = extabit.ObrazProgramInEntryName,
-                                   ProfileAdd = extabit.ProfileInObrazProgramInEntryName,
                                    ФИО = extabit.FIO,
                                    LicenseProgramCodeAndName = extabit.LicenseProgramCode + " " + extabit.LicenseProgramName,
                                    ProfileName = extabit.ProfileInObrazProgramInEntryName ?? extabit.ProfileName,
-                                   ObrazProgram = extabit.ObrazProgramInEntryName ?? extabit.ObrazProgramName,
+                                   ObrazProgramAdd = extabit.ObrazProgramInEntryName,
+                                   ObrazProgram = extabit.ObrazProgramName,
+                                   ObrazProgramCryptAdd = extabit.ObrazProgramInEntryCrypt,
                                    ObrazProgramCrypt = extabit.ObrazProgramCrypt,
                                    ObrazProgramId = extabit.ObrazProgramId,
                                    EntryHeaderId = entryHeader.Id,
@@ -5397,8 +5401,8 @@ namespace Priem
                                        ФИО = x.ФИО,
                                        LicenseProgramCodeAndName = x.LicenseProgramCodeAndName,
                                        ProfileName = x.ProfileName,
-                                       ObrazProgram = x.ObrazProgram.Replace("(очно-заочная)", "").Replace(" ВВ", ""),
-                                       ObrazProgramCrypt = x.ObrazProgramCrypt,
+                                       ObrazProgram = (x.ObrazProgramAdd ?? x.ObrazProgram).Replace("(очно-заочная)", "").Replace(" ВВ", ""),
+                                       ObrazProgramCrypt = x.ObrazProgramCryptAdd ?? x.ObrazProgramCrypt,
                                        ObrazProgramId = x.ObrazProgramId,
                                        EntryHeaderId = x.EntryHeaderId,
                                        EntryHeaderName = x.EntryHeaderName,
@@ -5429,21 +5433,34 @@ namespace Priem
                        // wd.SetFields("БакСпец", bakspec);
                         wd.SetFields("БакСпецРод", bakspec);
                        // wd.SetFields("НапрСпец", string.Format(" {0} {1} «{2}»", naprspecRod, professionCode, profession));
-                        wd.SetFields("ПриказДата", docDate);
-                        wd.SetFields("ПриказНомер", "№ " + docNum);
+                        //wd.SetFields("ПриказДата", docDate);
+                        //wd.SetFields("ПриказНомер", "№ " + docNum);
                         wd.SetFields("SignerName", v.SignerName);
                         wd.SetFields("SignerPosition", v.SignerPosition);
                         //SetFields("ДатаПечати", DateTime.Now.Date.ToShortDateString());
 
                         
                         wd.SetFields("Основание", educDoc);
+                        wd.SetFields("ДатаОснования", docDate);
+                        wd.SetFields("НомерОснования", docNum);
 
+                        string curLPHeader = "-";
                         string curSpez = "-";
                         string curObProg = "-";
                         string curHeader = "-";
                         string curCountry = "-";
 
                         ++counter;
+                        
+                        string LP = v.LicenseProgramCodeAndName;
+                        if (curLPHeader != LP)
+                        {
+                            td.AddRow(1);
+                            curRow++;
+                            td[0, curRow] = string.Format("{2}\tпо {0} \"{1}\"", naprspecRod, LP, curObProg == "-" ? "" : "\r\n");
+                            curLPHeader = LP;
+                        }
+                        
                         string obProg = v.ObrazProgram;
                         string obProgCode = v.ObrazProgramCrypt;
                         if (obProg != curObProg)

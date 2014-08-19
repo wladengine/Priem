@@ -5238,8 +5238,18 @@ namespace Priem
                 int StudyLevelId;
 
                 string naprspecRod = "";
+                string docNum = "НОМЕР";
+                DateTime docDate;
                 using (PriemEntities ctx = new PriemEntities())
                 {
+
+                    docNum = (from protocol in ctx.OrderNumbers
+                              where protocol.ProtocolId == protocolId
+                              select protocol.ComissionNumber).DefaultIfEmpty("НЕ УКАЗАН").FirstOrDefault();
+
+                    docDate = (DateTime)(from protocol in ctx.OrderNumbers
+                                         where protocol.ProtocolId == protocolId
+                                         select protocol.ComissionDate ?? DateTime.Now).FirstOrDefault();
 
                     formId = (from protocol in ctx.Protocol
                               join studyForm in ctx.StudyForm on protocol.StudyFormId equals studyForm.Id
@@ -5331,34 +5341,7 @@ namespace Priem
                                    where protocol.Id == protocolId
                                    select protocol.Number).FirstOrDefault();
 
-                    string docNum = "НОМЕР";
-                    string docDate = "ДАТА";
-                    DateTime tempDate;
-                    if (isRus)
-                    {
-                        
-                        docNum = (from protocol in ctx.OrderNumbers
-                                  where protocol.ProtocolId == protocolId
-                                  select protocol.ComissionNumber).DefaultIfEmpty("НЕ УКАЗАН").FirstOrDefault();
-
-                        docDate = (from protocol in ctx.OrderNumbers
-                                             where protocol.ProtocolId == protocolId
-                                             select protocol.ComissionDate ?? DateTime.Now).FirstOrDefault().ToShortDateString();
-                    }
-                    else
-                    {
-                        //docNum = MainClass.Bdc.GetStringValue(string.Format("SELECT OrderNumFor FROM ed.OrderNumbers WHERE ProtocolId='{0}'", protocolId));
-                        docNum = (from orderNumbers in ctx.OrderNumbers
-                                  where orderNumbers.ProtocolId == protocolId
-                                  select orderNumbers.OrderNumFor).FirstOrDefault();
-
-                        //DateTime.TryParse(MainClass.Bdc.GetStringValue(string.Format("SELECT OrderDateFor FROM ed.OrderNumbers WHERE ProtocolId='{0}'", protocolId)), out tempDate);
-                        tempDate = (DateTime)(from orderNumbers in ctx.OrderNumbers
-                                              where orderNumbers.ProtocolId == protocolId
-                                              select orderNumbers.OrderDateFor).FirstOrDefault();
-
-                        docDate = tempDate.ToShortDateString();
-                    }
+ 
                     
                     var lst = (from extabit in ctx.extAbit
                                join extentryView in ctx.extEntryView on extabit.Id equals extentryView.AbiturientId
@@ -5441,8 +5424,8 @@ namespace Priem
 
                         
                         wd.SetFields("Основание", educDoc);
-                        wd.SetFields("ДатаОснования", docDate);
-                        wd.SetFields("НомерОснования", docNum);
+                        wd.SetFields("ДатаОснования", docDate.ToShortDateString() ?? "ДАТА");
+                        wd.SetFields("НомерОснования", docNum ?? "НОМЕР");
 
                         string curLPHeader = "-";
                         string curSpez = "-";

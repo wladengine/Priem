@@ -122,6 +122,8 @@ namespace Priem
             qBuilder.AddQueryItem(new QueryItem("ed.extPerson", "ed.extPerson.BirthPlace", "Место_рождения"));
             qBuilder.AddQueryItem(new QueryItem("ed.extPerson", "ed.extPerson.PassportSeries", "Серия_паспорта"));
             qBuilder.AddQueryItem(new QueryItem("ed.extPerson", "ed.extPerson.PassportNumber", "Номер_паспорта"));
+            qBuilder.AddQueryItem(new QueryItem("ed.extPerson", "ed.extPerson.SNILS", "СНИЛС"));
+
             qBuilder.AddQueryItem(new QueryItem("ed.extPerson", "ed.extPerson.PassportAuthor", "Кем_выдан_паспорт"));
             qBuilder.AddQueryItem(new QueryItem("ed.extPerson", "ed.extPerson.PassportDate", "Дата_выдачи_паспорта"));
             qBuilder.AddQueryItem(new QueryItem("ed.extPerson", QueryBuilder.GetBoolField("ed.extPerson.Sex"), "Пол_мужской"));

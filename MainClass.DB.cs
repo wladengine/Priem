@@ -151,6 +151,9 @@ namespace Priem
             qBuilder.AddQueryItem(new QueryItem("ed.extPerson", "ed.extPerson.HEQualification", "Квалификация"));
             qBuilder.AddQueryItem(new QueryItem("ed.extPerson", "ed.extPerson.HighEducation", "Место_предыдущего_образования_маг"));
 
+            qBuilder.AddQueryItem(new QueryItem("ed.extAbit", "ed.extAbit.ObrazProgramInEntryName", "Образовательная_программа_зачисления"));
+            qBuilder.AddQueryItem(new QueryItem("ed.extAbit", "ed.extAbit.ProfileInObrazProgramInEntryName", "Профиль_зачисления"));
+
             if (MainClass.dbType == PriemType.PriemMag)
             {
                 qBuilder.AddQueryItem(new QueryItem("ed.extPerson", "ed.extPerson.HighEducation", "Название_уч_заведения"));
@@ -162,7 +165,6 @@ namespace Priem
                 qBuilder.AddQueryItem(new QueryItem("ed.extPerson", "ed.extPerson.SchoolName", "Название_уч_заведения"));
                 qBuilder.AddQueryItem(new QueryItem("ed.extPerson", "ed.extPerson.SchoolExitYear", "Год_выпуска"));
             }
-
 
             qBuilder.AddQueryItem(new QueryItem("ed.extPerson", QueryBuilder.GetBoolField("ed.extPerson.HostelEduc"), "Предоставлять_общежитие_обучение"));
             qBuilder.AddQueryItem(new QueryItem("ed.qAbiturient", QueryBuilder.GetBoolField("ed.qAbiturient.IsListener"), "Слушатель"));
@@ -181,7 +183,6 @@ namespace Priem
             qBuilder.AddQueryItem(new QueryItem("ed.qAbiturient", "ed.qAbiturient.Priority", "Приоритет"));
             qBuilder.AddQueryItem(new QueryItem("ed.qAbiturient", "ed.qAbiturient.SessionAVG", "Средний_балл_сессии"));
             qBuilder.AddQueryItem(new QueryItem("ed.qAbiturient", "ed.qAbiturient.StudentStatus", "Статус_студента"));
-
 
             qBuilder.AddQueryItem(new QueryItem("ed.PassportType", "ed.PassportType.Name", "Тип_паспорта"));
             qBuilder.AddQueryItem(new QueryItem("ed.Country", "ed.Country.Name", "Страна"));
@@ -300,6 +301,7 @@ namespace Priem
             //JOIN-ы
             qBuilder.AddTableJoint("ed.Person", " LEFT JOIN ed.Person ON ed.qAbiturient.PersonId = ed.Person.Id ");
             qBuilder.AddTableJoint("ed.extPerson", " INNER JOIN ed.extPerson ON ed.qAbiturient.PersonId = ed.extPerson.Id ");
+            qBuilder.AddTableJoint("ed.extAbit", " INNER JOIN ed.extAbit ON ed.qAbiturient.Id = ed.extAbit.Id ");
 
             qBuilder.AddTableJoint("ed.PassportType", " LEFT JOIN ed.PassportType ON ed.PassportType.Id = ed.extPerson.PassportTypeId ");
             qBuilder.AddTableJoint("ed.Country", " LEFT JOIN ed.Country ON ed.extPerson.CountryId = ed.Country.Id ");

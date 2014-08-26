@@ -81,7 +81,7 @@ namespace Priem
                     {
                         string sNum = "0000" + stNum.ToString();
                         sNum = sNum.Substring(sNum.Length - 4, 4);
-                        sNum = (DateTime.Now.Year % 100).ToString() + SLGr + sNum;
+                        sNum = (DateTime.Now.Year % 100).ToString() + Pref + sNum;
 
                         context.Abiturient_UpdateStudyNumber(sNum, abitId);
                         stNum++;

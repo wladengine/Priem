@@ -268,7 +268,8 @@ namespace Priem
                          //EntryProtId = extEV.Id,
                          Ab.Person.Person_EducationInfo.HEExitYear,
                          Ab.Person.Person_AdditionalInfo.HostelEduc,
-                         Ab.HasOriginals
+                         Ab.HasOriginals,
+                         Ab.Person.SNILS
                      }).ToList();
 
 
@@ -339,7 +340,7 @@ namespace Priem
                         "[Phone], [ZipCode], [Adress], [LifeAddress], " +
                         "[BirthDate], [Sex], " +
                         "[PasswordTypeId], [PaswSeries], [PaswNumber], [PaswDate], [PaswAuthor], " +
-                        "[StudyNumber], [EntryOrderId], [EduProgName], [EduProgKod], [StudyPlanNumber])" +
+                        "[StudyNumber], [EntryOrderId], [EduProgName], [EduProgKod], [StudyPlanNumber], [SNILS])" +
                         "VALUES (" +
                         "'{0}','{1}','{2}','{3}'," +
                         "'{4}','{5}','{6}','{7}', " +
@@ -351,7 +352,7 @@ namespace Priem
                         "'{28}','{29}','{30}','{31}'," +
                         "'{32}','{33}'," +
                         "'{34}','{35}','{36}','{37}','{38}'," +
-                        "'{39}','{40}', '{41}','{42}', '{43}')",
+                        "'{39}','{40}', '{41}','{42}', '{43}', '{44}')",
                         Abit.RegNum, Abit.Name, Abit.SecondName, Abit.Surname,
                         Abit.Privileges.ToString(), QueryServ.QueryForBool(Abit.IsExcellent.ToString()), Abit.ListenerTypeId.ToString(), QueryServ.QueryForBool(Abit.IsListener.ToString()),
                         QueryServ.QueryForBool(Abit.HostelEduc.ToString()), Abit.FacultyId.ToString(), profId, specId,
@@ -364,8 +365,8 @@ namespace Priem
                         ph, zc, a, la,
                         Abit.BirthDate.ToString(), QueryServ.QueryForBool(Abit.Sex.ToString()),
                         Abit.PassportTypeId.ToString(), Abit.PassportSeries, Abit.PassportNumber, Abit.PassportDate.ToString(), pa,
-                        Abit.StudyNumber, abId, 
-                        (Abit.ObrazProgramName.Length > 128 ? Abit.ObrazProgramName.Substring(0, 128) : Abit.ObrazProgramName), Abit.ObrazProgramCrypt, (Abit.StudyPlanNumber ?? ""));
+                        Abit.StudyNumber, abId,
+                        (Abit.ObrazProgramName.Length > 128 ? Abit.ObrazProgramName.Substring(0, 128) : Abit.ObrazProgramName), Abit.ObrazProgramCrypt, (Abit.StudyPlanNumber ?? ""), Abit.SNILS ?? "");
 
                     _odc.ExecuteQuery(s);
 

@@ -334,8 +334,9 @@ namespace Priem
             // 
             // gbWait
             // 
+            this.gbWait.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.gbWait.Controls.Add(this.lblWait);
-            this.gbWait.Location = new System.Drawing.Point(179, 218);
+            this.gbWait.Location = new System.Drawing.Point(235, 229);
             this.gbWait.Name = "gbWait";
             this.gbWait.Size = new System.Drawing.Size(200, 36);
             this.gbWait.TabIndex = 115;

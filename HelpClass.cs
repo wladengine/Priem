@@ -17,7 +17,6 @@ namespace Priem
         {
             return GetComboListByTable(tableName, null);
         }
-
         public static List<KeyValuePair<string, string>> GetComboListByTable(string tableName, string orderBy)
         {
             try
@@ -40,7 +39,6 @@ namespace Priem
                 return null;
             }
         }
-
         public static List<KeyValuePair<string, string>> GetComboListByQuery(string query)
         {
             try
@@ -239,7 +237,5 @@ namespace Priem
                 WinFormsServ.Error("Ошибка сервера: " + ex.Message);
             }
         }
-
-
     }
 }

@@ -48,13 +48,13 @@ namespace Priem
             {
                 int rowNum = 0;
                 var ListLP = context.Entry.Where(x => x.KCP.HasValue && x.KCP > 0 && (StudyLevelId.HasValue ? x.StudyLevel.Id == StudyLevelId : x.StudyLevel.LevelGroupId == 4))
-                    .Select(x => new { x.StudyFormId, x.StudyBasisId, x.LicenseProgramId, x.SP_LicenseProgram.GSGUCode, x.SP_LicenseProgram.Name, x.SP_LicenseProgram.Code, x.KCP, x.KCPCel }).Distinct().ToList();
+                    .Select(x => new { x.StudyFormId, x.StudyBasisId, x.LicenseProgramId, x.SP_LicenseProgram.GSGUCode, x.SP_LicenseProgram.Name, x.SP_LicenseProgram.Code }).Distinct().ToList();
                 ProgressForm pf = new ProgressForm();
                 pf.SetProgressText("Загрузка данных...");
                 pf.MaxPrBarValue = ListLP.Count;
                 pf.Show();
-                try
-                {
+                //try
+                //{
                 foreach (var LP in ListLP)
                 {
                     pf.PerformStep();
@@ -90,11 +90,13 @@ namespace Priem
 
                     //p1_1 Количество мест для приёма граждан
                     node = rwNode.AppendChild(doc.CreateNode(XmlNodeType.Element, "p1_1", ""));
-                    node.InnerText = LP.KCP.ToString();
+                    node.InnerText = context.Entry.Where(x => x.LicenseProgramId == LP.LicenseProgramId && x.StudyBasisId == LP.StudyBasisId && x.StudyFormId == LP.StudyFormId)
+                        .Select(x => x.KCP).DefaultIfEmpty(0).Sum().ToString();
 
                     //p1_2 в т.ч. целевики
                     node = rwNode.AppendChild(doc.CreateNode(XmlNodeType.Element, "p1_2", ""));
-                    node.InnerText = LP.KCPCel.ToString();
+                    node.InnerText = context.Entry.Where(x => x.LicenseProgramId == LP.LicenseProgramId && x.StudyBasisId == LP.StudyBasisId && x.StudyFormId == LP.StudyFormId)
+                        .Select(x => x.KCPCel).DefaultIfEmpty(0).Sum().ToString();
 
                     var Abits = context.Abiturient
                         .Where(x => x.Entry.LicenseProgramId == LP.LicenseProgramId && x.Entry.StudyBasisId == LP.StudyBasisId && x.Entry.StudyFormId == LP.StudyFormId)
@@ -120,14 +122,14 @@ namespace Priem
                     node = rwNode.AppendChild(doc.CreateNode(XmlNodeType.Element, "p3_2", ""));
                     node.InnerText = cnt.ToString();
                     
-                    //р8 Проходной балл по направлению подготовки (специальности), приведенный к 100-бальной шкале
+                    //р8 Проходной балл по направлению подготовки (специальности), приведенный к 15-бальной шкале
                     int MinMark =
                         (from ev in EV
                          join mark in context.Mark on ev.AbiturientId equals mark.AbiturientId
                          where ev.IsCel == 0 && ev.IsQuota == 0 && ev.IsCrimea == 0 && ev.IsBE == 0
                          select new { FiveGradeValue = (int?)mark.FiveGradeValue, mark.AbiturientId })
-                         .GroupBy(x => x.AbiturientId)
-                         .Select(x => x.Where(y => y.AbiturientId == x.Key).Select(y => y.FiveGradeValue ?? 0).Sum())
+                         .GroupBy(x => x.AbiturientId).DefaultIfEmpty()
+                         .Select(x => x.Where(y => y.AbiturientId == x.Key).Select(y => y.FiveGradeValue ?? 0).DefaultIfEmpty(0).Sum())
                          .Min();
                     node = rwNode.AppendChild(doc.CreateNode(XmlNodeType.Element, "p8", ""));
                     node.InnerText = (MinMark).ToString();
@@ -140,15 +142,15 @@ namespace Priem
                     XmlWriter w = XmlWriter.Create(sfd.FileName, new XmlWriterSettings() { NewLineHandling = NewLineHandling.Entitize, NewLineChars = "" });
                     doc.Save(w);
                 }
-                }
-                catch (Exception ex)
-                {
-                    WinFormsServ.Error(ex);
-                }
-                finally
-                {
+                //}
+                //catch (Exception ex)
+                //{
+                //    WinFormsServ.Error(ex);
+                //}
+                //finally
+                //{
                 pf.Close();
-                }
+                //}
 
 
                 //retString = declaration.OuterXml + doc.InnerXml;

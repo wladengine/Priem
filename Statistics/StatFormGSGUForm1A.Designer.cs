@@ -41,6 +41,7 @@
             this.btnStartImport.TabIndex = 5;
             this.btnStartImport.Text = "Рассчитать";
             this.btnStartImport.UseVisualStyleBackColor = true;
+            this.btnStartImport.Click += new System.EventHandler(this.btnStartImport_Click);
             // 
             // label1
             // 

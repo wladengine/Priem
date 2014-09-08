@@ -634,7 +634,9 @@
       [extPerson].[KladrCode] AS [KladrCode], 
       [extPerson].[SNILS] AS [SNILS], 
       [extPerson].[RegionEducId] AS [RegionEducId], 
-      [extPerson].[RegionNumber] AS [RegionNumber]
+      [extPerson].[RegionNumber] AS [RegionNumber], 
+      [extPerson].[ForeignNationality] AS [ForeignNationality], 
+      [extPerson].[ForeignNationalityId] AS [ForeignNationalityId]
       FROM [ed].[extPerson] AS [extPerson]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="extPersonAll" EntityType="Priem2012Model.Store.extPersonAll" store:Type="Views" store:Schema="ed" store:Name="extPersonAll">
@@ -1795,6 +1797,8 @@
           <Property Name="CommissionId" Type="int" />
           <Property Name="KCPCrimea" Type="int" />
           <Property Name="KCPQuota" Type="int" />
+          <Property Name="DateFinishEduc" Type="date" />
+          <Property Name="DateStartEduc" Type="date" />
         </EntityType>
         <EntityType Name="EntryHeader">
           <Key>
@@ -3236,6 +3240,8 @@
           <Property Name="SNILS" Type="nvarchar" MaxLength="50" />
           <Property Name="RegionEducId" Type="int" />
           <Property Name="RegionNumber" Type="nvarchar" MaxLength="2" />
+          <Property Name="ForeignNationality" Type="nvarchar" MaxLength="100" />
+          <Property Name="ForeignNationalityId" Type="int" />
         </EntityType>
         <!--Errors Found During Generation:
       warning 6002: The table/view 'Priem.ed.extPersonAll' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.
@@ -5347,6 +5353,7 @@
           <Parameter Name="IsParallel" Type="bit" Mode="In" />
           <Parameter Name="IsReduced" Type="bit" Mode="In" />
           <Parameter Name="IsSecond" Type="bit" Mode="In" />
+          <Parameter Name="StudyPlanNumber" Type="nvarchar" Mode="In" />
           <Parameter Name="DateOfStart_Foreign" Type="datetime" Mode="In" />
           <Parameter Name="DateOfClose_Foreign" Type="datetime" Mode="In" />
           <Parameter Name="DateOfStart_GosLine" Type="datetime" Mode="In" />
@@ -7444,6 +7451,7 @@
             <Parameter Name="IsParallel" Mode="In" Type="Boolean" />
             <Parameter Name="IsReduced" Mode="In" Type="Boolean" />
             <Parameter Name="IsSecond" Mode="In" Type="Boolean" />
+            <Parameter Name="StudyPlanNumber" Mode="In" Type="String" />
             <Parameter Name="DateOfStart_Foreign" Mode="In" Type="DateTime" />
             <Parameter Name="DateOfClose_Foreign" Mode="In" Type="DateTime" />
             <Parameter Name="DateOfStart_GosLine" Mode="In" Type="DateTime" />
@@ -10278,6 +10286,8 @@
           <Property Type="String" Name="SNILS" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Type="Int32" Name="RegionEducId" />
           <Property Type="String" Name="RegionNumber" MaxLength="2" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="ForeignNationality" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Type="Int32" Name="ForeignNationalityId" />
         </EntityType>
         <EntityType Name="SchoolNames">
           <Key>
@@ -10650,6 +10660,8 @@
           <NavigationProperty Name="SP_LicenseProgram" Relationship="Priem2012Model.FK_Entry_SP_LicenseProgram" FromRole="Entry" ToRole="SP_LicenseProgram" />
           <NavigationProperty Name="SP_ObrazProgram" Relationship="Priem2012Model.FK_Entry_SP_ObrazProgram" FromRole="Entry" ToRole="SP_ObrazProgram" />
           <Property Type="Int32" Name="KCPQuota" />
+          <Property Type="DateTime" Name="DateFinishEduc" Precision="0" />
+          <Property Type="DateTime" Name="DateStartEduc" Precision="0" />
         </EntityType>
         <Association Name="FK_Abiturient_Entry">
           <End Type="Priem2012Model.Entry" Role="Entry" Multiplicity="1" />
@@ -12879,6 +12891,8 @@
           <EntitySetMapping Name="extPerson">
             <EntityTypeMapping TypeName="Priem2012Model.extPerson">
               <MappingFragment StoreEntitySet="extPerson">
+                <ScalarProperty Name="ForeignNationalityId" ColumnName="ForeignNationalityId" />
+                <ScalarProperty Name="ForeignNationality" ColumnName="ForeignNationality" />
                 <ScalarProperty Name="RegionNumber" ColumnName="RegionNumber" />
                 <ScalarProperty Name="RegionEducId" ColumnName="RegionEducId" />
                 <ScalarProperty Name="SNILS" ColumnName="SNILS" />
@@ -13136,6 +13150,8 @@
           <EntitySetMapping Name="Entry">
             <EntityTypeMapping TypeName="Priem2012Model.Entry">
               <MappingFragment StoreEntitySet="Entry">
+                <ScalarProperty Name="DateStartEduc" ColumnName="DateStartEduc" />
+                <ScalarProperty Name="DateFinishEduc" ColumnName="DateFinishEduc" />
                 <ScalarProperty Name="KCPQuota" ColumnName="KCPQuota" />
                 <ScalarProperty Name="KCPCrimea" ColumnName="KCPCrimea" />
                 <ScalarProperty Name="CommissionId" ColumnName="CommissionId" />

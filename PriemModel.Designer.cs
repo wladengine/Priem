@@ -11451,6 +11451,7 @@ namespace Priem
         /// <param name="isParallel">No Metadata Documentation available.</param>
         /// <param name="isReduced">No Metadata Documentation available.</param>
         /// <param name="isSecond">No Metadata Documentation available.</param>
+        /// <param name="studyPlanNumber">No Metadata Documentation available.</param>
         /// <param name="dateOfStart_Foreign">No Metadata Documentation available.</param>
         /// <param name="dateOfClose_Foreign">No Metadata Documentation available.</param>
         /// <param name="dateOfStart_GosLine">No Metadata Documentation available.</param>
@@ -11458,7 +11459,7 @@ namespace Priem
         /// <param name="dateOfStart">No Metadata Documentation available.</param>
         /// <param name="dateOfClose">No Metadata Documentation available.</param>
         /// <param name="comissionId">No Metadata Documentation available.</param>
-        public int Entry_Update(Nullable<global::System.Guid> id, Nullable<global::System.Int32> studyLevelId, Nullable<global::System.Int32> studyFormId, Nullable<global::System.Int32> studyBasisId, Nullable<global::System.Int32> facultyId, Nullable<global::System.Boolean> isClosed, Nullable<global::System.Boolean> isParallel, Nullable<global::System.Boolean> isReduced, Nullable<global::System.Boolean> isSecond, Nullable<global::System.DateTime> dateOfStart_Foreign, Nullable<global::System.DateTime> dateOfClose_Foreign, Nullable<global::System.DateTime> dateOfStart_GosLine, Nullable<global::System.DateTime> dateOfClose_GosLine, Nullable<global::System.DateTime> dateOfStart, Nullable<global::System.DateTime> dateOfClose, Nullable<global::System.Int32> comissionId)
+        public int Entry_Update(Nullable<global::System.Guid> id, Nullable<global::System.Int32> studyLevelId, Nullable<global::System.Int32> studyFormId, Nullable<global::System.Int32> studyBasisId, Nullable<global::System.Int32> facultyId, Nullable<global::System.Boolean> isClosed, Nullable<global::System.Boolean> isParallel, Nullable<global::System.Boolean> isReduced, Nullable<global::System.Boolean> isSecond, global::System.String studyPlanNumber, Nullable<global::System.DateTime> dateOfStart_Foreign, Nullable<global::System.DateTime> dateOfClose_Foreign, Nullable<global::System.DateTime> dateOfStart_GosLine, Nullable<global::System.DateTime> dateOfClose_GosLine, Nullable<global::System.DateTime> dateOfStart, Nullable<global::System.DateTime> dateOfClose, Nullable<global::System.Int32> comissionId)
         {
             ObjectParameter idParameter;
             if (id.HasValue)
@@ -11550,6 +11551,16 @@ namespace Priem
                 isSecondParameter = new ObjectParameter("IsSecond", typeof(global::System.Boolean));
             }
     
+            ObjectParameter studyPlanNumberParameter;
+            if (studyPlanNumber != null)
+            {
+                studyPlanNumberParameter = new ObjectParameter("StudyPlanNumber", studyPlanNumber);
+            }
+            else
+            {
+                studyPlanNumberParameter = new ObjectParameter("StudyPlanNumber", typeof(global::System.String));
+            }
+    
             ObjectParameter dateOfStart_ForeignParameter;
             if (dateOfStart_Foreign.HasValue)
             {
@@ -11620,7 +11631,7 @@ namespace Priem
                 comissionIdParameter = new ObjectParameter("ComissionId", typeof(global::System.Int32));
             }
     
-            return base.ExecuteFunction("Entry_Update", idParameter, studyLevelIdParameter, studyFormIdParameter, studyBasisIdParameter, facultyIdParameter, isClosedParameter, isParallelParameter, isReducedParameter, isSecondParameter, dateOfStart_ForeignParameter, dateOfClose_ForeignParameter, dateOfStart_GosLineParameter, dateOfClose_GosLineParameter, dateOfStartParameter, dateOfCloseParameter, comissionIdParameter);
+            return base.ExecuteFunction("Entry_Update", idParameter, studyLevelIdParameter, studyFormIdParameter, studyBasisIdParameter, facultyIdParameter, isClosedParameter, isParallelParameter, isReducedParameter, isSecondParameter, studyPlanNumberParameter, dateOfStart_ForeignParameter, dateOfClose_ForeignParameter, dateOfStart_GosLineParameter, dateOfClose_GosLineParameter, dateOfStartParameter, dateOfCloseParameter, comissionIdParameter);
         }
     
         /// <summary>
@@ -19504,6 +19515,54 @@ namespace Priem
         private Nullable<global::System.Int32> _KCPQuota;
         partial void OnKCPQuotaChanging(Nullable<global::System.Int32> value);
         partial void OnKCPQuotaChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.DateTime> DateFinishEduc
+        {
+            get
+            {
+                return _DateFinishEduc;
+            }
+            set
+            {
+                OnDateFinishEducChanging(value);
+                ReportPropertyChanging("DateFinishEduc");
+                _DateFinishEduc = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("DateFinishEduc");
+                OnDateFinishEducChanged();
+            }
+        }
+        private Nullable<global::System.DateTime> _DateFinishEduc;
+        partial void OnDateFinishEducChanging(Nullable<global::System.DateTime> value);
+        partial void OnDateFinishEducChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.DateTime> DateStartEduc
+        {
+            get
+            {
+                return _DateStartEduc;
+            }
+            set
+            {
+                OnDateStartEducChanging(value);
+                ReportPropertyChanging("DateStartEduc");
+                _DateStartEduc = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("DateStartEduc");
+                OnDateStartEducChanged();
+            }
+        }
+        private Nullable<global::System.DateTime> _DateStartEduc;
+        partial void OnDateStartEducChanging(Nullable<global::System.DateTime> value);
+        partial void OnDateStartEducChanged();
 
         #endregion
 
@@ -33507,6 +33566,54 @@ namespace Priem
         private global::System.String _RegionNumber;
         partial void OnRegionNumberChanging(global::System.String value);
         partial void OnRegionNumberChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String ForeignNationality
+        {
+            get
+            {
+                return _ForeignNationality;
+            }
+            set
+            {
+                OnForeignNationalityChanging(value);
+                ReportPropertyChanging("ForeignNationality");
+                _ForeignNationality = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("ForeignNationality");
+                OnForeignNationalityChanged();
+            }
+        }
+        private global::System.String _ForeignNationality;
+        partial void OnForeignNationalityChanging(global::System.String value);
+        partial void OnForeignNationalityChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Int32> ForeignNationalityId
+        {
+            get
+            {
+                return _ForeignNationalityId;
+            }
+            set
+            {
+                OnForeignNationalityIdChanging(value);
+                ReportPropertyChanging("ForeignNationalityId");
+                _ForeignNationalityId = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("ForeignNationalityId");
+                OnForeignNationalityIdChanged();
+            }
+        }
+        private Nullable<global::System.Int32> _ForeignNationalityId;
+        partial void OnForeignNationalityIdChanging(Nullable<global::System.Int32> value);
+        partial void OnForeignNationalityIdChanged();
 
         #endregion
 

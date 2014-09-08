@@ -27,10 +27,10 @@ namespace Priem
         string _queryOrange;
 
         bool bMagAddNabor1Enabled = true;
-        DateTime dtMagAddNabor1 = new DateTime(2013, 6, 22);
+        DateTime dtMagAddNabor1 = new DateTime(2014, 8, 15);
 
         bool b1kursAddNabor1Enabled = true;
-        DateTime dt1kursAddNabor1 = new DateTime(2013, 8, 20);
+        DateTime dt1kursAddNabor1 = new DateTime(2014, 8, 15);
 
         bool bFirstWaveEnabled = true;
 

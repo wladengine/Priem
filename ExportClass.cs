@@ -42,7 +42,6 @@ namespace Priem
 
                     string numFor = (from ab in context.extAbit
                                   join abF in context.qAbiturientForeignApplicationsOnly on ab.Id equals abF.Id
-                                  where ab.StudyLevelGroupId == SLGr
                                   select ab.StudyNumber).Max();
 
                     var abits = (from ab in context.extAbit

@@ -402,6 +402,7 @@ namespace Priem
             tbKCPQuota.Enabled = true;
             cbComission.Enabled = true;
             cbFaculty.Enabled = true;
+            tbStudyPlan.Enabled = true;
         }
 
         private bool GetIsCanChangeEntry()
@@ -449,6 +450,8 @@ namespace Priem
             Entry.ProfileName = cbProfile.Text;
             Entry.StudyFormId = StudyFormId;
             Entry.StudyBasisId = StudyBasisId;
+            if (!string.IsNullOrEmpty(tbStudyPlan.Text.Trim()))
+                Entry.StudyPlanNumber = tbStudyPlan.Text.Trim();
             Entry.KCP = KCP;
             Entry.KCPCel = KCPCel;
             Entry.KCPQuota = KCPQuota;
@@ -503,7 +506,7 @@ DateOfStart, DateOfClose, DateOfStart_Foreign, DateOfClose_Foreign, DateOfStart_
         {
             context.Entry_UpdateCEl(GuidId, KCPCel);
             context.Entry_UpdateKC(GuidId, KCP, KCPCrimea, KCPQuota);
-            context.Entry_Update(GuidId, StudyLevelId, StudyFormId, StudyBasisId, FacultyId, false, IsParallel, IsReduced, IsSecond,
+            context.Entry_Update(GuidId, StudyLevelId, StudyFormId, StudyBasisId, FacultyId, false, IsParallel, IsReduced, IsSecond, tbStudyPlan.Text.Trim(),
                 DateOfStart_Foreign, DateOfClose_Foreign, DateOfStart_GosLine, DateOfClose_GosLine, DateOfStart, DateOfClose, ComissionId);
 
             try

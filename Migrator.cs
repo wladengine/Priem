@@ -41,11 +41,14 @@ namespace Priem
             this.MdiParent = MainClass.mainform;
 
             _bdc = MainClass.Bdc;
-            
-            if(MainClass.IsPasha())
-                ComboServ.FillCombo(cbFaculty, HelpClass.GetComboListByTable("ed.SP_Faculty"), false, true);               
-            else
-                ComboServ.FillCombo(cbFaculty, HelpClass.GetComboListByTable("ed.SP_Faculty"), false, false);           
+
+            using (PriemEntities context = new PriemEntities())
+            {
+                var src = context.StudyLevelGroup.Select(x => new { x.Id, x.Name }).ToList()
+                    .Select(x => new KeyValuePair<string, string>(x.Id.ToString(), x.Name)).ToList();
+
+                ComboServ.FillCombo(cbStudyLevelGroup, src, false, false);
+            }
 
             btnStart.Enabled = false;
             btnMetro.Enabled = false;
@@ -76,6 +79,14 @@ namespace Priem
         public string FacultyId
         {
             get { return ComboServ.GetComboId(cbFaculty); }            
+        }
+        public int? StudyLevelGroupId
+        {
+            get { return ComboServ.GetComboIdInt(cbStudyLevelGroup); }
+        }
+        public bool IsFor
+        {
+            get { return chbIsFor.Checked; }
         }
 
         Dictionary<string, string> _dRegion;
@@ -108,7 +119,7 @@ namespace Priem
             slSpec = new SortedList<string, string>();
 
             string query = @"SELECT DISTINCT LicenseProgramId, FacultyId, LicenseProgramCode, LicenseProgramName  
-                       FROM ed.qEntry WHERE qEntry.StudyLevelGroupId = " + MainClass.studyLevelGroupId + ((string.IsNullOrEmpty(FacultyId) ? "" : " AND ed.qEntry.FacultyId = " + FacultyId));
+                       FROM ed.qEntry WHERE qEntry.StudyLevelGroupId = " + StudyLevelGroupId + ((string.IsNullOrEmpty(FacultyId) ? "" : " AND ed.qEntry.FacultyId = " + FacultyId));
 
             DataSet dsProf = _bdc.GetDataSet(query);
 
@@ -126,7 +137,7 @@ namespace Priem
             }
 
             query = @"SELECT DISTINCT LicenseProgramId, FacultyId, ProfileId, ProfileName 
-                       FROM ed.qEntry WHERE NOT ProfileId IS NULL AND qEntry.StudyLevelGroupId = " + MainClass.studyLevelGroupId + ((string.IsNullOrEmpty(FacultyId) ? "" : " AND ed.qEntry.FacultyId = " + FacultyId));
+                       FROM ed.qEntry WHERE NOT ProfileId IS NULL AND qEntry.StudyLevelGroupId = " + StudyLevelGroupId + ((string.IsNullOrEmpty(FacultyId) ? "" : " AND ed.qEntry.FacultyId = " + FacultyId));
 
             DataSet dsSpec = _bdc.GetDataSet(query);
 
@@ -145,11 +156,10 @@ namespace Priem
                 newSpecId++;
             }
         }
-       
         private void MigrateOrders()
         {
             string query = @"SELECT ed.OrderNumbers.*, ed.Protocol.FacultyId, ed.Protocol.StudyFormId, ed.Protocol.StudyBasisId FROM ed.OrderNumbers 
-                             INNER JOIN ed.Protocol On ed.OrderNumbers.ProtocolId = ed.Protocol.Id WHERE Protocol.StudyLevelGroupId = " + MainClass.studyLevelGroupId + " " + GetFilter("ed.Protocol");
+                             INNER JOIN ed.Protocol On ed.OrderNumbers.ProtocolId = ed.Protocol.Id WHERE Protocol.StudyLevelGroupId = " + StudyLevelGroupId + " " + GetFilter("ed.Protocol");
             string queryAbits;
 
             DataSet ds = _bdc.GetDataSet(query);
@@ -187,8 +197,6 @@ namespace Priem
                 }
             }
         }
-
-        //миграция
         private void MigrateAbits()
         {
             NewWatch wc = new NewWatch(100);
@@ -204,8 +212,13 @@ namespace Priem
                     (from Ab in context.Abiturient
                      join Ent in context.extEntry on Ab.EntryId equals Ent.Id
                      join extEV in context.extEntryView on Ab.Id equals extEV.AbiturientId
-                     where Ab.Entry.StudyLevel.LevelGroupId == MainClass.studyLevelGroupId &&
+
+                     join qq in context.qAbiturientForeignApplicationsOnly on Ab.Id equals qq.Id into qq2
+                     from qq in qq2.DefaultIfEmpty()
+
+                     where Ab.Entry.StudyLevel.LevelGroupId == StudyLevelGroupId &&
                      (iFacultyId == 0 ? true : Ab.Entry.FacultyId == iFacultyId)
+                     && (IsFor ? qq.Id != null : qq.Id == null)
                      //&& extEV.Date > new DateTime(2013, 9, 18)
                      select new
                      {
@@ -328,6 +341,11 @@ namespace Priem
                     long abId = _slIds[Abit.Id.ToString()];
                     string regionId = _dRegion[Abit.Nation];
 
+                    string AbitSchoolName = Abit.SchoolName.Replace("'", "");
+                    if (AbitSchoolName.Length > 200)
+                        AbitSchoolName = AbitSchoolName.Substring(0, 200);
+
+
                     string s = string.Format(
                         "INSERT INTO Abiturient (" +
                         "[FileNum], [Name], [Patronymic], [Surname], " +
@@ -353,14 +371,14 @@ namespace Priem
                         "'{32}','{33}'," +
                         "'{34}','{35}','{36}','{37}','{38}'," +
                         "'{39}','{40}', '{41}','{42}', '{43}', '{44}')",
-                        Abit.RegNum, Abit.Name, Abit.SecondName, Abit.Surname,
+                        Abit.RegNum ?? "", Abit.Name, Abit.SecondName, Abit.Surname,
                         Abit.Privileges.ToString(), QueryServ.QueryForBool(Abit.IsExcellent.ToString()), Abit.ListenerTypeId.ToString(), QueryServ.QueryForBool(Abit.IsListener.ToString()),
                         QueryServ.QueryForBool(Abit.HostelEduc.ToString()), Abit.FacultyId.ToString(), profId, specId,
                         Abit.StudyBasisId, Abit.StudyFormId, Abit.CompetitionId,
                         Abit.DocDate, regionId, Abit.RegionId.HasValue ? Abit.RegionId.ToString() : "1",
                         Abit.LanguageId.HasValue ? Abit.LanguageId.Value.ToString() : "1",
                         educSeries, Abit.AttestatRegion, educNum, QueryServ.QueryForBool(Abit.HasOriginals.ToString()),
-                        Abit.SchoolName.Replace("'", "").Substring(0, Abit.SchoolName.Length > 200 ? 200 : Abit.SchoolName.Length), Abit.SchoolCity, Abit.SchoolNum, (Abit.SchoolTypeId ?? 1).ToString(), 
+                        AbitSchoolName, Abit.SchoolCity, Abit.SchoolNum, (Abit.SchoolTypeId ?? 1).ToString(), 
                         (string.IsNullOrEmpty(educYear) ? DateTime.Now.Year.ToString() : educYear),
                         ph, zc, a, la,
                         Abit.BirthDate.ToString(), QueryServ.QueryForBool(Abit.Sex.ToString()),
@@ -385,7 +403,7 @@ namespace Priem
             if (!string.IsNullOrEmpty(FacultyId))
                 res += string.Format(" AND {0}.FacultyId={1} ", table, FacultyId);
             
-            res += string.Format(" AND {0}.StudyLevelGroupId={1} ", table, MainClass.studyLevelGroupId);
+            res += string.Format(" AND {0}.StudyLevelGroupId={1} ", table, StudyLevelGroupId);
 
             return res;
         }
@@ -405,10 +423,11 @@ namespace Priem
             string query = string.Format("SELECT DISTINCT ed.extAbit.Id, ed.Person.Name, ed.Person.SecondName, ed.Person.Surname, " +
                               "ed.Person.BirthDate, ed.extAbit.StudyNumber, ed.extAbit.StudyLevelId, " +
                               "ed.Person.PassportTypeId, case when ed.Person.PassportTypeId=1 then 'Р' when ed.Person.PassportTypeId=3 then 'З' else '' end as PassportType, " +
-                              "ed.Person.PassportSeries, ed.Person.PassportNumber,  " +
+                              "ed.Person.PassportSeries, ed.Person.PassportNumber, EEE.DateFinishEduc, " +
                               "ed.extEntryView.Id AS EntryProtId " +
                               "FROM ed.extAbit INNER JOIN ed.Person ON ed.extAbit.PersonId = ed.Person.Id " +
                               "INNER JOIN ed.extEntryView ON ed.extEntryView.AbiturientId = ed.extAbit.Id " +
+                              "INNER JOIN ed.Entry AS EEE ON EEE.Id = extAbit.EntryId " +
                               "WHERE ed.extAbit.StudyFormId = 1 {0}", GetFilter("extAbit"));
 
             DataSet ds = _bdc.GetDataSet(query);
@@ -434,20 +453,39 @@ namespace Priem
                 string course;
 
                 string stLevel = dr["StudyLevelId"].ToString();
+                DateTime? dtFinish = dr.Field<DateTime?>("DateFinishEduc");
+                
                 if (stLevel == "16")
                 {
-                    dateEnd = "31.08.2017";
                     course = "1";
+                    if (dtFinish.HasValue)
+                        dateEnd = dtFinish.Value.ToString("dd.MM.yyyy");
+                    else
+                        dateEnd = "31.08." + (DateTime.Now.Year + 4).ToString();
                 }
                 else if (stLevel == "17")
                 {
-                    dateEnd = "31.08.2015";
                     course = "5";
+                    if (dtFinish.HasValue)
+                        dateEnd = dtFinish.Value.ToString("dd.MM.yyyy");
+                    else
+                        dateEnd = "31.08." + (DateTime.Now.Year + 2).ToString();
+                }
+                else if (stLevel == "18")
+                {
+                    course = "1";
+                    if (dtFinish.HasValue)
+                        dateEnd = dtFinish.Value.ToString("dd.MM.yyyy");
+                    else
+                        dateEnd = "31.08." + (DateTime.Now.Year + 5).ToString();
                 }
                 else
                 {
-                    dateEnd = "31.08.2018";
                     course = "1";
+                    if (dtFinish.HasValue)
+                        dateEnd = dtFinish.Value.ToString("dd.MM.yyyy");
+                    else
+                        dateEnd = "31.08." + (DateTime.Now.Year + 3).ToString();//aspirant
                 }
 
                 string datebirth = ((DateTime)dr["BirthDate"]).ToString("dd.MM.yyyy");
@@ -473,6 +511,16 @@ namespace Priem
 
             _odc.ExecuteWithTrasaction(_alQueries);
             MessageBox.Show("Done!");
+        }
+
+        private void cbStudyLevelGroup_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            using (PriemEntities context = new PriemEntities())
+            {
+                var src = context.extEntry.Where(x => x.StudyLevelGroupId == StudyLevelGroupId).Select(x => new { x.FacultyId, x.FacultyName }).Distinct().ToList().OrderBy(x => x.FacultyName)
+                    .Select(x => new KeyValuePair<string, string>(x.FacultyId.ToString(), x.FacultyName)).ToList();
+                ComboServ.FillCombo(cbFaculty, src, false, true);
+            }
         }
     }
 }

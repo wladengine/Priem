@@ -1344,7 +1344,6 @@ namespace Priem
                              select ent.IsClosed || ent.DateOfClose < DateTime.Now).FirstOrDefault();
             return !isClosed;
         }
-
         private string CheckCompetition(PriemEntities context)
         {
             if (StudyBasisId == 2)

@@ -26,7 +26,7 @@ namespace Priem
         string _queryFWJoin;
         string _queryOrange;
 
-        bool bMagAddNabor1Enabled = true;
+        bool bMagAddNabor1Enabled = false;
         DateTime dtMagAddNabor1 = new DateTime(2014, 8, 15);
 
         bool b1kursAddNabor1Enabled = true;
@@ -38,6 +38,7 @@ namespace Priem
         public RatingList(bool fromFixieren)
         {
             InitializeComponent();
+            InitVariables();
 
             _queryBody = @"SELECT DISTINCT ed.qAbiturient.Id as Id, ed.qAbiturient.RegNum as Рег_Номер, 
                     ed.extPerson.PersonNum as 'Ид. номер', ed.extPerson.FIO as ФИО, 
@@ -90,6 +91,38 @@ namespace Priem
             InitControls();            
 
             btnAdd.Visible = btnCard.Visible = btnRemove.Visible = false;
+        }
+
+        private void InitVariables()
+        {
+            using (PriemEntities context = new PriemEntities())
+            {
+                var dicSettings = context.C_AppSettings.Select(x => new { x.ParamKey, x.ParamValue }).ToList().ToDictionary(x => x.ParamKey, y => y.ParamValue);
+                string tmp = dicSettings.ContainsKey("bMagAddNabor1Enabled") ? dicSettings["bMagAddNabor1Enabled"] : "False";
+                bMagAddNabor1Enabled = bool.Parse(tmp);
+
+                tmp = dicSettings.ContainsKey("b1kursAddNabor1Enabled") ? dicSettings["b1kursAddNabor1Enabled"] : "False";
+                b1kursAddNabor1Enabled = bool.Parse(tmp);
+
+                tmp = dicSettings.ContainsKey("bFirstWaveEnabled") ? dicSettings["bFirstWaveEnabled"] : "False";
+                bFirstWaveEnabled = bool.Parse(tmp);
+
+                tmp = dicSettings.ContainsKey("dtMagAddNabor1") ? dicSettings["dtMagAddNabor1"] : new DateTime(DateTime.Now.Year, 8, 15).ToShortDateString();
+                dtMagAddNabor1 = DateTime.Parse(tmp);
+
+                tmp = dicSettings.ContainsKey("dt1kursAddNabor1") ? dicSettings["dt1kursAddNabor1"] : new DateTime(DateTime.Now.Year, 8, 15).ToShortDateString();
+                dt1kursAddNabor1 = DateTime.Parse(tmp);
+
+                if (MainClass.IsOwner() || MainClass.IsPasha())
+                {
+                    context.SetApplicationValue("bMagAddNabor1Enabled", bMagAddNabor1Enabled.ToString());
+                    context.SetApplicationValue("b1kursAddNabor1Enabled", b1kursAddNabor1Enabled.ToString());
+                    context.SetApplicationValue("bFirstWaveEnabled", bFirstWaveEnabled.ToString());
+                    //dates
+                    context.SetApplicationValue("dtMagAddNabor1", dtMagAddNabor1.ToShortDateString());
+                    context.SetApplicationValue("dt1kursAddNabor1", dt1kursAddNabor1.ToShortDateString());
+                }
+            }
         }
 
         #region Init
@@ -600,7 +633,7 @@ AND ed.FixierenView.IsSecond = {7} AND ed.FixierenView.IsReduced = {8} AND ed.Fi
                         //else
                         //    sFilters += " AND qAbiturient.Id IN (SELECT AbiturientId FROM ed.[_FirstWave])";
 
-                        if (b1kursAddNabor1Enabled)
+                        if (MainClass.dbType == PriemType.Priem && b1kursAddNabor1Enabled)
                             sFilters += " AND qAbiturient.DocInsertDate > '" + dt1kursAddNabor1.ToShortDateString() + "' ";
 
                         //до зачисления льготников выводить их, а потом - убирать

@@ -264,7 +264,7 @@ namespace Priem
                          Ab.Person.Person_EducationInfo.DiplomSeries,
                          Ab.Person.Person_EducationInfo.DiplomNum,
                          Ab.Person.Person_EducationInfo.IsExcellent,
-                         Nation = Ab.Person.Person_Contacts.Country.Name,
+                         Nation = Ab.Person.Nationality.Name,
                          Ab.Entry.FacultyId,
                          Ab.Entry.StudyFormId,
                          Ab.Entry.StudyBasisId,

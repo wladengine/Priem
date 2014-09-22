@@ -182,7 +182,7 @@ namespace Priem
 
                 List<KeyValuePair<string, string>> lst = ent.ToList().Select(u => new KeyValuePair<string, string>(u.LicenseProgramId.ToString(), u.LicenseProgramCode + " " + u.LicenseProgramName)).Distinct().ToList();
 
-                ComboServ.FillCombo(cbLicenseProgram, lst, false, false);
+                ComboServ.FillCombo(cbLicenseProgram, lst, false, true);
             }
         }        
 
@@ -199,8 +199,9 @@ namespace Priem
                 return;
             }
 
-            string query = string.Format("SELECT DISTINCT Id, Number as 'Номер представления' FROM ed.extEntryView WHERE StudyFormId={0} AND StudyBasisId={1} AND FacultyId= {2} AND LicenseProgramId = {3} AND IsListener = {4} AND IsSecond = {5} AND IsReduced = {6} AND IsParallel = {7} order by 2", StudyFormId, StudyBasisId, FacultyId, LicenseProgramId, QueryServ.StringParseFromBool(IsListener), QueryServ.StringParseFromBool(IsSecond), QueryServ.StringParseFromBool(IsReduced), QueryServ.StringParseFromBool(IsParallel));
-            HelpClass.FillDataGrid(dgvViews, _bdc, query, "");  
+            string query = string.Format("SELECT DISTINCT Id, Number as 'Номер представления' FROM ed.extEntryView WHERE StudyFormId={0} AND StudyBasisId={1} AND FacultyId= {2} {3} AND IsListener = {4} AND IsSecond = {5} AND IsReduced = {6} AND IsParallel = {7} AND StudyLevelGroupId = {8} order by 2", StudyFormId, StudyBasisId, FacultyId, 
+                LicenseProgramId.HasValue ? " AND LicenseProgramId = " + LicenseProgramId : "", QueryServ.StringParseFromBool(IsListener), QueryServ.StringParseFromBool(IsSecond), QueryServ.StringParseFromBool(IsReduced), QueryServ.StringParseFromBool(IsParallel), MainClass.studyLevelGroupId);
+            HelpClass.FillDataGrid(dgvViews, _bdc, query, "");
 
             dgvViews.Columns["Номер представления"].Width = 149;
             dgvViews.Update();

@@ -294,7 +294,7 @@ namespace Priem
 
                 var notApplicableList = abitList.Select(x => x.Id).Except(_slIds.Keys.Select(x => Guid.Parse(x))).ToList();
 
-                if (notApplicableList.Count() > 0)
+                if (notApplicableList.Count() > 0 && !IsFor)
                 {
                     WinFormsServ.Error("Not found orders for " + notApplicableList.Count() + " Ids");
                     return;
@@ -310,17 +310,17 @@ namespace Priem
                     if (pa.Length > 250)
                         pa = pa.Substring(0, 250);
 
-                    string a = Abit.Code + ", " + Abit.City + ", " + Abit.Street + ", д." + Abit.House + ", " + (Abit.Korpus.Length > 0 ? " к." + Abit.Korpus + ", " : "") + "кв." + Abit.Flat;
+                    string a = (Abit.Code ?? "") + ", " + (Abit.City ?? "") + ", " + (Abit.Street ?? "") + ", д." + (Abit.House ?? "") + ", " + ((Abit.Korpus ?? "").Length > 0 ? " к." + (Abit.Korpus ?? "") + ", " : "") + "кв." + (Abit.Flat ?? "");
                     if (a.Length > 250)
                         a = a.Substring(0, 250);
 
-                    string la = Abit.CodeReal + ", " + Abit.CityReal + ", " + Abit.StreetReal + ", д." + Abit.HouseReal + ", " + (Abit.KorpusReal.Length > 0 ? " к." + Abit.KorpusReal + ", " : "") + "кв." + Abit.FlatReal;
-                    if (Abit.CodeReal.Length == 0 && Abit.CityReal.Length == 0 && Abit.StreetReal.Length == 0 && Abit.HouseReal.Length == 0 && Abit.KorpusReal.Length == 0 && Abit.FlatReal.Length == 0)
+                    string la = (Abit.CodeReal ?? "") + ", " + (Abit.CityReal ?? "") + ", " + (Abit.StreetReal ?? "") + ", д." + (Abit.HouseReal ?? "") + ", " + ((Abit.KorpusReal ?? "").Length > 0 ? " к." + (Abit.KorpusReal ?? "") + ", " : "") + "кв." + (Abit.FlatReal ?? "");
+                    if ((Abit.CodeReal ?? "").Length == 0 && (Abit.CityReal ?? "").Length == 0 && (Abit.StreetReal ?? "").Length == 0 && (Abit.HouseReal ?? "").Length == 0 && (Abit.KorpusReal ?? "").Length == 0 && (Abit.FlatReal ?? "").Length == 0)
                         la = "";
                     if (la.Length > 250)
                         la = la.Substring(0, 250);
 
-                    string ph = Abit.Phone + (Abit.Mobiles.Length == 0 ? "" : "; " + Abit.Mobiles);
+                    string ph = (Abit.Phone ?? "") + ((Abit.Mobiles ?? "").Length == 0 ? "" : "; " + (Abit.Mobiles ?? ""));
                     if (ph.Length > 100)
                         ph = ph.Substring(0, 100);
 
@@ -332,16 +332,23 @@ namespace Priem
                     else
                         specId = slSpec[Abit.FacultyId + "_" + Abit.LicenseProgramId + "_" + Abit.ProfileId.ToString()];
 
-                    string educSeries = MainClass.studyLevelGroupId == 1 ? Abit.AttestatSeries : Abit.DiplomSeries;
-                    string educNum = MainClass.studyLevelGroupId == 1 ? Abit.AttestatNum : Abit.DiplomNum;
-                    string educYear = MainClass.studyLevelGroupId == 1 ? (Abit.SchoolExitYear.HasValue ? Abit.SchoolExitYear.ToString() : "") : (Abit.HEExitYear.HasValue ? Abit.HEExitYear.ToString() : "");
+                    string educSeries = StudyLevelGroupId == 1 ? Abit.AttestatSeries ?? "" : Abit.DiplomSeries ?? "";
+                    string educNum = StudyLevelGroupId == 1 ? Abit.AttestatNum ?? "" : Abit.DiplomNum ?? "";
+
+                    if (educNum.Length > 15)
+                        educNum = educNum.Substring(0, 15);
+
+                    string educYear = StudyLevelGroupId == 1 ? (Abit.SchoolExitYear.HasValue ? Abit.SchoolExitYear.ToString() : "") : (Abit.HEExitYear.HasValue ? Abit.HEExitYear.ToString() : "");
                     if (string.IsNullOrEmpty(educYear))
                         educYear = "0";
+
+                    if (IsFor && !_slIds.ContainsKey(Abit.Id.ToString()))
+                        continue;
 
                     long abId = _slIds[Abit.Id.ToString()];
                     string regionId = _dRegion[Abit.Nation];
 
-                    string AbitSchoolName = Abit.SchoolName.Replace("'", "");
+                    string AbitSchoolName = (Abit.SchoolName ?? "").Replace("'", "");
                     if (AbitSchoolName.Length > 200)
                         AbitSchoolName = AbitSchoolName.Substring(0, 200);
 
@@ -374,17 +381,17 @@ namespace Priem
                         Abit.RegNum ?? "", Abit.Name, Abit.SecondName, Abit.Surname,
                         Abit.Privileges.ToString(), QueryServ.QueryForBool(Abit.IsExcellent.ToString()), Abit.ListenerTypeId.ToString(), QueryServ.QueryForBool(Abit.IsListener.ToString()),
                         QueryServ.QueryForBool(Abit.HostelEduc.ToString()), Abit.FacultyId.ToString(), profId, specId,
-                        Abit.StudyBasisId, Abit.StudyFormId, Abit.CompetitionId,
-                        Abit.DocDate, regionId, Abit.RegionId.HasValue ? Abit.RegionId.ToString() : "1",
+                        Abit.StudyBasisId, Abit.StudyFormId, Abit.CompetitionId ?? 0,
+                        Abit.DocDate.ToString(), regionId, Abit.RegionId.HasValue ? Abit.RegionId.ToString() : "1",
                         Abit.LanguageId.HasValue ? Abit.LanguageId.Value.ToString() : "1",
-                        educSeries, Abit.AttestatRegion, educNum, QueryServ.QueryForBool(Abit.HasOriginals.ToString()),
-                        AbitSchoolName, Abit.SchoolCity, Abit.SchoolNum, (Abit.SchoolTypeId ?? 1).ToString(), 
+                        educSeries, Abit.AttestatRegion ?? "", educNum, QueryServ.QueryForBool(Abit.HasOriginals.ToString()),
+                        AbitSchoolName ?? "", Abit.SchoolCity ?? "", Abit.SchoolNum ?? "", (Abit.SchoolTypeId ?? 1).ToString(), 
                         (string.IsNullOrEmpty(educYear) ? DateTime.Now.Year.ToString() : educYear),
                         ph, zc, a, la,
                         Abit.BirthDate.ToString(), QueryServ.QueryForBool(Abit.Sex.ToString()),
-                        Abit.PassportTypeId.ToString(), Abit.PassportSeries, Abit.PassportNumber, Abit.PassportDate.ToString(), pa,
-                        Abit.StudyNumber, abId,
-                        (Abit.ObrazProgramName.Length > 128 ? Abit.ObrazProgramName.Substring(0, 128) : Abit.ObrazProgramName), Abit.ObrazProgramCrypt, (Abit.StudyPlanNumber ?? ""), Abit.SNILS ?? "");
+                        Abit.PassportTypeId.ToString(), Abit.PassportSeries ?? "", Abit.PassportNumber ?? "", Abit.PassportDate.ToString(), pa,
+                        Abit.StudyNumber ?? "", abId,
+                        ((Abit.ObrazProgramName ?? "").Length > 128 ? (Abit.ObrazProgramName ?? "").Substring(0, 128) : Abit.ObrazProgramName ?? ""), Abit.ObrazProgramCrypt ?? "", (Abit.StudyPlanNumber ?? ""), Abit.SNILS ?? "");
 
                     _odc.ExecuteQuery(s);
 

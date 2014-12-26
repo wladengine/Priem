@@ -34,30 +34,34 @@ namespace Priem
                 for (int SLGr = 1; SLGr <= 4; SLGr++)
                 {
                     //взять максимум номера, если еще ничего не назначено
-                    string num = (from ab in context.extAbit
-                                  join abF in context.qAbiturientForeignApplicationsOnly on ab.Id equals abF.Id into abF2
-                                  from abF in abF2.DefaultIfEmpty()
-                                  where ab.StudyLevelGroupId == SLGr && abF == null
-                                  select ab.StudyNumber).Max();
+                    string num =
+                        (from ab in context.extAbit
+                         join abF in context.qAbiturientForeignApplicationsOnly on ab.Id equals abF.Id into abF2
+                         from abF in abF2.DefaultIfEmpty()
+                         where ab.StudyLevelGroupId == SLGr && abF == null
+                         select ab.StudyNumber).Max();
 
-                    string numFor = (from ab in context.extAbit
-                                  join abF in context.qAbiturientForeignApplicationsOnly on ab.Id equals abF.Id
-                                  select ab.StudyNumber).Max();
+                    string numFor =
+                        (from ab in context.Abiturient
+                         join abF in context.qAbiturientForeignApplicationsOnly on ab.Id equals abF.Id
+                         select ab.StudyNumber).Max();
 
-                    var abits = (from ab in context.extAbit
-                                join ev in context.extEntryView
-                                on ab.Id equals ev.AbiturientId
-                                where ab.StudyLevelGroupId == SLGr && (ab.StudyNumber == null || ab.StudyNumber.Length == 0)
-                                orderby ab.FacultyId, ab.FIO
-                                select ab.Id).ToList();
+                    var abits =
+                        (from ab in context.extAbit
+                         join ev in context.extEntryView
+                         on ab.Id equals ev.AbiturientId
+                         where ab.StudyLevelGroupId == SLGr && (ab.StudyNumber == null || ab.StudyNumber.Length == 0)
+                         orderby ab.FacultyId, ab.FIO
+                         select ab.Id).ToList();
 
-                    var foreignAbits = (from ab in context.extAbit
-                                       join ev in context.extEntryView
-                                       on ab.Id equals ev.AbiturientId
-                                       join abF in context.qAbiturientForeignApplicationsOnly on ab.Id equals abF.Id
-                                       where ab.StudyLevelGroupId == SLGr && (ab.StudyNumber == null || ab.StudyNumber.Length == 0)
-                                       orderby ab.FacultyId, ab.FIO
-                                       select ab.Id).ToList();
+                    var foreignAbits =
+                        (from ab in context.extAbit
+                         join ev in context.extEntryView
+                         on ab.Id equals ev.AbiturientId
+                         join abF in context.qAbiturientForeignApplicationsOnly on ab.Id equals abF.Id
+                         where ab.StudyLevelGroupId == SLGr && (ab.StudyNumber == null || ab.StudyNumber.Length == 0)
+                         orderby ab.FacultyId, ab.FIO
+                         select ab.Id).ToList();
 
                     List<Guid> lstAbits = abits.Except(foreignAbits).ToList();
 

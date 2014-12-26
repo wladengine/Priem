@@ -19,6 +19,7 @@ namespace Priem
         private DBPriem _bdc;
         private OleDbClass _odc;
         private string _emptyBase = string.Format(@"{0}\Templates\EMPTYAbiturientDB.mdb", Application.StartupPath);
+        private string _emptyBaseFor = string.Format(@"{0}\Templates\EMPTYAbiturientDB_For.mdb", Application.StartupPath);
         private string _metroBase = string.Format(@"{0}\Templates\MetroDB.mdb", Application.StartupPath);
 
         private long _NewId = 1000001;
@@ -59,7 +60,7 @@ namespace Priem
         {
             string newfile = folderBrowser.SelectedPath + "/AbiturientDB.mdb";
 
-            FileInfo fi = new FileInfo(_emptyBase);
+            FileInfo fi = new FileInfo(IsFor ? _emptyBaseFor : _emptyBase);
             fi.CopyTo(newfile, true);
 
             _odc = new OleDbClass();
@@ -94,10 +95,20 @@ namespace Priem
         {
             _dRegion = new Dictionary<string, string>();
 
-            DataSet ds = _bdc.GetDataSet("SELECT * FROM ed.Region");
+            if (IsFor)
+            {
+                DataSet ds = _bdc.GetDataSet("SELECT * FROM ed.ForeignCountry");
 
-            foreach (DataRow row in ds.Tables[0].Rows)
-                _dRegion.Add(row["Name"].ToString(), row["Id"].ToString());
+                foreach (DataRow row in ds.Tables[0].Rows)
+                    _dRegion.Add(row["Name"].ToString(), row["Id"].ToString());
+            }
+            else
+            {
+                DataSet ds = _bdc.GetDataSet("SELECT * FROM ed.Region");
+
+                foreach (DataRow row in ds.Tables[0].Rows)
+                    _dRegion.Add(row["Name"].ToString(), row["Id"].ToString());
+            }
         }
 
         //путь сохранения
@@ -210,11 +221,15 @@ namespace Priem
 
                 var abitList =
                     (from Ab in context.Abiturient
+                     join Pers in context.Person on Ab.PersonId equals Pers.Id
                      join Ent in context.extEntry on Ab.EntryId equals Ent.Id
                      join extEV in context.extEntryView on Ab.Id equals extEV.AbiturientId
 
                      join qq in context.qAbiturientForeignApplicationsOnly on Ab.Id equals qq.Id into qq2
                      from qq in qq2.DefaultIfEmpty()
+
+                     join forNat in context.ForeignCountry on Pers.ForeignNationalityId equals forNat.Id into forNat2
+                     from forNat in forNat2.DefaultIfEmpty()
 
                      where Ab.Entry.StudyLevel.LevelGroupId == StudyLevelGroupId &&
                      (iFacultyId == 0 ? true : Ab.Entry.FacultyId == iFacultyId)
@@ -265,6 +280,7 @@ namespace Priem
                          Ab.Person.Person_EducationInfo.DiplomNum,
                          Ab.Person.Person_EducationInfo.IsExcellent,
                          Nation = Ab.Person.Nationality.Name,
+                         ForNation = forNat.Name,
                          Ab.Entry.FacultyId,
                          Ab.Entry.StudyFormId,
                          Ab.Entry.StudyBasisId,
@@ -346,7 +362,8 @@ namespace Priem
                         continue;
 
                     long abId = _slIds[Abit.Id.ToString()];
-                    string regionId = _dRegion[Abit.Nation];
+                    string regionId = string.Empty;
+                    regionId = IsFor ? _dRegion[Abit.ForNation] : _dRegion[Abit.Nation];
 
                     string AbitSchoolName = (Abit.SchoolName ?? "").Replace("'", "");
                     if (AbitSchoolName.Length > 200)
@@ -382,7 +399,7 @@ namespace Priem
                         Abit.Privileges.ToString(), QueryServ.QueryForBool(Abit.IsExcellent.ToString()), Abit.ListenerTypeId.ToString(), QueryServ.QueryForBool(Abit.IsListener.ToString()),
                         QueryServ.QueryForBool(Abit.HostelEduc.ToString()), Abit.FacultyId.ToString(), profId, specId,
                         Abit.StudyBasisId, Abit.StudyFormId, Abit.CompetitionId ?? 0,
-                        Abit.DocDate.ToString(), regionId, Abit.RegionId.HasValue ? Abit.RegionId.ToString() : "1",
+                        Abit.DocDate.ToString(), regionId, IsFor ? regionId : (Abit.RegionId.HasValue ? Abit.RegionId.ToString() : "1"),
                         Abit.LanguageId.HasValue ? Abit.LanguageId.Value.ToString() : "1",
                         educSeries, Abit.AttestatRegion ?? "", educNum, QueryServ.QueryForBool(Abit.HasOriginals.ToString()),
                         AbitSchoolName ?? "", Abit.SchoolCity ?? "", Abit.SchoolNum ?? "", (Abit.SchoolTypeId ?? 1).ToString(), 

@@ -71,6 +71,7 @@
       FROM [ed].[Fixieren] AS [Fixieren]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="FixierenView" EntityType="Priem2012Model.Store.FixierenView" store:Type="Tables" Schema="ed" />
+          <EntitySet Name="ForeignCountry" EntityType="Priem2012Model.Store.ForeignCountry" store:Type="Tables" Schema="ed" />
           <EntitySet Name="Language" EntityType="Priem2012Model.Store.Language" store:Type="Tables" Schema="ed" />
           <EntitySet Name="Mark" EntityType="Priem2012Model.Store.Mark" store:Type="Tables" Schema="ed" />
           <EntitySet Name="ObrazProgramInEntry" EntityType="Priem2012Model.Store.ObrazProgramInEntry" store:Type="Tables" Schema="ed" />
@@ -543,7 +544,12 @@
       [extOlympiadsAll].[OlympSubjectName] AS [OlympSubjectName], 
       [extOlympiadsAll].[OlympTypeName] AS [OlympTypeName], 
       [extOlympiadsAll].[PersonId] AS [PersonId], 
-      [extOlympiadsAll].[OriginDoc] AS [OriginDoc]
+      [extOlympiadsAll].[OriginDoc] AS [OriginDoc], 
+      [extOlympiadsAll].[Number] AS [Number], 
+      [extOlympiadsAll].[DocumentSeries] AS [DocumentSeries], 
+      [extOlympiadsAll].[DocumentNumber] AS [DocumentNumber], 
+      [extOlympiadsAll].[DocumentDate] AS [DocumentDate], 
+      [extOlympiadsAll].[OlympValueSortOrder] AS [OlympValueSortOrder]
       FROM [ed].[extOlympiadsAll] AS [extOlympiadsAll]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="extPerson" EntityType="Priem2012Model.Store.extPerson" store:Type="Views" store:Schema="ed" store:Name="extPerson">
@@ -636,7 +642,9 @@
       [extPerson].[RegionEducId] AS [RegionEducId], 
       [extPerson].[RegionNumber] AS [RegionNumber], 
       [extPerson].[ForeignNationality] AS [ForeignNationality], 
-      [extPerson].[ForeignNationalityId] AS [ForeignNationalityId]
+      [extPerson].[ForeignNationalityId] AS [ForeignNationalityId], 
+      [extPerson].[ForeignCountry] AS [ForeignCountry], 
+      [extPerson].[ForeignCountryId] AS [ForeignCountryId]
       FROM [ed].[extPerson] AS [extPerson]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="extPersonAll" EntityType="Priem2012Model.Store.extPersonAll" store:Type="Views" store:Schema="ed" store:Name="extPersonAll">
@@ -1412,6 +1420,10 @@
             <End Role="Country" EntitySet="Country" />
             <End Role="Person_Contacts" EntitySet="Person_Contacts" />
           </AssociationSet>
+          <AssociationSet Name="FK_Person_Contacts_ForeignCountry" Association="Priem2012Model.Store.FK_Person_Contacts_ForeignCountry">
+            <End Role="ForeignCountry" EntitySet="ForeignCountry" />
+            <End Role="Person_Contacts" EntitySet="Person_Contacts" />
+          </AssociationSet>
           <AssociationSet Name="FK_Person_Contacts_Person" Association="Priem2012Model.Store.FK_Person_Contacts_Person">
             <End Role="Person" EntitySet="Person" />
             <End Role="Person_Contacts" EntitySet="Person_Contacts" />
@@ -1422,6 +1434,10 @@
           </AssociationSet>
           <AssociationSet Name="FK_Person_EducationInfo_Country" Association="Priem2012Model.Store.FK_Person_EducationInfo_Country">
             <End Role="Country" EntitySet="Country" />
+            <End Role="Person_EducationInfo" EntitySet="Person_EducationInfo" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Person_EducationInfo_ForeignCountry" Association="Priem2012Model.Store.FK_Person_EducationInfo_ForeignCountry">
+            <End Role="ForeignCountry" EntitySet="ForeignCountry" />
             <End Role="Person_EducationInfo" EntitySet="Person_EducationInfo" />
           </AssociationSet>
           <AssociationSet Name="FK_Person_EducationInfo_Language" Association="Priem2012Model.Store.FK_Person_EducationInfo_Language">
@@ -1951,6 +1967,18 @@
           <Property Name="IsCrimea" Type="bit" Nullable="false" />
           <Property Name="IsQuota" Type="bit" Nullable="false" />
         </EntityType>
+        <EntityType Name="ForeignCountry">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="100" />
+          <Property Name="Distance" Type="int" />
+          <Property Name="NameRod" Type="nvarchar" MaxLength="100" />
+          <Property Name="LevelOfUsing" Type="int" />
+          <Property Name="PriemDictionaryId" Type="int" />
+          <Property Name="OSKMCode" Type="nvarchar" MaxLength="10" />
+        </EntityType>
         <EntityType Name="Language">
           <Key>
             <PropertyRef Name="Id" />
@@ -2053,6 +2081,7 @@
           <Property Name="IsOpen" Type="bit" Nullable="false" />
           <Property Name="Holder" Type="nvarchar" MaxLength="150" />
           <Property Name="ExamId" Type="int" />
+          <Property Name="IsInVseross" Type="bit" />
         </EntityType>
         <EntityType Name="OlympSubjectToExam">
           <Key>
@@ -2448,6 +2477,7 @@
           <Property Name="IsOpen" Type="bit" Nullable="false" />
           <Property Name="Holder" Type="nvarchar" MaxLength="100" />
           <Property Name="GSGUCode" Type="nvarchar" MaxLength="50" />
+          <Property Name="VSHEUGNId" Type="int" />
         </EntityType>
         <EntityType Name="SP_ObrazProgram">
           <Key>
@@ -3120,6 +3150,7 @@
         <EntityType Name="extOlympiadsAll">
           <Key>
             <PropertyRef Name="Id" />
+            
             <PropertyRef Name="OriginDoc" />
           </Key>
           <Property Name="Id" Type="uniqueidentifier" Nullable="false" />
@@ -3134,8 +3165,13 @@
           <Property Name="OlympName" Type="nvarchar" MaxLength="2000" />
           <Property Name="OlympSubjectName" Type="nvarchar" MaxLength="100" />
           <Property Name="OlympTypeName" Type="nvarchar" MaxLength="50" />
-          <Property Name="PersonId" Type="uniqueidentifier" />
+          <Property Name="PersonId" Type="uniqueidentifier" Nullable="false" />
           <Property Name="OriginDoc" Type="bit" Nullable="false" />
+          <Property Name="Number" Type="int" />
+          <Property Name="DocumentSeries" Type="nvarchar" MaxLength="50" />
+          <Property Name="DocumentNumber" Type="nvarchar" MaxLength="50" />
+          <Property Name="DocumentDate" Type="date" />
+          <Property Name="OlympValueSortOrder" Type="int" />
         </EntityType>
         <!--Errors Found During Generation:
       warning 6002: The table/view 'Priem.ed.extPerson' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.
@@ -3242,6 +3278,8 @@
           <Property Name="RegionNumber" Type="nvarchar" MaxLength="2" />
           <Property Name="ForeignNationality" Type="nvarchar" MaxLength="100" />
           <Property Name="ForeignNationalityId" Type="int" />
+          <Property Name="ForeignCountry" Type="nvarchar" MaxLength="100" />
+          <Property Name="ForeignCountryId" Type="int" />
         </EntityType>
         <!--Errors Found During Generation:
       warning 6002: The table/view 'Priem.ed.extPersonAll' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.
@@ -4797,6 +4835,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Person_Contacts_ForeignCountry">
+          <End Role="ForeignCountry" Type="Priem2012Model.Store.ForeignCountry" Multiplicity="0..1" />
+          <End Role="Person_Contacts" Type="Priem2012Model.Store.Person_Contacts" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ForeignCountry">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Person_Contacts">
+              <PropertyRef Name="ForeignCountryId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Person_Contacts_Person">
           <End Role="Person" Type="Priem2012Model.Store.Person" Multiplicity="1">
             <OnDelete Action="Cascade" />
@@ -4832,6 +4882,18 @@
             </Principal>
             <Dependent Role="Person_EducationInfo">
               <PropertyRef Name="CountryEducId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Person_EducationInfo_ForeignCountry">
+          <End Role="ForeignCountry" Type="Priem2012Model.Store.ForeignCountry" Multiplicity="0..1" />
+          <End Role="Person_EducationInfo" Type="Priem2012Model.Store.Person_EducationInfo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ForeignCountry">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Person_EducationInfo">
+              <PropertyRef Name="ForeignCountryEducId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -7758,6 +7820,15 @@
             <End Role="OrderNumbers" EntitySet="OrderNumbers" />
           </AssociationSet>
           <EntitySet Name="extEntry" EntityType="Priem2012Model.extEntry" />
+          <EntitySet Name="ForeignCountry" EntityType="Priem2012Model.ForeignCountry" />
+          <AssociationSet Name="FK_Person_Contacts_ForeignCountry" Association="Priem2012Model.FK_Person_Contacts_ForeignCountry">
+            <End Role="ForeignCountry" EntitySet="ForeignCountry" />
+            <End Role="Person_Contacts" EntitySet="Person_Contacts" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Person_EducationInfo_ForeignCountry" Association="Priem2012Model.FK_Person_EducationInfo_ForeignCountry">
+            <End Role="ForeignCountry" EntitySet="ForeignCountry" />
+            <End Role="Person_EducationInfo" EntitySet="Person_EducationInfo" />
+          </AssociationSet>
           </EntityContainer>
         <EntityType Name="AttMarks">
           <Key>
@@ -8102,6 +8173,7 @@
           <Property Type="String" Name="Holder" MaxLength="150" FixedLength="false" Unicode="true" />
           <Property Type="Int32" Name="ExamId" />
           <NavigationProperty Name="OlympSubjectToExam" Relationship="Priem2012Model.FK_OlympSubjectToExam_OlympSubject" FromRole="OlympSubject" ToRole="OlympSubjectToExam" />
+          <Property Type="Boolean" Name="IsInVseross" />
         </EntityType>
         <EntityType Name="OlympValue">
           <Key>
@@ -9035,8 +9107,13 @@
           <Property Type="String" Name="OlympName" MaxLength="2000" FixedLength="false" Unicode="true" />
           <Property Type="String" Name="OlympSubjectName" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Type="String" Name="OlympTypeName" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Type="Guid" Name="PersonId" />
+          <Property Type="Guid" Name="PersonId" Nullable="false" />
           <Property Type="Boolean" Name="OriginDoc" Nullable="false" />
+          <Property Type="Int32" Name="Number" />
+          <Property Type="String" Name="DocumentSeries" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="DocumentNumber" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="DateTime" Name="DocumentDate" Precision="0" />
+          <Property Type="Int32" Name="OlympValueSortOrder" />
         </EntityType>
         <EntityType Name="AbitDoc">
           <Key>
@@ -9638,6 +9715,7 @@
           <Property Type="String" Name="ForeignAddressInfo" MaxLength="1000" FixedLength="false" Unicode="true" />
           <Property Type="Int32" Name="ForeignCountryId" />
           <Property Type="String" Name="KladrCode" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="ForeignCountry" Relationship="Priem2012Model.FK_Person_Contacts_ForeignCountry" FromRole="Person_Contacts" ToRole="ForeignCountry" />
         </EntityType>
         <EntityType Name="Person_EducationInfo">
           <Key>
@@ -9679,6 +9757,7 @@
           <Property Type="Boolean" Name="HasTRKI" Nullable="false" />
           <Property Type="String" Name="TRKICertificateNumber" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Type="Int32" Name="RegionEducId" />
+          <NavigationProperty Name="ForeignCountry" Relationship="Priem2012Model.FK_Person_EducationInfo_ForeignCountry" FromRole="Person_EducationInfo" ToRole="ForeignCountry" />
         </EntityType>
         <Association Name="FK_Abiturient_Person">
           <End Type="Priem2012Model.Person" Role="Person" Multiplicity="1" />
@@ -10288,6 +10367,8 @@
           <Property Type="String" Name="RegionNumber" MaxLength="2" FixedLength="false" Unicode="true" />
           <Property Type="String" Name="ForeignNationality" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Type="Int32" Name="ForeignNationalityId" />
+          <Property Type="String" Name="ForeignCountry" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Type="Int32" Name="ForeignCountryId" />
         </EntityType>
         <EntityType Name="SchoolNames">
           <Key>
@@ -10328,6 +10409,7 @@
           <NavigationProperty Name="SP_ObrazProgram" Relationship="Priem2012Model.FK_SP_ObrazProgram_SP_LicenseProgram" FromRole="SP_LicenseProgram" ToRole="SP_ObrazProgram" />
           <NavigationProperty Name="Entry" Relationship="Priem2012Model.FK_Entry_SP_LicenseProgram" FromRole="SP_LicenseProgram" ToRole="Entry" />
           <Property Type="String" Name="GSGUCode" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="Int32" Name="VSHEUGNId" />
         </EntityType>
         <EntityType Name="SP_ObrazProgram">
           <Key>
@@ -11317,6 +11399,44 @@
           <Property Type="Int32" Name="KCPCrimea" />
           <Property Type="Int32" Name="KCPQuota" />
         </EntityType>
+        <EntityType Name="ForeignCountry">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Type="Int32" Name="Id" Nullable="false" />
+          <Property Type="String" Name="Name" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Type="Int32" Name="Distance" />
+          <Property Type="String" Name="NameRod" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Type="Int32" Name="LevelOfUsing" />
+          <Property Type="Int32" Name="PriemDictionaryId" />
+          <Property Type="String" Name="OSKMCode" MaxLength="10" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Person_Contacts" Relationship="Priem2012Model.FK_Person_Contacts_ForeignCountry" FromRole="ForeignCountry" ToRole="Person_Contacts" />
+          <NavigationProperty Name="Person_EducationInfo" Relationship="Priem2012Model.FK_Person_EducationInfo_ForeignCountry" FromRole="ForeignCountry" ToRole="Person_EducationInfo" />
+        </EntityType>
+        <Association Name="FK_Person_Contacts_ForeignCountry">
+          <End Type="Priem2012Model.ForeignCountry" Role="ForeignCountry" Multiplicity="0..1" />
+          <End Type="Priem2012Model.Person_Contacts" Role="Person_Contacts" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ForeignCountry">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Person_Contacts">
+              <PropertyRef Name="ForeignCountryId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Person_EducationInfo_ForeignCountry">
+          <End Type="Priem2012Model.ForeignCountry" Role="ForeignCountry" Multiplicity="0..1" />
+          <End Type="Priem2012Model.Person_EducationInfo" Role="Person_EducationInfo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ForeignCountry">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Person_EducationInfo">
+              <PropertyRef Name="ForeignCountryEducId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -11508,6 +11628,7 @@
           <EntitySetMapping Name="OlympSubject">
             <EntityTypeMapping TypeName="Priem2012Model.OlympSubject">
               <MappingFragment StoreEntitySet="OlympSubject">
+                <ScalarProperty Name="IsInVseross" ColumnName="IsInVseross" />
                 <ScalarProperty Name="ExamId" ColumnName="ExamId" />
                 <ScalarProperty Name="Holder" ColumnName="Holder" />
                 <ScalarProperty Name="IsOpen" ColumnName="IsOpen" />
@@ -12124,6 +12245,11 @@
           <EntitySetMapping Name="extOlympiadsAll">
             <EntityTypeMapping TypeName="Priem2012Model.extOlympiadsAll">
               <MappingFragment StoreEntitySet="extOlympiadsAll">
+                <ScalarProperty Name="OlympValueSortOrder" ColumnName="OlympValueSortOrder" />
+                <ScalarProperty Name="DocumentDate" ColumnName="DocumentDate" />
+                <ScalarProperty Name="DocumentNumber" ColumnName="DocumentNumber" />
+                <ScalarProperty Name="DocumentSeries" ColumnName="DocumentSeries" />
+                <ScalarProperty Name="Number" ColumnName="Number" />
                 <ScalarProperty Name="OriginDoc" ColumnName="OriginDoc" />
                 <ScalarProperty Name="PersonId" ColumnName="PersonId" />
                 <ScalarProperty Name="OlympTypeName" ColumnName="OlympTypeName" />
@@ -12891,6 +13017,8 @@
           <EntitySetMapping Name="extPerson">
             <EntityTypeMapping TypeName="Priem2012Model.extPerson">
               <MappingFragment StoreEntitySet="extPerson">
+                <ScalarProperty Name="ForeignCountryId" ColumnName="ForeignCountryId" />
+                <ScalarProperty Name="ForeignCountry" ColumnName="ForeignCountry" />
                 <ScalarProperty Name="ForeignNationalityId" ColumnName="ForeignNationalityId" />
                 <ScalarProperty Name="ForeignNationality" ColumnName="ForeignNationality" />
                 <ScalarProperty Name="RegionNumber" ColumnName="RegionNumber" />
@@ -13014,6 +13142,7 @@
           <EntitySetMapping Name="SP_LicenseProgram">
             <EntityTypeMapping TypeName="Priem2012Model.SP_LicenseProgram">
               <MappingFragment StoreEntitySet="SP_LicenseProgram">
+                <ScalarProperty Name="VSHEUGNId" ColumnName="VSHEUGNId" />
                 <ScalarProperty Name="GSGUCode" ColumnName="GSGUCode" />
                 <ScalarProperty Name="Holder" ColumnName="Holder" />
                 <ScalarProperty Name="IsOpen" ColumnName="IsOpen" />
@@ -13555,6 +13684,19 @@
                 <ScalarProperty Name="LicenseProgramName" ColumnName="LicenseProgramName" />
                 <ScalarProperty Name="LicenseProgramId" ColumnName="LicenseProgramId" />
                 <ScalarProperty Name="FacultyId" ColumnName="FacultyId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ForeignCountry">
+            <EntityTypeMapping TypeName="Priem2012Model.ForeignCountry">
+              <MappingFragment StoreEntitySet="ForeignCountry">
+                <ScalarProperty Name="OSKMCode" ColumnName="OSKMCode" />
+                <ScalarProperty Name="PriemDictionaryId" ColumnName="PriemDictionaryId" />
+                <ScalarProperty Name="LevelOfUsing" ColumnName="LevelOfUsing" />
+                <ScalarProperty Name="NameRod" ColumnName="NameRod" />
+                <ScalarProperty Name="Distance" ColumnName="Distance" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -14487,6 +14629,9 @@
         <EntityTypeShape EntityType="Priem2012Model.Signer" Width="1.5" PointX="6.06952067002166" PointY="29.910763262729517" />
         <AssociationConnector Association="Priem2012Model.FK_OrderNumbers_Signer" />
         <EntityTypeShape EntityType="Priem2012Model.extEntry" Width="1.5" PointX="6.1182239084123742" PointY="5.8176663098007753" />
+        <EntityTypeShape EntityType="Priem2012Model.ForeignCountry" Width="1.5" PointX="6.0731763476846634" PointY="4.1650090236985164" />
+        <AssociationConnector Association="Priem2012Model.FK_Person_Contacts_ForeignCountry" />
+        <AssociationConnector Association="Priem2012Model.FK_Person_EducationInfo_ForeignCountry" />
         </Diagram>
     </Diagrams>
   </Designer>

@@ -70,8 +70,8 @@ namespace Priem
                     item.FacultyId = (int)dr["FacultyId"];
                     item.LicenseProgramId = (int)dr["LicenseProgramId"];
                     item.ObrazProgramId = (int)dr["ObrazProgramId"];
-                    item.ProfileId = dr.Field<Guid?>("ProfileId"); 
-                    item.ProfileName = dr["ProfileName"].ToString();
+                    item.ProfileId = dr.Field<int>("ProfileId"); 
+                    //item.ProfileName = dr["ProfileName"].ToString();
                     item.StudyBasisId = (int)dr["StudyBasisId"];
                     item.StudyFormId = (int)dr["StudyFormId"];
                     item.StudyLevelId = (int)dr["StudyLevelId"];
@@ -260,8 +260,8 @@ namespace Priem
                             item.FacultyId = (int)dr["FacultyId"];
                             item.LicenseProgramId = (int)dr["LicenseProgramId"];
                             item.ObrazProgramId = (int)dr["ObrazProgramId"];
-                            item.ProfileId = dr.Field<Guid?>("ProfileId");
-                            item.ProfileName = dr["ProfileName"].ToString();
+                            item.ProfileId = dr.Field<int?>("ProfileId") ?? 0;
+                            //item.ProfileName = dr["ProfileName"].ToString();
                             item.StudyBasisId = (int)dr["StudyBasisId"];
                             item.StudyFormId = (int)dr["StudyFormId"];
                             item.StudyLevelId = (int)dr["StudyLevelId"];
@@ -484,7 +484,6 @@ SET
       ,[DateOfClose]=@DateOfClose
       ,[DateOfStart]=@DateOfStart
       ,[IsUsedForPriem]=@IsUsedForPriem
-      ,ProfileName=@ProfileName
 WHERE
       [Id]=@Id";
                             }
@@ -500,7 +499,7 @@ WHERE
                             slParams.Add("@IsReduced", Entr.IsReduced);
                             slParams.Add("@IsSecond", Entr.IsClosed);
                             slParams.AddVal("@ProfileId", Entr.ProfileId);
-                            slParams.AddVal("@ProfileName", Entr.ProfileName);
+                            
 
                             slParams.Add("@StudyLevelId", Entr.StudyLevelId);
                             slParams.Add("@StudyFormId", Entr.StudyFormId);

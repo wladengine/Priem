@@ -130,14 +130,15 @@ namespace Priem
             get { return ComboServ.GetComboIdInt(cbObrazProgram); }
             set { ComboServ.SetComboId(cbObrazProgram, value); }
         }
-        public Guid? ProfileId
+        public int? ProfileId
         {
             get
             {
-                Guid gRet = Guid.Empty;
-                if (string.IsNullOrEmpty(ComboServ.GetComboId(cbProfile)) || !Guid.TryParse(ComboServ.GetComboId(cbProfile), out gRet))
-                    return null;
-                return gRet;
+                return ComboServ.GetComboIdInt(cbProfile);
+                //Guid gRet = Guid.Empty;
+                //if (string.IsNullOrEmpty(ComboServ.GetComboId(cbProfile)) || !Guid.TryParse(ComboServ.GetComboId(cbProfile), out gRet))
+                //    return null;
+                //return gRet;
             }
             set
             {

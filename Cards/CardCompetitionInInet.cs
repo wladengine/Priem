@@ -201,13 +201,15 @@ namespace Priem
             {
                 using (PriemEntities context = new PriemEntities())
                 {
-                    List<KeyValuePair<string, string>> lst = ((from ent in GetEntry(context)
-                                                               where ent.LicenseProgramId == LicenseProgramId && ent.ObrazProgramId == ObrazProgramId && ent.ProfileId != null
-                                                               select new
-                                                               {
-                                                                   Id = ent.ProfileId,
-                                                                   Name = ent.ProfileName
-                                                               }).Distinct()).ToList().Select(u => new KeyValuePair<string, string>(u.Id.ToString(), u.Name)).ToList();
+                    List<KeyValuePair<string, string>> lst =
+                        ((from ent in GetEntry(context)
+                          where ent.LicenseProgramId == LicenseProgramId && ent.ObrazProgramId == ObrazProgramId && ent.ProfileId != null
+                          select new
+                          {
+                              Id = ent.ProfileId,
+                              Name = ent.SP_Profile.Name
+                          }).Distinct())
+                          .ToList().Select(u => new KeyValuePair<string, string>(u.Id.ToString(), u.Name)).ToList();
 
                     if (lst.Count() > 0)
                     {
@@ -464,7 +466,7 @@ namespace Priem
                     _competition.LicenseProgramId = LicenseProgramId.Value;
                 if (ObrazProgramId.HasValue)
                     _competition.ObrazProgramId = ObrazProgramId.Value;
-                _competition.ProfileId = ProfileId;
+                _competition.ProfileId = ProfileId ?? 0;
                 if (CompetitionId.HasValue)
                     _competition.CompetitionId = CompetitionId.Value;
                 _competition.CompetitionName = cbCompetition.Text;

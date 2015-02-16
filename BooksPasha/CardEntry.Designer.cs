@@ -34,7 +34,6 @@
             this.label6 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
-            this.label9 = new System.Windows.Forms.Label();
             this.label11 = new System.Windows.Forms.Label();
             this.label12 = new System.Windows.Forms.Label();
             this.tbStudyPlan = new System.Windows.Forms.TextBox();
@@ -43,6 +42,14 @@
             this.tcCard = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.gbEntry = new System.Windows.Forms.GroupBox();
+            this.cbAggregateGroup = new System.Windows.Forms.ComboBox();
+            this.label9 = new System.Windows.Forms.Label();
+            this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.chbIsSecond = new System.Windows.Forms.CheckBox();
+            this.chbIsParallel = new System.Windows.Forms.CheckBox();
+            this.chbIsReduced = new System.Windows.Forms.CheckBox();
+            this.label21 = new System.Windows.Forms.Label();
+            this.tbKCPQuota = new System.Windows.Forms.TextBox();
             this.label20 = new System.Windows.Forms.Label();
             this.tbKCPCrimea = new System.Windows.Forms.TextBox();
             this.cbComission = new System.Windows.Forms.ComboBox();
@@ -50,9 +57,6 @@
             this.cbProfile = new System.Windows.Forms.ComboBox();
             this.cbObrazProgram = new System.Windows.Forms.ComboBox();
             this.cbLicenseProgram = new System.Windows.Forms.ComboBox();
-            this.chbIsReduced = new System.Windows.Forms.CheckBox();
-            this.chbIsParallel = new System.Windows.Forms.CheckBox();
-            this.chbIsSecond = new System.Windows.Forms.CheckBox();
             this.cbFaculty = new System.Windows.Forms.ComboBox();
             this.cbStudyLevel = new System.Windows.Forms.ComboBox();
             this.cbStudyBasis = new System.Windows.Forms.ComboBox();
@@ -85,12 +89,11 @@
             this.btnDelete = new System.Windows.Forms.Button();
             this.btnAdd = new System.Windows.Forms.Button();
             this.dgvObrazProgramInEntry = new System.Windows.Forms.DataGridView();
-            this.label21 = new System.Windows.Forms.Label();
-            this.tbKCPQuota = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.epError)).BeginInit();
             this.tcCard.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.gbEntry.SuspendLayout();
+            this.groupBox4.SuspendLayout();
             this.tabPage2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvExams)).BeginInit();
             this.tabPage3.SuspendLayout();
@@ -125,7 +128,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(15, 188);
+            this.label3.Location = new System.Drawing.Point(15, 231);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(53, 13);
             this.label3.TabIndex = 31;
@@ -134,7 +137,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(18, 228);
+            this.label5.Location = new System.Drawing.Point(18, 271);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(63, 13);
             this.label5.TabIndex = 35;
@@ -143,7 +146,7 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(15, 108);
+            this.label6.Location = new System.Drawing.Point(15, 151);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(75, 13);
             this.label6.TabIndex = 44;
@@ -152,7 +155,7 @@
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(15, 148);
+            this.label7.Location = new System.Drawing.Point(15, 191);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(158, 13);
             this.label7.TabIndex = 45;
@@ -161,25 +164,16 @@
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(15, 23);
+            this.label8.Location = new System.Drawing.Point(15, 41);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(120, 13);
             this.label8.TabIndex = 46;
             this.label8.Text = "Уровень образования";
             // 
-            // label9
-            // 
-            this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(15, 70);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(68, 13);
-            this.label9.TabIndex = 47;
-            this.label9.Text = "Реализация";
-            // 
             // label11
             // 
             this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(15, 268);
+            this.label11.Location = new System.Drawing.Point(15, 312);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(93, 13);
             this.label11.TabIndex = 52;
@@ -188,7 +182,7 @@
             // label12
             // 
             this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(14, 307);
+            this.label12.Location = new System.Drawing.Point(238, 311);
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(94, 13);
             this.label12.TabIndex = 49;
@@ -242,6 +236,9 @@
             // 
             // gbEntry
             // 
+            this.gbEntry.Controls.Add(this.cbAggregateGroup);
+            this.gbEntry.Controls.Add(this.label9);
+            this.gbEntry.Controls.Add(this.groupBox4);
             this.gbEntry.Controls.Add(this.label21);
             this.gbEntry.Controls.Add(this.tbKCPQuota);
             this.gbEntry.Controls.Add(this.label20);
@@ -251,9 +248,6 @@
             this.gbEntry.Controls.Add(this.cbProfile);
             this.gbEntry.Controls.Add(this.cbObrazProgram);
             this.gbEntry.Controls.Add(this.cbLicenseProgram);
-            this.gbEntry.Controls.Add(this.chbIsReduced);
-            this.gbEntry.Controls.Add(this.chbIsParallel);
-            this.gbEntry.Controls.Add(this.chbIsSecond);
             this.gbEntry.Controls.Add(this.cbFaculty);
             this.gbEntry.Controls.Add(this.cbStudyLevel);
             this.gbEntry.Controls.Add(this.cbStudyBasis);
@@ -270,7 +264,6 @@
             this.gbEntry.Controls.Add(this.label8);
             this.gbEntry.Controls.Add(this.label3);
             this.gbEntry.Controls.Add(this.label5);
-            this.gbEntry.Controls.Add(this.label9);
             this.gbEntry.Controls.Add(this.label11);
             this.gbEntry.Controls.Add(this.label12);
             this.gbEntry.Location = new System.Drawing.Point(6, 6);
@@ -278,6 +271,83 @@
             this.gbEntry.Size = new System.Drawing.Size(409, 492);
             this.gbEntry.TabIndex = 56;
             this.gbEntry.TabStop = false;
+            // 
+            // cbAggregateGroup
+            // 
+            this.cbAggregateGroup.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbAggregateGroup.FormattingEnabled = true;
+            this.cbAggregateGroup.Location = new System.Drawing.Point(18, 127);
+            this.cbAggregateGroup.Name = "cbAggregateGroup";
+            this.cbAggregateGroup.Size = new System.Drawing.Size(377, 21);
+            this.cbAggregateGroup.TabIndex = 81;
+            this.cbAggregateGroup.SelectedIndexChanged += new System.EventHandler(this.cbAggregateGroup_SelectedIndexChanged);
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(15, 111);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(111, 13);
+            this.label9.TabIndex = 80;
+            this.label9.Text = "Укрупнённая группа";
+            // 
+            // groupBox4
+            // 
+            this.groupBox4.Controls.Add(this.chbIsSecond);
+            this.groupBox4.Controls.Add(this.chbIsParallel);
+            this.groupBox4.Controls.Add(this.chbIsReduced);
+            this.groupBox4.Location = new System.Drawing.Point(262, 19);
+            this.groupBox4.Name = "groupBox4";
+            this.groupBox4.Size = new System.Drawing.Size(141, 87);
+            this.groupBox4.TabIndex = 79;
+            this.groupBox4.TabStop = false;
+            this.groupBox4.Text = "Реализация";
+            // 
+            // chbIsSecond
+            // 
+            this.chbIsSecond.AutoSize = true;
+            this.chbIsSecond.Location = new System.Drawing.Point(6, 19);
+            this.chbIsSecond.Name = "chbIsSecond";
+            this.chbIsSecond.Size = new System.Drawing.Size(95, 17);
+            this.chbIsSecond.TabIndex = 67;
+            this.chbIsSecond.Text = "Для лиц с ВО";
+            this.chbIsSecond.UseVisualStyleBackColor = true;
+            // 
+            // chbIsParallel
+            // 
+            this.chbIsParallel.AutoSize = true;
+            this.chbIsParallel.Location = new System.Drawing.Point(6, 42);
+            this.chbIsParallel.Name = "chbIsParallel";
+            this.chbIsParallel.Size = new System.Drawing.Size(128, 17);
+            this.chbIsParallel.TabIndex = 68;
+            this.chbIsParallel.Text = "Параллельное обуч.";
+            this.chbIsParallel.UseVisualStyleBackColor = true;
+            // 
+            // chbIsReduced
+            // 
+            this.chbIsReduced.AutoSize = true;
+            this.chbIsReduced.Location = new System.Drawing.Point(6, 65);
+            this.chbIsReduced.Name = "chbIsReduced";
+            this.chbIsReduced.Size = new System.Drawing.Size(116, 17);
+            this.chbIsReduced.TabIndex = 69;
+            this.chbIsReduced.Text = "Сокр. программы";
+            this.chbIsReduced.UseVisualStyleBackColor = true;
+            // 
+            // label21
+            // 
+            this.label21.AutoSize = true;
+            this.label21.Location = new System.Drawing.Point(250, 446);
+            this.label21.Name = "label21";
+            this.label21.Size = new System.Drawing.Size(77, 13);
+            this.label21.TabIndex = 77;
+            this.label21.Text = "КЦ льготники";
+            // 
+            // tbKCPQuota
+            // 
+            this.tbKCPQuota.Location = new System.Drawing.Point(253, 462);
+            this.tbKCPQuota.Name = "tbKCPQuota";
+            this.tbKCPQuota.Size = new System.Drawing.Size(63, 20);
+            this.tbKCPQuota.TabIndex = 78;
             // 
             // label20
             // 
@@ -318,7 +388,7 @@
             this.cbProfile.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
             this.cbProfile.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
             this.cbProfile.FormattingEnabled = true;
-            this.cbProfile.Location = new System.Drawing.Point(18, 204);
+            this.cbProfile.Location = new System.Drawing.Point(18, 247);
             this.cbProfile.Name = "cbProfile";
             this.cbProfile.Size = new System.Drawing.Size(377, 21);
             this.cbProfile.TabIndex = 72;
@@ -327,7 +397,7 @@
             // 
             this.cbObrazProgram.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbObrazProgram.FormattingEnabled = true;
-            this.cbObrazProgram.Location = new System.Drawing.Point(18, 164);
+            this.cbObrazProgram.Location = new System.Drawing.Point(18, 207);
             this.cbObrazProgram.Name = "cbObrazProgram";
             this.cbObrazProgram.Size = new System.Drawing.Size(377, 21);
             this.cbObrazProgram.TabIndex = 71;
@@ -337,47 +407,17 @@
             // 
             this.cbLicenseProgram.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbLicenseProgram.FormattingEnabled = true;
-            this.cbLicenseProgram.Location = new System.Drawing.Point(18, 124);
+            this.cbLicenseProgram.Location = new System.Drawing.Point(18, 167);
             this.cbLicenseProgram.Name = "cbLicenseProgram";
             this.cbLicenseProgram.Size = new System.Drawing.Size(377, 21);
             this.cbLicenseProgram.TabIndex = 70;
             this.cbLicenseProgram.SelectedIndexChanged += new System.EventHandler(this.cbLicenseProgram_SelectedIndexChanged);
             // 
-            // chbIsReduced
-            // 
-            this.chbIsReduced.AutoSize = true;
-            this.chbIsReduced.Location = new System.Drawing.Point(253, 88);
-            this.chbIsReduced.Name = "chbIsReduced";
-            this.chbIsReduced.Size = new System.Drawing.Size(116, 17);
-            this.chbIsReduced.TabIndex = 69;
-            this.chbIsReduced.Text = "Сокр. программы";
-            this.chbIsReduced.UseVisualStyleBackColor = true;
-            // 
-            // chbIsParallel
-            // 
-            this.chbIsParallel.AutoSize = true;
-            this.chbIsParallel.Location = new System.Drawing.Point(119, 88);
-            this.chbIsParallel.Name = "chbIsParallel";
-            this.chbIsParallel.Size = new System.Drawing.Size(128, 17);
-            this.chbIsParallel.TabIndex = 68;
-            this.chbIsParallel.Text = "Параллельное обуч.";
-            this.chbIsParallel.UseVisualStyleBackColor = true;
-            // 
-            // chbIsSecond
-            // 
-            this.chbIsSecond.AutoSize = true;
-            this.chbIsSecond.Location = new System.Drawing.Point(18, 88);
-            this.chbIsSecond.Name = "chbIsSecond";
-            this.chbIsSecond.Size = new System.Drawing.Size(95, 17);
-            this.chbIsSecond.TabIndex = 67;
-            this.chbIsSecond.Text = "Для лиц с ВО";
-            this.chbIsSecond.UseVisualStyleBackColor = true;
-            // 
             // cbFaculty
             // 
             this.cbFaculty.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbFaculty.FormattingEnabled = true;
-            this.cbFaculty.Location = new System.Drawing.Point(18, 244);
+            this.cbFaculty.Location = new System.Drawing.Point(18, 287);
             this.cbFaculty.Name = "cbFaculty";
             this.cbFaculty.Size = new System.Drawing.Size(377, 21);
             this.cbFaculty.TabIndex = 66;
@@ -386,7 +426,7 @@
             // 
             this.cbStudyLevel.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbStudyLevel.FormattingEnabled = true;
-            this.cbStudyLevel.Location = new System.Drawing.Point(18, 39);
+            this.cbStudyLevel.Location = new System.Drawing.Point(18, 57);
             this.cbStudyLevel.Name = "cbStudyLevel";
             this.cbStudyLevel.Size = new System.Drawing.Size(207, 21);
             this.cbStudyLevel.TabIndex = 65;
@@ -396,7 +436,7 @@
             // 
             this.cbStudyBasis.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbStudyBasis.FormattingEnabled = true;
-            this.cbStudyBasis.Location = new System.Drawing.Point(17, 323);
+            this.cbStudyBasis.Location = new System.Drawing.Point(241, 327);
             this.cbStudyBasis.Name = "cbStudyBasis";
             this.cbStudyBasis.Size = new System.Drawing.Size(155, 21);
             this.cbStudyBasis.TabIndex = 64;
@@ -405,7 +445,7 @@
             // 
             this.cbStudyForm.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbStudyForm.FormattingEnabled = true;
-            this.cbStudyForm.Location = new System.Drawing.Point(18, 283);
+            this.cbStudyForm.Location = new System.Drawing.Point(18, 327);
             this.cbStudyForm.Name = "cbStudyForm";
             this.cbStudyForm.Size = new System.Drawing.Size(155, 21);
             this.cbStudyForm.TabIndex = 63;
@@ -692,22 +732,6 @@
             this.dgvObrazProgramInEntry.TabIndex = 0;
             this.dgvObrazProgramInEntry.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvObrazProgramInEntry_CellDoubleClick);
             // 
-            // label21
-            // 
-            this.label21.AutoSize = true;
-            this.label21.Location = new System.Drawing.Point(250, 446);
-            this.label21.Name = "label21";
-            this.label21.Size = new System.Drawing.Size(77, 13);
-            this.label21.TabIndex = 77;
-            this.label21.Text = "КЦ льготники";
-            // 
-            // tbKCPQuota
-            // 
-            this.tbKCPQuota.Location = new System.Drawing.Point(253, 462);
-            this.tbKCPQuota.Name = "tbKCPQuota";
-            this.tbKCPQuota.Size = new System.Drawing.Size(63, 20);
-            this.tbKCPQuota.TabIndex = 78;
-            // 
             // CardEntry
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -725,6 +749,8 @@
             this.tabPage1.ResumeLayout(false);
             this.gbEntry.ResumeLayout(false);
             this.gbEntry.PerformLayout();
+            this.groupBox4.ResumeLayout(false);
+            this.groupBox4.PerformLayout();
             this.tabPage2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dgvExams)).EndInit();
             this.tabPage3.ResumeLayout(false);
@@ -748,7 +774,6 @@
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Label label8;
-        private System.Windows.Forms.Label label9;
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.Label label12;
         private System.Windows.Forms.TextBox tbStudyPlan;
@@ -801,5 +826,8 @@
         private System.Windows.Forms.TextBox tbKCPCrimea;
         private System.Windows.Forms.Label label21;
         private System.Windows.Forms.TextBox tbKCPQuota;
+        private System.Windows.Forms.ComboBox cbAggregateGroup;
+        private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.GroupBox groupBox4;
     }
 }

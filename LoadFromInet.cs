@@ -255,7 +255,7 @@ namespace Priem
                 abit.FacultyId = (int)row["FacultyId"];
                 abit.LicenseProgramId = (int)row["LicenseProgramId"];
                 abit.ObrazProgramId = (int)row["ObrazProgramId"];
-                abit.ProfileId = (Guid?)(Util.ToNullObject(row["ProfileId"]));
+                abit.ProfileId = (int)(row["ProfileId"]);
                 abit.StudyFormId = (int)row["StudyFormId"];
                 abit.StudyBasisId = (int)row["StudyBasisId"];
                

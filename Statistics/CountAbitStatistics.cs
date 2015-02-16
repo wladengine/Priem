@@ -145,7 +145,7 @@ namespace Priem
                 var dates = (from ab in context.qAbitAll
                              where ab.DocInsertDate != null && ab.DocInsertDate > dtpStart.Value && ab.DocInsertDate <= dtpEnd.Value
                              && ab.StudyLevelGroupId == MainClass.studyLevelGroupId && (FacultyId.HasValue ? (ab.FacultyId == FacultyId.Value) : (true))
-                            select ab.DocInsertDate.Value).ToList().Select(x => x.Date).Distinct().OrderBy(x => x);
+                            select ab.DocInsertDate).ToList().Select(x => x.Date).Distinct().OrderBy(x => x);
 
                 string query = string.Format(@"SELECT DISTINCT LicenseProgramId, LicenseProgramCode + ' ' + LicenseProgramName AS Profession, 
             ObrazProgramId, ObrazProgramCrypt + ' ' + ObrazProgramName AS ObrazProgram, ProfileId, ProfileName, convert(date, DocInsertDate) AS Date, COUNT(extAbit.Id) AS CNT

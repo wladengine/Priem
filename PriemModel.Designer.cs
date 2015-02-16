@@ -108,6 +108,8 @@ using System.Xml.Serialization;
 [assembly: EdmRelationshipAttribute("Priem2012Model", "FK_OrderNumbers_Signer", "Signer", System.Data.Metadata.Edm.RelationshipMultiplicity.ZeroOrOne, typeof(Priem.Signer), "OrderNumbers", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(Priem.OrderNumbers), true)]
 [assembly: EdmRelationshipAttribute("Priem2012Model", "FK_Person_Contacts_ForeignCountry", "ForeignCountry", System.Data.Metadata.Edm.RelationshipMultiplicity.ZeroOrOne, typeof(Priem.ForeignCountry), "Person_Contacts", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(Priem.Person_Contacts), true)]
 [assembly: EdmRelationshipAttribute("Priem2012Model", "FK_Person_EducationInfo_ForeignCountry", "ForeignCountry", System.Data.Metadata.Edm.RelationshipMultiplicity.ZeroOrOne, typeof(Priem.ForeignCountry), "Person_EducationInfo", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(Priem.Person_EducationInfo), true)]
+[assembly: EdmRelationshipAttribute("Priem2012Model", "FK_Entry_SP_Profile", "SP_Profile", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(Priem.SP_Profile), "Entry", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(Priem.Entry), true)]
+[assembly: EdmRelationshipAttribute("Priem2012Model", "FK_SP_LicenseProgram_SP_AggregateGroup", "SP_AggregateGroup", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(Priem.SP_AggregateGroup), "SP_LicenseProgram", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(Priem.SP_LicenseProgram), true)]
 
 #endregion
 
@@ -2062,6 +2064,22 @@ namespace Priem
             }
         }
         private ObjectSet<ForeignCountry> _ForeignCountry;
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        public ObjectSet<SP_AggregateGroup> SP_AggregateGroup
+        {
+            get
+            {
+                if ((_SP_AggregateGroup == null))
+                {
+                    _SP_AggregateGroup = base.CreateObjectSet<SP_AggregateGroup>("SP_AggregateGroup");
+                }
+                return _SP_AggregateGroup;
+            }
+        }
+        private ObjectSet<SP_AggregateGroup> _SP_AggregateGroup;
 
         #endregion
 
@@ -3017,6 +3035,14 @@ namespace Priem
         public void AddToForeignCountry(ForeignCountry foreignCountry)
         {
             base.AddObject("ForeignCountry", foreignCountry);
+        }
+    
+        /// <summary>
+        /// Deprecated Method for adding a new object to the SP_AggregateGroup EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// </summary>
+        public void AddToSP_AggregateGroup(SP_AggregateGroup sP_AggregateGroup)
+        {
+            base.AddObject("SP_AggregateGroup", sP_AggregateGroup);
         }
 
         #endregion
@@ -9464,7 +9490,7 @@ namespace Priem
         /// <param name="isCrimea">No Metadata Documentation available.</param>
         /// <param name="isQuota">No Metadata Documentation available.</param>
         /// <param name="id">No Metadata Documentation available.</param>
-        public int FixierenView_Insert(Nullable<global::System.Int32> studyLevelGroupId, Nullable<global::System.Int32> facultyId, Nullable<global::System.Int32> licenseProgramId, Nullable<global::System.Int32> obrazProgramId, Nullable<global::System.Guid> profileId, Nullable<global::System.Int32> studyBasisId, Nullable<global::System.Int32> studyFormId, Nullable<global::System.Boolean> isSecond, Nullable<global::System.Boolean> isReduced, Nullable<global::System.Boolean> isParallel, Nullable<global::System.Boolean> isCel, Nullable<global::System.Int32> docNum, Nullable<global::System.Boolean> locked, Nullable<global::System.Boolean> isCrimea, Nullable<global::System.Boolean> isQuota, ObjectParameter id)
+        public int FixierenView_Insert(Nullable<global::System.Int32> studyLevelGroupId, Nullable<global::System.Int32> facultyId, Nullable<global::System.Int32> licenseProgramId, Nullable<global::System.Int32> obrazProgramId, Nullable<global::System.Int32> profileId, Nullable<global::System.Int32> studyBasisId, Nullable<global::System.Int32> studyFormId, Nullable<global::System.Boolean> isSecond, Nullable<global::System.Boolean> isReduced, Nullable<global::System.Boolean> isParallel, Nullable<global::System.Boolean> isCel, Nullable<global::System.Int32> docNum, Nullable<global::System.Boolean> locked, Nullable<global::System.Boolean> isCrimea, Nullable<global::System.Boolean> isQuota, ObjectParameter id)
         {
             ObjectParameter studyLevelGroupIdParameter;
             if (studyLevelGroupId.HasValue)
@@ -9513,7 +9539,7 @@ namespace Priem
             }
             else
             {
-                profileIdParameter = new ObjectParameter("ProfileId", typeof(global::System.Guid));
+                profileIdParameter = new ObjectParameter("ProfileId", typeof(global::System.Int32));
             }
     
             ObjectParameter studyBasisIdParameter;
@@ -9634,7 +9660,7 @@ namespace Priem
         /// <param name="isParallel">No Metadata Documentation available.</param>
         /// <param name="isCel">No Metadata Documentation available.</param>
         /// <param name="locked">No Metadata Documentation available.</param>
-        public int FixierenView_UpdateLocked(Nullable<global::System.Int32> studyLevelGroupId, Nullable<global::System.Int32> facultyId, Nullable<global::System.Int32> licenseProgramId, Nullable<global::System.Int32> obrazProgramId, Nullable<global::System.Guid> profileId, Nullable<global::System.Int32> studyBasisId, Nullable<global::System.Int32> studyFormId, Nullable<global::System.Boolean> isSecond, Nullable<global::System.Boolean> isReduced, Nullable<global::System.Boolean> isParallel, Nullable<global::System.Boolean> isCel, Nullable<global::System.Boolean> locked)
+        public int FixierenView_UpdateLocked(Nullable<global::System.Int32> studyLevelGroupId, Nullable<global::System.Int32> facultyId, Nullable<global::System.Int32> licenseProgramId, Nullable<global::System.Int32> obrazProgramId, Nullable<global::System.Int32> profileId, Nullable<global::System.Int32> studyBasisId, Nullable<global::System.Int32> studyFormId, Nullable<global::System.Boolean> isSecond, Nullable<global::System.Boolean> isReduced, Nullable<global::System.Boolean> isParallel, Nullable<global::System.Boolean> isCel, Nullable<global::System.Boolean> locked)
         {
             ObjectParameter studyLevelGroupIdParameter;
             if (studyLevelGroupId.HasValue)
@@ -9683,7 +9709,7 @@ namespace Priem
             }
             else
             {
-                profileIdParameter = new ObjectParameter("ProfileId", typeof(global::System.Guid));
+                profileIdParameter = new ObjectParameter("ProfileId", typeof(global::System.Int32));
             }
     
             ObjectParameter studyBasisIdParameter;
@@ -10360,7 +10386,7 @@ namespace Priem
         /// <param name="isCel">No Metadata Documentation available.</param>
         /// <param name="docNum">No Metadata Documentation available.</param>
         /// <param name="locked">No Metadata Documentation available.</param>
-        public int FixierenViewBackup2_Insert(Nullable<global::System.Guid> id, Nullable<global::System.Int32> studyLevelGroupId, Nullable<global::System.Int32> facultyId, Nullable<global::System.Int32> licenseProgramId, Nullable<global::System.Int32> obrazProgramId, Nullable<global::System.Guid> profileId, Nullable<global::System.Int32> studyBasisId, Nullable<global::System.Int32> studyFormId, Nullable<global::System.Boolean> isSecond, Nullable<global::System.Boolean> isReduced, Nullable<global::System.Boolean> isParallel, Nullable<global::System.Boolean> isCel, Nullable<global::System.Int32> docNum, Nullable<global::System.Boolean> locked)
+        public int FixierenViewBackup2_Insert(Nullable<global::System.Guid> id, Nullable<global::System.Int32> studyLevelGroupId, Nullable<global::System.Int32> facultyId, Nullable<global::System.Int32> licenseProgramId, Nullable<global::System.Int32> obrazProgramId, Nullable<global::System.Int32> profileId, Nullable<global::System.Int32> studyBasisId, Nullable<global::System.Int32> studyFormId, Nullable<global::System.Boolean> isSecond, Nullable<global::System.Boolean> isReduced, Nullable<global::System.Boolean> isParallel, Nullable<global::System.Boolean> isCel, Nullable<global::System.Int32> docNum, Nullable<global::System.Boolean> locked)
         {
             ObjectParameter idParameter;
             if (id.HasValue)
@@ -10419,7 +10445,7 @@ namespace Priem
             }
             else
             {
-                profileIdParameter = new ObjectParameter("ProfileId", typeof(global::System.Guid));
+                profileIdParameter = new ObjectParameter("ProfileId", typeof(global::System.Int32));
             }
     
             ObjectParameter studyBasisIdParameter;
@@ -18787,6 +18813,7 @@ namespace Priem
         /// <param name="facultyId">Initial value of the FacultyId property.</param>
         /// <param name="licenseProgramId">Initial value of the LicenseProgramId property.</param>
         /// <param name="obrazProgramId">Initial value of the ObrazProgramId property.</param>
+        /// <param name="profileId">Initial value of the ProfileId property.</param>
         /// <param name="studyBasisId">Initial value of the StudyBasisId property.</param>
         /// <param name="studyFormId">Initial value of the StudyFormId property.</param>
         /// <param name="studyLevelId">Initial value of the StudyLevelId property.</param>
@@ -18796,13 +18823,14 @@ namespace Priem
         /// <param name="isClosed">Initial value of the IsClosed property.</param>
         /// <param name="dateOfClose">Initial value of the DateOfClose property.</param>
         /// <param name="dateOfStart">Initial value of the DateOfStart property.</param>
-        public static Entry CreateEntry(global::System.Guid id, global::System.Int32 facultyId, global::System.Int32 licenseProgramId, global::System.Int32 obrazProgramId, global::System.Int32 studyBasisId, global::System.Int32 studyFormId, global::System.Int32 studyLevelId, global::System.Boolean isSecond, global::System.Boolean isReduced, global::System.Boolean isParallel, global::System.Boolean isClosed, global::System.DateTime dateOfClose, global::System.DateTime dateOfStart)
+        public static Entry CreateEntry(global::System.Guid id, global::System.Int32 facultyId, global::System.Int32 licenseProgramId, global::System.Int32 obrazProgramId, global::System.Int32 profileId, global::System.Int32 studyBasisId, global::System.Int32 studyFormId, global::System.Int32 studyLevelId, global::System.Boolean isSecond, global::System.Boolean isReduced, global::System.Boolean isParallel, global::System.Boolean isClosed, global::System.DateTime dateOfClose, global::System.DateTime dateOfStart)
         {
             Entry entry = new Entry();
             entry.Id = id;
             entry.FacultyId = facultyId;
             entry.LicenseProgramId = licenseProgramId;
             entry.ObrazProgramId = obrazProgramId;
+            entry.ProfileId = profileId;
             entry.StudyBasisId = studyBasisId;
             entry.StudyFormId = studyFormId;
             entry.StudyLevelId = studyLevelId;
@@ -18921,9 +18949,9 @@ namespace Priem
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
-        public Nullable<global::System.Guid> ProfileId
+        public global::System.Int32 ProfileId
         {
             get
             {
@@ -18938,33 +18966,9 @@ namespace Priem
                 OnProfileIdChanged();
             }
         }
-        private Nullable<global::System.Guid> _ProfileId;
-        partial void OnProfileIdChanging(Nullable<global::System.Guid> value);
+        private global::System.Int32 _ProfileId;
+        partial void OnProfileIdChanging(global::System.Int32 value);
         partial void OnProfileIdChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
-        [DataMemberAttribute()]
-        public global::System.String ProfileName
-        {
-            get
-            {
-                return _ProfileName;
-            }
-            set
-            {
-                OnProfileNameChanging(value);
-                ReportPropertyChanging("ProfileName");
-                _ProfileName = StructuralObject.SetValidValue(value, true);
-                ReportPropertyChanged("ProfileName");
-                OnProfileNameChanged();
-            }
-        }
-        private global::System.String _ProfileName;
-        partial void OnProfileNameChanging(global::System.String value);
-        partial void OnProfileNameChanged();
     
         /// <summary>
         /// No Metadata Documentation available.
@@ -19907,6 +19911,44 @@ namespace Priem
                 if ((value != null))
                 {
                     ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<SP_ObrazProgram>("Priem2012Model.FK_Entry_SP_ObrazProgram", "SP_ObrazProgram", value);
+                }
+            }
+        }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("Priem2012Model", "FK_Entry_SP_Profile", "SP_Profile")]
+        public SP_Profile SP_Profile
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<SP_Profile>("Priem2012Model.FK_Entry_SP_Profile", "SP_Profile").Value;
+            }
+            set
+            {
+                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<SP_Profile>("Priem2012Model.FK_Entry_SP_Profile", "SP_Profile").Value = value;
+            }
+        }
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [BrowsableAttribute(false)]
+        [DataMemberAttribute()]
+        public EntityReference<SP_Profile> SP_ProfileReference
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<SP_Profile>("Priem2012Model.FK_Entry_SP_Profile", "SP_Profile");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<SP_Profile>("Priem2012Model.FK_Entry_SP_Profile", "SP_Profile", value);
                 }
             }
         }
@@ -21884,6 +21926,7 @@ namespace Priem
         /// <param name="licenseProgramName">Initial value of the LicenseProgramName property.</param>
         /// <param name="obrazProgramId">Initial value of the ObrazProgramId property.</param>
         /// <param name="obrazProgramName">Initial value of the ObrazProgramName property.</param>
+        /// <param name="profileId">Initial value of the ProfileId property.</param>
         /// <param name="studyBasisId">Initial value of the StudyBasisId property.</param>
         /// <param name="studyBasisName">Initial value of the StudyBasisName property.</param>
         /// <param name="studyFormId">Initial value of the StudyFormId property.</param>
@@ -21900,7 +21943,7 @@ namespace Priem
         /// <param name="isReduced">Initial value of the IsReduced property.</param>
         /// <param name="isParallel">Initial value of the IsParallel property.</param>
         /// <param name="isGosLine">Initial value of the IsGosLine property.</param>
-        public static extAbit CreateextAbit(global::System.Guid id, global::System.Guid personId, global::System.Guid entryId, global::System.Boolean isListener, global::System.Boolean isPaid, global::System.Boolean backDoc, global::System.DateTime docDate, global::System.DateTime docInsertDate, global::System.Boolean @checked, global::System.Boolean notEnabled, global::System.Boolean compFromOlymp, global::System.Boolean hasOriginals, global::System.Int32 facultyId, global::System.Int32 licenseProgramId, global::System.String licenseProgramName, global::System.Int32 obrazProgramId, global::System.String obrazProgramName, global::System.Int32 studyBasisId, global::System.String studyBasisName, global::System.Int32 studyFormId, global::System.String studyFormName, global::System.Int32 studyLevelId, global::System.String studyLevelName, global::System.Boolean isSecond, global::System.String name, global::System.String surname, global::System.Int32 studyLevelGroupId, global::System.String fIO, global::System.String obrazProgramNameEx, global::System.Boolean withHE, global::System.Boolean isReduced, global::System.Boolean isParallel, global::System.Boolean isGosLine)
+        public static extAbit CreateextAbit(global::System.Guid id, global::System.Guid personId, global::System.Guid entryId, global::System.Boolean isListener, global::System.Boolean isPaid, global::System.Boolean backDoc, global::System.DateTime docDate, global::System.DateTime docInsertDate, global::System.Boolean @checked, global::System.Boolean notEnabled, global::System.Boolean compFromOlymp, global::System.Boolean hasOriginals, global::System.Int32 facultyId, global::System.Int32 licenseProgramId, global::System.String licenseProgramName, global::System.Int32 obrazProgramId, global::System.String obrazProgramName, global::System.Int32 profileId, global::System.Int32 studyBasisId, global::System.String studyBasisName, global::System.Int32 studyFormId, global::System.String studyFormName, global::System.Int32 studyLevelId, global::System.String studyLevelName, global::System.Boolean isSecond, global::System.String name, global::System.String surname, global::System.Int32 studyLevelGroupId, global::System.String fIO, global::System.String obrazProgramNameEx, global::System.Boolean withHE, global::System.Boolean isReduced, global::System.Boolean isParallel, global::System.Boolean isGosLine)
         {
             extAbit extAbit = new extAbit();
             extAbit.Id = id;
@@ -21920,6 +21963,7 @@ namespace Priem
             extAbit.LicenseProgramName = licenseProgramName;
             extAbit.ObrazProgramId = obrazProgramId;
             extAbit.ObrazProgramName = obrazProgramName;
+            extAbit.ProfileId = profileId;
             extAbit.StudyBasisId = studyBasisId;
             extAbit.StudyBasisName = studyBasisName;
             extAbit.StudyFormId = studyFormId;
@@ -22849,9 +22893,9 @@ namespace Priem
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
-        public Nullable<global::System.Guid> ProfileId
+        public global::System.Int32 ProfileId
         {
             get
             {
@@ -22866,8 +22910,8 @@ namespace Priem
                 OnProfileIdChanged();
             }
         }
-        private Nullable<global::System.Guid> _ProfileId;
-        partial void OnProfileIdChanging(Nullable<global::System.Guid> value);
+        private global::System.Int32 _ProfileId;
+        partial void OnProfileIdChanging(global::System.Int32 value);
         partial void OnProfileIdChanged();
     
         /// <summary>
@@ -26005,6 +26049,7 @@ namespace Priem
         /// <param name="licenseProgramName">Initial value of the LicenseProgramName property.</param>
         /// <param name="obrazProgramId">Initial value of the ObrazProgramId property.</param>
         /// <param name="obrazProgramName">Initial value of the ObrazProgramName property.</param>
+        /// <param name="profileId">Initial value of the ProfileId property.</param>
         /// <param name="studyBasisId">Initial value of the StudyBasisId property.</param>
         /// <param name="studyFormId">Initial value of the StudyFormId property.</param>
         /// <param name="studyLevelId">Initial value of the StudyLevelId property.</param>
@@ -26017,7 +26062,7 @@ namespace Priem
         /// <param name="obrazProgramNameEx">Initial value of the ObrazProgramNameEx property.</param>
         /// <param name="isReduced">Initial value of the IsReduced property.</param>
         /// <param name="isParallel">Initial value of the IsParallel property.</param>
-        public static extEntry CreateextEntry(global::System.Guid id, global::System.Int32 facultyId, global::System.Int32 licenseProgramId, global::System.String licenseProgramName, global::System.Int32 obrazProgramId, global::System.String obrazProgramName, global::System.Int32 studyBasisId, global::System.Int32 studyFormId, global::System.Int32 studyLevelId, global::System.Boolean isSecond, global::System.String studyBasisName, global::System.String studyFormName, global::System.String studyLevelName, global::System.Boolean isClosed, global::System.Int32 studyLevelGroupId, global::System.String obrazProgramNameEx, global::System.Boolean isReduced, global::System.Boolean isParallel)
+        public static extEntry CreateextEntry(global::System.Guid id, global::System.Int32 facultyId, global::System.Int32 licenseProgramId, global::System.String licenseProgramName, global::System.Int32 obrazProgramId, global::System.String obrazProgramName, global::System.Int32 profileId, global::System.Int32 studyBasisId, global::System.Int32 studyFormId, global::System.Int32 studyLevelId, global::System.Boolean isSecond, global::System.String studyBasisName, global::System.String studyFormName, global::System.String studyLevelName, global::System.Boolean isClosed, global::System.Int32 studyLevelGroupId, global::System.String obrazProgramNameEx, global::System.Boolean isReduced, global::System.Boolean isParallel)
         {
             extEntry extEntry = new extEntry();
             extEntry.Id = id;
@@ -26026,6 +26071,7 @@ namespace Priem
             extEntry.LicenseProgramName = licenseProgramName;
             extEntry.ObrazProgramId = obrazProgramId;
             extEntry.ObrazProgramName = obrazProgramName;
+            extEntry.ProfileId = profileId;
             extEntry.StudyBasisId = studyBasisId;
             extEntry.StudyFormId = studyFormId;
             extEntry.StudyLevelId = studyLevelId;
@@ -26282,9 +26328,9 @@ namespace Priem
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
-        public Nullable<global::System.Guid> ProfileId
+        public global::System.Int32 ProfileId
         {
             get
             {
@@ -26299,8 +26345,8 @@ namespace Priem
                 OnProfileIdChanged();
             }
         }
-        private Nullable<global::System.Guid> _ProfileId;
-        partial void OnProfileIdChanging(Nullable<global::System.Guid> value);
+        private global::System.Int32 _ProfileId;
+        partial void OnProfileIdChanging(global::System.Int32 value);
         partial void OnProfileIdChanged();
     
         /// <summary>
@@ -29099,6 +29145,7 @@ namespace Priem
         /// <param name="facultyId">Initial value of the FacultyId property.</param>
         /// <param name="licenseProgramId">Initial value of the LicenseProgramId property.</param>
         /// <param name="obrazProgramId">Initial value of the ObrazProgramId property.</param>
+        /// <param name="profileId">Initial value of the ProfileId property.</param>
         /// <param name="studyBasisId">Initial value of the StudyBasisId property.</param>
         /// <param name="studyFormId">Initial value of the StudyFormId property.</param>
         /// <param name="studyLevelId">Initial value of the StudyLevelId property.</param>
@@ -29106,7 +29153,7 @@ namespace Priem
         /// <param name="isSecond">Initial value of the IsSecond property.</param>
         /// <param name="isReduced">Initial value of the IsReduced property.</param>
         /// <param name="isParallel">Initial value of the IsParallel property.</param>
-        public static extExamInEntry CreateextExamInEntry(global::System.Int32 id, global::System.Guid entryId, global::System.Int32 examId, global::System.Boolean isProfil, global::System.Int32 examNameId, global::System.Boolean isAdditional, global::System.Int32 facultyId, global::System.Int32 licenseProgramId, global::System.Int32 obrazProgramId, global::System.Int32 studyBasisId, global::System.Int32 studyFormId, global::System.Int32 studyLevelId, global::System.Int32 studyLevelGroupId, global::System.Boolean isSecond, global::System.Boolean isReduced, global::System.Boolean isParallel)
+        public static extExamInEntry CreateextExamInEntry(global::System.Int32 id, global::System.Guid entryId, global::System.Int32 examId, global::System.Boolean isProfil, global::System.Int32 examNameId, global::System.Boolean isAdditional, global::System.Int32 facultyId, global::System.Int32 licenseProgramId, global::System.Int32 obrazProgramId, global::System.Int32 profileId, global::System.Int32 studyBasisId, global::System.Int32 studyFormId, global::System.Int32 studyLevelId, global::System.Int32 studyLevelGroupId, global::System.Boolean isSecond, global::System.Boolean isReduced, global::System.Boolean isParallel)
         {
             extExamInEntry extExamInEntry = new extExamInEntry();
             extExamInEntry.Id = id;
@@ -29118,6 +29165,7 @@ namespace Priem
             extExamInEntry.FacultyId = facultyId;
             extExamInEntry.LicenseProgramId = licenseProgramId;
             extExamInEntry.ObrazProgramId = obrazProgramId;
+            extExamInEntry.ProfileId = profileId;
             extExamInEntry.StudyBasisId = studyBasisId;
             extExamInEntry.StudyFormId = studyFormId;
             extExamInEntry.StudyLevelId = studyLevelId;
@@ -29423,9 +29471,9 @@ namespace Priem
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
-        public Nullable<global::System.Guid> ProfileId
+        public global::System.Int32 ProfileId
         {
             get
             {
@@ -29440,8 +29488,8 @@ namespace Priem
                 OnProfileIdChanged();
             }
         }
-        private Nullable<global::System.Guid> _ProfileId;
-        partial void OnProfileIdChanging(Nullable<global::System.Guid> value);
+        private global::System.Int32 _ProfileId;
+        partial void OnProfileIdChanging(global::System.Int32 value);
         partial void OnProfileIdChanged();
     
         /// <summary>
@@ -37284,6 +37332,7 @@ namespace Priem
         /// <param name="facultyId">Initial value of the FacultyId property.</param>
         /// <param name="licenseProgramId">Initial value of the LicenseProgramId property.</param>
         /// <param name="obrazProgramId">Initial value of the ObrazProgramId property.</param>
+        /// <param name="profileId">Initial value of the ProfileId property.</param>
         /// <param name="studyFormId">Initial value of the StudyFormId property.</param>
         /// <param name="studyBasisId">Initial value of the StudyBasisId property.</param>
         /// <param name="isSecond">Initial value of the IsSecond property.</param>
@@ -37293,7 +37342,7 @@ namespace Priem
         /// <param name="locked">Initial value of the Locked property.</param>
         /// <param name="isCrimea">Initial value of the IsCrimea property.</param>
         /// <param name="isQuota">Initial value of the IsQuota property.</param>
-        public static FixierenView CreateFixierenView(global::System.Guid id, global::System.Int32 studyLevelGroupId, global::System.Int32 facultyId, global::System.Int32 licenseProgramId, global::System.Int32 obrazProgramId, global::System.Int32 studyFormId, global::System.Int32 studyBasisId, global::System.Boolean isSecond, global::System.Boolean isReduced, global::System.Boolean isParallel, global::System.Boolean isCel, global::System.Boolean locked, global::System.Boolean isCrimea, global::System.Boolean isQuota)
+        public static FixierenView CreateFixierenView(global::System.Guid id, global::System.Int32 studyLevelGroupId, global::System.Int32 facultyId, global::System.Int32 licenseProgramId, global::System.Int32 obrazProgramId, global::System.Int32 profileId, global::System.Int32 studyFormId, global::System.Int32 studyBasisId, global::System.Boolean isSecond, global::System.Boolean isReduced, global::System.Boolean isParallel, global::System.Boolean isCel, global::System.Boolean locked, global::System.Boolean isCrimea, global::System.Boolean isQuota)
         {
             FixierenView fixierenView = new FixierenView();
             fixierenView.Id = id;
@@ -37301,6 +37350,7 @@ namespace Priem
             fixierenView.FacultyId = facultyId;
             fixierenView.LicenseProgramId = licenseProgramId;
             fixierenView.ObrazProgramId = obrazProgramId;
+            fixierenView.ProfileId = profileId;
             fixierenView.StudyFormId = studyFormId;
             fixierenView.StudyBasisId = studyBasisId;
             fixierenView.IsSecond = isSecond;
@@ -37443,9 +37493,9 @@ namespace Priem
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
-        public Nullable<global::System.Guid> ProfileId
+        public global::System.Int32 ProfileId
         {
             get
             {
@@ -37460,8 +37510,8 @@ namespace Priem
                 OnProfileIdChanged();
             }
         }
-        private Nullable<global::System.Guid> _ProfileId;
-        partial void OnProfileIdChanging(Nullable<global::System.Guid> value);
+        private global::System.Int32 _ProfileId;
+        partial void OnProfileIdChanging(global::System.Int32 value);
         partial void OnProfileIdChanged();
     
         /// <summary>
@@ -49616,9 +49666,13 @@ namespace Priem
         /// Create a new qAbitAll object.
         /// </summary>
         /// <param name="id">Initial value of the Id property.</param>
+        /// <param name="personId">Initial value of the PersonId property.</param>
+        /// <param name="entryId">Initial value of the EntryId property.</param>
         /// <param name="isListener">Initial value of the IsListener property.</param>
         /// <param name="isPaid">Initial value of the IsPaid property.</param>
         /// <param name="backDoc">Initial value of the BackDoc property.</param>
+        /// <param name="docDate">Initial value of the DocDate property.</param>
+        /// <param name="docInsertDate">Initial value of the DocInsertDate property.</param>
         /// <param name="checked">Initial value of the Checked property.</param>
         /// <param name="notEnabled">Initial value of the NotEnabled property.</param>
         /// <param name="compFromOlymp">Initial value of the CompFromOlymp property.</param>
@@ -49628,6 +49682,7 @@ namespace Priem
         /// <param name="licenseProgramName">Initial value of the LicenseProgramName property.</param>
         /// <param name="obrazProgramId">Initial value of the ObrazProgramId property.</param>
         /// <param name="obrazProgramName">Initial value of the ObrazProgramName property.</param>
+        /// <param name="profileId">Initial value of the ProfileId property.</param>
         /// <param name="studyBasisId">Initial value of the StudyBasisId property.</param>
         /// <param name="studyBasisName">Initial value of the StudyBasisName property.</param>
         /// <param name="studyFormId">Initial value of the StudyFormId property.</param>
@@ -49640,13 +49695,17 @@ namespace Priem
         /// <param name="withHE">Initial value of the WithHE property.</param>
         /// <param name="isReduced">Initial value of the IsReduced property.</param>
         /// <param name="isParallel">Initial value of the IsParallel property.</param>
-        public static qAbitAll CreateqAbitAll(global::System.Guid id, global::System.Boolean isListener, global::System.Boolean isPaid, global::System.Boolean backDoc, global::System.Boolean @checked, global::System.Boolean notEnabled, global::System.Boolean compFromOlymp, global::System.Boolean hasOriginals, global::System.Int32 facultyId, global::System.Int32 licenseProgramId, global::System.String licenseProgramName, global::System.Int32 obrazProgramId, global::System.String obrazProgramName, global::System.Int32 studyBasisId, global::System.String studyBasisName, global::System.Int32 studyFormId, global::System.String studyFormName, global::System.Int32 studyLevelId, global::System.String studyLevelName, global::System.Guid studyPlanId, global::System.Boolean isSecond, global::System.Int32 studyLevelGroupId, global::System.Boolean withHE, global::System.Boolean isReduced, global::System.Boolean isParallel)
+        public static qAbitAll CreateqAbitAll(global::System.Guid id, global::System.Guid personId, global::System.Guid entryId, global::System.Boolean isListener, global::System.Boolean isPaid, global::System.Boolean backDoc, global::System.DateTime docDate, global::System.DateTime docInsertDate, global::System.Boolean @checked, global::System.Boolean notEnabled, global::System.Boolean compFromOlymp, global::System.Boolean hasOriginals, global::System.Int32 facultyId, global::System.Int32 licenseProgramId, global::System.String licenseProgramName, global::System.Int32 obrazProgramId, global::System.String obrazProgramName, global::System.Int32 profileId, global::System.Int32 studyBasisId, global::System.String studyBasisName, global::System.Int32 studyFormId, global::System.String studyFormName, global::System.Int32 studyLevelId, global::System.String studyLevelName, global::System.Guid studyPlanId, global::System.Boolean isSecond, global::System.Int32 studyLevelGroupId, global::System.Boolean withHE, global::System.Boolean isReduced, global::System.Boolean isParallel)
         {
             qAbitAll qAbitAll = new qAbitAll();
             qAbitAll.Id = id;
+            qAbitAll.PersonId = personId;
+            qAbitAll.EntryId = entryId;
             qAbitAll.IsListener = isListener;
             qAbitAll.IsPaid = isPaid;
             qAbitAll.BackDoc = backDoc;
+            qAbitAll.DocDate = docDate;
+            qAbitAll.DocInsertDate = docInsertDate;
             qAbitAll.Checked = @checked;
             qAbitAll.NotEnabled = notEnabled;
             qAbitAll.CompFromOlymp = compFromOlymp;
@@ -49656,6 +49715,7 @@ namespace Priem
             qAbitAll.LicenseProgramName = licenseProgramName;
             qAbitAll.ObrazProgramId = obrazProgramId;
             qAbitAll.ObrazProgramName = obrazProgramName;
+            qAbitAll.ProfileId = profileId;
             qAbitAll.StudyBasisId = studyBasisId;
             qAbitAll.StudyBasisName = studyBasisName;
             qAbitAll.StudyFormId = studyFormId;
@@ -49705,9 +49765,9 @@ namespace Priem
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
-        public Nullable<global::System.Guid> PersonId
+        public global::System.Guid PersonId
         {
             get
             {
@@ -49722,8 +49782,8 @@ namespace Priem
                 OnPersonIdChanged();
             }
         }
-        private Nullable<global::System.Guid> _PersonId;
-        partial void OnPersonIdChanging(Nullable<global::System.Guid> value);
+        private global::System.Guid _PersonId;
+        partial void OnPersonIdChanging(global::System.Guid value);
         partial void OnPersonIdChanged();
     
         /// <summary>
@@ -49753,9 +49813,9 @@ namespace Priem
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
-        public Nullable<global::System.Guid> EntryId
+        public global::System.Guid EntryId
         {
             get
             {
@@ -49770,8 +49830,8 @@ namespace Priem
                 OnEntryIdChanged();
             }
         }
-        private Nullable<global::System.Guid> _EntryId;
-        partial void OnEntryIdChanging(Nullable<global::System.Guid> value);
+        private global::System.Guid _EntryId;
+        partial void OnEntryIdChanging(global::System.Guid value);
         partial void OnEntryIdChanged();
     
         /// <summary>
@@ -49906,9 +49966,9 @@ namespace Priem
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
-        public Nullable<global::System.DateTime> DocDate
+        public global::System.DateTime DocDate
         {
             get
             {
@@ -49923,16 +49983,16 @@ namespace Priem
                 OnDocDateChanged();
             }
         }
-        private Nullable<global::System.DateTime> _DocDate;
-        partial void OnDocDateChanging(Nullable<global::System.DateTime> value);
+        private global::System.DateTime _DocDate;
+        partial void OnDocDateChanging(global::System.DateTime value);
         partial void OnDocDateChanged();
     
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
-        public Nullable<global::System.DateTime> DocInsertDate
+        public global::System.DateTime DocInsertDate
         {
             get
             {
@@ -49947,8 +50007,8 @@ namespace Priem
                 OnDocInsertDateChanged();
             }
         }
-        private Nullable<global::System.DateTime> _DocInsertDate;
-        partial void OnDocInsertDateChanging(Nullable<global::System.DateTime> value);
+        private global::System.DateTime _DocInsertDate;
+        partial void OnDocInsertDateChanging(global::System.DateTime value);
         partial void OnDocInsertDateChanged();
     
         /// <summary>
@@ -50575,9 +50635,9 @@ namespace Priem
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
-        public Nullable<global::System.Guid> ProfileId
+        public global::System.Int32 ProfileId
         {
             get
             {
@@ -50592,8 +50652,8 @@ namespace Priem
                 OnProfileIdChanged();
             }
         }
-        private Nullable<global::System.Guid> _ProfileId;
-        partial void OnProfileIdChanging(Nullable<global::System.Guid> value);
+        private global::System.Int32 _ProfileId;
+        partial void OnProfileIdChanging(global::System.Int32 value);
         partial void OnProfileIdChanged();
     
         /// <summary>
@@ -51111,6 +51171,30 @@ namespace Priem
         private global::System.String _StudyLevelFISName;
         partial void OnStudyLevelFISNameChanging(global::System.String value);
         partial void OnStudyLevelFISNameChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String Name
+        {
+            get
+            {
+                return _Name;
+            }
+            set
+            {
+                OnNameChanging(value);
+                ReportPropertyChanging("Name");
+                _Name = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("Name");
+                OnNameChanged();
+            }
+        }
+        private global::System.String _Name;
+        partial void OnNameChanging(global::System.String value);
+        partial void OnNameChanged();
 
         #endregion
 
@@ -51147,6 +51231,7 @@ namespace Priem
         /// <param name="licenseProgramName">Initial value of the LicenseProgramName property.</param>
         /// <param name="obrazProgramId">Initial value of the ObrazProgramId property.</param>
         /// <param name="obrazProgramName">Initial value of the ObrazProgramName property.</param>
+        /// <param name="profileId">Initial value of the ProfileId property.</param>
         /// <param name="studyBasisId">Initial value of the StudyBasisId property.</param>
         /// <param name="studyBasisName">Initial value of the StudyBasisName property.</param>
         /// <param name="studyFormId">Initial value of the StudyFormId property.</param>
@@ -51162,7 +51247,7 @@ namespace Priem
         /// <param name="isGosLine">Initial value of the IsGosLine property.</param>
         /// <param name="isViewed">Initial value of the IsViewed property.</param>
         /// <param name="isCommonRussianCompetition">Initial value of the IsCommonRussianCompetition property.</param>
-        public static qAbiturient CreateqAbiturient(global::System.Guid id, global::System.Guid personId, global::System.Guid entryId, global::System.Boolean isListener, global::System.Boolean isPaid, global::System.Boolean backDoc, global::System.DateTime docDate, global::System.DateTime docInsertDate, global::System.Boolean @checked, global::System.Boolean notEnabled, global::System.Boolean compFromOlymp, global::System.Boolean hasOriginals, global::System.Int32 facultyId, global::System.Int32 licenseProgramId, global::System.String licenseProgramName, global::System.Int32 obrazProgramId, global::System.String obrazProgramName, global::System.Int32 studyBasisId, global::System.String studyBasisName, global::System.Int32 studyFormId, global::System.String studyFormName, global::System.Int32 studyLevelId, global::System.String studyLevelName, global::System.Boolean isSecond, global::System.Int32 studyLevelGroupId, global::System.String obrazProgramNameEx, global::System.Boolean withHE, global::System.Boolean isReduced, global::System.Boolean isParallel, global::System.Boolean isGosLine, global::System.Boolean isViewed, global::System.Boolean isCommonRussianCompetition)
+        public static qAbiturient CreateqAbiturient(global::System.Guid id, global::System.Guid personId, global::System.Guid entryId, global::System.Boolean isListener, global::System.Boolean isPaid, global::System.Boolean backDoc, global::System.DateTime docDate, global::System.DateTime docInsertDate, global::System.Boolean @checked, global::System.Boolean notEnabled, global::System.Boolean compFromOlymp, global::System.Boolean hasOriginals, global::System.Int32 facultyId, global::System.Int32 licenseProgramId, global::System.String licenseProgramName, global::System.Int32 obrazProgramId, global::System.String obrazProgramName, global::System.Int32 profileId, global::System.Int32 studyBasisId, global::System.String studyBasisName, global::System.Int32 studyFormId, global::System.String studyFormName, global::System.Int32 studyLevelId, global::System.String studyLevelName, global::System.Boolean isSecond, global::System.Int32 studyLevelGroupId, global::System.String obrazProgramNameEx, global::System.Boolean withHE, global::System.Boolean isReduced, global::System.Boolean isParallel, global::System.Boolean isGosLine, global::System.Boolean isViewed, global::System.Boolean isCommonRussianCompetition)
         {
             qAbiturient qAbiturient = new qAbiturient();
             qAbiturient.Id = id;
@@ -51182,6 +51267,7 @@ namespace Priem
             qAbiturient.LicenseProgramName = licenseProgramName;
             qAbiturient.ObrazProgramId = obrazProgramId;
             qAbiturient.ObrazProgramName = obrazProgramName;
+            qAbiturient.ProfileId = profileId;
             qAbiturient.StudyBasisId = studyBasisId;
             qAbiturient.StudyBasisName = studyBasisName;
             qAbiturient.StudyFormId = studyFormId;
@@ -52110,9 +52196,9 @@ namespace Priem
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
-        public Nullable<global::System.Guid> ProfileId
+        public global::System.Int32 ProfileId
         {
             get
             {
@@ -52127,8 +52213,8 @@ namespace Priem
                 OnProfileIdChanged();
             }
         }
-        private Nullable<global::System.Guid> _ProfileId;
-        partial void OnProfileIdChanging(Nullable<global::System.Guid> value);
+        private global::System.Int32 _ProfileId;
+        partial void OnProfileIdChanging(global::System.Int32 value);
         partial void OnProfileIdChanged();
     
         /// <summary>
@@ -53877,7 +53963,7 @@ namespace Priem
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
-        public Nullable<global::System.Guid> ProfileId
+        public Nullable<global::System.Int32> ProfileId
         {
             get
             {
@@ -53892,8 +53978,8 @@ namespace Priem
                 OnProfileIdChanged();
             }
         }
-        private Nullable<global::System.Guid> _ProfileId;
-        partial void OnProfileIdChanging(Nullable<global::System.Guid> value);
+        private Nullable<global::System.Int32> _ProfileId;
+        partial void OnProfileIdChanging(Nullable<global::System.Int32> value);
         partial void OnProfileIdChanged();
     
         /// <summary>
@@ -55734,7 +55820,7 @@ namespace Priem
         /// Create a new qProfile object.
         /// </summary>
         /// <param name="id">Initial value of the Id property.</param>
-        public static qProfile CreateqProfile(global::System.Guid id)
+        public static qProfile CreateqProfile(global::System.Int32 id)
         {
             qProfile qProfile = new qProfile();
             qProfile.Id = id;
@@ -55750,7 +55836,7 @@ namespace Priem
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
         [DataMemberAttribute()]
-        public global::System.Guid Id
+        public global::System.Int32 Id
         {
             get
             {
@@ -55768,8 +55854,8 @@ namespace Priem
                 }
             }
         }
-        private global::System.Guid _Id;
-        partial void OnIdChanging(global::System.Guid value);
+        private global::System.Int32 _Id;
+        partial void OnIdChanging(global::System.Int32 value);
         partial void OnIdChanged();
     
         /// <summary>
@@ -57502,6 +57588,259 @@ namespace Priem
     /// <summary>
     /// No Metadata Documentation available.
     /// </summary>
+    [EdmEntityTypeAttribute(NamespaceName="Priem2012Model", Name="SP_AggregateGroup")]
+    [Serializable()]
+    [DataContractAttribute(IsReference=true)]
+    public partial class SP_AggregateGroup : EntityObject
+    {
+        #region Factory Method
+    
+        /// <summary>
+        /// Create a new SP_AggregateGroup object.
+        /// </summary>
+        /// <param name="id">Initial value of the Id property.</param>
+        /// <param name="isOpen">Initial value of the IsOpen property.</param>
+        public static SP_AggregateGroup CreateSP_AggregateGroup(global::System.Int32 id, global::System.Boolean isOpen)
+        {
+            SP_AggregateGroup sP_AggregateGroup = new SP_AggregateGroup();
+            sP_AggregateGroup.Id = id;
+            sP_AggregateGroup.IsOpen = isOpen;
+            return sP_AggregateGroup;
+        }
+
+        #endregion
+
+        #region Primitive Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 Id
+        {
+            get
+            {
+                return _Id;
+            }
+            set
+            {
+                if (_Id != value)
+                {
+                    OnIdChanging(value);
+                    ReportPropertyChanging("Id");
+                    _Id = StructuralObject.SetValidValue(value);
+                    ReportPropertyChanged("Id");
+                    OnIdChanged();
+                }
+            }
+        }
+        private global::System.Int32 _Id;
+        partial void OnIdChanging(global::System.Int32 value);
+        partial void OnIdChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String Name
+        {
+            get
+            {
+                return _Name;
+            }
+            set
+            {
+                OnNameChanging(value);
+                ReportPropertyChanging("Name");
+                _Name = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("Name");
+                OnNameChanged();
+            }
+        }
+        private global::System.String _Name;
+        partial void OnNameChanging(global::System.String value);
+        partial void OnNameChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String NameEng
+        {
+            get
+            {
+                return _NameEng;
+            }
+            set
+            {
+                OnNameEngChanging(value);
+                ReportPropertyChanging("NameEng");
+                _NameEng = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("NameEng");
+                OnNameEngChanged();
+            }
+        }
+        private global::System.String _NameEng;
+        partial void OnNameEngChanging(global::System.String value);
+        partial void OnNameEngChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String Acronym
+        {
+            get
+            {
+                return _Acronym;
+            }
+            set
+            {
+                OnAcronymChanging(value);
+                ReportPropertyChanging("Acronym");
+                _Acronym = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("Acronym");
+                OnAcronymChanged();
+            }
+        }
+        private global::System.String _Acronym;
+        partial void OnAcronymChanging(global::System.String value);
+        partial void OnAcronymChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String AcronymEng
+        {
+            get
+            {
+                return _AcronymEng;
+            }
+            set
+            {
+                OnAcronymEngChanging(value);
+                ReportPropertyChanging("AcronymEng");
+                _AcronymEng = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("AcronymEng");
+                OnAcronymEngChanged();
+            }
+        }
+        private global::System.String _AcronymEng;
+        partial void OnAcronymEngChanging(global::System.String value);
+        partial void OnAcronymEngChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Int32> ProfessionListId
+        {
+            get
+            {
+                return _ProfessionListId;
+            }
+            set
+            {
+                OnProfessionListIdChanging(value);
+                ReportPropertyChanging("ProfessionListId");
+                _ProfessionListId = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("ProfessionListId");
+                OnProfessionListIdChanged();
+            }
+        }
+        private Nullable<global::System.Int32> _ProfessionListId;
+        partial void OnProfessionListIdChanging(Nullable<global::System.Int32> value);
+        partial void OnProfessionListIdChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Boolean IsOpen
+        {
+            get
+            {
+                return _IsOpen;
+            }
+            set
+            {
+                OnIsOpenChanging(value);
+                ReportPropertyChanging("IsOpen");
+                _IsOpen = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("IsOpen");
+                OnIsOpenChanged();
+            }
+        }
+        private global::System.Boolean _IsOpen;
+        partial void OnIsOpenChanging(global::System.Boolean value);
+        partial void OnIsOpenChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String Holder
+        {
+            get
+            {
+                return _Holder;
+            }
+            set
+            {
+                OnHolderChanging(value);
+                ReportPropertyChanging("Holder");
+                _Holder = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("Holder");
+                OnHolderChanged();
+            }
+        }
+        private global::System.String _Holder;
+        partial void OnHolderChanging(global::System.String value);
+        partial void OnHolderChanged();
+
+        #endregion
+
+    
+        #region Navigation Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("Priem2012Model", "FK_SP_LicenseProgram_SP_AggregateGroup", "SP_LicenseProgram")]
+        public EntityCollection<SP_LicenseProgram> SP_LicenseProgram
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<SP_LicenseProgram>("Priem2012Model.FK_SP_LicenseProgram_SP_AggregateGroup", "SP_LicenseProgram");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<SP_LicenseProgram>("Priem2012Model.FK_SP_LicenseProgram_SP_AggregateGroup", "SP_LicenseProgram", value);
+                }
+            }
+        }
+
+        #endregion
+
+    }
+    
+    /// <summary>
+    /// No Metadata Documentation available.
+    /// </summary>
     [EdmEntityTypeAttribute(NamespaceName="Priem2012Model", Name="SP_Faculty")]
     [Serializable()]
     [DataContractAttribute(IsReference=true)]
@@ -58252,6 +58591,44 @@ namespace Priem
                 }
             }
         }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("Priem2012Model", "FK_SP_LicenseProgram_SP_AggregateGroup", "SP_AggregateGroup")]
+        public SP_AggregateGroup SP_AggregateGroup
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<SP_AggregateGroup>("Priem2012Model.FK_SP_LicenseProgram_SP_AggregateGroup", "SP_AggregateGroup").Value;
+            }
+            set
+            {
+                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<SP_AggregateGroup>("Priem2012Model.FK_SP_LicenseProgram_SP_AggregateGroup", "SP_AggregateGroup").Value = value;
+            }
+        }
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [BrowsableAttribute(false)]
+        [DataMemberAttribute()]
+        public EntityReference<SP_AggregateGroup> SP_AggregateGroupReference
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<SP_AggregateGroup>("Priem2012Model.FK_SP_LicenseProgram_SP_AggregateGroup", "SP_AggregateGroup");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<SP_AggregateGroup>("Priem2012Model.FK_SP_LicenseProgram_SP_AggregateGroup", "SP_AggregateGroup", value);
+                }
+            }
+        }
 
         #endregion
 
@@ -58887,6 +59264,28 @@ namespace Priem
                 if ((value != null))
                 {
                     ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<ProfileInObrazProgramInEntry>("Priem2012Model.FK_ProfileInObrazProgramInEntry_SP_Profile", "ProfileInObrazProgramInEntry", value);
+                }
+            }
+        }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("Priem2012Model", "FK_Entry_SP_Profile", "Entry")]
+        public EntityCollection<Entry> Entry
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<Entry>("Priem2012Model.FK_Entry_SP_Profile", "Entry");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<Entry>("Priem2012Model.FK_Entry_SP_Profile", "Entry", value);
                 }
             }
         }

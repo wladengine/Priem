@@ -122,6 +122,7 @@
           <EntitySet Name="SchoolNames" EntityType="Priem2012Model.Store.SchoolNames" store:Type="Tables" Schema="ed" />
           <EntitySet Name="SchoolType" EntityType="Priem2012Model.Store.SchoolType" store:Type="Tables" Schema="ed" />
           <EntitySet Name="Signer" EntityType="Priem2012Model.Store.Signer" store:Type="Tables" Schema="ed" />
+          <EntitySet Name="SP_AggregateGroup" EntityType="Priem2012Model.Store.SP_AggregateGroup" store:Type="Tables" Schema="ed" />
           <EntitySet Name="SP_Faculty" EntityType="Priem2012Model.Store.SP_Faculty" store:Type="Tables" Schema="ed" />
           <EntitySet Name="SP_LicenseProgram" EntityType="Priem2012Model.Store.SP_LicenseProgram" store:Type="Tables" Schema="ed" />
           <EntitySet Name="SP_ObrazProgram" EntityType="Priem2012Model.Store.SP_ObrazProgram" store:Type="Tables" Schema="ed" />
@@ -898,7 +899,8 @@
       [qAbitAll].[QualificationCode] AS [QualificationCode], 
       [qAbitAll].[StudyBasisFISName] AS [StudyBasisFISName], 
       [qAbitAll].[StudyFormFISName] AS [StudyFormFISName], 
-      [qAbitAll].[StudyLevelFISName] AS [StudyLevelFISName]
+      [qAbitAll].[StudyLevelFISName] AS [StudyLevelFISName], 
+      [qAbitAll].[Name] AS [Name]
       FROM [ed].[qAbitAll] AS [qAbitAll]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="qAbiturient" EntityType="Priem2012Model.Store.qAbiturient" store:Type="Views" store:Schema="ed" store:Name="qAbiturient">
@@ -1284,6 +1286,10 @@
             <End Role="SP_ObrazProgram" EntitySet="SP_ObrazProgram" />
             <End Role="Entry" EntitySet="Entry" />
           </AssociationSet>
+          <AssociationSet Name="FK_Entry_SP_Profile" Association="Priem2012Model.Store.FK_Entry_SP_Profile">
+            <End Role="SP_Profile" EntitySet="SP_Profile" />
+            <End Role="Entry" EntitySet="Entry" />
+          </AssociationSet>
           <AssociationSet Name="FK_Entry_StudyBasis" Association="Priem2012Model.Store.FK_Entry_StudyBasis">
             <End Role="StudyBasis" EntitySet="StudyBasis" />
             <End Role="Entry" EntitySet="Entry" />
@@ -1491,6 +1497,10 @@
           <AssociationSet Name="fk_Protocol_StudyForm" Association="Priem2012Model.Store.fk_Protocol_StudyForm">
             <End Role="StudyForm" EntitySet="StudyForm" />
             <End Role="Protocol" EntitySet="Protocol" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SP_LicenseProgram_SP_AggregateGroup" Association="Priem2012Model.Store.FK_SP_LicenseProgram_SP_AggregateGroup">
+            <End Role="SP_AggregateGroup" EntitySet="SP_AggregateGroup" />
+            <End Role="SP_LicenseProgram" EntitySet="SP_LicenseProgram" />
           </AssociationSet>
           <AssociationSet Name="FK_SP_LicenseProgram_StudyLevel" Association="Priem2012Model.Store.FK_SP_LicenseProgram_StudyLevel">
             <End Role="StudyLevel" EntitySet="StudyLevel" />
@@ -1787,8 +1797,7 @@
           <Property Name="FacultyId" Type="int" Nullable="false" />
           <Property Name="LicenseProgramId" Type="int" Nullable="false" />
           <Property Name="ObrazProgramId" Type="int" Nullable="false" />
-          <Property Name="ProfileId" Type="uniqueidentifier" />
-          <Property Name="ProfileName" Type="nvarchar" MaxLength="1000" />
+          <Property Name="ProfileId" Type="int" Nullable="false" />
           <Property Name="StudyBasisId" Type="int" Nullable="false" />
           <Property Name="StudyFormId" Type="int" Nullable="false" />
           <Property Name="StudyLevelId" Type="int" Nullable="false" />
@@ -1955,7 +1964,7 @@
           <Property Name="FacultyId" Type="int" Nullable="false" />
           <Property Name="LicenseProgramId" Type="int" Nullable="false" />
           <Property Name="ObrazProgramId" Type="int" Nullable="false" />
-          <Property Name="ProfileId" Type="uniqueidentifier" />
+          <Property Name="ProfileId" Type="int" Nullable="false" />
           <Property Name="StudyFormId" Type="int" Nullable="false" />
           <Property Name="StudyBasisId" Type="int" Nullable="false" />
           <Property Name="IsSecond" Type="bit" Nullable="false" />
@@ -2448,6 +2457,19 @@
           <Property Name="Name" Type="nvarchar" MaxLength="100" />
           <Property Name="Position" Type="nvarchar" MaxLength="100" />
         </EntityType>
+        <EntityType Name="SP_AggregateGroup">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="1000" />
+          <Property Name="NameEng" Type="nvarchar" MaxLength="1000" />
+          <Property Name="Acronym" Type="nvarchar" MaxLength="100" />
+          <Property Name="AcronymEng" Type="nvarchar" MaxLength="100" />
+          <Property Name="ProfessionListId" Type="int" />
+          <Property Name="IsOpen" Type="bit" Nullable="false" />
+          <Property Name="Holder" Type="nvarchar" MaxLength="100" />
+        </EntityType>
         <EntityType Name="SP_Faculty">
           <Key>
             <PropertyRef Name="Id" />
@@ -2568,6 +2590,7 @@
             <PropertyRef Name="LicenseProgramName" />
             <PropertyRef Name="ObrazProgramId" />
             <PropertyRef Name="ObrazProgramName" />
+            
             <PropertyRef Name="StudyBasisId" />
             <PropertyRef Name="StudyBasisName" />
             <PropertyRef Name="StudyFormId" />
@@ -2621,7 +2644,7 @@
           <Property Name="ObrazProgramName" Type="nvarchar" Nullable="false" MaxLength="1000" />
           <Property Name="ObrazProgramNumber" Type="nvarchar" MaxLength="50" />
           <Property Name="ObrazProgramCrypt" Type="nvarchar" MaxLength="66" />
-          <Property Name="ProfileId" Type="uniqueidentifier" />
+          <Property Name="ProfileId" Type="int" Nullable="false" />
           <Property Name="ProfileName" Type="nvarchar" MaxLength="1000" />
           <Property Name="StudyBasisId" Type="int" Nullable="false" />
           <Property Name="StudyBasisName" Type="nvarchar" Nullable="false" MaxLength="50" />
@@ -2830,6 +2853,7 @@
             <PropertyRef Name="LicenseProgramName" />
             <PropertyRef Name="ObrazProgramId" />
             <PropertyRef Name="ObrazProgramName" />
+            
             <PropertyRef Name="StudyBasisId" />
             <PropertyRef Name="StudyFormId" />
             <PropertyRef Name="StudyLevelId" />
@@ -2852,7 +2876,7 @@
           <Property Name="ObrazProgramName" Type="nvarchar" Nullable="false" MaxLength="1000" />
           <Property Name="ObrazProgramNumber" Type="nvarchar" MaxLength="50" />
           <Property Name="ObrazProgramCrypt" Type="nvarchar" MaxLength="66" />
-          <Property Name="ProfileId" Type="uniqueidentifier" />
+          <Property Name="ProfileId" Type="int" Nullable="false" />
           <Property Name="ProfileName" Type="nvarchar" MaxLength="1000" />
           <Property Name="StudyBasisId" Type="int" Nullable="false" />
           <Property Name="StudyFormId" Type="int" Nullable="false" />
@@ -3016,6 +3040,7 @@
             <PropertyRef Name="FacultyId" />
             <PropertyRef Name="LicenseProgramId" />
             <PropertyRef Name="ObrazProgramId" />
+            
             <PropertyRef Name="StudyBasisId" />
             <PropertyRef Name="StudyFormId" />
             <PropertyRef Name="StudyLevelId" />
@@ -3035,7 +3060,7 @@
           <Property Name="FacultyId" Type="int" Nullable="false" />
           <Property Name="LicenseProgramId" Type="int" Nullable="false" />
           <Property Name="ObrazProgramId" Type="int" Nullable="false" />
-          <Property Name="ProfileId" Type="uniqueidentifier" />
+          <Property Name="ProfileId" Type="int" Nullable="false" />
           <Property Name="StudyBasisId" Type="int" Nullable="false" />
           <Property Name="StudyFormId" Type="int" Nullable="false" />
           <Property Name="StudyLevelId" Type="int" Nullable="false" />
@@ -3541,9 +3566,13 @@
         <EntityType Name="qAbitAll">
           <Key>
             <PropertyRef Name="Id" />
+            
+            
             <PropertyRef Name="IsListener" />
             <PropertyRef Name="IsPaid" />
             <PropertyRef Name="BackDoc" />
+            
+            
             <PropertyRef Name="Checked" />
             <PropertyRef Name="NotEnabled" />
             <PropertyRef Name="CompFromOlymp" />
@@ -3552,6 +3581,7 @@
             <PropertyRef Name="LicenseProgramId" />
             
             <PropertyRef Name="ObrazProgramId" />
+            
             
             <PropertyRef Name="StudyBasisId" />
             <PropertyRef Name="StudyBasisName" />
@@ -3567,16 +3597,16 @@
             <PropertyRef Name="StudyPlanId" />
           </Key>
           <Property Name="Id" Type="uniqueidentifier" Nullable="false" />
-          <Property Name="PersonId" Type="uniqueidentifier" />
+          <Property Name="PersonId" Type="uniqueidentifier" Nullable="false" />
           <Property Name="RegNum" Type="nvarchar" MaxLength="50" />
-          <Property Name="EntryId" Type="uniqueidentifier" />
+          <Property Name="EntryId" Type="uniqueidentifier" Nullable="false" />
           <Property Name="CompetitionId" Type="int" />
           <Property Name="IsListener" Type="bit" Nullable="false" />
           <Property Name="IsPaid" Type="bit" Nullable="false" />
           <Property Name="BackDoc" Type="bit" Nullable="false" />
           <Property Name="BackDocDate" Type="smalldatetime" />
-          <Property Name="DocDate" Type="smalldatetime" />
-          <Property Name="DocInsertDate" Type="smalldatetime" />
+          <Property Name="DocDate" Type="smalldatetime" Nullable="false" />
+          <Property Name="DocInsertDate" Type="smalldatetime" Nullable="false" />
           <Property Name="Checked" Type="bit" Nullable="false" />
           <Property Name="NotEnabled" Type="bit" Nullable="false" />
           <Property Name="Coefficient" Type="float" />
@@ -3602,7 +3632,7 @@
           <Property Name="ObrazProgramName" Type="nvarchar" Nullable="false" MaxLength="1000" />
           <Property Name="ObrazProgramNumber" Type="nvarchar" MaxLength="50" />
           <Property Name="ObrazProgramCrypt" Type="nvarchar" MaxLength="66" />
-          <Property Name="ProfileId" Type="uniqueidentifier" />
+          <Property Name="ProfileId" Type="int" Nullable="false" />
           <Property Name="ProfileName" Type="nvarchar" MaxLength="1000" />
           <Property Name="StudyBasisId" Type="int" Nullable="false" />
           <Property Name="StudyBasisName" Type="nvarchar" Nullable="false" MaxLength="50" />
@@ -3623,6 +3653,7 @@
           <Property Name="StudyBasisFISName" Type="nvarchar" MaxLength="50" />
           <Property Name="StudyFormFISName" Type="nvarchar" MaxLength="50" />
           <Property Name="StudyLevelFISName" Type="nvarchar" MaxLength="50" />
+          <Property Name="Name" Type="nvarchar" MaxLength="1000" />
         </EntityType>
         <!--Errors Found During Generation:
       warning 6002: The table/view 'Priem.ed.qAbiturient' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.
@@ -3646,6 +3677,7 @@
             <PropertyRef Name="LicenseProgramName" />
             <PropertyRef Name="ObrazProgramId" />
             <PropertyRef Name="ObrazProgramName" />
+            
             <PropertyRef Name="StudyBasisId" />
             <PropertyRef Name="StudyBasisName" />
             <PropertyRef Name="StudyFormId" />
@@ -3698,7 +3730,7 @@
           <Property Name="ObrazProgramName" Type="nvarchar" Nullable="false" MaxLength="1000" />
           <Property Name="ObrazProgramNumber" Type="nvarchar" MaxLength="50" />
           <Property Name="ObrazProgramCrypt" Type="nvarchar" MaxLength="66" />
-          <Property Name="ProfileId" Type="uniqueidentifier" />
+          <Property Name="ProfileId" Type="int" Nullable="false" />
           <Property Name="ProfileName" Type="nvarchar" MaxLength="1000" />
           <Property Name="StudyBasisId" Type="int" Nullable="false" />
           <Property Name="StudyBasisName" Type="nvarchar" Nullable="false" MaxLength="50" />
@@ -3823,7 +3855,7 @@
           <Property Name="ObrazProgramName" Type="nvarchar" Nullable="false" MaxLength="1000" />
           <Property Name="ObrazProgramNumber" Type="nvarchar" MaxLength="50" />
           <Property Name="ObrazProgramCrypt" Type="nvarchar" MaxLength="66" />
-          <Property Name="ProfileId" Type="uniqueidentifier" />
+          <Property Name="ProfileId" Type="int" />
           <Property Name="ProfileName" Type="nvarchar" MaxLength="1000" />
           <Property Name="StudyBasisId" Type="int" Nullable="false" />
           <Property Name="StudyFormId" Type="int" Nullable="false" />
@@ -3953,7 +3985,7 @@
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Id" Type="int" Nullable="false" />
           <Property Name="Name" Type="nvarchar" MaxLength="1000" />
         </EntityType>
         <!--Errors Found During Generation:
@@ -4398,6 +4430,18 @@
             </Principal>
             <Dependent Role="Entry">
               <PropertyRef Name="ObrazProgramId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Entry_SP_Profile">
+          <End Role="SP_Profile" Type="Priem2012Model.Store.SP_Profile" Multiplicity="1" />
+          <End Role="Entry" Type="Priem2012Model.Store.Entry" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SP_Profile">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Entry">
+              <PropertyRef Name="ProfileId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -5057,6 +5101,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_SP_LicenseProgram_SP_AggregateGroup">
+          <End Role="SP_AggregateGroup" Type="Priem2012Model.Store.SP_AggregateGroup" Multiplicity="1" />
+          <End Role="SP_LicenseProgram" Type="Priem2012Model.Store.SP_LicenseProgram" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SP_AggregateGroup">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="SP_LicenseProgram">
+              <PropertyRef Name="AggregateGroupId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_SP_LicenseProgram_StudyLevel">
           <End Role="StudyLevel" Type="Priem2012Model.Store.StudyLevel" Multiplicity="1" />
           <End Role="SP_LicenseProgram" Type="Priem2012Model.Store.SP_LicenseProgram" Multiplicity="*" />
@@ -5625,7 +5681,7 @@
           <Parameter Name="FacultyId" Type="int" Mode="In" />
           <Parameter Name="LicenseProgramId" Type="int" Mode="In" />
           <Parameter Name="ObrazProgramId" Type="int" Mode="In" />
-          <Parameter Name="ProfileId" Type="uniqueidentifier" Mode="In" />
+          <Parameter Name="ProfileId" Type="int" Mode="In" />
           <Parameter Name="StudyBasisId" Type="int" Mode="In" />
           <Parameter Name="StudyFormId" Type="int" Mode="In" />
           <Parameter Name="IsSecond" Type="bit" Mode="In" />
@@ -5643,7 +5699,7 @@
           <Parameter Name="FacultyId" Type="int" Mode="In" />
           <Parameter Name="LicenseProgramId" Type="int" Mode="In" />
           <Parameter Name="ObrazProgramId" Type="int" Mode="In" />
-          <Parameter Name="ProfileId" Type="uniqueidentifier" Mode="In" />
+          <Parameter Name="ProfileId" Type="int" Mode="In" />
           <Parameter Name="StudyBasisId" Type="int" Mode="In" />
           <Parameter Name="StudyFormId" Type="int" Mode="In" />
           <Parameter Name="IsSecond" Type="bit" Mode="In" />
@@ -5658,7 +5714,7 @@
           <Parameter Name="FacultyId" Type="int" Mode="In" />
           <Parameter Name="LicenseProgramId" Type="int" Mode="In" />
           <Parameter Name="ObrazProgramId" Type="int" Mode="In" />
-          <Parameter Name="ProfileId" Type="uniqueidentifier" Mode="In" />
+          <Parameter Name="ProfileId" Type="int" Mode="In" />
           <Parameter Name="StudyBasisId" Type="int" Mode="In" />
           <Parameter Name="StudyFormId" Type="int" Mode="In" />
           <Parameter Name="IsSecond" Type="bit" Mode="In" />
@@ -7164,7 +7220,7 @@
             <Parameter Name="FacultyId" Mode="In" Type="Int32" />
             <Parameter Name="LicenseProgramId" Mode="In" Type="Int32" />
             <Parameter Name="ObrazProgramId" Mode="In" Type="Int32" />
-            <Parameter Name="ProfileId" Mode="In" Type="Guid" />
+            <Parameter Name="ProfileId" Mode="In" Type="Int32" />
             <Parameter Name="StudyBasisId" Mode="In" Type="Int32" />
             <Parameter Name="StudyFormId" Mode="In" Type="Int32" />
             <Parameter Name="IsSecond" Mode="In" Type="Boolean" />
@@ -7182,7 +7238,7 @@
             <Parameter Name="FacultyId" Mode="In" Type="Int32" />
             <Parameter Name="LicenseProgramId" Mode="In" Type="Int32" />
             <Parameter Name="ObrazProgramId" Mode="In" Type="Int32" />
-            <Parameter Name="ProfileId" Mode="In" Type="Guid" />
+            <Parameter Name="ProfileId" Mode="In" Type="Int32" />
             <Parameter Name="StudyBasisId" Mode="In" Type="Int32" />
             <Parameter Name="StudyFormId" Mode="In" Type="Int32" />
             <Parameter Name="IsSecond" Mode="In" Type="Boolean" />
@@ -7272,7 +7328,7 @@
             <Parameter Name="FacultyId" Mode="In" Type="Int32" />
             <Parameter Name="LicenseProgramId" Mode="In" Type="Int32" />
             <Parameter Name="ObrazProgramId" Mode="In" Type="Int32" />
-            <Parameter Name="ProfileId" Mode="In" Type="Guid" />
+            <Parameter Name="ProfileId" Mode="In" Type="Int32" />
             <Parameter Name="StudyBasisId" Mode="In" Type="Int32" />
             <Parameter Name="StudyFormId" Mode="In" Type="Int32" />
             <Parameter Name="IsSecond" Mode="In" Type="Boolean" />
@@ -7829,6 +7885,15 @@
             <End Role="ForeignCountry" EntitySet="ForeignCountry" />
             <End Role="Person_EducationInfo" EntitySet="Person_EducationInfo" />
           </AssociationSet>
+          <AssociationSet Name="FK_Entry_SP_Profile" Association="Priem2012Model.FK_Entry_SP_Profile">
+            <End Role="SP_Profile" EntitySet="SP_Profile" />
+            <End Role="Entry" EntitySet="Entry" />
+          </AssociationSet>
+          <EntitySet Name="SP_AggregateGroup" EntityType="Priem2012Model.SP_AggregateGroup" />
+          <AssociationSet Name="FK_SP_LicenseProgram_SP_AggregateGroup" Association="Priem2012Model.FK_SP_LicenseProgram_SP_AggregateGroup">
+            <End Role="SP_AggregateGroup" EntitySet="SP_AggregateGroup" />
+            <End Role="SP_LicenseProgram" EntitySet="SP_LicenseProgram" />
+          </AssociationSet>
           </EntityContainer>
         <EntityType Name="AttMarks">
           <Key>
@@ -8146,7 +8211,7 @@
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Type="Guid" Name="Id" Nullable="false" />
+          <Property Type="Int32" Name="Id" Nullable="false" />
           <Property Type="String" Name="Name" MaxLength="1000" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="OlympLevel">
@@ -8851,7 +8916,7 @@
           <Property Type="Int32" Name="FacultyId" Nullable="false" />
           <Property Type="Int32" Name="LicenseProgramId" Nullable="false" />
           <Property Type="Int32" Name="ObrazProgramId" Nullable="false" />
-          <Property Type="Guid" Name="ProfileId" />
+          <Property Type="Int32" Name="ProfileId" Nullable="false" />
           <Property Type="Int32" Name="StudyBasisId" Nullable="false" />
           <Property Type="Int32" Name="StudyFormId" Nullable="false" />
           <Property Type="Int32" Name="StudyLevelId" Nullable="false" />
@@ -8890,16 +8955,16 @@
             <PropertyRef Name="IsParallel" />
           </Key>
           <Property Type="Guid" Name="Id" Nullable="false" />
-          <Property Type="Guid" Name="PersonId" />
+          <Property Type="Guid" Name="PersonId" Nullable="false" />
           <Property Type="String" Name="RegNum" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Type="Guid" Name="EntryId" />
+          <Property Type="Guid" Name="EntryId" Nullable="false" />
           <Property Type="Int32" Name="CompetitionId" />
           <Property Type="Boolean" Name="IsListener" Nullable="false" />
           <Property Type="Boolean" Name="IsPaid" Nullable="false" />
           <Property Type="Boolean" Name="BackDoc" Nullable="false" />
           <Property Type="DateTime" Name="BackDocDate" Precision="0" />
-          <Property Type="DateTime" Name="DocDate" Precision="0" />
-          <Property Type="DateTime" Name="DocInsertDate" Precision="0" />
+          <Property Type="DateTime" Name="DocDate" Precision="0" Nullable="false" />
+          <Property Type="DateTime" Name="DocInsertDate" Precision="0" Nullable="false" />
           <Property Type="Boolean" Name="Checked" Nullable="false" />
           <Property Type="Boolean" Name="NotEnabled" Nullable="false" />
           <Property Type="Double" Name="Coefficient" />
@@ -8925,7 +8990,7 @@
           <Property Type="String" Name="ObrazProgramName" MaxLength="1000" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Type="String" Name="ObrazProgramNumber" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Type="String" Name="ObrazProgramCrypt" MaxLength="66" FixedLength="false" Unicode="true" />
-          <Property Type="Guid" Name="ProfileId" />
+          <Property Type="Int32" Name="ProfileId" Nullable="false" />
           <Property Type="String" Name="ProfileName" MaxLength="1000" FixedLength="false" Unicode="true" />
           <Property Type="Int32" Name="StudyBasisId" Nullable="false" />
           <Property Type="String" Name="StudyBasisName" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
@@ -8946,6 +9011,7 @@
           <Property Type="String" Name="StudyBasisFISName" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Type="String" Name="StudyFormFISName" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Type="String" Name="StudyLevelFISName" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Name" MaxLength="1000" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="qProtocol">
           <Key>
@@ -9331,7 +9397,7 @@
           <Property Type="Int32" Name="FacultyId" Nullable="false" />
           <Property Type="Int32" Name="LicenseProgramId" Nullable="false" />
           <Property Type="Int32" Name="ObrazProgramId" Nullable="false" />
-          <Property Type="Guid" Name="ProfileId" />
+          <Property Type="Int32" Name="ProfileId" Nullable="false" />
           <Property Type="Int32" Name="StudyFormId" Nullable="false" />
           <Property Type="Int32" Name="StudyBasisId" Nullable="false" />
           <Property Type="Boolean" Name="IsSecond" Nullable="false" />
@@ -9546,7 +9612,7 @@
           <Property Type="String" Name="ObrazProgramName" MaxLength="1000" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Type="String" Name="ObrazProgramNumber" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Type="String" Name="ObrazProgramCrypt" MaxLength="66" FixedLength="false" Unicode="true" />
-          <Property Type="Guid" Name="ProfileId" />
+          <Property Type="Int32" Name="ProfileId" />
           <Property Type="String" Name="ProfileName" MaxLength="1000" FixedLength="false" Unicode="true" />
           <Property Type="Int32" Name="StudyBasisId" Nullable="false" />
           <Property Type="Int32" Name="StudyFormId" Nullable="false" />
@@ -10410,6 +10476,7 @@
           <NavigationProperty Name="Entry" Relationship="Priem2012Model.FK_Entry_SP_LicenseProgram" FromRole="SP_LicenseProgram" ToRole="Entry" />
           <Property Type="String" Name="GSGUCode" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Type="Int32" Name="VSHEUGNId" />
+          <NavigationProperty Name="SP_AggregateGroup" Relationship="Priem2012Model.FK_SP_LicenseProgram_SP_AggregateGroup" FromRole="SP_LicenseProgram" ToRole="SP_AggregateGroup" />
         </EntityType>
         <EntityType Name="SP_ObrazProgram">
           <Key>
@@ -10442,6 +10509,7 @@
           <Property Type="Boolean" Name="IsOpen" Nullable="false" />
           <Property Type="String" Name="Holder" MaxLength="100" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="ProfileInObrazProgramInEntry" Relationship="Priem2012Model.FK_ProfileInObrazProgramInEntry_SP_Profile" FromRole="SP_Profile" ToRole="ProfileInObrazProgramInEntry" />
+          <NavigationProperty Name="Entry" Relationship="Priem2012Model.FK_Entry_SP_Profile" FromRole="SP_Profile" ToRole="Entry" />
         </EntityType>
         <Association Name="FK_SP_LicenseProgram_StudyLevel">
           <End Type="Priem2012Model.StudyLevel" Role="StudyLevel" Multiplicity="1" />
@@ -10706,8 +10774,7 @@
           <Property Type="Int32" Name="FacultyId" Nullable="false" />
           <Property Type="Int32" Name="LicenseProgramId" Nullable="false" />
           <Property Type="Int32" Name="ObrazProgramId" Nullable="false" />
-          <Property Type="Guid" Name="ProfileId" />
-          <Property Type="String" Name="ProfileName" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <Property Type="Int32" Name="ProfileId" Nullable="false" />
           <Property Type="Int32" Name="StudyBasisId" Nullable="false" />
           <Property Type="Int32" Name="StudyFormId" Nullable="false" />
           <Property Type="Int32" Name="StudyLevelId" Nullable="false" />
@@ -10744,6 +10811,7 @@
           <Property Type="Int32" Name="KCPQuota" />
           <Property Type="DateTime" Name="DateFinishEduc" Precision="0" />
           <Property Type="DateTime" Name="DateStartEduc" Precision="0" />
+          <NavigationProperty Name="SP_Profile" Relationship="Priem2012Model.FK_Entry_SP_Profile" FromRole="Entry" ToRole="SP_Profile" />
         </EntityType>
         <Association Name="FK_Abiturient_Entry">
           <End Type="Priem2012Model.Entry" Role="Entry" Multiplicity="1" />
@@ -10966,7 +11034,7 @@
           <Property Type="String" Name="ObrazProgramName" Nullable="false" MaxLength="1000" FixedLength="false" Unicode="true" />
           <Property Type="String" Name="ObrazProgramNumber" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Type="String" Name="ObrazProgramCrypt" MaxLength="66" FixedLength="false" Unicode="true" />
-          <Property Type="Guid" Name="ProfileId" />
+          <Property Type="Int32" Name="ProfileId" Nullable="false" />
           <Property Type="String" Name="ProfileName" MaxLength="1000" FixedLength="false" Unicode="true" />
           <Property Type="Int32" Name="StudyBasisId" Nullable="false" />
           <Property Type="String" Name="StudyBasisName" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
@@ -11100,7 +11168,7 @@
           <Property Type="String" Name="ObrazProgramName" Nullable="false" MaxLength="1000" FixedLength="false" Unicode="true" />
           <Property Type="String" Name="ObrazProgramNumber" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Type="String" Name="ObrazProgramCrypt" MaxLength="66" FixedLength="false" Unicode="true" />
-          <Property Type="Guid" Name="ProfileId" />
+          <Property Type="Int32" Name="ProfileId" Nullable="false" />
           <Property Type="String" Name="ProfileName" MaxLength="1000" FixedLength="false" Unicode="true" />
           <Property Type="Int32" Name="StudyBasisId" Nullable="false" />
           <Property Type="String" Name="StudyBasisName" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
@@ -11372,7 +11440,7 @@
           <Property Type="String" Name="ObrazProgramName" Nullable="false" MaxLength="1000" FixedLength="false" Unicode="true" />
           <Property Type="String" Name="ObrazProgramNumber" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Type="String" Name="ObrazProgramCrypt" MaxLength="66" FixedLength="false" Unicode="true" />
-          <Property Type="Guid" Name="ProfileId" />
+          <Property Type="Int32" Name="ProfileId" Nullable="false" />
           <Property Type="String" Name="ProfileName" MaxLength="1000" FixedLength="false" Unicode="true" />
           <Property Type="Int32" Name="StudyBasisId" Nullable="false" />
           <Property Type="Int32" Name="StudyFormId" Nullable="false" />
@@ -11434,6 +11502,44 @@
             </Principal>
             <Dependent Role="Person_EducationInfo">
               <PropertyRef Name="ForeignCountryEducId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Entry_SP_Profile">
+          <End Type="Priem2012Model.SP_Profile" Role="SP_Profile" Multiplicity="1" />
+          <End Type="Priem2012Model.Entry" Role="Entry" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SP_Profile">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Entry">
+              <PropertyRef Name="ProfileId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="SP_AggregateGroup">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Type="Int32" Name="Id" Nullable="false" />
+          <Property Type="String" Name="Name" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="NameEng" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Acronym" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="AcronymEng" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Type="Int32" Name="ProfessionListId" />
+          <Property Type="Boolean" Name="IsOpen" Nullable="false" />
+          <Property Type="String" Name="Holder" MaxLength="100" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="SP_LicenseProgram" Relationship="Priem2012Model.FK_SP_LicenseProgram_SP_AggregateGroup" FromRole="SP_AggregateGroup" ToRole="SP_LicenseProgram" />
+        </EntityType>
+        <Association Name="FK_SP_LicenseProgram_SP_AggregateGroup">
+          <End Type="Priem2012Model.SP_AggregateGroup" Role="SP_AggregateGroup" Multiplicity="1" />
+          <End Type="Priem2012Model.SP_LicenseProgram" Role="SP_LicenseProgram" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SP_AggregateGroup">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="SP_LicenseProgram">
+              <PropertyRef Name="AggregateGroupId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -12134,6 +12240,7 @@
           <EntitySetMapping Name="qAbitAll">
             <EntityTypeMapping TypeName="Priem2012Model.qAbitAll">
               <MappingFragment StoreEntitySet="qAbitAll">
+                <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="StudyLevelFISName" ColumnName="StudyLevelFISName" />
                 <ScalarProperty Name="StudyFormFISName" ColumnName="StudyFormFISName" />
                 <ScalarProperty Name="StudyBasisFISName" ColumnName="StudyBasisFISName" />
@@ -13305,7 +13412,6 @@
                 <ScalarProperty Name="StudyLevelId" ColumnName="StudyLevelId" />
                 <ScalarProperty Name="StudyFormId" ColumnName="StudyFormId" />
                 <ScalarProperty Name="StudyBasisId" ColumnName="StudyBasisId" />
-                <ScalarProperty Name="ProfileName" ColumnName="ProfileName" />
                 <ScalarProperty Name="ProfileId" ColumnName="ProfileId" />
                 <ScalarProperty Name="ObrazProgramId" ColumnName="ObrazProgramId" />
                 <ScalarProperty Name="LicenseProgramId" ColumnName="LicenseProgramId" />
@@ -13701,6 +13807,20 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="SP_AggregateGroup">
+            <EntityTypeMapping TypeName="Priem2012Model.SP_AggregateGroup">
+              <MappingFragment StoreEntitySet="SP_AggregateGroup">
+                <ScalarProperty Name="Holder" ColumnName="Holder" />
+                <ScalarProperty Name="IsOpen" ColumnName="IsOpen" />
+                <ScalarProperty Name="ProfessionListId" ColumnName="ProfessionListId" />
+                <ScalarProperty Name="AcronymEng" ColumnName="AcronymEng" />
+                <ScalarProperty Name="Acronym" ColumnName="Acronym" />
+                <ScalarProperty Name="NameEng" ColumnName="NameEng" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -13721,7 +13841,7 @@
     </Options>
     <!-- Diagram content (shape and connector positions) -->
     <Diagrams>
-      <Diagram Name="PriemModel" ZoomLevel="51">
+      <Diagram Name="PriemModel" ZoomLevel="49">
         <EntityTypeShape EntityType="Priem2012Model.AttMarks" Width="1.5" PointX="4" PointY="41.625" Height="1.9210009765624996" IsExpanded="true" />
         <EntityTypeShape EntityType="Priem2012Model.AttSubject" Width="1.5" PointX="1.75" PointY="48" Height="1.4279589843750031" IsExpanded="true" />
         <EntityTypeShape EntityType="Priem2012Model.CelCompetition" Width="1.5" PointX="9" PointY="32.625" Height="1.5923063151041674" IsExpanded="true" />
@@ -14625,13 +14745,16 @@
           <ConnectorPoint PointX="13.419666666666666" PointY="17.505768229166669" />
           <ConnectorPoint PointX="12.375" PointY="17.505768229166669" />
         </AssociationConnector>
-        <EntityTypeShape EntityType="Priem2012Model.qAbiturient_WhoSetIsPaid" Width="1.5" PointX="11.867920383749492" PointY="18.688014247775083" />
+        <EntityTypeShape EntityType="Priem2012Model.qAbiturient_WhoSetIsPaid" Width="1.5" PointX="14.75" PointY="18.5" />
         <EntityTypeShape EntityType="Priem2012Model.Signer" Width="1.5" PointX="6.06952067002166" PointY="29.910763262729517" />
         <AssociationConnector Association="Priem2012Model.FK_OrderNumbers_Signer" />
         <EntityTypeShape EntityType="Priem2012Model.extEntry" Width="1.5" PointX="6.1182239084123742" PointY="5.8176663098007753" />
         <EntityTypeShape EntityType="Priem2012Model.ForeignCountry" Width="1.5" PointX="6.0731763476846634" PointY="4.1650090236985164" />
         <AssociationConnector Association="Priem2012Model.FK_Person_Contacts_ForeignCountry" />
         <AssociationConnector Association="Priem2012Model.FK_Person_EducationInfo_ForeignCountry" />
+        <AssociationConnector Association="Priem2012Model.FK_Entry_SP_Profile" />
+        <EntityTypeShape EntityType="Priem2012Model.SP_AggregateGroup" Width="1.5" PointX="1.9465192714457023" PointY="11.20235112831106" />
+        <AssociationConnector Association="Priem2012Model.FK_SP_LicenseProgram_SP_AggregateGroup" />
         </Diagram>
     </Diagrams>
   </Designer>

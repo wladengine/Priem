@@ -9,7 +9,7 @@ namespace Priem
 {
     public static class Exams
     {
-        public static IEnumerable<extExamInEntry> GetExamsWithFilters(PriemEntities context, int? facultyId, int? licenseProgramId, int? obrazProgramId, Guid? profileId, int? stFormId, int? stBasisId, bool? isSecond, bool? isReduced, bool? isParallel)
+        public static IEnumerable<extExamInEntry> GetExamsWithFilters(PriemEntities context, int? facultyId, int? licenseProgramId, int? obrazProgramId, int? profileId, int? stFormId, int? stBasisId, bool? isSecond, bool? isReduced, bool? isParallel)
         {            
             IEnumerable<extExamInEntry> exams = from ex in context.extExamInEntry where ex.StudyLevelGroupId == MainClass.studyLevelGroupId select ex;
 

@@ -343,7 +343,7 @@ namespace Priem
                     string profId = slProf[Abit.FacultyId + "_" + Abit.LicenseProgramId];
 
                     string specId;
-                    if (!Abit.ProfileId.HasValue)
+                    if (Abit.ProfileId == 0)
                         specId = "0";
                     else
                         specId = slSpec[Abit.FacultyId + "_" + Abit.LicenseProgramId + "_" + Abit.ProfileId.ToString()];

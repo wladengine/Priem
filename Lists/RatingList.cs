@@ -178,15 +178,16 @@ namespace Priem
             get { return ComboServ.GetComboIdInt(cbObrazProgram); }
             set { ComboServ.SetComboId(cbObrazProgram, value); }
         }
-        public Guid? ProfileId
+        public int? ProfileId
         {
             get
             {
-                string prId = ComboServ.GetComboId(cbProfile);
-                if (string.IsNullOrEmpty(prId))
-                    return null;
-                else
-                    return new Guid(prId);
+                return ComboServ.GetComboIdInt(cbProfile);
+                //string prId = ComboServ.GetComboId(cbProfile);
+                //if (string.IsNullOrEmpty(prId))
+                //    return null;
+                //else
+                //    return new Guid(prId);
             }
             set
             {

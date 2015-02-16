@@ -41,17 +41,18 @@ namespace Priem
                 return ComboServ.GetComboIdInt(cbObrazProgram);
             }
         }
-        public Guid? ProfileId
-        {
-            get
-            {
-                if (cbObrazProgram.Text == ComboServ.DISPLAY_ALL_VALUE)
-                    return null;
-                Guid g;
-                Guid.TryParse(ComboServ.GetComboId(cbObrazProgram), out g);
-                return g;
-            }
-        }
+        //public int? ProfileId
+        //{
+        //    get
+        //    {
+        //        return ComboServ.GetComboIdInt(cbObrazProgram);
+        //        //if (cbObrazProgram.Text == ComboServ.DISPLAY_ALL_VALUE)
+        //        //    return null;
+        //        //Guid g;
+        //        //Guid.TryParse(ComboServ.GetComboId(cbObrazProgram), out g);
+        //        //return g;
+        //    }
+        //}
         public int? StudyFormId
         {
             get
@@ -166,8 +167,8 @@ namespace Priem
                     src = src.Where(x => x.LicenseProgramId == LicenseProgramId);
                 if (ObrazProgramId.HasValue)
                     src = src.Where(x => x.ObrazProgramId == ObrazProgramId);
-                if (ProfileId.HasValue)
-                    src = src.Where(x => x.ProfileId == ProfileId);
+                //if (ProfileId.HasValue)
+                //    src = src.Where(x => x.ProfileId == ProfileId);
 
                 var bind = src.Distinct().ToList()
                            .Select(x => new KeyValuePair<string, string>(x.StudyFormId.ToString(), x.StudyFormName)).ToList();
@@ -195,8 +196,8 @@ namespace Priem
                     src = src.Where(x => x.LicenseProgramId == LicenseProgramId);
                 if (ObrazProgramId.HasValue)
                     src = src.Where(x => x.ObrazProgramId == ObrazProgramId);
-                if (ProfileId.HasValue)
-                    src = src.Where(x => x.ProfileId == ProfileId);
+                //if (ProfileId.HasValue)
+                //    src = src.Where(x => x.ProfileId == ProfileId);
                 if (StudyFormId.HasValue)
                     src = src.Where(x => x.StudyFormId == StudyFormId);
 

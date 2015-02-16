@@ -735,7 +735,7 @@ namespace Priem
                                     Profession = Entry.SP_LicenseProgram.Name,
                                     ProfessionCode = Entry.SP_LicenseProgram.Code,
                                     ObrazProgram = Entry.StudyLevel.Acronym + "." + Entry.SP_ObrazProgram.Number + "." + MainClass.sPriemYear + " " + Entry.SP_ObrazProgram.Name,
-                                    Specialization = Entry.ProfileName,
+                                    Specialization = Entry.SP_Profile.Name,
                                     Entry.StudyFormId,
                                     Entry.StudyForm.Name,
                                     Entry.StudyBasisId,
@@ -3383,7 +3383,7 @@ namespace Priem
             }
         }
 
-        public static void PrintRatingProtocol(int? iStudyFormId, int? iStudyBasisId, int? iFacultyId, int? iLicenseProgramId, int? iObrazProgramId, Guid? gProfileId, bool isCel, bool isCrimea, int plan, string savePath, bool isSecond, bool isReduced, bool isParallel, bool isQuota)
+        public static void PrintRatingProtocol(int? iStudyFormId, int? iStudyBasisId, int? iFacultyId, int? iLicenseProgramId, int? iObrazProgramId, int? iProfileId, bool isCel, bool isCrimea, int plan, string savePath, bool isSecond, bool isReduced, bool isParallel, bool isQuota)
         {
             FileStream fileS = null;
             try
@@ -3444,7 +3444,7 @@ namespace Priem
                 {
                     fixId = (from fixierenView in ctx.FixierenView
                              where fixierenView.StudyFormId == iStudyFormId && fixierenView.StudyBasisId == iStudyBasisId && fixierenView.FacultyId == iFacultyId && fixierenView.LicenseProgramId == iLicenseProgramId &&
-                             fixierenView.ObrazProgramId == iObrazProgramId && (gProfileId.HasValue ? fixierenView.ProfileId == gProfileId : true) && fixierenView.IsCel == isCel && fixierenView.IsCrimea == isCrimea && fixierenView.IsSecond == isSecond && fixierenView.IsParallel == isParallel && fixierenView.IsReduced == isReduced && fixierenView.IsQuota == isQuota
+                             fixierenView.ObrazProgramId == iObrazProgramId && (iProfileId.HasValue ? fixierenView.ProfileId == iProfileId : true) && fixierenView.IsCel == isCel && fixierenView.IsCrimea == isCrimea && fixierenView.IsSecond == isSecond && fixierenView.IsParallel == isParallel && fixierenView.IsReduced == isReduced && fixierenView.IsQuota == isQuota
                              select fixierenView.Id).FirstOrDefault();
 
                     docNum = (from fixierenView in ctx.FixierenView
@@ -3469,8 +3469,8 @@ namespace Priem
                               select entry.StudyLevel.Acronym + "." + entry.SP_ObrazProgram.Number + "." + MainClass.sPriemYear + " " + entry.SP_ObrazProgram.Name).FirstOrDefault();
 
                     spec = (from entry in ctx.Entry
-                            where gProfileId.HasValue ? entry.ProfileId == gProfileId : entry.ProfileId == null
-                            select entry.ProfileName).FirstOrDefault();
+                            where iProfileId.HasValue ? entry.ProfileId == iProfileId : entry.ProfileId == null
+                            select entry.SP_Profile.Name).FirstOrDefault();
                 }
 
                 /*

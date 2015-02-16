@@ -14,6 +14,7 @@ namespace Priem
 {
     public partial class CardEntry : BookCard
     {
+        #region Fields
         public int StudyFormId
         {
             get { return ComboServ.GetComboIdInt(cbStudyForm).Value; }
@@ -49,19 +50,24 @@ namespace Priem
             get { return chbIsReduced.Checked; }
             set { chbIsReduced.Checked = value; }
         }
-        public int LicenseProgramId
+        public int? AggregateGroupId
         {
-            get { return ComboServ.GetComboIdInt(cbLicenseProgram).Value; }
+            get { return ComboServ.GetComboIdInt(cbAggregateGroup); }
+            set { ComboServ.SetComboId(cbAggregateGroup, value); }
+        }
+        public int? LicenseProgramId
+        {
+            get { return ComboServ.GetComboIdInt(cbLicenseProgram); }
             set { ComboServ.SetComboId(cbLicenseProgram, value); }
         }
-        public int ObrazProgramId
+        public int? ObrazProgramId
         {
-            get { return ComboServ.GetComboIdInt(cbObrazProgram).Value; }
+            get { return ComboServ.GetComboIdInt(cbObrazProgram); }
             set { ComboServ.SetComboId(cbObrazProgram, value); }
         }
-        public Guid? ProfileId
+        public int? ProfileId
         {
-            get { return ComboServ.GetComboIdGuid(cbProfile); }
+            get { return ComboServ.GetComboIdInt(cbProfile); }
             set { ComboServ.SetComboId(cbProfile, value); }
         }
         public int? ComissionId
@@ -219,6 +225,7 @@ namespace Priem
                     tbKCPQuota.Text = "";
             }
         }
+        #endregion
 
         public CardEntry(string id)
             : base(id)
@@ -248,10 +255,14 @@ namespace Priem
 
                 src = context.SP_Profile.Select(x => new { x.Id, x.Name }).ToList()
                     .Select(x => new KeyValuePair<string, string>(x.Id.ToString(), x.Name)).ToList();
-                ComboServ.FillCombo(cbProfile, src, true, false);
+                ComboServ.FillCombo(cbProfile, src, false, false);
+                
+                //src = context.SP_AggregateGroup.Select(x => new { x.Id, x.Name }).ToList()
+                //    .Select(x => new KeyValuePair<string, string>(x.Id.ToString(), x.Name)).ToList();
+                //ComboServ.FillCombo(cbAggregateGroup, src, false, false);
 
                 src = context.StudyLevel.Select(x => new { x.Id, x.Name }).ToList()
-                            .Select(x => new KeyValuePair<string, string>(x.Id.ToString(), x.Name)).ToList();
+                    .Select(x => new KeyValuePair<string, string>(x.Id.ToString(), x.Name)).ToList();
                 ComboServ.FillCombo(cbStudyLevel, src, false, false);
 
                 src = context.Comission.Select(x => new { x.Id, x.Name }).ToList()
@@ -259,6 +270,7 @@ namespace Priem
                 ComboServ.FillCombo(cbComission, src, true, false);
 
                 UpdateAfterStudyLevel();
+                UpdateAfterAggregateGroup();
                 UpdateAfterLicenseProgram();
                 UpdateAfterObrazProgram();
             }
@@ -283,7 +295,18 @@ namespace Priem
         {
             using (PriemEntities context = new PriemEntities())
             {
-                var src = context.SP_LicenseProgram.Where(x => x.StudyLevelId == StudyLevelId).OrderBy(x => x.Code).Select(x => new { x.Id, x.Code, x.Name }).ToList()
+                var src = context.SP_LicenseProgram.Where(x => x.StudyLevelId == StudyLevelId)
+                    .Select(x => new { Id = x.AggregateGroupId, Name = x.SP_AggregateGroup.Name }).Distinct()
+                    .ToList().Select(x => new KeyValuePair<string, string>(x.Id.ToString(), x.Name)).ToList();
+                ComboServ.FillCombo(cbAggregateGroup, src, (src.Count == 0), false);
+            }
+        }
+        private void UpdateAfterAggregateGroup()
+        {
+            using (PriemEntities context = new PriemEntities())
+            {
+                var src = context.SP_LicenseProgram.Where(x => x.StudyLevelId == StudyLevelId && (AggregateGroupId.HasValue ? x.AggregateGroupId == AggregateGroupId : true))
+                    .OrderBy(x => x.Code).Select(x => new { x.Id, x.Code, x.Name }).ToList()
                     .Select(x => new KeyValuePair<string, string>(x.Id.ToString(), "(" + x.Code + ") " + x.Name)).ToList();
                 ComboServ.FillCombo(cbLicenseProgram, src, false, false);
             }
@@ -433,21 +456,16 @@ namespace Priem
         {
             Guid Id = Guid.NewGuid();
 
-            Guid? _ProfileId;
-            if (cbProfile.Text == "нет")
-                _ProfileId = null;
-            else
-                _ProfileId = Guid.NewGuid();
+            int _ProfileId = ComboServ.GetComboIdInt(cbProfile) ?? 0;
 
 
             var Entry = new Entry();
             Entry.Id = Id;
             Entry.FacultyId = FacultyId.Value;
             Entry.StudyLevelId = StudyLevelId;
-            Entry.LicenseProgramId = LicenseProgramId;
-            Entry.ObrazProgramId = ObrazProgramId;
+            Entry.LicenseProgramId = LicenseProgramId.Value;
+            Entry.ObrazProgramId = ObrazProgramId.Value;
             Entry.ProfileId = _ProfileId;
-            Entry.ProfileName = cbProfile.Text;
             Entry.StudyFormId = StudyFormId;
             Entry.StudyBasisId = StudyBasisId;
             if (!string.IsNullOrEmpty(tbStudyPlan.Text.Trim()))
@@ -468,9 +486,9 @@ namespace Priem
             idParam.Value = Id;
 
             string query = @"INSERT INTO [_Entry] 
-(Id, StudyLevelId, LicenseProgramId, ObrazProgramId, ProfileId, ProfileName, StudyFormId, StudyBasisId, FacultyId, SemesterId, CampaignYear,
+(Id, StudyLevelId, LicenseProgramId, ObrazProgramId, ProfileId, StudyFormId, StudyBasisId, FacultyId, SemesterId, CampaignYear,
 DateOfStart, DateOfClose, DateOfStart_Foreign, DateOfClose_Foreign, DateOfStart_GosLine, DateOfClose_GosLine, ComissionId) VALUES
-(@Id, @StudyLevelId, @LicenseProgramId, @ObrazProgramId, @ProfileId, @ProfileName, @StudyFormId, @StudyBasisId, @FacultyId, @SemesterId, @CampaignYear,
+(@Id, @StudyLevelId, @LicenseProgramId, @ObrazProgramId, @ProfileId, @StudyFormId, @StudyBasisId, @FacultyId, @SemesterId, @CampaignYear,
 @DateOfStart, @DateOfClose, @DateOfStart_Foreign, @DateOfClose_Foreign, @DateOfStart_GosLine, @DateOfClose_GosLine, @ComissionId)";
             SortedList<string, object> sl = new SortedList<string, object>();
             sl.Add("@Id", Id);
@@ -479,7 +497,6 @@ DateOfStart, DateOfClose, DateOfStart_Foreign, DateOfClose_Foreign, DateOfStart_
             sl.Add("@LicenseProgramId", LicenseProgramId);
             sl.Add("@ObrazProgramId", ObrazProgramId);
             sl.AddVal("@ProfileId", _ProfileId);
-            sl.AddVal("@ProfileName", cbProfile.Text);
             sl.AddVal("@SemesterId", 1);
 
             sl.Add("@StudyLevelId", StudyLevelId);
@@ -667,9 +684,13 @@ WHERE Id=@Id";
                 WinFormsServ.Error("Сохраните сперва карточку!");
                 return;
             }
-            var crd = new CardObrazProgramInEntry(GuidId.Value, LicenseProgramId);
-            crd.ToUpdateList += UpdateObrazProgramInEntry;
-            crd.Show();
+
+            if (LicenseProgramId.HasValue)
+            {
+                var crd = new CardObrazProgramInEntry(GuidId.Value, LicenseProgramId.Value);
+                crd.ToUpdateList += UpdateObrazProgramInEntry;
+                crd.Show();
+            }
         }
         private void btnDelete_Click(object sender, EventArgs e)
         {
@@ -706,6 +727,23 @@ WHERE Id=@Id";
 
         #endregion
 
+        protected override bool CheckFields()
+        {
+            bool bRet = true;
+            if (!LicenseProgramId.HasValue)
+            {
+                epError.SetError(cbLicenseProgram, "не указано направление");
+                bRet = false;
+            }
+            if (!ObrazProgramId.HasValue)
+            {
+                epError.SetError(cbLicenseProgram, "не указана обр. программа");
+                bRet = false;
+            }
+
+            return bRet;
+        }
+
         private void cbStudyLevel_SelectedIndexChanged(object sender, EventArgs e)
         {
             UpdateAfterStudyLevel();
@@ -721,6 +759,11 @@ WHERE Id=@Id";
         private void cbProfile_SelectedIndexChanged(object sender, EventArgs e)
         {
 
+        }
+
+        private void cbAggregateGroup_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            UpdateAfterAggregateGroup();
         }
     }
 }

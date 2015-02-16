@@ -40,7 +40,7 @@ namespace Priem
                                LicenseProgramName = x.Abiturient.Entry.SP_LicenseProgram.Name,
                                ObrazProgramCrypt = x.Abiturient.Entry.StudyLevel.Acronym + "." + x.Abiturient.Entry.SP_ObrazProgram.Number + "." + MainClass.sPriemYear,
                                ObrazProgramName = x.Abiturient.Entry.SP_ObrazProgram.Name,
-                               x.Abiturient.Entry.ProfileName,
+                               ProfileName = x.Abiturient.Entry.SP_Profile.Name,
                                //x.Abiturient.Entry.LicenseProgramCode,
                                //x.Abiturient.Entry.LicenseProgramName,
                                //x.Abiturient.Entry.ObrazProgramCrypt,

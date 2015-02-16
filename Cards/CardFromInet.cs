@@ -786,7 +786,7 @@ WHERE IsCommited = 1 AND IntNumber=@CommitId";
                               LicenseProgramName = rw.Field<string>("LicenseProgramName"),
                               ObrazProgramId = rw.Field<int>("ObrazProgramId"),
                               ObrazProgramName = rw.Field<string>("ObrazProgramName"),
-                              ProfileId = rw.Field<Guid?>("ProfileId"),
+                              ProfileId = rw.Field<int?>("ProfileId") ?? 0,
                               ProfileName = rw.Field<string>("ProfileName"),
                               StudyBasisId = rw.Field<int>("StudyBasisId"),
                               StudyBasisName = rw.Field<string>("StudyBasisName"),
@@ -1549,7 +1549,7 @@ FROM [extApplicationDetails] WHERE [ApplicationId]=@AppId";
                                         var entry = context.Entry.Where(x => x.Id == app_entry).FirstOrDefault();
                                         str += "\n" + incrmntr++ + ")" + entry.SP_LicenseProgram.Code + " " + entry.SP_LicenseProgram.Name + "; " 
                                             + entry.StudyLevel.Acronym + "." + entry.SP_ObrazProgram.Number + " " + entry.SP_ObrazProgram.Name + 
-                                            ";\nПрофиль:" + entry.ProfileName + ";" + entry.StudyForm.Acronym + ";" + entry.StudyBasis.Acronym;
+                                            ";\nПрофиль:" + entry.SP_Profile.Name + ";" + entry.StudyForm.Acronym + ";" + entry.StudyBasis.Acronym;
                                     }
                                     dr = MessageBox.Show(str, "Внимание!", MessageBoxButtons.YesNo);
                                     if (dr == System.Windows.Forms.DialogResult.Yes)

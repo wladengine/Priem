@@ -377,7 +377,7 @@ namespace Priem
                     {
                         LP = x.Entry.SP_LicenseProgram.Code + " " + x.Entry.SP_LicenseProgram.Name,
                         OP = x.Entry.StudyLevel.Acronym + "." + x.Entry.SP_ObrazProgram.Number + "." + MainClass.sPriemYear + " " + x.Entry.SP_ObrazProgram.Name,
-                        Prof = x.Entry.ProfileName,
+                        Prof = x.Entry.SP_Profile.Name,
                         StudyForm = x.Entry.StudyForm.Acronym,
                         StudyBasis = x.Entry.StudyBasis.Acronym
                     }).FirstOrDefault();

@@ -181,7 +181,7 @@ namespace Priem
                                 LicenseProgramName = x.Entry.SP_LicenseProgram.Name,
                                 ObrazProgramCrypt = x.Entry.StudyLevel.Acronym + "." + x.Entry.SP_ObrazProgram.Number + "." + MainClass.sPriemYear,
                                 ObrazProgramName = x.Entry.SP_ObrazProgram.Name,
-                                x.Entry.ProfileName,
+                                ProfileName = x.Entry.SP_Profile.Name,
                                 StudyForm = x.Entry.StudyForm.Name,
                                 Prorektor = x.Prorektor.Name
                             }).ToList()

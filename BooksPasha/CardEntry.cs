@@ -737,7 +737,7 @@ WHERE Id=@Id";
             }
             if (!ObrazProgramId.HasValue)
             {
-                epError.SetError(cbLicenseProgram, "не указана обр. программа");
+                epError.SetError(cbObrazProgram, "не указана обр. программа");
                 bRet = false;
             }
 

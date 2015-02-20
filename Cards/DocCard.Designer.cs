@@ -35,22 +35,22 @@
             // 
             // chlbFile
             // 
-            this.chlbFile.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.chlbFile.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.chlbFile.BackColor = System.Drawing.SystemColors.Control;
             this.chlbFile.CheckOnClick = true;
             this.chlbFile.FormattingEnabled = true;
             this.chlbFile.HorizontalScrollbar = true;
             this.chlbFile.Location = new System.Drawing.Point(12, 12);
             this.chlbFile.Name = "chlbFile";
-            this.chlbFile.Size = new System.Drawing.Size(371, 199);
+            this.chlbFile.Size = new System.Drawing.Size(450, 439);
             this.chlbFile.TabIndex = 9;
             // 
             // btnOpenFile
             // 
             this.btnOpenFile.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnOpenFile.Location = new System.Drawing.Point(12, 228);
+            this.btnOpenFile.Location = new System.Drawing.Point(12, 478);
             this.btnOpenFile.Name = "btnOpenFile";
             this.btnOpenFile.Size = new System.Drawing.Size(100, 23);
             this.btnOpenFile.TabIndex = 10;
@@ -61,7 +61,7 @@
             // btnClose
             // 
             this.btnClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnClose.Location = new System.Drawing.Point(283, 228);
+            this.btnClose.Location = new System.Drawing.Point(283, 478);
             this.btnClose.Name = "btnClose";
             this.btnClose.Size = new System.Drawing.Size(100, 23);
             this.btnClose.TabIndex = 11;
@@ -73,7 +73,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(401, 263);
+            this.ClientSize = new System.Drawing.Size(480, 513);
             this.Controls.Add(this.btnClose);
             this.Controls.Add(this.btnOpenFile);
             this.Controls.Add(this.chlbFile);

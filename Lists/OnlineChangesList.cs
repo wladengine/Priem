@@ -97,7 +97,7 @@ namespace Priem
             {
                 using (PriemEntities context = new PriemEntities())
                 {                    
-                    ComboServ.FillCombo(cbChangeType, HelpClass.GetComboListByTable("ed.ChangeType", "ORDER BY Id"), false, false);
+                    ComboServ.FillCombo(cbChangeType, HelpClass.GetComboListByTable("ed.ChangeType", "ORDER BY Priority"), false, false);
                     ComboServ.FillCombo(cbFaculty, HelpClass.GetComboListByTable("ed.qFaculty", "ORDER BY Acronym"), false, false);
                     ComboServ.FillCombo(cbStudyBasis, HelpClass.GetComboListByTable("ed.StudyBasis", "ORDER BY Name"), false, true);
 

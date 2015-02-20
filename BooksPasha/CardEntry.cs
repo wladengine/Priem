@@ -359,8 +359,10 @@ namespace Priem
                                        select ex).FirstOrDefault();
 
                     StudyLevelId = ent.StudyLevelId;
+                    UpdateAfterStudyLevel();
                     //tbStudyLevel.Text = ent.StudyLevelName;
-                    
+                    AggregateGroupId = ent.SP_LicenseProgram.AggregateGroupId;
+                    UpdateAfterAggregateGroup();
                     LicenseProgramId = ent.LicenseProgramId;
                     ObrazProgramId = ent.ObrazProgramId;
                     UpdateAfterObrazProgram();

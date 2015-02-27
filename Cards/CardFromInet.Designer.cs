@@ -205,6 +205,7 @@
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.gbFile = new System.Windows.Forms.GroupBox();
+            this.dgvFiles = new System.Windows.Forms.DataGridView();
             this.chlbFile = new System.Windows.Forms.CheckedListBox();
             this.btnOpenFile = new System.Windows.Forms.Button();
             this.tpApplication = new System.Windows.Forms.TabPage();
@@ -245,6 +246,7 @@
             this.tpDocs.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.gbFile.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvFiles)).BeginInit();
             this.tpApplication.SuspendLayout();
             this.groupBox7.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvApplications)).BeginInit();
@@ -2071,6 +2073,7 @@
             // 
             // gbFile
             // 
+            this.gbFile.Controls.Add(this.dgvFiles);
             this.gbFile.Controls.Add(this.chlbFile);
             this.gbFile.Controls.Add(this.btnOpenFile);
             this.gbFile.Location = new System.Drawing.Point(8, 3);
@@ -2078,6 +2081,16 @@
             this.gbFile.Size = new System.Drawing.Size(543, 281);
             this.gbFile.TabIndex = 12;
             this.gbFile.TabStop = false;
+            // 
+            // dgvFiles
+            // 
+            this.dgvFiles.AllowUserToAddRows = false;
+            this.dgvFiles.AllowUserToDeleteRows = false;
+            this.dgvFiles.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvFiles.Location = new System.Drawing.Point(6, 89);
+            this.dgvFiles.Name = "dgvFiles";
+            this.dgvFiles.Size = new System.Drawing.Size(529, 157);
+            this.dgvFiles.TabIndex = 11;
             // 
             // chlbFile
             // 
@@ -2090,7 +2103,7 @@
             this.chlbFile.HorizontalScrollbar = true;
             this.chlbFile.Location = new System.Drawing.Point(6, 19);
             this.chlbFile.Name = "chlbFile";
-            this.chlbFile.Size = new System.Drawing.Size(531, 229);
+            this.chlbFile.Size = new System.Drawing.Size(531, 64);
             this.chlbFile.TabIndex = 9;
             // 
             // btnOpenFile
@@ -2268,6 +2281,7 @@
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
             this.gbFile.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dgvFiles)).EndInit();
             this.tpApplication.ResumeLayout(false);
             this.tpApplication.PerformLayout();
             this.groupBox7.ResumeLayout(false);
@@ -2467,5 +2481,6 @@
         private System.Windows.Forms.GroupBox gbEducationDocuments;
         private System.Windows.Forms.TextBox tbTRKICertificateNumber;
         private System.Windows.Forms.CheckBox chbHasTRKI;
+        private System.Windows.Forms.DataGridView dgvFiles;
     }
 }

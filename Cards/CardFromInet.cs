@@ -540,7 +540,34 @@ namespace Priem
 
             chlbFile.DataSource = new BindingSource(lstFiles, null);
             chlbFile.ValueMember = "Key";
-            chlbFile.DisplayMember = "Value";   
+            chlbFile.DisplayMember = "Value";
+
+            dgvFiles.DataSource = _docs.UpdateFilesTable();
+            if (dgvFiles.Rows.Count > 0)
+            {
+                foreach (DataGridViewColumn clm in dgvFiles.Columns)
+                    clm.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+                
+                if (!dgvFiles.Columns.Contains("Открыть"))
+                {
+                    DataGridViewCheckBoxCell cl = new DataGridViewCheckBoxCell();
+                    cl.TrueValue = true;
+                    cl.FalseValue = false;
+
+                    DataGridViewCheckBoxColumn clm = new DataGridViewCheckBoxColumn();
+                    clm.CellTemplate = cl;
+                    clm.Name = "Открыть";
+                    dgvFiles.Columns.Add(clm);
+                    dgvFiles.Columns["Открыть"].DisplayIndex = 0;
+                    dgvFiles.Columns["Открыть"].AutoSizeMode = DataGridViewAutoSizeColumnMode.ColumnHeader; 
+                }
+                if (dgvFiles.Columns.Contains("Id"))
+                    dgvFiles.Columns["Id"].Visible = false;
+                if (dgvFiles.Columns.Contains("FileExtention"))
+                    dgvFiles.Columns["FileExtention"].Visible = false;
+                dgvFiles.Columns["FileName"].Name = "Файл";
+
+            }
         }
 
         private extPerson GetPerson()
@@ -1732,6 +1759,24 @@ FROM [extApplicationDetails] WHERE [ApplicationId]=@AppId";
                 lstFiles.Add(file);
             }
 
+            _docs.OpenFile(lstFiles);
+
+            lstFiles = new List<KeyValuePair<string, string>>();
+            foreach ( DataGridViewRow rw in dgvFiles.Rows)
+            {
+                DataGridViewCheckBoxCell cell = rw.Cells["Открыть"] as DataGridViewCheckBoxCell;
+                if (cell.Value == cell.TrueValue)
+                {
+                    if (dgvFiles.Columns.Contains("Файл"))
+                    {
+                        string fileName = rw.Cells["Файл"].Value.ToString();
+                        if (!fileName.EndsWith(rw.Cells["FileExtention"].Value.ToString()))
+                            fileName += "."+rw.Cells["FileExtention"].Value.ToString();
+                        KeyValuePair<string, string> file = new KeyValuePair<string, string>(rw.Cells["Id"].Value.ToString(), fileName);
+                        lstFiles.Add(file);
+                    }
+                }
+            }
             _docs.OpenFile(lstFiles);
         }
 

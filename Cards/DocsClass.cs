@@ -112,7 +112,7 @@ namespace Priem
                 DataTable tbl = new DataTable();
 
 
-                string query = string.Format("SELECT Id, FileName + ' (' + convert(nvarchar, extAbitFiles.LoadDate, 104) + ' ' + convert(nvarchar, extAbitFiles.LoadDate, 108) + ')' + FileExtention AS FileName, Comment  FROM extAbitFiles WHERE extAbitFiles.PersonId = '{0}' {1} {2}", _personId,
+                string query = string.Format("SELECT Id, FileName + ' (' + convert(nvarchar, extAbitFiles.LoadDate, 104) + ')' AS FileName, Comment, FileExtention  FROM extAbitFiles WHERE extAbitFiles.PersonId = '{0}' {1} {2}", _personId,
                     !string.IsNullOrEmpty(_abitId) ? " AND (extAbitFiles.ApplicationId = '" + _abitId + "' OR extAbitFiles.ApplicationId IS NULL)" : "",
                     !string.IsNullOrEmpty(_commitId) ? " AND (extAbitFiles.CommitId = '" + _commitId + "' OR extAbitFiles.CommitId IS NULL)" : "");
                 

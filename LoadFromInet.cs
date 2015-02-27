@@ -64,16 +64,13 @@ namespace Priem
                     PassportTypeId, PassportSeries, PassportNumber, PassportAuthor, PassportDate,
                     PassportCode, '' AS PersonalCode, CountryId, NationalityId, RegionId, Phone, Mobiles, Email,
                     Code, City, Street, House, Korpus, Flat, CodeReal, CityReal, StreetReal, HouseReal, KorpusReal, FlatReal,
-                    AbitHostel AS HostelAbit, LanguageId, SchoolCity, SchoolTypeId, SchoolName, SchoolNum, SchoolExitYear, IsExcellent,
-                    CountryEducId, RegionEducId, AttestatRegion, AttestatSeries, AttestatNum,
-                    EducationDocumentSeries AS DiplomSeries, EducationDocumentNumber AS DiplomNum, AvgMark AS SchoolAVG,
-                    (case when SchoolTypeId=1 then '' else SchoolName end) AS HighEducation, HEProfession AS HEProfession, 
-                    HEQualification AS HEQualification, DiplomaTheme AS HEWork, HEEntryYear, HEExitYear, StudyFormId AS HEStudyFormId, 
+                    AbitHostel AS HostelAbit, LanguageId, 
                     Parents AS PersonInfo, AddInfo AS ExtraInfo, StartEnglish, EnglishMark, AbiturientTypeId, HostelEduc, SNILS, KladrCode
-                    FROM extPerson_All
+                    , HasTRKI, TRKICertificateNumber
+                    FROM extPerson
                     WHERE 0=0";
 
-                DataSet ds = _bdcInet.GetDataSet(personQueryInet + " AND extPerson_All.Barcode = " + fileNum);
+                DataSet ds = _bdcInet.GetDataSet(personQueryInet + " AND extPerson.Barcode = " + fileNum);
                 if (ds.Tables[0].Rows.Count == 0)
                     throw new Exception("Записей не найдено");
 
@@ -143,11 +140,11 @@ namespace Priem
                     
                 pers.HasAssignToHostel = false;
                 pers.HasExamPass = false;
-                pers.IsExcellent = QueryServ.ToBoolValue(row["IsExcellent"]);
+                //pers.IsExcellent = QueryServ.ToBoolValue(row["IsExcellent"]);
                 pers.LanguageId = (int?)(Util.ToNullObject(row["LanguageId"]));
                 //pers.SchoolCity = row["SchoolCity"].ToString();
                 //pers.SchoolTypeId = (int?)(Util.ToNullObject(row["SchoolTypeId"]));
-                pers.SchoolName = row["SchoolName"].ToString();
+                /*pers.SchoolName = row["SchoolName"].ToString();
                 pers.SchoolNum = row["SchoolNum"].ToString();
                 int SchoolExitYear = 0;
                 int.TryParse(row["SchoolExitYear"].ToString(), out SchoolExitYear);
@@ -158,16 +155,17 @@ namespace Priem
                 pers.AttestatNum = row["AttestatNum"].ToString();
                 pers.DiplomSeries = row["DiplomSeries"].ToString();
                 pers.DiplomNum = row["DiplomNum"].ToString();
-
+                */
                 pers.HasTRKI = (bool)row["HasTRKI"];
                 pers.TRKICertificateNumber = row["TRKICertificateNumber"].ToString();
-                
+                /*
                 double avg;                
                 if(!double.TryParse(row["SchoolAVG"].ToString(), out avg))
                     pers.SchoolAVG = null;
                 else
                     pers.SchoolAVG = avg;
-
+                */
+                /*
                 pers.HighEducation = row["HighEducation"].ToString();
                 pers.HEProfession = row["HEProfession"].ToString();
                 pers.HEQualification = row["HEQualification"].ToString();
@@ -175,6 +173,7 @@ namespace Priem
                 pers.HEExitYear = (int?)(Util.ToNullObject(row["HEExitYear"]));
                 pers.HEStudyFormId = (int?)(Util.ToNullObject(row["HEStudyFormId"]));
                 pers.HEWork = row["HEWork"].ToString();
+                 */
                 pers.PersonInfo = row["PersonInfo"].ToString();
                 pers.ExtraInfo = row["ExtraInfo"].ToString();
                 pers.StartEnglish = QueryServ.ToBoolValue(row["StartEnglish"]);
@@ -240,17 +239,72 @@ namespace Priem
         {
             List<Person_EducationInfo> lstRet = new List<Person_EducationInfo>();
 
+            string query = @"select
+Person.Id as PersonId
+, PersonEducationDocument.Id as EducationDocumentId
+, SchoolCity, SchoolTypeId, SchoolName, SchoolNum, SchoolExitYear, CountryEducId
+, RegionEducId,  IsEqual, Series , Number, AvgMark
+, PersonHighEducationInfo.EducationDocumentId as PersonHighEducationInfoId
+, Qualification.Name as Qualification
+      , EntryYear
+      , ExitYear
+      , DiplomaTheme
+      , QualificationId
+      , StudyFormId
+      , ProgramName
+, IsExcellent
+from dbo.PersonEducationDocument 
+inner join Person on Person.Id = PersonEducationDocument.PersonId
+left join PersonHighEducationInfo on PersonHighEducationInfo.EducationDocumentId = PersonEducationDocument.Id
+left join Qualification on Qualification.Id = QualificationId
+where Person.Barcode =" + fileNum ;
+
+            /*
             string PersonEducationFromInet = @"SELECT SchoolCity, SchoolTypeId, SchoolName, SchoolNum, SchoolExitYear, IsExcellent,
                     CountryEducId, RegionEducId, AttestatSeries, AttestatNum, EducationDocumentSeries AS DiplomSeries, EducationDocumentNumber AS DiplomNum, AvgMark AS SchoolAVG,
                     (case when SchoolTypeId=1 then '' else SchoolName end) AS HighEducation, HEProfession AS HEProfession, 
                     HEQualification AS HEQualification, DiplomaTheme AS HEWork, HEEntryYear, HEExitYear, StudyFormId AS HEStudyFormId, 
                     Parents AS PersonInfo, AddInfo AS ExtraInfo, StartEnglish, EnglishMark, AbiturientTypeId, HostelEduc, SNILS, KladrCode
                     FROM extPerson_All";
+            
             DataSet ds_EducationInfo = _bdcInet.GetDataSet(PersonEducationFromInet + " AND extPerson_All.Barcode = " + fileNum);
+            */
+            DataSet ds_EducationInfo = _bdcInet.GetDataSet(query);
+
             if (ds_EducationInfo.Tables[0].Rows.Count == 0)
                 throw new Exception("Записей не найдено");
 
-
+            foreach (DataRow row in ds_EducationInfo.Tables[0].Rows)
+            {
+                lstRet.Add(
+                    new Person_EducationInfo()
+                    {
+                        Id = row.Field<int>("EducationDocumentId"),
+                        PersonId = row.Field<Guid>("PersonId"),
+                        SchoolCity = row.Field<string>("SchoolCity"),
+                        SchoolTypeId = row.Field<int>("SchoolTypeId"),
+                        SchoolName = row.Field<string>("SchoolName"),
+                        SchoolNum = row.Field<string>("SchoolNum"),
+                        SchoolExitYear = int.Parse(row.Field<string>("SchoolExitYear")),
+                        CountryEducId = row.Field<int>("CountryEducId"),
+                        RegionEducId = row.Field<int>("RegionEducId"),
+                        IsExcellent = row.Field<bool>("IsExcellent"),
+                        IsEqual = row.Field<bool>("IsEqual"),
+                        AttestatSeries = row.Field<string>("Series"),
+                        AttestatNum = row.Field<string>("Number"),
+                        DiplomSeries = row.Field<string>("Series"),
+                        DiplomNum = row.Field<string>("Number"),
+                        SchoolAVG = row.Field<double>("AvgMark"),
+                        HighEducation = row.Field<string>("SchoolName"),
+                        HEProfession = row.Field<string>("ProgramName") ?? "",
+                        HEQualification = row.Field<string>("Qualification") ?? " ",
+                        HEEntryYear = row.Field<int?>("EntryYear"),
+                        HEExitYear = row.Field<int?>("ExitYear"),
+                        HEWork = row.Field<string>("DiplomaTheme") ?? "",
+                        HEStudyFormId = row.Field<int?>("StudyFormId"),
+                    }
+                    );
+            }
 
             return lstRet;
         }

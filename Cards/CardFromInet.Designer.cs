@@ -163,6 +163,8 @@
             this.chbEgeInSpbgu = new System.Windows.Forms.CheckBox();
             this.dgvEGE = new System.Windows.Forms.DataGridView();
             this.tabPage5 = new System.Windows.Forms.TabPage();
+            this.tbTRKICertificateNumber = new System.Windows.Forms.TextBox();
+            this.chbHasTRKI = new System.Windows.Forms.CheckBox();
             this.cbLanguage = new System.Windows.Forms.ComboBox();
             this.label28 = new System.Windows.Forms.Label();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
@@ -214,8 +216,6 @@
             this.lblHasMotivationLetter = new System.Windows.Forms.Label();
             this.lblHasEssay = new System.Windows.Forms.Label();
             this.lblBarcode = new System.Windows.Forms.Label();
-            this.tbTRKICertificateNumber = new System.Windows.Forms.TextBox();
-            this.chbHasTRKI = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.epError)).BeginInit();
             this.tabCard.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -1118,6 +1118,7 @@
             this.dgvEducationDocuments.ReadOnly = true;
             this.dgvEducationDocuments.Size = new System.Drawing.Size(616, 98);
             this.dgvEducationDocuments.TabIndex = 100;
+            this.dgvEducationDocuments.CurrentCellChanged += new System.EventHandler(this.dgvEducationDocuments_CurrentCellChanged);
             // 
             // groupBox6
             // 
@@ -1477,7 +1478,7 @@
             this.cbAttestatSeries.FormattingEnabled = true;
             this.cbAttestatSeries.Location = new System.Drawing.Point(55, 20);
             this.cbAttestatSeries.Name = "cbAttestatSeries";
-            this.cbAttestatSeries.Size = new System.Drawing.Size(101, 21);
+            this.cbAttestatSeries.Size = new System.Drawing.Size(162, 21);
             this.cbAttestatSeries.TabIndex = 114;
             // 
             // label31
@@ -1537,9 +1538,9 @@
             this.gbDipl.Controls.Add(this.tbDiplomSeries);
             this.gbDipl.Controls.Add(this.label50);
             this.gbDipl.Controls.Add(this.tbDiplomNum);
-            this.gbDipl.Location = new System.Drawing.Point(6, 18);
+            this.gbDipl.Location = new System.Drawing.Point(6, 19);
             this.gbDipl.Name = "gbDipl";
-            this.gbDipl.Size = new System.Drawing.Size(239, 73);
+            this.gbDipl.Size = new System.Drawing.Size(239, 71);
             this.gbDipl.TabIndex = 80;
             this.gbDipl.TabStop = false;
             this.gbDipl.Text = "Диплом";
@@ -1547,7 +1548,7 @@
             // label51
             // 
             this.label51.AutoSize = true;
-            this.label51.Location = new System.Drawing.Point(31, 49);
+            this.label51.Location = new System.Drawing.Point(31, 48);
             this.label51.Name = "label51";
             this.label51.Size = new System.Drawing.Size(18, 13);
             this.label51.TabIndex = 1;
@@ -1555,16 +1556,16 @@
             // 
             // tbDiplomSeries
             // 
-            this.tbDiplomSeries.Location = new System.Drawing.Point(58, 21);
+            this.tbDiplomSeries.Location = new System.Drawing.Point(55, 20);
             this.tbDiplomSeries.MaxLength = 15;
             this.tbDiplomSeries.Name = "tbDiplomSeries";
-            this.tbDiplomSeries.Size = new System.Drawing.Size(159, 20);
+            this.tbDiplomSeries.Size = new System.Drawing.Size(162, 20);
             this.tbDiplomSeries.TabIndex = 0;
             // 
             // label50
             // 
             this.label50.AutoSize = true;
-            this.label50.Location = new System.Drawing.Point(11, 24);
+            this.label50.Location = new System.Drawing.Point(15, 23);
             this.label50.Name = "label50";
             this.label50.Size = new System.Drawing.Size(38, 13);
             this.label50.TabIndex = 36;
@@ -1572,10 +1573,10 @@
             // 
             // tbDiplomNum
             // 
-            this.tbDiplomNum.Location = new System.Drawing.Point(58, 46);
+            this.tbDiplomNum.Location = new System.Drawing.Point(55, 45);
             this.tbDiplomNum.MaxLength = 10;
             this.tbDiplomNum.Name = "tbDiplomNum";
-            this.tbDiplomNum.Size = new System.Drawing.Size(159, 20);
+            this.tbDiplomNum.Size = new System.Drawing.Size(162, 20);
             this.tbDiplomNum.TabIndex = 0;
             // 
             // chbIsExcellent
@@ -1649,6 +1650,24 @@
             this.tabPage5.TabIndex = 2;
             this.tabPage5.Text = "Льготы и доп. информация";
             this.tabPage5.UseVisualStyleBackColor = true;
+            // 
+            // tbTRKICertificateNumber
+            // 
+            this.tbTRKICertificateNumber.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.tbTRKICertificateNumber.Location = new System.Drawing.Point(453, 115);
+            this.tbTRKICertificateNumber.MaxLength = 4;
+            this.tbTRKICertificateNumber.Name = "tbTRKICertificateNumber";
+            this.tbTRKICertificateNumber.Size = new System.Drawing.Size(121, 20);
+            this.tbTRKICertificateNumber.TabIndex = 124;
+            // 
+            // chbHasTRKI
+            // 
+            this.chbHasTRKI.Location = new System.Drawing.Point(453, 93);
+            this.chbHasTRKI.Name = "chbHasTRKI";
+            this.chbHasTRKI.Size = new System.Drawing.Size(125, 16);
+            this.chbHasTRKI.TabIndex = 123;
+            this.chbHasTRKI.Text = "ТРКИ";
+            this.chbHasTRKI.UseVisualStyleBackColor = true;
             // 
             // cbLanguage
             // 
@@ -2184,24 +2203,6 @@
             this.lblBarcode.Name = "lblBarcode";
             this.lblBarcode.Size = new System.Drawing.Size(0, 13);
             this.lblBarcode.TabIndex = 41;
-            // 
-            // tbTRKICertificateNumber
-            // 
-            this.tbTRKICertificateNumber.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.tbTRKICertificateNumber.Location = new System.Drawing.Point(453, 115);
-            this.tbTRKICertificateNumber.MaxLength = 4;
-            this.tbTRKICertificateNumber.Name = "tbTRKICertificateNumber";
-            this.tbTRKICertificateNumber.Size = new System.Drawing.Size(121, 20);
-            this.tbTRKICertificateNumber.TabIndex = 124;
-            // 
-            // chbHasTRKI
-            // 
-            this.chbHasTRKI.Location = new System.Drawing.Point(453, 93);
-            this.chbHasTRKI.Name = "chbHasTRKI";
-            this.chbHasTRKI.Size = new System.Drawing.Size(125, 16);
-            this.chbHasTRKI.TabIndex = 123;
-            this.chbHasTRKI.Text = "ТРКИ";
-            this.chbHasTRKI.UseVisualStyleBackColor = true;
             // 
             // CardFromInet
             // 

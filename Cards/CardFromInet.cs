@@ -20,6 +20,7 @@ namespace Priem
         private DBPriem _bdcInet;
         private int? _abitBarc;
         private int? _personBarc;
+        private int _currentEducRow;
 
         private Guid? personId;
         private bool _closePerson;
@@ -968,7 +969,7 @@ FROM [extApplicationDetails] WHERE [ApplicationId]=@AppId";
                 School = x.SchoolName,
                 Series = (x.SchoolTypeId == 1 ? x.AttestatSeries : x.DiplomSeries),
                 Num = x.SchoolTypeId == 1 ? x.AttestatNum : x.DiplomNum,
-            });
+            }).ToList();
 
             dgvEducationDocuments.Columns["Id"].Visible = false;
             dgvEducationDocuments.Columns["School"].HeaderText = "Уч. учреждение";
@@ -980,11 +981,35 @@ FROM [extApplicationDetails] WHERE [ApplicationId]=@AppId";
 
             if (lstVals.Count > 0)
                 ViewEducationInfo(lstVals.First().Id);
+            
+            _currentEducRow = 0;
         }
 
         private void ViewEducationInfo(int id)
         {
+            int ind = lstEducationInfo.FindIndex(x => x.Id == id);
 
+            CountryEducId = lstEducationInfo[ind].CountryEducId;
+            RegionEducId = lstEducationInfo[ind].RegionEducId;
+            IsEqual = lstEducationInfo[ind].IsEqual;
+            AttestatSeries = lstEducationInfo[ind].AttestatSeries;
+            AttestatNum = lstEducationInfo[ind].AttestatNum;
+            DiplomSeries = lstEducationInfo[ind].DiplomSeries;
+            DiplomNum = lstEducationInfo[ind].DiplomNum;
+            SchoolAVG = lstEducationInfo[ind].SchoolAVG;
+            HighEducation = lstEducationInfo[ind].HighEducation;
+            HEProfession = lstEducationInfo[ind].HEProfession;
+            HEQualification = lstEducationInfo[ind].HEQualification;
+            HEEntryYear = lstEducationInfo[ind].HEEntryYear;
+            HEExitYear = lstEducationInfo[ind].HEExitYear;
+            HEWork = lstEducationInfo[ind].HEWork;
+            HEStudyFormId = lstEducationInfo[ind].HEStudyFormId;
+            IsExcellent = lstEducationInfo[ind].IsExcellent;
+            SchoolCity = lstEducationInfo[ind].SchoolCity;
+            SchoolTypeId = lstEducationInfo[ind].SchoolTypeId;
+            SchoolName = lstEducationInfo[ind].SchoolName;
+            SchoolNum = lstEducationInfo[ind].SchoolNum;
+            SchoolExitYear = lstEducationInfo[ind].SchoolExitYear;
         }
 
         #region Save
@@ -1823,6 +1848,17 @@ FROM [extApplicationDetails] WHERE [ApplicationId]=@AppId";
 
                 UpdateApplicationGrid();
             }
+        }
+
+        private void dgvEducationDocuments_CurrentCellChanged(object sender, EventArgs e)
+        {
+            if (dgvEducationDocuments.CurrentRow != null)
+                if (dgvEducationDocuments.CurrentRow.Index != _currentEducRow)
+                {
+                    _currentEducRow = dgvEducationDocuments.CurrentRow.Index;
+                    ViewEducationInfo(lstEducationInfo[_currentEducRow].Id);
+
+                }
         }
     }
 }

@@ -23,7 +23,7 @@ namespace Priem
         List<List<KeyValuePair<int, int>>> Coord_Save = new List<List<KeyValuePair<int, int>>>();
         List<KeyValuePair<int, KeyValuePair<int, int>>> DeleteList = new List<KeyValuePair<int, KeyValuePair<int, int>>>();
         Guid ErrorGuid = Guid.Empty;
-        int startrow = 8;
+        int startrow = 9;
         bool btnGreenIsClicked = false;
 
         public MyList()
@@ -115,9 +115,6 @@ namespace Priem
             {
                 var ent = MainClass.GetEntry(context);
 
-                if (FacultyId.HasValue)
-                    ent = ent.Where(c => c.FacultyId == FacultyId);
-
                 List<KeyValuePair<string, string>> lst = ent.ToList().Select(u => new KeyValuePair<string, string>(u.StudyFormId.ToString(), u.StudyFormName)).Distinct().OrderBy(u => u.Key).ToList();
 
                 ComboServ.FillCombo(cbStudyForm, lst, false, true);
@@ -132,8 +129,16 @@ namespace Priem
 
                 if (FacultyId.HasValue)
                     ent = ent.Where(c => c.FacultyId == FacultyId);
+                else
+                {
+                    ComboServ.FillCombo(cbLicenseProgram, new List<KeyValuePair<string,string>>(), false, true);
+                    return;
+                }
+
                 if (StudyFormId != null)
                     ent = ent.Where(c => c.StudyFormId == StudyFormId);
+                if (StudyBasisId.HasValue)
+                    ent = ent.Where(c => c.StudyBasisId == StudyBasisId);
 
                 List<KeyValuePair<string, string>> lst = ent.ToList().Select(u => new KeyValuePair<string, string>(u.LicenseProgramId.ToString(), u.LicenseProgramName)).Distinct().ToList();
 
@@ -145,11 +150,13 @@ namespace Priem
         public override void UpdateDataGrid()
         {
         }
+
         private void FillGrid(string abitFilters)
         {
             DataTable examTable = new DataTable();
             examTable.Columns.Add("Id");
 
+            DataRow row_FacultyId = examTable.NewRow();
             DataRow row_LicProg = examTable.NewRow();
             DataRow row_ObrazProg = examTable.NewRow();
             DataRow row_EntryId = examTable.NewRow();
@@ -168,9 +175,9 @@ namespace Priem
             NewWatch wc = new NewWatch();
             wc.Show();
 
-            ///// Поиск по Направлениям в QEntry
-            string query = @"Select distinct qEntry.LicenseProgramId, qEntry.LicenseProgramName, qEntry.StudyBasisId, qEntry.StudyFormId
-                                from ed.qEntry " + abitFilters + " order by StudyFormId, StudyBasisId, LicenseProgramName ";
+            ///// Поиск по Направлениям в extEntry
+            string query = @"Select distinct extEntry.LicenseProgramId, extEntry.FacultyId, extEntry.LicenseProgramName, extEntry.StudyBasisId, extEntry.StudyFormId
+                                from ed.extEntry " + abitFilters + " order by StudyFormId, StudyBasisId, LicenseProgramName ";
             DataTable tbl = MainClass.Bdc.GetDataSet(query).Tables[0];
             string index = "";
             int cnt = 1;
@@ -178,28 +185,29 @@ namespace Priem
             {
                 wc.SetText("Получение данных по учебным планам... (Обработано конкурсов: " + (cnt++).ToString() + "/" + tbl.Rows.Count + ")");
                 ///// Поиск ОБРАЗОВАТЕЛЬНЫХ ПРОГРАММ 
-                query = @"Select distinct qEntry.ObrazProgramId, qEntry.ObrazProgramName
-                                from ed.qEntry " + abitFilters + " and LicenseProgramId=" + rwEntry.Field<int>("LicenseProgramId").ToString() + " and StudyBasisId=" + rwEntry.Field<int>("StudyBasisId").ToString() +
+                query = @"Select distinct extEntry.ObrazProgramId, extEntry.ObrazProgramName
+                                from ed.extEntry " + abitFilters + " and LicenseProgramId=" + rwEntry.Field<int>("LicenseProgramId").ToString() + " and StudyBasisId=" + rwEntry.Field<int>("StudyBasisId").ToString() +
                                                  " and StudyFormId=" + rwEntry.Field<int>("StudyFormId").ToString() + " and IsSecond = 0";
                 DataTable tbl_LicProg = MainClass.Bdc.GetDataSet(query).Tables[0];
 
                 foreach (DataRow rw_licProg in tbl_LicProg.Rows)
                 {
                     ///// ДЛЯ КАЖДОЙ ОБРАЗОВАТЕЛЬНОЙ ПРОГРАММЫ ПОИСК ПРОФИЛЕЙ:
-                    query = @"select distinct qEntry.Id, KCP, ProfileId, ProfileName from ed.qEntry" + abitFilters + " and LicenseProgramId=" + rwEntry.Field<int>("LicenseProgramId").ToString() +
+                    query = @"select distinct extEntry.Id, FacultyId, KCP, ProfileId, ProfileName from ed.extEntry" + abitFilters + " and LicenseProgramId=" + rwEntry.Field<int>("LicenseProgramId").ToString() +
                             " and ObrazProgramId=" + rw_licProg.Field<int>("ObrazProgramId").ToString() + " and ProfileId is not null and StudyBasisId=" + rwEntry.Field<int>("StudyBasisId").ToString() +
                                                  " and StudyFormId=" + rwEntry.Field<int>("StudyFormId").ToString() + " and IsSecond = 0";
                     DataTable tbl_ObrProgramProfile = MainClass.Bdc.GetDataSet(query).Tables[0];
                     /////  ЕСЛИ ЕСТЬ НЕНУЛЕВЫЕ ПРОФИЛИ (ПРОБЛЕМА С ИД СТОЛБЦА)
-                    ///// НЕ ДОЛЖНО БЫТЬ ЗАГОЛОВКА СЛОБЦА, СТОЛБЕЦ = (НАПР/ОБРПРОГ/ПРОФ)
+                    /////  НЕ ДОЛЖНО БЫТЬ ЗАГОЛОВКА СЛОБЦА, СТОЛБЕЦ = (НАПР/ОБРПРОГ/ПРОФ)
                     if (tbl_ObrProgramProfile.Rows.Count > 0)
                     {
                         foreach (DataRow row_profile in tbl_ObrProgramProfile.Rows)
                         {
                             clm = new DataColumn();
-                            index = rwEntry.Field<int>("StudyFormId").ToString() + "_" + rwEntry.Field<int>("StudyBasisId").ToString() + "_" + rwEntry.Field<int>("LicenseProgramId").ToString() + "_" + rw_licProg.Field<int>("ObrazProgramId").ToString() + "_" + row_profile.Field<Guid>("ProfileId").ToString();
+                            index = Guid.NewGuid().ToString();//rwEntry.Field<int>("StudyFormId").ToString() + "_" + rwEntry.Field<int>("StudyBasisId").ToString() + "_" + rwEntry.Field<int>("LicenseProgramId").ToString() + "_" + rw_licProg.Field<int>("ObrazProgramId").ToString() + "_" + row_profile.Field<int>("ProfileId").ToString();
                             clm.ColumnName = index;
                             examTable.Columns.Add(clm);
+                            row_FacultyId[index] = rwEntry.Field<int>("FacultyId");
                             row_LicProg[index] = rwEntry.Field<string>("LicenseProgramName");
                             row_ObrazProg[index] = rw_licProg.Field<string>("ObrazProgramName") + "(" + row_profile.Field<string>("ProfileName") + ")";
                             row_EntryId[index] = row_profile.Field<Guid>("Id");
@@ -213,7 +221,7 @@ namespace Priem
                     else
                     {
                         //// нужно получить EntryId 
-                        query = @"select distinct qEntry.Id, qEntry.StudyBasisName, KCP from ed.qEntry" + abitFilters + " and LicenseProgramId=" + rwEntry.Field<int>("LicenseProgramId").ToString() +
+                        query = @"select distinct extEntry.Id, FacultyId, extEntry.StudyBasisName, KCP from ed.extEntry" + abitFilters + " and LicenseProgramId=" + rwEntry.Field<int>("LicenseProgramId").ToString() +
                             " and ObrazProgramId=" + rw_licProg.Field<int>("ObrazProgramId").ToString() + " and StudyBasisId=" + rwEntry.Field<int>("StudyBasisId").ToString() +
                                                  " and StudyFormId=" + rwEntry.Field<int>("StudyFormId").ToString() + " and IsSecond = 0";
                         DataSet ds = MainClass.Bdc.GetDataSet(query);
@@ -222,7 +230,7 @@ namespace Priem
 
                         /// поиск по EntryId В ОБРАЗОВАТЕЛЬНЫХ ПРОГРАММАХ
                         query = @"SELECT distinct ObrazProgramInEntry.[Id] as Id, SP_ObrazProgram.Name as Name, SP_ObrazProgram.Id as ObrazProgramId, KCP,
-                                ObrazProgramInEntry.EgeExamNameId , ObrazProgramInEntry.EgeMin, EgeExamName.Name as EgeName
+                                ObrazProgramInEntry.EgeExamNameId , ObrazProgramInEntry.EgeMin, EgeExamName.Name as EgeName, FacultyId
                               FROM [ed].[ObrazProgramInEntry] 
                              inner join ed.SP_ObrazProgram on ObrazProgramInEntry.ObrazProgramId = SP_ObrazProgram.Id
                              left join ed.EgeExamName on EgeExamName.Id = ObrazProgramInEntry.EgeExamNameId
@@ -232,10 +240,11 @@ namespace Priem
                         ///// приоритетов образ.программ нет
                         if (tbl_ObrProgram.Rows.Count == 0)
                         {
-                            index = rwEntry.Field<int>("StudyFormId").ToString() + "_" + rwEntry.Field<int>("StudyBasisId").ToString() + "_" + rwEntry.Field<int>("LicenseProgramId").ToString() + "_" + rw_licProg.Field<int>("ObrazProgramId").ToString() + "_0";
+                            index = Guid.NewGuid().ToString();//rwEntry.Field<int>("StudyFormId").ToString() + "_" + rwEntry.Field<int>("StudyBasisId").ToString() + "_" + rwEntry.Field<int>("LicenseProgramId").ToString() + "_" + rw_licProg.Field<int>("ObrazProgramId").ToString() + "_0";
                             clm = new DataColumn();
                             clm.ColumnName = index;
                             examTable.Columns.Add(clm);
+                            row_FacultyId[index] = rwEntry.Field<int>("FacultyId");
                             row_LicProg[index] = rwEntry.Field<string>("LicenseProgramName");
                             row_ObrazProg[index] = rw_licProg.Field<String>("ObrazProgramName");
                             row_EntryId[index] = EntryId.ToString();
@@ -251,9 +260,10 @@ namespace Priem
                             foreach (DataRow rw_ObProg in tbl_ObrProgram.Rows)
                             {
                                 clm = new DataColumn();
-                                index = rwEntry.Field<int>("StudyFormId").ToString() + "_" + rwEntry.Field<int>("StudyBasisId").ToString() + "_" + rwEntry.Field<int>("LicenseProgramId").ToString() + "_" + rw_ObProg.Field<int>("ObrazProgramId").ToString() + "_0";
+                                index = Guid.NewGuid().ToString();//rwEntry.Field<int>("StudyFormId").ToString() + "_" + rwEntry.Field<int>("StudyBasisId").ToString() + "_" + rwEntry.Field<int>("LicenseProgramId").ToString() + "_" + rw_ObProg.Field<int>("ObrazProgramId").ToString() + "_0";
                                 clm.ColumnName = index;
                                 examTable.Columns.Add(clm);
+                                row_FacultyId[index] = rwEntry.Field<int>("FacultyId");
                                 row_ObrazProg[index] = rw_ObProg.Field<String>("Name");
                                 row_LicProg[index] = rwEntry.Field<string>("LicenseProgramName");
                                 row_EntryId[index] = EntryId;
@@ -301,6 +311,8 @@ namespace Priem
             examTable.Rows.Add(row_StudyBasis);
             examTable.Rows.Add(row_Ege);
             examTable.Rows.Add(row_KCP);
+            examTable.Rows.Add(row_FacultyId); 
+
 
             wc.SetText("Получение данных по абитуриентам...(0/0)");
 
@@ -323,7 +335,7 @@ namespace Priem
             inner join ed.extPerson on Abiturient.PersonId = extPerson.Id
             left join ed.extAbitMarksSum on extAbitMarksSum.Id = Abiturient.Id
             inner join ed." +Wave+ @" on "+Wave+ @".AbiturientId = Abiturient.Id
-            inner join ed.qEntry on Abiturient.EntryId = qEntry.Id
+            inner join ed.extEntry on Abiturient.EntryId = extEntry.Id
             " + ((cbZeroWave.Checked) ? "inner join ed.extEntryView on extEntryView.AbiturientId = Abiturient.Id" : "") + 
             @"
             where Abiturient.EntryId=@EntryId and Abiturient.BackDoc = 0  and Abiturient.IsGosLine=0 
@@ -392,7 +404,18 @@ namespace Priem
             Coord_Save = Coord;
 
             DataView dv = new DataView(examTable);
+            
             dgvAbitList.DataSource = dv;
+            if (dgvAbitList.CurrentRow !=null )
+            {
+                if (dgvAbitList.CurrentRow.Index != 8)
+                    dgvAbitList.Rows[8].Visible = false;
+                else
+                {
+                    dgvAbitList.CurrentCell = dgvAbitList.Rows[0].Cells[0];
+                    dgvAbitList.Rows[8].Visible = false;
+                }
+            }
             dgvAbitList.Columns["Id"].Visible = false;
             dgvAbitList.ColumnHeadersVisible = false;
             dgvAbitList.AllowUserToOrderColumns = false;
@@ -406,34 +429,37 @@ namespace Priem
         private string GetAbitFilterString()
         {
             string s = " WHERE 1=1 ";
-            s += " AND ed.qEntry.StudyLevelGroupId = " + MainClass.studyLevelGroupId;
+            s += " AND ed.extEntry.StudyLevelGroupId = " + MainClass.studyLevelGroupId;
 
             //обработали форму обучения  
             if (StudyFormId != null)
-                s += " AND ed.qEntry.StudyFormId = " + StudyFormId;
+                s += " AND ed.extEntry.StudyFormId = " + StudyFormId;
 
             //обработали основу обучения  
             if (StudyBasisId != null)
-                s += " AND ed.qEntry.StudyBasisId = " + StudyBasisId;
+                s += " AND ed.extEntry.StudyBasisId = " + StudyBasisId;
 
             //обработали факультет
+            /*
             if (FacultyId != null)
-                s += " AND ed.qEntry.FacultyId = " + FacultyId;
+                s += " AND ed.extEntry.FacultyId = " + FacultyId;
+            */
 
             //обработали Направление
+            /*
             if (LicenseProgramId != null)
-                s += " AND ed.qEntry.LicenseProgramId = " + LicenseProgramId;
-
+                s += " AND ed.extEntry.LicenseProgramId = " + LicenseProgramId;
+            */
             return s;
         }
         private void btnFillGrid_Click(object sender, EventArgs e)
         {
-            FillGrid(GetAbitFilterString());
-            btn_GreenList.Enabled = true;
+            FillGrid(true);
         }
         private void cbFaculty_SelectedIndexChanged(object sender, EventArgs e)
         {
-            FillStudyForm();
+            FillLicenseProgram();
+            FillGrid(false);
         }
         private void cbStudyBasis_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -445,7 +471,7 @@ namespace Priem
         }
         private void cbLicenseProgram_SelectedIndexChanged(object sender, EventArgs e)
         {
-
+            FillGrid(false);
         }
 
         private bool UpdateResult()
@@ -500,7 +526,7 @@ namespace Priem
             for (int colindex = 1; colindex < dgvAbitList.Columns.Count; colindex++)
             {
                 int KCP = 0;
-                int.TryParse(dgvAbitList.Rows[startrow - 1].Cells[colindex].Value.ToString(), out KCP);
+                int.TryParse(dgvAbitList.Rows[6].Cells[colindex].Value.ToString(), out KCP);
 
                 for (int j = startrow; (j < KCP + startrow) && (j < dgvAbitList.Rows.Count); j++)
                 {
@@ -529,18 +555,18 @@ namespace Priem
             // теперь Английские языки
             for (int colindex = 1; colindex < dgvAbitList.Columns.Count; colindex++)
             {
-                if (String.IsNullOrEmpty(dgvAbitList.Rows[startrow - 2].Cells[colindex].Value.ToString()))
+                if (String.IsNullOrEmpty(dgvAbitList.Rows[6].Cells[colindex].Value.ToString()))
                     continue;
 
-                string EgeExamNameId = dgvAbitList.Rows[startrow - 2].Cells[colindex].Value.ToString();
+                string EgeExamNameId = dgvAbitList.Rows[6].Cells[colindex].Value.ToString();
                 EgeExamNameId = EgeExamNameId.Substring(0, EgeExamNameId.IndexOf("_"));
-                string sEgeMin = dgvAbitList.Rows[startrow - 2].Cells[colindex].Value.ToString();
+                string sEgeMin = dgvAbitList.Rows[6].Cells[colindex].Value.ToString();
                 sEgeMin = sEgeMin.Substring(sEgeMin.IndexOf("(") + 1);
                 sEgeMin = sEgeMin.Substring(0, sEgeMin.IndexOf(")"));
                 int EgeMin = int.Parse(sEgeMin);
 
                 int KCP_temp = 0;
-                if (int.TryParse(dgvAbitList.Rows[startrow - 1].Cells[colindex].Value.ToString(), out KCP_temp))
+                if (int.TryParse(dgvAbitList.Rows[7].Cells[colindex].Value.ToString(), out KCP_temp))
 
                     for (int j = startrow; j < dgvAbitList.Rows.Count; j++)
                     {
@@ -592,7 +618,7 @@ namespace Priem
                 for (int colindex = 1; colindex < dgvAbitList.Columns.Count; colindex++)
                 {
                     int KCP = 0;
-                    if (int.TryParse(dgvAbitList.Rows[startrow - 1].Cells[colindex].Value.ToString(), out KCP))
+                    if (int.TryParse(dgvAbitList.Rows[7].Cells[colindex].Value.ToString(), out KCP))
                     { }
 
 
@@ -641,7 +667,7 @@ namespace Priem
                                     }
 
                                     int KCP_temp = 0;
-                                    if (int.TryParse(dgvAbitList.Rows[startrow - 1].Cells[kvp.Key].Value.ToString(), out KCP_temp))
+                                    if (int.TryParse(dgvAbitList.Rows[7].Cells[kvp.Key].Value.ToString(), out KCP_temp))
                                     { }
 
                                     cellvalue = dgvAbitList.Rows[kvp.Value + startrow].Cells[kvp.Key].Value.ToString();
@@ -755,9 +781,9 @@ namespace Priem
         {
             for (int j = 1; j < dgvAbitList.Columns.Count; j++)
             {
-                string value = dgvAbitList.Rows[startrow - 2].Cells[j].Value.ToString();
+                string value = dgvAbitList.Rows[6].Cells[j].Value.ToString();
                 if (!String.IsNullOrEmpty(value))
-                    dgvAbitList.Rows[startrow - 2].Cells[j].Value = value.Substring(value.IndexOf("_") + 1);
+                    dgvAbitList.Rows[6].Cells[j].Value = value.Substring(value.IndexOf("_") + 1);
             }
             for (int i = startrow; i < dgvAbitList.Rows.Count; i++)
             {
@@ -878,14 +904,14 @@ namespace Priem
                             prog.PerformStep();
                         }
                         // тут был раньше профиль. (Если убрать Entry, то тут должно быть КСР)
-                        Excel.Range Range3 = ws.Range[ws.Cells[1, 1], ws.Cells[startrow - 2, tbl.Columns.Count]];
+                        Excel.Range Range3 = ws.Range[ws.Cells[1, 1], ws.Cells[6, tbl.Columns.Count]];
                         Range3.WrapText = true;
                         Range3.RowHeight = rowHeight;
                         Range3.ColumnWidth = colFIOWidth;
                         Range3.HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter;
                         Range3.VerticalAlignment = Excel.XlHAlign.xlHAlignCenter;
 
-                        Range3 = ws.Range[ws.Cells[startrow - 1, 1], ws.Cells[tbl.Rows.Count, tbl.Columns.Count]];
+                        Range3 = ws.Range[ws.Cells[7, 1], ws.Cells[tbl.Rows.Count, tbl.Columns.Count]];
                         Range3.HorizontalAlignment = Excel.XlHAlign.xlHAlignLeft;
 
                         // начиная со второй строки (КСР, и далее абитуриенты)
@@ -1058,7 +1084,7 @@ namespace Priem
             wc.Show();
             wc.SetText("Удаление старых данных...");
             MainClass.Bdc.ExecuteQuery(@"  delete from ed.AbiturientGREEN
-                                           where AbiturientId In (select qAbiturient.Id from ed.qAbiturient inner join ed.qEntry on qEntry.Id = EntryId " + GetAbitFilterString() + ")");
+                                           where AbiturientId In (select qAbiturient.Id from ed.qAbiturient inner join ed.extEntry on extEntry.Id = EntryId " + GetAbitFilterString() + ")");
             wc.SetText("Добавление новых данных...");
             wc.SetMax(dgvAbitList.Columns.Count);
             for (int clmn = startcol; clmn < dgvAbitList.Columns.Count; clmn++)
@@ -1281,6 +1307,51 @@ namespace Priem
 
         private void cbZeroWave_CheckedChanged(object sender, EventArgs e)
         {
+        }
+
+        private void FillGrid(bool update)
+        {
+            if (update)
+                FillGrid(GetAbitFilterString());
+
+            if (FacultyId != null)
+            {
+                foreach (DataGridViewColumn clm in dgvAbitList.Columns)
+                {
+                    if (dgvAbitList.Rows[8].Cells[clm.Index].Value.ToString() != FacultyId.Value.ToString())
+                    {
+                        clm.Visible = false;
+                    }
+                    else
+                        clm.Visible = true;
+                }
+            }
+            else
+            {
+                foreach (DataGridViewColumn clm in dgvAbitList.Columns)
+                {
+                    clm.Visible = true;
+                }
+            }
+
+            if (LicenseProgramId != null)
+            {
+                foreach (DataGridViewColumn clm in dgvAbitList.Columns)
+                {
+                    if (clm.Visible == true)
+                    {
+                        if (dgvAbitList.Rows[0].Cells[clm.Index].Value.ToString() != ((KeyValuePair<string,string>)cbLicenseProgram.SelectedItem).Value)
+                        {
+                            clm.Visible = false;
+                        }
+                        else
+                            clm.Visible = true;
+                    }
+                }
+
+            }
+            dgvAbitList.Columns["Id"].Visible = false;
+            btn_GreenList.Enabled = true;
         }
     }
 }

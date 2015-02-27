@@ -134,7 +134,7 @@ AND (StudyLevel.LevelGroupId <> {0} OR StudyLevel.LevelGroupId IS NULL OR StudyL
             }
 
             //сперва проверим, есть ли ещё "живое" заявление, или абитуриент уже успел его удалить 
-            string query = "SELECT COUNT(*) FROM Abiturient WHERE ApplicationCommitNumber=@Barcode";
+            string query = "SELECT COUNT(Id) FROM Abiturient WHERE ApplicationCommitNumber=@Barcode";
             bool bHasInInetBase = (int)bdcInet.GetValue(query, new SortedList<string, object>() { { "@Barcode", fileNum } }) > 0;
 
             //если заявления нет, то надо проверить, нет ли его в нашей базе

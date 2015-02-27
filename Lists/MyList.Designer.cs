@@ -36,6 +36,7 @@
             this.btnFillGrid = new System.Windows.Forms.Button();
             this.dgvAbitList = new System.Windows.Forms.DataGridView();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.cbZeroWave = new System.Windows.Forms.CheckBox();
             this.tbAbitsTop = new System.Windows.Forms.TextBox();
             this.rbAbitsTop = new System.Windows.Forms.RadioButton();
             this.rbAbitsAll = new System.Windows.Forms.RadioButton();
@@ -58,7 +59,8 @@
             this.pictureBoxThistle = new System.Windows.Forms.PictureBox();
             this.labelThistle = new System.Windows.Forms.Label();
             this.ttextEntryView = new System.Windows.Forms.ToolTip(this.components);
-            this.cbZeroWave = new System.Windows.Forms.CheckBox();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.groupBox3 = new System.Windows.Forms.GroupBox();
             ((System.ComponentModel.ISupportInitialize)(this.dgvAbitList)).BeginInit();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
@@ -66,6 +68,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxWhite)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxThistle)).BeginInit();
+            this.groupBox1.SuspendLayout();
+            this.groupBox3.SuspendLayout();
             this.SuspendLayout();
             // 
             // lblCount
@@ -97,9 +101,9 @@
             // 
             this.cbFaculty.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbFaculty.FormattingEnabled = true;
-            this.cbFaculty.Location = new System.Drawing.Point(109, 9);
+            this.cbFaculty.Location = new System.Drawing.Point(102, 15);
             this.cbFaculty.Name = "cbFaculty";
-            this.cbFaculty.Size = new System.Drawing.Size(207, 21);
+            this.cbFaculty.Size = new System.Drawing.Size(194, 21);
             this.cbFaculty.TabIndex = 0;
             this.cbFaculty.SelectedIndexChanged += new System.EventHandler(this.cbFaculty_SelectedIndexChanged);
             // 
@@ -107,9 +111,9 @@
             // 
             this.cbStudyBasis.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbStudyBasis.FormattingEnabled = true;
-            this.cbStudyBasis.Location = new System.Drawing.Point(109, 40);
+            this.cbStudyBasis.Location = new System.Drawing.Point(102, 17);
             this.cbStudyBasis.Name = "cbStudyBasis";
-            this.cbStudyBasis.Size = new System.Drawing.Size(207, 21);
+            this.cbStudyBasis.Size = new System.Drawing.Size(194, 21);
             this.cbStudyBasis.TabIndex = 1;
             this.cbStudyBasis.SelectedIndexChanged += new System.EventHandler(this.cbStudyBasis_SelectedIndexChanged);
             // 
@@ -117,9 +121,9 @@
             // 
             this.cbStudyForm.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbStudyForm.FormattingEnabled = true;
-            this.cbStudyForm.Location = new System.Drawing.Point(109, 69);
+            this.cbStudyForm.Location = new System.Drawing.Point(102, 42);
             this.cbStudyForm.Name = "cbStudyForm";
-            this.cbStudyForm.Size = new System.Drawing.Size(207, 21);
+            this.cbStudyForm.Size = new System.Drawing.Size(194, 21);
             this.cbStudyForm.TabIndex = 2;
             this.cbStudyForm.SelectedIndexChanged += new System.EventHandler(this.cbStudyForm_SelectedIndexChanged);
             // 
@@ -127,15 +131,15 @@
             // 
             this.cbLicenseProgram.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbLicenseProgram.FormattingEnabled = true;
-            this.cbLicenseProgram.Location = new System.Drawing.Point(109, 97);
+            this.cbLicenseProgram.Location = new System.Drawing.Point(102, 40);
             this.cbLicenseProgram.Name = "cbLicenseProgram";
-            this.cbLicenseProgram.Size = new System.Drawing.Size(207, 21);
+            this.cbLicenseProgram.Size = new System.Drawing.Size(194, 21);
             this.cbLicenseProgram.TabIndex = 3;
             this.cbLicenseProgram.SelectedIndexChanged += new System.EventHandler(this.cbLicenseProgram_SelectedIndexChanged);
             // 
             // btnFillGrid
             // 
-            this.btnFillGrid.Location = new System.Drawing.Point(342, 73);
+            this.btnFillGrid.Location = new System.Drawing.Point(342, 87);
             this.btnFillGrid.Name = "btnFillGrid";
             this.btnFillGrid.Size = new System.Drawing.Size(189, 23);
             this.btnFillGrid.TabIndex = 4;
@@ -149,9 +153,9 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.dgvAbitList.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvAbitList.Location = new System.Drawing.Point(13, 131);
+            this.dgvAbitList.Location = new System.Drawing.Point(13, 151);
             this.dgvAbitList.Name = "dgvAbitList";
-            this.dgvAbitList.Size = new System.Drawing.Size(1075, 416);
+            this.dgvAbitList.Size = new System.Drawing.Size(1075, 396);
             this.dgvAbitList.TabIndex = 5;
             this.dgvAbitList.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvAbitList_CellContentDoubleClick);
             this.dgvAbitList.CellMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dgvAbitList_CellMouseClick);
@@ -165,10 +169,21 @@
             this.groupBox2.Controls.Add(this.rbAbitsAll);
             this.groupBox2.Location = new System.Drawing.Point(331, 9);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(320, 62);
+            this.groupBox2.Size = new System.Drawing.Size(320, 72);
             this.groupBox2.TabIndex = 67;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Количество абитуриентов для отображения";
+            // 
+            // cbZeroWave
+            // 
+            this.cbZeroWave.AutoSize = true;
+            this.cbZeroWave.Location = new System.Drawing.Point(11, 47);
+            this.cbZeroWave.Name = "cbZeroWave";
+            this.cbZeroWave.Size = new System.Drawing.Size(183, 17);
+            this.cbZeroWave.TabIndex = 86;
+            this.cbZeroWave.Text = "Выводить только зачисленных";
+            this.cbZeroWave.UseVisualStyleBackColor = true;
+            this.cbZeroWave.CheckedChanged += new System.EventHandler(this.cbZeroWave_CheckedChanged);
             // 
             // tbAbitsTop
             // 
@@ -203,7 +218,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(10, 12);
+            this.label1.Location = new System.Drawing.Point(33, 18);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(63, 13);
             this.label1.TabIndex = 68;
@@ -212,7 +227,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(10, 43);
+            this.label2.Location = new System.Drawing.Point(3, 20);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(94, 13);
             this.label2.TabIndex = 69;
@@ -221,7 +236,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(10, 72);
+            this.label3.Location = new System.Drawing.Point(3, 45);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(93, 13);
             this.label3.TabIndex = 70;
@@ -230,7 +245,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(10, 97);
+            this.label4.Location = new System.Drawing.Point(21, 43);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(75, 13);
             this.label4.TabIndex = 71;
@@ -238,7 +253,7 @@
             // 
             // btnToExcel
             // 
-            this.btnToExcel.Location = new System.Drawing.Point(342, 97);
+            this.btnToExcel.Location = new System.Drawing.Point(342, 116);
             this.btnToExcel.Name = "btnToExcel";
             this.btnToExcel.Size = new System.Drawing.Size(189, 21);
             this.btnToExcel.TabIndex = 72;
@@ -303,7 +318,7 @@
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(661, 92);
+            this.label8.Location = new System.Drawing.Point(661, 95);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(422, 13);
             this.label8.TabIndex = 79;
@@ -331,7 +346,7 @@
             // 
             this.label10.AutoSize = true;
             this.label10.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label10.Location = new System.Drawing.Point(661, 106);
+            this.label10.Location = new System.Drawing.Point(661, 116);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(413, 15);
             this.label10.TabIndex = 82;
@@ -339,9 +354,9 @@
             // 
             // btn_GreenList
             // 
-            this.btn_GreenList.Location = new System.Drawing.Point(537, 74);
+            this.btn_GreenList.Location = new System.Drawing.Point(537, 87);
             this.btn_GreenList.Name = "btn_GreenList";
-            this.btn_GreenList.Size = new System.Drawing.Size(108, 44);
+            this.btn_GreenList.Size = new System.Drawing.Size(108, 49);
             this.btn_GreenList.TabIndex = 83;
             this.btn_GreenList.Text = "GreenList";
             this.btn_GreenList.UseVisualStyleBackColor = true;
@@ -365,22 +380,39 @@
             this.labelThistle.TabIndex = 84;
             this.labelThistle.Text = "У абитуриента нет необходимого ЕГЭ для образовательной программы";
             // 
-            // cbZeroWave
+            // groupBox1
             // 
-            this.cbZeroWave.AutoSize = true;
-            this.cbZeroWave.Location = new System.Drawing.Point(11, 40);
-            this.cbZeroWave.Name = "cbZeroWave";
-            this.cbZeroWave.Size = new System.Drawing.Size(183, 17);
-            this.cbZeroWave.TabIndex = 86;
-            this.cbZeroWave.Text = "Выводить только зачисленных";
-            this.cbZeroWave.UseVisualStyleBackColor = true;
-            this.cbZeroWave.CheckedChanged += new System.EventHandler(this.cbZeroWave_CheckedChanged);
+            this.groupBox1.Controls.Add(this.label3);
+            this.groupBox1.Controls.Add(this.label2);
+            this.groupBox1.Controls.Add(this.cbStudyForm);
+            this.groupBox1.Controls.Add(this.cbStudyBasis);
+            this.groupBox1.Location = new System.Drawing.Point(13, 5);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(310, 69);
+            this.groupBox1.TabIndex = 86;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Учитывается при анализе:";
+            // 
+            // groupBox3
+            // 
+            this.groupBox3.Controls.Add(this.label4);
+            this.groupBox3.Controls.Add(this.label1);
+            this.groupBox3.Controls.Add(this.cbLicenseProgram);
+            this.groupBox3.Controls.Add(this.cbFaculty);
+            this.groupBox3.Location = new System.Drawing.Point(13, 77);
+            this.groupBox3.Name = "groupBox3";
+            this.groupBox3.Size = new System.Drawing.Size(310, 67);
+            this.groupBox3.TabIndex = 87;
+            this.groupBox3.TabStop = false;
+            this.groupBox3.Text = "Учитывается при отображении:";
             // 
             // MyList
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1100, 553);
+            this.Controls.Add(this.groupBox3);
+            this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.pictureBoxThistle);
             this.Controls.Add(this.labelThistle);
             this.Controls.Add(this.btn_GreenList);
@@ -395,23 +427,11 @@
             this.Controls.Add(this.label6);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.btnToExcel);
-            this.Controls.Add(this.label4);
-            this.Controls.Add(this.label3);
-            this.Controls.Add(this.label2);
-            this.Controls.Add(this.label1);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.dgvAbitList);
             this.Controls.Add(this.btnFillGrid);
-            this.Controls.Add(this.cbLicenseProgram);
-            this.Controls.Add(this.cbStudyForm);
-            this.Controls.Add(this.cbStudyBasis);
-            this.Controls.Add(this.cbFaculty);
             this.Name = "MyList";
             this.Text = "MyList";
-            this.Controls.SetChildIndex(this.cbFaculty, 0);
-            this.Controls.SetChildIndex(this.cbStudyBasis, 0);
-            this.Controls.SetChildIndex(this.cbStudyForm, 0);
-            this.Controls.SetChildIndex(this.cbLicenseProgram, 0);
             this.Controls.SetChildIndex(this.btnFillGrid, 0);
             this.Controls.SetChildIndex(this.dgvAbitList, 0);
             this.Controls.SetChildIndex(this.groupBox2, 0);
@@ -420,10 +440,6 @@
             this.Controls.SetChildIndex(this.btnClose, 0);
             this.Controls.SetChildIndex(this.btnAdd, 0);
             this.Controls.SetChildIndex(this.btnRemove, 0);
-            this.Controls.SetChildIndex(this.label1, 0);
-            this.Controls.SetChildIndex(this.label2, 0);
-            this.Controls.SetChildIndex(this.label3, 0);
-            this.Controls.SetChildIndex(this.label4, 0);
             this.Controls.SetChildIndex(this.btnToExcel, 0);
             this.Controls.SetChildIndex(this.label5, 0);
             this.Controls.SetChildIndex(this.label6, 0);
@@ -438,6 +454,8 @@
             this.Controls.SetChildIndex(this.btn_GreenList, 0);
             this.Controls.SetChildIndex(this.labelThistle, 0);
             this.Controls.SetChildIndex(this.pictureBoxThistle, 0);
+            this.Controls.SetChildIndex(this.groupBox1, 0);
+            this.Controls.SetChildIndex(this.groupBox3, 0);
             ((System.ComponentModel.ISupportInitialize)(this.dgvAbitList)).EndInit();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
@@ -446,6 +464,10 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxWhite)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxThistle)).EndInit();
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
+            this.groupBox3.ResumeLayout(false);
+            this.groupBox3.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -483,5 +505,7 @@
         private System.Windows.Forms.Label labelThistle;
         private System.Windows.Forms.ToolTip ttextEntryView;
         private System.Windows.Forms.CheckBox cbZeroWave;
+        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.GroupBox groupBox3;
     }
 }

@@ -13,10 +13,14 @@
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <TargetFrameworkProfile>Client</TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
-    <SccProjectName>Svn</SccProjectName>
-    <SccLocalPath>Svn</SccLocalPath>
-    <SccAuxPath>Svn</SccAuxPath>
-    <SccProvider>SubversionScc</SccProvider>
+    <SccProjectName>
+    </SccProjectName>
+    <SccLocalPath>
+    </SccLocalPath>
+    <SccAuxPath>
+    </SccAuxPath>
+    <SccProvider>
+    </SccProvider>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <PlatformTarget>x86</PlatformTarget>
@@ -317,7 +321,7 @@
     <Compile Include="Cards\CardApplication_InnerEntryInEntryPriorities.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Cards\CardApplication_InnerEntryInEntryPriorities.Designer.cs">
+    <Compile Include="Cards\CardApplication_InnerEntryInEntryPriorities.designer.cs">
       <DependentUpon>CardApplication_InnerEntryInEntryPriorities.cs</DependentUpon>
     </Compile>
     <Compile Include="Cards\CardAttMarks.cs">
@@ -633,7 +637,9 @@
     <Compile Include="Lists\MyList.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Lists\MyList.Designer.cs" />
+    <Compile Include="Lists\MyList.Designer.cs">
+      <DependentUpon>MyList.cs</DependentUpon>
+    </Compile>
     <Compile Include="Lists\MyListRatingProfileList.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -1182,6 +1188,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Lists\ListRatingWithEGE.resx">
       <DependentUpon>ListRatingWithEGE.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Lists\MyList.resx">
+      <DependentUpon>MyList.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Lists\OlympAbitList.resx">
       <DependentUpon>OlympAbitList.cs</DependentUpon>

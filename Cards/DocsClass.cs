@@ -102,5 +102,33 @@ namespace Priem
                 return null;
             }
         }
+
+        public DataTable UpdateFilesTable()
+        {
+            try
+            {
+                if (_personId == null)
+                    return null;
+                DataTable tbl = new DataTable();
+
+
+                string query = string.Format("SELECT Id, FileName + ' (' + convert(nvarchar, extAbitFiles.LoadDate, 104) + ' ' + convert(nvarchar, extAbitFiles.LoadDate, 108) + ')' + FileExtention AS FileName, Comment  FROM extAbitFiles WHERE extAbitFiles.PersonId = '{0}' {1} {2}", _personId,
+                    !string.IsNullOrEmpty(_abitId) ? " AND (extAbitFiles.ApplicationId = '" + _abitId + "' OR extAbitFiles.ApplicationId IS NULL)" : "",
+                    !string.IsNullOrEmpty(_commitId) ? " AND (extAbitFiles.CommitId = '" + _commitId + "' OR extAbitFiles.CommitId IS NULL)" : "");
+                
+                DataSet ds = _bdcInet.GetDataSet(query + " ORDER BY extAbitFiles.LoadDate DESC");
+
+                if (ds.Tables[0] != null)
+                    tbl = ds.Tables[0];
+
+                return tbl;
+            }
+            catch (System.Exception exc)
+            {
+                WinFormsServ.Error("Ошибка обновления данных о приложениях: " + exc.Message);
+                return null;
+            }
+        }
+
     }
 }

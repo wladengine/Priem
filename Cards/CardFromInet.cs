@@ -42,7 +42,7 @@ namespace Priem
             _personBarc = personBarcode;
             _closeAbit = closeAbit;
             tcCard = tabCard;
-
+            
             if (_abitBarc == null)
                 _closeAbit = true;
 

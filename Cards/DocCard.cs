@@ -41,6 +41,12 @@ namespace Priem
             chlbFile.DataSource = new BindingSource(lstFiles, null);
             chlbFile.ValueMember = "Key";
             chlbFile.DisplayMember = "Value";
+
+            dgvFiles.DataSource = _docs.UpdateFilesTable();
+            DataGridViewCheckBoxColumn clm = new DataGridViewCheckBoxColumn();
+            clm.Name = "Открыть";
+            dgvFiles.Columns.Add(clm);
+            dgvFiles.Columns["Открыть"].DisplayIndex = 0;
         }
 
         private void btnOpenFile_Click(object sender, EventArgs e)

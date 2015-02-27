@@ -1,6 +1,6 @@
 ﻿namespace Priem
 {
-    partial class CardApplication_ObrazProgramInEntryPriorities
+    partial class CardApplication_InnerEntryInEntryPriorities
     {
         /// <summary>
         /// Required designer variable.
@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(CardApplication_ObrazProgramInEntryPriorities));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(CardApplication_InnerEntryInEntryPriorities));
             this.dgv = new System.Windows.Forms.DataGridView();
             this.btnDown = new System.Windows.Forms.Button();
             this.btnUp = new System.Windows.Forms.Button();

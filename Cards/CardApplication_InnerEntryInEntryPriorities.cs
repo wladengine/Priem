@@ -9,12 +9,12 @@ using System.Windows.Forms;
 
 namespace Priem
 {
-    public partial class CardApplication_ObrazProgramInEntryPriorities : Form
+    public partial class CardApplication_InnerEntryInEntryPriorities : Form
     {
         private Guid _ApplicationId;
         private DataTable tblPrior;
         private int currSelectedRowId;
-        public CardApplication_ObrazProgramInEntryPriorities(Guid AppId)
+        public CardApplication_InnerEntryInEntryPriorities(Guid AppId)
         {
             InitializeComponent();
             _ApplicationId = AppId;
@@ -35,31 +35,31 @@ namespace Priem
 
                 tbLicenseProgram.Text = context.Entry.Where(x => x.Id == EntryId).Select(x => x.SP_LicenseProgram.Code + " " + x.SP_LicenseProgram.Name).First();
 
-                var baseData = context.ObrazProgramInEntry.Where(x => x.EntryId == EntryId).Select(x => new
+                var baseData = context.InnerEntryInEntry.Where(x => x.EntryId == EntryId).Select(x => new
                 {
                     x.Id,
                     ObrazProgramName = x.SP_ObrazProgram.Name,
-                    HasInnerProfiles = x.ProfileInObrazProgramInEntry.Count() > 1
+                    //HasInnerProfiles = x.Count() > 1
                 });
 
                 var usedData = context.ApplicationDetails.Where(x => x.ApplicationId == _ApplicationId).Select(x => new
                 {
-                    x.ObrazProgramInEntryId,
-                    Priority = x.ObrazProgramInEntryPriority
+                    x.InnerEntryInEntryId,
+                    Priority = x.InnerEntryInEntryPriority
                 });
 
                 Dictionary<Guid, int> dicObrazPrograms = new Dictionary<Guid, int>();
                 foreach (var usedProf in usedData)
                 {
-                    if (dicObrazPrograms.ContainsKey(usedProf.ObrazProgramInEntryId))
+                    if (dicObrazPrograms.ContainsKey(usedProf.InnerEntryInEntryId))
                         continue;
 
-                    int priorMin = usedData.Where(x => x.ObrazProgramInEntryId == usedProf.ObrazProgramInEntryId).Select(x => x.Priority).Min();
+                    int priorMin = usedData.Where(x => x.InnerEntryInEntryId == usedProf.InnerEntryInEntryId).Select(x => x.Priority).Min();
 
                     if (dicObrazPrograms.ContainsValue(priorMin) )
                         continue;
                     else
-                        dicObrazPrograms.Add(usedProf.ObrazProgramInEntryId, priorMin);
+                        dicObrazPrograms.Add(usedProf.InnerEntryInEntryId, priorMin);
                 }
 
                 if (dicObrazPrograms.Count() < baseData.Count())
@@ -95,7 +95,7 @@ namespace Priem
                     rw.SetField<Guid>("Id", Op.Value);
                     rw.SetField<string>("ObrazProgramName", baseData.Where(x=> x.Id == Op.Value).Select(x => x.ObrazProgramName).FirstOrDefault());
                     rw.SetField<int>("Priority", priority);
-                    bool hasInnerProfiles = baseData.Where(x => x.Id == Op.Value).Select(x => x.HasInnerProfiles).FirstOrDefault();
+                    bool hasInnerProfiles = baseData.Where(x => x.Id == Op.Value).Count() > 1;
                     if (hasInnerProfiles)
                         rw.SetField<string>("HasInnerProfilePriorityText", "по профилям");
                     tblPrior.Rows.Add(rw);
@@ -206,16 +206,6 @@ namespace Priem
 
             if (string.IsNullOrEmpty(dgv["HasInnerProfilePriorityText", e.RowIndex].Value.ToString()))
                 return;
-
-            try
-            {
-                Guid OPInEntryId = (Guid)dgv["Id", e.RowIndex].Value;
-                var crd = new CardApplication_ProfileInObrazProgramInEntry(_ApplicationId, OPInEntryId);
-                crd.Show();
-            }
-            catch
-            {
-            }
         }
     }
 }

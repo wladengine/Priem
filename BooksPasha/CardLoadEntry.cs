@@ -86,6 +86,8 @@ namespace Priem
                             (int)dr["StudyFormId"], (int)dr["StudyLevelId"], (Guid)dr["StudyPlanId"], dr["StudyPlanNumber"].ToString(),
                             dr["ProgramModeShortName"].ToString(), (bool)dr["IsSecond"], (bool)dr["IsReduced"], (bool)dr["IsParallel"], dr.Field<int?>("KCP"), null, null);
 
+                    //inner profiles
+                    DataSet dsProf = _bdcEduc.GetDataSet("SELECT ProfileId, ProfileNameNoNumber FROM ed.extStudyPlanProfiles");
                 }
 
                 MessageBox.Show("Выполнено");

@@ -310,10 +310,10 @@ namespace Priem
 
                     GetHasInnerPriorities(context);
 
-                    if (ObrazProgramInEntryId.HasValue)
-                        ObrazProgramInEntryId = abit.ObrazProgramInEntryId;
-                    if (ProfileInObrazProgramInEntryId.HasValue)
-                        ProfileInObrazProgramInEntryId = abit.ProfileInObrazProgramInEntryId;
+                    //if (ObrazProgramInEntryId.HasValue)
+                    //    ObrazProgramInEntryId = abit.ObrazProgramInEntryId;
+                    //if (ProfileInObrazProgramInEntryId.HasValue)
+                    //    ProfileInObrazProgramInEntryId = abit.ProfileInObrazProgramInEntryId;
                 }
             }
             catch (Exception ex)
@@ -1024,7 +1024,7 @@ namespace Priem
                 return;
             using (PriemEntities context = new PriemEntities())
             {
-                var opInEntry = context.ObrazProgramInEntry
+                var opInEntry = context.InnerEntryInEntry
                     .Where(x => x.EntryId == EntId);
 
                 if (opInEntry.Count() > 0)
@@ -1918,7 +1918,7 @@ namespace Priem
 
         private void GetHasInnerPriorities(PriemEntities context)
         {
-            var OPs = context.ObrazProgramInEntry.Where(x => x.EntryId == EntryId).Count();
+            var OPs = context.InnerEntryInEntry.Where(x => x.EntryId == EntryId).Count();
 
             if (OPs > 0)
             {
@@ -1940,7 +1940,7 @@ namespace Priem
         {
             if (GuidId.HasValue)
             {
-                var crd = new CardApplication_ObrazProgramInEntryPriorities(GuidId.Value);
+                var crd = new CardApplication_InnerEntryInEntryPriorities(GuidId.Value);
                 crd.Show();
             }
         }
@@ -1950,7 +1950,7 @@ namespace Priem
             using (PriemEntities context = new PriemEntities())
             {
                 List<KeyValuePair<string, string>> ObrazProgramInEntryList =
-                                (from ent in context.ObrazProgramInEntry
+                                (from ent in context.InnerEntryInEntry
                                  join SP_ObrazProgr in context.SP_ObrazProgram on ent.ObrazProgramId equals SP_ObrazProgr.Id
                                  where ent.EntryId == EntryId
                                  select new { ent.Id, SP_ObrazProgr.Name }).ToList()
@@ -1965,9 +1965,9 @@ namespace Priem
             using (PriemEntities context = new PriemEntities())
             {
                 List<KeyValuePair<string, string>> ProfileInObrazProgramInEntryList =
-                                (from ent in context.ProfileInObrazProgramInEntry
+                                (from ent in context.InnerEntryInEntry
                                  join SP_Prof in context.SP_Profile on ent.ProfileId equals SP_Prof.Id
-                                 where ent.ObrazProgramInEntryId == ObrazProgramInEntryId
+                                 where ent.EntryId == EntryId
                                  select new { ent.Id, SP_Prof.Name }).ToList()
                                  .Select(x => new KeyValuePair<string, string>(x.Id.ToString(), x.Name))
                                  .ToList();

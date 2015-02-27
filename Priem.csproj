@@ -155,12 +155,6 @@
     <Compile Include="BooksPasha\CardOlympSubjectToExam.Designer.cs">
       <DependentUpon>CardOlympSubjectToExam.cs</DependentUpon>
     </Compile>
-    <Compile Include="BooksPasha\CardProfileInObrazProgramInEntry.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="BooksPasha\CardProfileInObrazProgramInEntry.Designer.cs">
-      <DependentUpon>CardProfileInObrazProgramInEntry.cs</DependentUpon>
-    </Compile>
     <Compile Include="BooksPasha\CompetitiveGroupCard.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -320,17 +314,11 @@
     <Compile Include="Cards\CardAbit.Fields.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Cards\CardApplication_ObrazProgramInEntryPriorities.cs">
+    <Compile Include="Cards\CardApplication_InnerEntryInEntryPriorities.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Cards\CardApplication_ObrazProgramInEntryPriorities.Designer.cs">
-      <DependentUpon>CardApplication_ObrazProgramInEntryPriorities.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Cards\CardApplication_ProfileInObrazProgramInEntry.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Cards\CardApplication_ProfileInObrazProgramInEntry.Designer.cs">
-      <DependentUpon>CardApplication_ProfileInObrazProgramInEntry.cs</DependentUpon>
+    <Compile Include="Cards\CardApplication_InnerEntryInEntryPriorities.Designer.cs">
+      <DependentUpon>CardApplication_InnerEntryInEntryPriorities.cs</DependentUpon>
     </Compile>
     <Compile Include="Cards\CardAttMarks.cs">
       <SubType>Form</SubType>
@@ -397,12 +385,6 @@
     </Compile>
     <Compile Include="Cards\CardPerson.Fields.cs">
       <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Cards\CardProfileInObrazProgramInEntryInCompetition.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Cards\CardProfileInObrazProgramInEntryInCompetition.Designer.cs">
-      <DependentUpon>CardProfileInObrazProgramInEntryInCompetition.cs</DependentUpon>
     </Compile>
     <Compile Include="Cards\DocCard.cs">
       <SubType>Form</SubType>
@@ -991,9 +973,6 @@
     <EmbeddedResource Include="BooksPasha\CardOlympSubjectToExam.resx">
       <DependentUpon>CardOlympSubjectToExam.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="BooksPasha\CardProfileInObrazProgramInEntry.resx">
-      <DependentUpon>CardProfileInObrazProgramInEntry.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="BooksPasha\CompetitiveGroupCard.resx">
       <DependentUpon>CompetitiveGroupCard.cs</DependentUpon>
     </EmbeddedResource>
@@ -1069,11 +1048,8 @@
     <EmbeddedResource Include="Cards\CardAbit.resx">
       <DependentUpon>CardAbit.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Cards\CardApplication_ObrazProgramInEntryPriorities.resx">
-      <DependentUpon>CardApplication_ObrazProgramInEntryPriorities.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Cards\CardApplication_ProfileInObrazProgramInEntry.resx">
-      <DependentUpon>CardApplication_ProfileInObrazProgramInEntry.cs</DependentUpon>
+    <EmbeddedResource Include="Cards\CardApplication_InnerEntryInEntryPriorities.resx">
+      <DependentUpon>CardApplication_InnerEntryInEntryPriorities.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Cards\CardAttMarks.resx">
       <DependentUpon>CardAttMarks.cs</DependentUpon>
@@ -1101,9 +1077,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Cards\CardPerson.resx">
       <DependentUpon>CardPerson.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Cards\CardProfileInObrazProgramInEntryInCompetition.resx">
-      <DependentUpon>CardProfileInObrazProgramInEntryInCompetition.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Cards\DocCard.resx">
       <DependentUpon>DocCard.cs</DependentUpon>

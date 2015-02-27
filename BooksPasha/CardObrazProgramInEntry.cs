@@ -47,6 +47,11 @@ namespace Priem
             get { return ComboServ.GetComboIdInt(cbObrazProgram).Value; }
             set { ComboServ.SetComboId(cbObrazProgram, value); }
         }
+        private int ProfileId
+        {
+            get { return ComboServ.GetComboIdInt(cbProfile).Value; }
+            set { ComboServ.SetComboId(cbProfile, value); }
+        }
         
         public CardObrazProgramInEntry(Guid entryId, int licenseProgramId)
         {
@@ -78,20 +83,19 @@ namespace Priem
                 return;
             using (PriemEntities context = new PriemEntities())
             {
-                var z = context.ObrazProgramInEntry.Where(x => x.Id == GuidId).FirstOrDefault();
+                var z = context.InnerEntryInEntry.Where(x => x.Id == GuidId).FirstOrDefault();
                 if (z == null)
                 {
-                    WinFormsServ.Error("Не удалось получить значение ObrazProgramInEntry");
+                    WinFormsServ.Error("Не удалось получить значение InnerEntryInEntry");
                     return;
                 }
                 EntryId = z.Entry.Id;
                 LicenseProgramId = z.Entry.LicenseProgramId;
                 UpdateCombo();
                 ObrazProgramId = z.ObrazProgramId;
+                ProfileId = z.ProfileId;
                 KCP = z.KCP;
             }
-            
-            UpdateGridProfileInObrazProgramInEntry();
         }
         private void UpdateCombo()
         {
@@ -100,6 +104,10 @@ namespace Priem
                 var Ent = context.qObrazProgram.Where(x => x.LicenseProgramId == LicenseProgramId).Select(x => new { x.Id, x.Crypt, x.Name }).ToList()
                     .Select(x => new KeyValuePair<string, string>(x.Id.ToString(), x.Crypt + " " + x.Name)).ToList();
                 ComboServ.FillCombo(cbObrazProgram, Ent, false, false);
+
+                var Prof = context.SP_Profile.Select(x => new { x.Id, x.Name }).ToList()
+                    .Select(x => new KeyValuePair<string, string>(x.Id.ToString(), x.Name)).ToList();
+                ComboServ.FillCombo(cbProfile, Prof, false, false);
             }
         }
 
@@ -107,78 +115,7 @@ namespace Priem
         {
             SaveCard();
         }
-        private void btnAdd_Click(object sender, EventArgs e)
-        {
-            OpenCardProfileInObrazProgramInEntry(null);
-        }
-
-        private void OpenCardProfileInObrazProgramInEntry(string sId)
-        {
-            var crd = new CardProfileInObrazProgramInEntry(sId, tbLicenseProgram.Text, cbObrazProgram.Text);
-            crd.OnSave += AddIntoBase;
-            crd.Show();
-        }
-
-        private void UpdateGridProfileInObrazProgramInEntry()
-        {
-            using (PriemEntities context = new PriemEntities())
-            {
-                var src = context.ProfileInObrazProgramInEntry.Where(x => x.ObrazProgramInEntryId == GuidId).Select(x => new { x.Id, x.SP_Profile.Name, x.KCP }).ToArray();
-                dgvProfileInObrazProgramInEntry.DataSource = Util.ConvertToDataTable(src);
-                dgvProfileInObrazProgramInEntry.Columns["Id"].Visible = false;
-            }
-        }
-
-        private void AddIntoBase(int ProfileId, int KCP)
-        {
-            if (!GuidId.HasValue)
-                SaveCard();
-
-            using (PriemEntities context = new PriemEntities())
-            using (TransactionScope tran = new TransactionScope())
-            {
-                try
-                {
-                    Guid gId = Guid.NewGuid();
-
-                    int cnt = context.ProfileInObrazProgramInEntry.Where(x => x.ObrazProgramInEntryId == GuidId.Value && x.ProfileId == ProfileId).Count();
-                    if (cnt == 0)
-                    {
-                        context.ProfileInObrazProgramInEntry.AddObject(new ProfileInObrazProgramInEntry() { ObrazProgramInEntryId = GuidId.Value, ProfileId = ProfileId, KCP = KCP, Id = gId });
-                        context.SaveChanges();
-
-                        string query = "INSERT INTO ProfileInObrazProgramInEntry (Id, ObrazProgramInEntryId, ProfileId, KCP) VALUES (@Id, @ObrazProgramInEntryId, @ProfileId, @KCP)";
-                        SortedList<string, object> slParams = new SortedList<string, object>();
-                        slParams.Add("@Id", gId);
-                        slParams.Add("@ObrazProgramInEntryId", GuidId.Value);
-                        slParams.Add("@ProfileId", ProfileId);
-                        slParams.Add("@KCP", KCP);
-                        MainClass.BdcOnlineReadWrite.ExecuteQuery(query, slParams);
-                        tran.Complete();
-                    }
-                    else
-                    {
-                        var ent = context.ProfileInObrazProgramInEntry.Where(x => x.ObrazProgramInEntryId == GuidId.Value && x.ProfileId == ProfileId).First();
-                        ent.KCP = KCP;
-                        context.SaveChanges();
-
-                        string query = "UPDATE ProfileInObrazProgramInEntry SET KCP=@KCP WHERE ObrazProgramInEntryId=@ObrazProgramInEntryId AND ProfileId=@ProfileId";
-                        SortedList<string, object> slParams = new SortedList<string, object>();
-                        slParams.Add("@ObrazProgramInEntryId", GuidId.Value);
-                        slParams.Add("@ProfileId", ProfileId);
-                        slParams.Add("@KCP", KCP);
-                        MainClass.BdcOnlineReadWrite.ExecuteQuery(query, slParams);
-                        tran.Complete();
-                    }
-                }
-                catch (Exception ex)
-                {
-                    WinFormsServ.Error(ex);
-                }
-            }
-            UpdateGridProfileInObrazProgramInEntry();
-        }
-
+        
         protected override bool SaveRecord()
         {
             return SaveCard();
@@ -194,23 +131,24 @@ namespace Priem
                     if (!GuidId.HasValue)
                     {
                         GuidId = Guid.NewGuid();
-                        context.ObrazProgramInEntry.AddObject(new ObrazProgramInEntry() { Id = GuidId.Value, ObrazProgramId = ObrazProgramId, KCP = KCP, EntryId = EntryId });
+                        context.InnerEntryInEntry.AddObject(new InnerEntryInEntry() { Id = GuidId.Value, ObrazProgramId = ObrazProgramId, ProfileId = ProfileId, KCP = KCP, EntryId = EntryId });
 
-                        query = "INSERT INTO ObrazProgramInEntry(Id, ObrazProgramId, EntryId) VALUES (@Id, @ObrazProgramId, @EntryId)";
+                        query = "INSERT INTO ObrazProgramInEntry(Id, ObrazProgramId, @ProfileId, EntryId) VALUES (@Id, @ObrazProgramId, @ProfileId, @EntryId)";
                     }
                     else
                     {
-                        var Ent = context.ObrazProgramInEntry.Where(x => x.Id == GuidId).FirstOrDefault();
+                        var Ent = context.InnerEntryInEntry.Where(x => x.Id == GuidId).FirstOrDefault();
                         if (Ent == null)
                         {
-                            WinFormsServ.Error("Не найдена запись в таблице ObrazProgramInEntry!");
+                            WinFormsServ.Error("Не найдена запись в таблице InnerEntryInEntry!");
                             return false;
                         }
 
                         Ent.ObrazProgramId = ObrazProgramId;
+                        Ent.ProfileId = ProfileId;
                         Ent.KCP = KCP;
 
-                        query = "UPDATE ObrazProgramInEntry SET ObrazProgramId=@ObrazProgramId, EntryId=@EntryId WHERE Id=@Id";
+                        query = "UPDATE InnerEntryInEntry SET ObrazProgramId=@ObrazProgramId, ProfileId=@ProfileId, EntryId=@EntryId WHERE Id=@Id";
                     }
 
                     context.SaveChanges();
@@ -219,6 +157,7 @@ namespace Priem
                     slParams.Add("@Id", GuidId.Value);
                     slParams.Add("@ObrazProgramId", ObrazProgramId);
                     slParams.Add("@EntryId", EntryId);
+                    slParams.Add("@ProfileId", ProfileId);
                     MainClass.BdcOnlineReadWrite.ExecuteQuery(query, slParams);
 
                     tran.Complete();
@@ -239,54 +178,6 @@ namespace Priem
         protected override void CloseCardAfterSave()
         {
             this.Close();
-        }
-        
-        private void dgvProfileInObrazProgramInEntry_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
-        {
-            if (e.RowIndex < 0)
-                return;
-
-            string sId = dgvProfileInObrazProgramInEntry["Id", e.RowIndex].Value.ToString();
-
-            OpenCardProfileInObrazProgramInEntry(sId);
-        }
-
-        private void btnDelete_Click(object sender, EventArgs e)
-        {
-            if (dgvProfileInObrazProgramInEntry.SelectedCells.Count == 0)
-                return;
-
-            int rwInd = dgvProfileInObrazProgramInEntry.SelectedCells[0].RowIndex;
-            Guid gId = (Guid)dgvProfileInObrazProgramInEntry["Id", rwInd].Value;
-
-            using (PriemEntities context = new PriemEntities())
-            {
-                var ent = context.ProfileInObrazProgramInEntry.Where(x => x.Id == gId).FirstOrDefault();
-                if (ent == null)
-                    return;
-
-                using (TransactionScope tran = new TransactionScope())
-                {
-                    try
-                    {
-                        context.ProfileInObrazProgramInEntry.DeleteObject(ent);
-                        context.SaveChanges();
-
-                        string query = "DELETE FROM ProfileInObrazProgramInEntry WHERE Id=@Id";
-                        SortedList<string, object> slParams = new SortedList<string, object>();
-                        slParams.Add("@Id", gId);
-
-                        MainClass.BdcOnlineReadWrite.ExecuteQuery(query, slParams);
-
-                        tran.Complete();
-                    }
-                    catch (Exception ex)
-                    {
-                        WinFormsServ.Error(ex);
-                    }
-                }
-            }
-            UpdateGridProfileInObrazProgramInEntry();
         }
     }
 }

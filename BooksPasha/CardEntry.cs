@@ -672,7 +672,7 @@ WHERE Id=@Id";
 
             using (PriemEntities context = new PriemEntities())
             {
-                var src = context.ObrazProgramInEntry.Where(x => x.EntryId == GuidId).Select(x => new { x.Id, x.SP_ObrazProgram.Name, x.KCP }).ToArray();
+                var src = context.InnerEntryInEntry.Where(x => x.EntryId == GuidId).Select(x => new { x.Id, x.SP_ObrazProgram.Name, x.KCP }).ToArray();
                 dgvObrazProgramInEntry.DataSource = Util.ConvertToDataTable(src);
                 dgvObrazProgramInEntry.Columns["Id"].Visible = false;
                 dgvObrazProgramInEntry.Columns["Name"].HeaderText = "Образовательная программа";
@@ -705,11 +705,11 @@ WHERE Id=@Id";
 
             using (PriemEntities context = new PriemEntities())
             {
-                var OPIE = context.ObrazProgramInEntry.Where(x => x.Id == gId).FirstOrDefault();
-                context.ObrazProgramInEntry.DeleteObject(OPIE);
+                var OPIE = context.InnerEntryInEntry.Where(x => x.Id == gId).FirstOrDefault();
+                context.InnerEntryInEntry.DeleteObject(OPIE);
                 context.SaveChanges();
 
-                string query = "DELETE FROM ObrazProgramInEntry WHERE Id=@Id";
+                string query = "DELETE FROM InnerEntryInEntry WHERE Id=@Id";
                 SortedList<string, object> slParams = new SortedList<string, object>();
                 slParams.Add("@Id", gId);
                 MainClass.BdcOnlineReadWrite.ExecuteQuery(query, slParams);

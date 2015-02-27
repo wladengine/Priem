@@ -29,31 +29,27 @@
         private void InitializeComponent()
         {
             this.cbObrazProgram = new System.Windows.Forms.ComboBox();
-            this.dgvProfileInObrazProgramInEntry = new System.Windows.Forms.DataGridView();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.btnDelete = new System.Windows.Forms.Button();
-            this.btnAdd = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.tbLicenseProgram = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.tbKCP = new System.Windows.Forms.TextBox();
+            this.label4 = new System.Windows.Forms.Label();
+            this.cbProfile = new System.Windows.Forms.ComboBox();
             ((System.ComponentModel.ISupportInitialize)(this.epError)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvProfileInObrazProgramInEntry)).BeginInit();
-            this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // btnClose
             // 
-            this.btnClose.Location = new System.Drawing.Point(403, 436);
+            this.btnClose.Location = new System.Drawing.Point(403, 169);
             // 
             // btnSaveChange
             // 
-            this.btnSaveChange.Location = new System.Drawing.Point(12, 402);
+            this.btnSaveChange.Location = new System.Drawing.Point(12, 135);
             // 
             // btnSaveAsNew
             // 
-            this.btnSaveAsNew.Location = new System.Drawing.Point(336, 402);
+            this.btnSaveAsNew.Location = new System.Drawing.Point(336, 135);
             // 
             // cbObrazProgram
             // 
@@ -65,58 +61,6 @@
             this.cbObrazProgram.Name = "cbObrazProgram";
             this.cbObrazProgram.Size = new System.Drawing.Size(347, 21);
             this.cbObrazProgram.TabIndex = 0;
-            // 
-            // dgvProfileInObrazProgramInEntry
-            // 
-            this.dgvProfileInObrazProgramInEntry.AllowUserToAddRows = false;
-            this.dgvProfileInObrazProgramInEntry.AllowUserToDeleteRows = false;
-            this.dgvProfileInObrazProgramInEntry.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.dgvProfileInObrazProgramInEntry.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvProfileInObrazProgramInEntry.Location = new System.Drawing.Point(6, 19);
-            this.dgvProfileInObrazProgramInEntry.Name = "dgvProfileInObrazProgramInEntry";
-            this.dgvProfileInObrazProgramInEntry.ReadOnly = true;
-            this.dgvProfileInObrazProgramInEntry.Size = new System.Drawing.Size(443, 248);
-            this.dgvProfileInObrazProgramInEntry.TabIndex = 1;
-            this.dgvProfileInObrazProgramInEntry.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvProfileInObrazProgramInEntry_CellDoubleClick);
-            // 
-            // groupBox1
-            // 
-            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox1.Controls.Add(this.btnDelete);
-            this.groupBox1.Controls.Add(this.btnAdd);
-            this.groupBox1.Controls.Add(this.dgvProfileInObrazProgramInEntry);
-            this.groupBox1.Location = new System.Drawing.Point(12, 93);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(455, 303);
-            this.groupBox1.TabIndex = 2;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Профили";
-            // 
-            // btnDelete
-            // 
-            this.btnDelete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnDelete.Location = new System.Drawing.Point(374, 274);
-            this.btnDelete.Name = "btnDelete";
-            this.btnDelete.Size = new System.Drawing.Size(75, 23);
-            this.btnDelete.TabIndex = 3;
-            this.btnDelete.Text = "Удалить";
-            this.btnDelete.UseVisualStyleBackColor = true;
-            this.btnDelete.Click += new System.EventHandler(this.btnDelete_Click);
-            // 
-            // btnAdd
-            // 
-            this.btnAdd.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnAdd.Location = new System.Drawing.Point(6, 274);
-            this.btnAdd.Name = "btnAdd";
-            this.btnAdd.Size = new System.Drawing.Size(75, 23);
-            this.btnAdd.TabIndex = 2;
-            this.btnAdd.Text = "Добавить";
-            this.btnAdd.UseVisualStyleBackColor = true;
-            this.btnAdd.Click += new System.EventHandler(this.btnAdd_Click);
             // 
             // label1
             // 
@@ -149,7 +93,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(84, 68);
+            this.label3.Location = new System.Drawing.Point(84, 96);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(30, 13);
             this.label3.TabIndex = 8;
@@ -157,28 +101,49 @@
             // 
             // tbKCP
             // 
-            this.tbKCP.Location = new System.Drawing.Point(120, 65);
+            this.tbKCP.Location = new System.Drawing.Point(120, 93);
             this.tbKCP.Name = "tbKCP";
             this.tbKCP.Size = new System.Drawing.Size(89, 20);
             this.tbKCP.TabIndex = 9;
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(61, 68);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(53, 13);
+            this.label4.TabIndex = 26;
+            this.label4.Text = "Профиль";
+            // 
+            // cbProfile
+            // 
+            this.cbProfile.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.cbProfile.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
+            this.cbProfile.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
+            this.cbProfile.FormattingEnabled = true;
+            this.cbProfile.Location = new System.Drawing.Point(120, 65);
+            this.cbProfile.Name = "cbProfile";
+            this.cbProfile.Size = new System.Drawing.Size(347, 21);
+            this.cbProfile.TabIndex = 25;
             // 
             // CardObrazProgramInEntry
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(479, 437);
+            this.ClientSize = new System.Drawing.Size(479, 170);
+            this.Controls.Add(this.label4);
+            this.Controls.Add(this.cbProfile);
             this.Controls.Add(this.tbKCP);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.tbLicenseProgram);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.cbObrazProgram);
             this.Location = new System.Drawing.Point(0, 0);
             this.Name = "CardObrazProgramInEntry";
             this.Text = "Образовательная программа в году";
             this.Controls.SetChildIndex(this.cbObrazProgram, 0);
-            this.Controls.SetChildIndex(this.groupBox1, 0);
             this.Controls.SetChildIndex(this.label1, 0);
             this.Controls.SetChildIndex(this.tbLicenseProgram, 0);
             this.Controls.SetChildIndex(this.label2, 0);
@@ -187,9 +152,9 @@
             this.Controls.SetChildIndex(this.btnSaveChange, 0);
             this.Controls.SetChildIndex(this.btnClose, 0);
             this.Controls.SetChildIndex(this.btnSaveAsNew, 0);
+            this.Controls.SetChildIndex(this.cbProfile, 0);
+            this.Controls.SetChildIndex(this.label4, 0);
             ((System.ComponentModel.ISupportInitialize)(this.epError)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvProfileInObrazProgramInEntry)).EndInit();
-            this.groupBox1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -198,14 +163,12 @@
         #endregion
 
         private System.Windows.Forms.ComboBox cbObrazProgram;
-        private System.Windows.Forms.DataGridView dgvProfileInObrazProgramInEntry;
-        private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.Button btnDelete;
-        private System.Windows.Forms.Button btnAdd;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox tbLicenseProgram;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TextBox tbKCP;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.ComboBox cbProfile;
     }
 }

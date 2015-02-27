@@ -27,9 +27,8 @@ namespace Priem
                 comp.lstObrazProgramsInEntry.Select(x => new
                 {
                     x.Id,
-                    x.ObrazProgramInEntryPriority,
+                    x.InnerEntryInEntryPriority,
                     x.ObrazProgramName,
-                    HasProfiles = x.ListProfiles.Count > 0 ? "по профилям" : ""
                 }).ToList();
 
             dgvObrazProgramInEntryList.DataSource = src;
@@ -38,8 +37,6 @@ namespace Priem
             dgvObrazProgramInEntryList.Columns["ObrazProgramInEntryPriority"].HeaderText = "Приоритет";
             dgvObrazProgramInEntryList.Columns["ObrazProgramName"].HeaderText = "Обр. программа";
             dgvObrazProgramInEntryList.Columns["ObrazProgramName"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-            dgvObrazProgramInEntryList.Columns["HasProfiles"].HeaderText = "";
-            dgvObrazProgramInEntryList.Columns["HasProfiles"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCellsExceptHeader;
         }
 
         private void dgvObrazProgramInEntryList_CellContentClick(object sender, DataGridViewCellEventArgs e)
@@ -49,12 +46,6 @@ namespace Priem
                 Guid gId = (Guid)dgvObrazProgramInEntryList["Id", e.RowIndex].Value;
 
                 var OPIE = comp.lstObrazProgramsInEntry.Where(x => x.Id == gId).FirstOrDefault();
-
-                if (OPIE != null && OPIE.ListProfiles.Count > 0)
-                {
-                    var crd = new CardProfileInObrazProgramInEntryInCompetition(OPIE, comp.LicenseProgramName);
-                    crd.Show();
-                }
             }
         }
     }

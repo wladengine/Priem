@@ -757,10 +757,10 @@ namespace Priem
                                        select new ShortAppcationDetails()
                                        {
                                            ApplicationId = x.Id,
-                                           ObrazProgramInEntryPriority = Ad.ObrazProgramInEntryPriority,
-                                           ObrazProgramName = ((Ad.ObrazProgramInEntry.SP_ObrazProgram.SP_LicenseProgram.StudyLevel.Acronym + "." + Ad.ObrazProgramInEntry.SP_ObrazProgram.Number + " ") ?? "") + Ad.ObrazProgramInEntry.SP_ObrazProgram.Name,
-                                           ProfileInObrazProgramInEntryPriority = Ad.ProfileInObrazProgramInEntryPriority,
-                                           ProfileName = !Ad.ProfileInObrazProgramInEntryId.HasValue ? "нет" : Ad.ProfileInObrazProgramInEntry.SP_Profile.Name
+                                           ObrazProgramInEntryPriority = Ad.InnerEntryInEntryPriority,
+                                           ObrazProgramName = ((Ad.InnerEntryInEntry.SP_ObrazProgram.SP_LicenseProgram.StudyLevel.Acronym + "." + Ad.InnerEntryInEntry.SP_ObrazProgram.Number + " ") ?? "") + Ad.InnerEntryInEntry.SP_ObrazProgram.Name,
+                                           ProfileInObrazProgramInEntryPriority = Ad.InnerEntryInEntryPriority,
+                                           ProfileName = Ad.InnerEntryInEntry.SP_Profile.Name
                                        }).Distinct().ToList();
 
                 var person = (from x in context.Person
@@ -4982,10 +4982,10 @@ namespace Priem
                                    NameRod = country.NameRod,
                                    extabit.ObrazProgramInEntryCrypt, 
                                    extabit.ObrazProgramInEntryName,
-                                   extabit.ObrazProgramInEntryId,
-                                   extabit.ProfileInObrazProgramInEntryId,
+                                   //extabit.ObrazProgramInEntryId,
+                                   
                                    extabit.ProfileInObrazProgramInEntryName,
-                                   extabit.ObrazProgramInEntryObrazProgramId
+                                   extabit.InnerEntryInEntryObrazProgramId
                                }).ToList().Distinct().Select(x =>
                                    new
                                    {
@@ -4997,18 +4997,15 @@ namespace Priem
                                        CelCompName = x.CelCompName,
                                        LicenseProgramName = x.LicenseProgramName,
                                        LicenseProgramCode = x.LicenseProgramCode,
-                                       ProfileName = x.ProfileInObrazProgramInEntryId.HasValue ? x.ProfileInObrazProgramInEntryName : x.ProfileName,
-                                       //ObrazProgram = x.ObrazProgram.Replace("(очно-заочная)", "").Replace(" ВВ", ""),
-                                       ObrazProgram = x.ObrazProgramInEntryId.HasValue ? x.ObrazProgramInEntryCrypt + " " + x.ObrazProgramInEntryName : x.ObrazProgram.Replace("(очно-заочная)", "").Replace(" ВВ", ""),
-                                       ObrazProgramId = x.ObrazProgramInEntryId.HasValue ? x.ObrazProgramInEntryObrazProgramId : x.ObrazProgramId,
+                                       ProfileName = string.IsNullOrEmpty(x.ProfileInObrazProgramInEntryName) ? x.ProfileName : x.ProfileInObrazProgramInEntryName,
+                                       ObrazProgram = x.InnerEntryInEntryObrazProgramId.HasValue ? x.ObrazProgramInEntryCrypt + " " + x.ObrazProgramInEntryName : x.ObrazProgram.Replace("(очно-заочная)", "").Replace(" ВВ", ""),
+                                       ObrazProgramId = x.InnerEntryInEntryObrazProgramId.HasValue ? x.InnerEntryInEntryObrazProgramId : x.ObrazProgramId,
                                        EntryHeaderId = x.EntryHeaderId,
                                        SortNum = x.SortNum,
                                        EntryHeaderName = x.EntryHeaderName,
                                        NameRod = x.NameRod,
                                        x.ObrazProgramInEntryCrypt,
                                        x.ObrazProgramInEntryName,
-                                       x.ObrazProgramInEntryId,
-                                       x.ProfileInObrazProgramInEntryId,
                                        x.ProfileInObrazProgramInEntryName
                                    }
                                ).OrderBy(x => x.CelCompName).ThenBy(x => x.ObrazProgram).ThenBy(x => x.ProfileName).ThenBy(x => x.NameRod).ThenBy(x => x.SortNum).ThenBy(x => x.ФИО).ToList();

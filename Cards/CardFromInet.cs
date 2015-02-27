@@ -789,19 +789,19 @@ FROM [extApplicationDetails] WHERE [ApplicationId]=@AppId";
                                }).ToList();
                     using (PriemEntities context = new PriemEntities())
                     {
-                        foreach (var OPIE in data.Select(x => new { x.ObrazProgramInEntryId, x.ObrazProgramInEntryPriority, x.ObrazProgramName, x.CurrDate, x.CurrVersion }).Distinct().OrderBy(x => x.ObrazProgramInEntryPriority))
-                        {
-                            var OP = new ShortObrazProgramInEntry(OPIE.ObrazProgramInEntryId, OPIE.ObrazProgramName) { ObrazProgramInEntryPriority = OPIE.ObrazProgramInEntryPriority, CurrVersion = OPIE.CurrVersion, CurrDate = OPIE.CurrDate };
-                            OP.ListProfiles = new List<ShortProfileInObrazProgramInEntry>();
-                            int profPriorVal = 0;
-                            foreach (var PROF in data.Where(x => x.ObrazProgramInEntryId == OPIE.ObrazProgramInEntryId && x.ProfileInObrazProgramInEntryId.HasValue).Select(x => new { x.ProfileInObrazProgramInEntryId, ProfileInObrazProgramInEntryPriority = x.ProfileInObrazProgramInEntryPriority, x.ProfileName }).OrderBy(x => x.ProfileInObrazProgramInEntryPriority))
-                            {
-                                profPriorVal++;
-                                OP.ListProfiles.Add(new ShortProfileInObrazProgramInEntry(PROF.ProfileInObrazProgramInEntryId.Value, PROF.ProfileName) { ProfileInObrazProgramInEntryPriority = PROF.ProfileInObrazProgramInEntryPriority ?? profPriorVal });
-                            }
+                        //foreach (var OPIE in data.Select(x => new { x.ObrazProgramInEntryId, x.ObrazProgramInEntryPriority, x.ObrazProgramName, x.CurrDate, x.CurrVersion }).Distinct().OrderBy(x => x.ObrazProgramInEntryPriority))
+                        //{
+                        //    var OP = new ShortObrazProgramInEntry(OPIE.ObrazProgramInEntryId, OPIE.ObrazProgramName) { ObrazProgramInEntryPriority = OPIE.ObrazProgramInEntryPriority, CurrVersion = OPIE.CurrVersion, CurrDate = OPIE.CurrDate };
+                        //    OP.ListProfiles = new List<ShortProfileInObrazProgramInEntry>();
+                        //    int profPriorVal = 0;
+                        //    foreach (var PROF in data.Where(x => x.ObrazProgramInEntryId == OPIE.ObrazProgramInEntryId && x.ProfileInObrazProgramInEntryId.HasValue).Select(x => new { x.ProfileInObrazProgramInEntryId, ProfileInObrazProgramInEntryPriority = x.ProfileInObrazProgramInEntryPriority, x.ProfileName }).OrderBy(x => x.ProfileInObrazProgramInEntryPriority))
+                        //    {
+                        //        profPriorVal++;
+                        //        OP.ListProfiles.Add(new ShortProfileInObrazProgramInEntry(PROF.ProfileInObrazProgramInEntryId.Value, PROF.ProfileName) { ProfileInObrazProgramInEntryPriority = PROF.ProfileInObrazProgramInEntryPriority ?? profPriorVal });
+                        //    }
                         
-                            C.lstObrazProgramsInEntry.Add(OP);
-                        }
+                        //    C.lstObrazProgramsInEntry.Add(OP);
+                        //}
                     }
                 }
 
@@ -1594,20 +1594,7 @@ FROM [extApplicationDetails] WHERE [ApplicationId]=@AppId";
                                 context.ApplicationVersion.AddObject(new ApplicationVersion() { IntNumber = currVersion, Id = ApplicationVersionId, ApplicationId = ApplicationId, VersionDate = currDate });
                                 foreach (var OPIE in Comp.lstObrazProgramsInEntry)
                                 {
-                                    context.Abiturient_UpdateObrazProgramInEntryPriority(OPIE.Id, OPIE.ObrazProgramInEntryPriority, ApplicationId);
-
-                                    foreach (var ProfInOPIE in OPIE.ListProfiles)
-                                    {
-                                        context.Abiturient_UpdateProfileInObrazProgramInEntryPriority(ProfInOPIE.Id, ProfInOPIE.ProfileInObrazProgramInEntryPriority, ApplicationId);
-                                        context.ApplicationVersionDetails.AddObject(new ApplicationVersionDetails()
-                                        {
-                                            ApplicationVersionId = ApplicationVersionId,
-                                            ObrazProgramInEntryId = OPIE.Id,
-                                            ObrazProgramInEntryPriority = OPIE.ObrazProgramInEntryPriority,
-                                            ProfileInObrazProgramInEntryId = ProfInOPIE.Id,
-                                            ProfileInObrazProgramInEntryPriority = ProfInOPIE.ProfileInObrazProgramInEntryPriority
-                                        });
-                                    }
+                                    //context.Abiturient_UpdateObrazProgramInEntryPriority(OPIE.Id, OPIE.ObrazProgramInEntryPriority, ApplicationId);
                                 }
                             }
                         }

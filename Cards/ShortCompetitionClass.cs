@@ -89,10 +89,11 @@ namespace Priem
     {
         public Guid Id { get; private set; }
         public string ObrazProgramName { get; private set; }
-        public int ObrazProgramInEntryPriority { get; set; }
+        public string ProfileName { get; private set; }
+        public int InnerEntryInEntryPriority { get; set; }
         public int CurrVersion { get; set; }
         public DateTime CurrDate { get; set; }
-        public List<ShortProfileInObrazProgramInEntry> ListProfiles { get; set; }
+        //public List<ShortProfileInObrazProgramInEntry> ListProfiles { get; set; }
 
         public ShortObrazProgramInEntry(Guid _id, string _obrazProgramName)
         {
@@ -100,16 +101,16 @@ namespace Priem
             ObrazProgramName = _obrazProgramName;
         }
     }
-    public class ShortProfileInObrazProgramInEntry
-    {
-        public Guid Id { get; private set; }
-        public string ProfileName { get; private set; }
-        public int ProfileInObrazProgramInEntryPriority { get; set; }
+    //public class ShortProfileInObrazProgramInEntry
+    //{
+    //    public Guid Id { get; private set; }
+    //    public string ProfileName { get; private set; }
+    //    public int ProfileInObrazProgramInEntryPriority { get; set; }
 
-        public ShortProfileInObrazProgramInEntry(Guid _Id, string _ProfileName)
-        {
-            Id = _Id;
-            ProfileName = _ProfileName;
-        }
-    }
+    //    public ShortProfileInObrazProgramInEntry(Guid _Id, string _ProfileName)
+    //    {
+    //        Id = _Id;
+    //        ProfileName = _ProfileName;
+    //    }
+    //}
 }

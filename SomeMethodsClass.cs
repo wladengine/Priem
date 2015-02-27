@@ -145,7 +145,7 @@ namespace Priem
                 ObjectParameter boolPar = new ObjectParameter("result", typeof(bool));
 
                 context.CheckPersonIdent(person.Surname, person.Name, person.SecondName, person.BirthDate, person.PassportSeries, person.PassportNumber,
-                    person.AttestatRegion, person.AttestatSeries, person.AttestatNum, boolPar);
+                    person.AttestatSeries, person.AttestatNum, boolPar);
                
                 return Convert.ToBoolean(boolPar.Value);
             }
@@ -195,12 +195,10 @@ namespace Priem
                             person.PassportSeries, person.PassportNumber, person.PassportAuthor, person.PassportDate, person.Sex, person.CountryId, person.NationalityId, 
                             person.RegionId, person.Phone, person.Mobiles, person.Email, person.Code, person.City, person.Street, person.House, person.Korpus, 
                             person.Flat, person.CodeReal, person.CityReal, person.StreetReal, person.HouseReal, person.KorpusReal, person.FlatReal, person.KladrCode,
-                            person.HostelAbit, person.HostelEduc, false, null, false, null, person.IsExcellent, 
-                            person.LanguageId, person.SchoolCity, person.SchoolTypeId, person.SchoolName, person.SchoolNum, person.SchoolExitYear, person.SchoolAVG, 
-                            person.CountryEducId, person.RegionEducId, person.IsEqual, person.AttestatRegion, person.AttestatSeries, person.AttestatNum, person.DiplomSeries, person.DiplomNum, 
-                            person.HighEducation, person.HEProfession, person.HEQualification, person.HEEntryYear, person.HEExitYear, person.HEStudyFormId, 
-                            person.HEWork, person.Stag, person.WorkPlace, person.MSVuz, person.MSCourse, person.MSStudyFormId, person.Privileges, person.PassportCode,
-                            person.PersonalCode, person.PersonInfo, person.ExtraInfo, person.ScienceWork, person.StartEnglish, person.EnglishMark, false, person.SNILS, entId);
+                            person.HostelAbit, person.HostelEduc, false, null, false, null, person.LanguageId, 
+                            person.Stag, person.WorkPlace, person.MSVuz, person.MSCourse, person.MSStudyFormId, person.Privileges, person.PassportCode,
+                            person.PersonalCode, person.PersonInfo, person.ExtraInfo, person.ScienceWork, person.StartEnglish, person.EnglishMark, false, person.SNILS, 
+                            person.HasTRKI, person.TRKICertificateNumber, entId);
 
                         //_bdcInet.ExecuteQuery("UPDATE Person SET IsImported = 1 WHERE Person.Barcode = " + persBarcode);     
                         

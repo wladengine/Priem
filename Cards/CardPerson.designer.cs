@@ -260,6 +260,8 @@
             this.btnAddAbit = new System.Windows.Forms.Button();
             this.btnDocs = new System.Windows.Forms.Button();
             this.sfdPrint = new System.Windows.Forms.SaveFileDialog();
+            this.tbTRKICertificateNumber = new System.Windows.Forms.TextBox();
+            this.chbHasTRKI = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.epError)).BeginInit();
             this.tabCard.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -2478,6 +2480,8 @@
             // 
             // tabPage7
             // 
+            this.tabPage7.Controls.Add(this.tbTRKICertificateNumber);
+            this.tabPage7.Controls.Add(this.chbHasTRKI);
             this.tabPage7.Controls.Add(this.groupBox2);
             this.tabPage7.Controls.Add(this.gbMotivateText);
             this.tabPage7.Controls.Add(this.gbPersonInfo);
@@ -2678,6 +2682,22 @@
             this.btnDocs.Visible = false;
             this.btnDocs.Click += new System.EventHandler(this.btnDocs_Click);
             // 
+            // tbTRKICertificateNumber
+            // 
+            this.tbTRKICertificateNumber.Location = new System.Drawing.Point(223, 115);
+            this.tbTRKICertificateNumber.Name = "tbTRKICertificateNumber";
+            this.tbTRKICertificateNumber.Size = new System.Drawing.Size(75, 20);
+            this.tbTRKICertificateNumber.TabIndex = 121;
+            // 
+            // chbHasTRKI
+            // 
+            this.chbHasTRKI.Location = new System.Drawing.Point(223, 91);
+            this.chbHasTRKI.Name = "chbHasTRKI";
+            this.chbHasTRKI.Size = new System.Drawing.Size(75, 18);
+            this.chbHasTRKI.TabIndex = 120;
+            this.chbHasTRKI.Text = "ТРКИ";
+            this.chbHasTRKI.UseVisualStyleBackColor = true;
+            // 
             // CardPerson
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -2749,6 +2769,7 @@
             this.gbHostel.ResumeLayout(false);
             this.gbHostel.PerformLayout();
             this.tabPage7.ResumeLayout(false);
+            this.tabPage7.PerformLayout();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
             this.gbMotivateText.ResumeLayout(false);
@@ -2985,6 +3006,8 @@
         private System.Windows.Forms.Label lblSearchingDogovor;
         private System.Windows.Forms.CheckBox chbHasDogovor;
         private System.Windows.Forms.Label lblHasDogovorUser;
+        private System.Windows.Forms.TextBox tbTRKICertificateNumber;
+        private System.Windows.Forms.CheckBox chbHasTRKI;
 
     }
 }

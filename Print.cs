@@ -784,7 +784,8 @@ namespace Priem
                                   x.PassportDate,
                                   x.Person_Contacts.City,
                                   Region = x.Person_Contacts.Region.Name,
-                                  ProgramName = x.Person_EducationInfo.HEProfession,
+                                  AddInfo = x.Person_AdditionalInfo.ExtraInfo,
+                                  Parents = x.Person_AdditionalInfo.PersonInfo,
                                   x.Person_Contacts.Code,
                                   x.Person_Contacts.Street,
                                   x.Person_Contacts.House,
@@ -793,27 +794,28 @@ namespace Priem
                                   x.Person_Contacts.Phone,
                                   x.Person_Contacts.Email,
                                   x.Person_Contacts.Mobiles,
-                                  x.Person_EducationInfo.SchoolExitYear,
-                                  x.Person_EducationInfo.SchoolName,
-                                  AddInfo = x.Person_AdditionalInfo.ExtraInfo,
-                                  Parents = x.Person_AdditionalInfo.PersonInfo,
-                                  x.Person_EducationInfo.StartEnglish,
-                                  x.Person_EducationInfo.EnglishMark,
-                                  x.Person_EducationInfo.IsEqual,
-                                  x.Person_EducationInfo.EqualDocumentNumber,
-                                  CountryEduc = x.Person_EducationInfo.CountryEducId != null ? x.Person_EducationInfo.Country.Name : "",
-                                  x.Person_EducationInfo.CountryEducId,
-                                  Qualification = x.Person_EducationInfo.HEQualification,
-                                  x.Person_EducationInfo.SchoolTypeId,
-                                  EducationDocumentSeries = x.Person_EducationInfo.DiplomSeries,
-                                  EducationDocumentNumber = x.Person_EducationInfo.DiplomNum,
-                                  x.Person_EducationInfo.AttestatRegion,
-                                  x.Person_EducationInfo.AttestatSeries,
-                                  x.Person_EducationInfo.AttestatNum,
-                                  Language = x.Person_EducationInfo.Language.Name,
+                                  x.Person_AdditionalInfo.StartEnglish,
+                                  x.Person_AdditionalInfo.EnglishMark,
+                                  
+                                  Language = x.Person_AdditionalInfo.Language.Name,
+
+                                  x.Person_EducationInfo.First().CountryEducId,
+                                  CountryEduc = x.Person_EducationInfo.First().CountryEducId != null ? x.Person_EducationInfo.First().Country.Name : "",
+                                  Qualification = x.Person_EducationInfo.First().HEQualification,
+                                  x.Person_EducationInfo.First().SchoolTypeId,
+                                  x.Person_EducationInfo.First().SchoolName,
+                                  x.Person_EducationInfo.First().SchoolExitYear,
+                                  x.Person_EducationInfo.First().IsEqual,
+                                  x.Person_EducationInfo.First().EqualDocumentNumber,
+                                  x.Person_EducationInfo.First().AttestatSeries,
+                                  x.Person_EducationInfo.First().AttestatNum,
+                                  EducationDocumentSeries = x.Person_EducationInfo.First().DiplomSeries,
+                                  EducationDocumentNumber = x.Person_EducationInfo.First().DiplomNum,
+                                  ProgramName = x.Person_EducationInfo.First().HEProfession,
+
                                   HasPrivileges = (x.Person_AdditionalInfo.Privileges ?? 0) > 0,
-                                  x.Person_EducationInfo.HasTRKI,
-                                  x.Person_EducationInfo.TRKICertificateNumber,
+                                  x.Person_AdditionalInfo.HasTRKI,
+                                  x.Person_AdditionalInfo.TRKICertificateNumber,
                                   x.Person_AdditionalInfo.HostelEduc,
                                   IsRussia = (x.Person_Contacts.CountryId == 1),
                                   x.HasRussianNationality,
@@ -972,7 +974,7 @@ namespace Priem
                     acrFlds.SetField("Address" + i, splitStr[i - 1]);
 
                 acrFlds.SetField("EnglishMark", person.EnglishMark.ToString());
-                if (person.StartEnglish ?? false)
+                if (person.StartEnglish)
                     acrFlds.SetField("chbEnglishYes", "1");
                 else
                     acrFlds.SetField("chbEnglishNo", "1");
@@ -1003,7 +1005,7 @@ namespace Priem
                     acrFlds.SetField("ExtraParents" + i.ToString(), splitStr[i - 1]);
                 }
 
-                string Attestat = person.SchoolTypeId == 1 ? ("аттестат серия " + (person.AttestatRegion + " " ?? "") + (person.AttestatSeries ?? "") + " №" + (person.AttestatNum ?? "")) :
+                string Attestat = person.SchoolTypeId == 1 ? ("аттестат серия " + (person.AttestatSeries ?? "") + " №" + (person.AttestatNum ?? "")) :
                         ("диплом серия " + (person.EducationDocumentSeries ?? "") + " №" + (person.EducationDocumentNumber ?? ""));
                 acrFlds.SetField("Attestat", Attestat);
                 acrFlds.SetField("Extra", person.AddInfo ?? "");
@@ -1744,7 +1746,7 @@ namespace Priem
                                            Id = extabit.Id,
                                            Рег_Номер = extabit.RegNum,
                                            ФИО = extperson.Surname + " " + extperson.Name + " " + extperson.SecondName,
-                                           Аттестат = extperson.SchoolTypeId == 1 ? extperson.AttestatRegion + " " + extperson.AttestatSeries + "  №" + extperson.AttestatNum : extperson.DiplomSeries + "  №" + extperson.DiplomNum,
+                                           Аттестат = extperson.SchoolTypeId == 1 ? extperson.AttestatSeries + "  №" + extperson.AttestatNum : extperson.DiplomSeries + "  №" + extperson.DiplomNum,
                                            Направление = qentry.LicenseProgramCode + " " + qentry.LicenseProgramName + ", " + qentry.ObrazProgramName + ", " + (qentry.ProfileId != null ? qentry.ProfileName : ""),
                                            Код = qentry.LicenseProgramCode,
                                            Конкурс = competition.Name,
@@ -2137,7 +2139,7 @@ namespace Priem
                                            Id = extabit.Id,
                                            Рег_Номер = extabit.RegNum,
                                            ФИО = extperson.Surname + " " + extperson.Name + " " + extperson.SecondName,
-                                           Аттестат = extperson.SchoolTypeId == 1 ? extperson.AttestatRegion + " " + extperson.AttestatSeries + "  №" + extperson.AttestatNum : extperson.DiplomSeries + "  №" + extperson.DiplomNum,
+                                           Аттестат = extperson.SchoolTypeId == 1 ? extperson.AttestatSeries + "  №" + extperson.AttestatNum : extperson.DiplomSeries + "  №" + extperson.DiplomNum,
                                            Направление = qentry.LicenseProgramCode + " " + qentry.LicenseProgramName + ", " + qentry.ObrazProgramName + ", " + (qentry.ProfileId != null ? qentry.ProfileName : ""),
                                            Код = qentry.LicenseProgramCode,
                                            Конкурс = competition.Name,
@@ -2527,7 +2529,7 @@ namespace Priem
                                            Id = extabit.Id,
                                            Рег_Номер = extabit.RegNum,
                                            ФИО = extperson.Surname + " " + extperson.Name + " " + extperson.SecondName,
-                                           Аттестат = extperson.SchoolTypeId == 1 ? extperson.AttestatRegion + " " + extperson.AttestatSeries + "  №" + extperson.AttestatNum : extperson.DiplomSeries + "  №" + extperson.DiplomNum,
+                                           Аттестат = extperson.SchoolTypeId == 1 ? extperson.AttestatSeries + "  №" + extperson.AttestatNum : extperson.DiplomSeries + "  №" + extperson.DiplomNum,
                                            Направление = qentry.LicenseProgramCode + " " + qentry.LicenseProgramName + ", " + qentry.ObrazProgramName + ", " + (qentry.ProfileId != null ? qentry.ProfileName : ""),
                                            Код = qentry.LicenseProgramCode,
                                            Конкурс = competition.Name,
@@ -2877,7 +2879,7 @@ namespace Priem
                                            Id = extabit.Id,
                                            Рег_Номер = extabit.RegNum,
                                            ФИО = extperson.Surname + " " + extperson.Name + " " + extperson.SecondName,
-                                           Аттестат = extperson.SchoolTypeId == 1 ? extperson.AttestatRegion + " " + extperson.AttestatSeries + "  №" + extperson.AttestatNum : extperson.DiplomSeries + "  №" + extperson.DiplomNum,
+                                           Аттестат = extperson.SchoolTypeId == 1 ? extperson.AttestatSeries + "  №" + extperson.AttestatNum : extperson.DiplomSeries + "  №" + extperson.DiplomNum,
                                            Направление = qentry.LicenseProgramCode + " " + qentry.LicenseProgramName + ", " + qentry.ObrazProgramName + ", " + (qentry.ProfileId != null ? qentry.ProfileName : ""),
                                            Код = qentry.LicenseProgramCode,
                                            Конкурс = competition.Name,

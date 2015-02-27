@@ -364,6 +364,7 @@ namespace Priem
                     AggregateGroupId = ent.SP_LicenseProgram.AggregateGroupId;
                     UpdateAfterAggregateGroup();
                     LicenseProgramId = ent.LicenseProgramId;
+                    UpdateAfterLicenseProgram();
                     ObrazProgramId = ent.ObrazProgramId;
                     UpdateAfterObrazProgram();
                     ProfileId = ent.ProfileId;

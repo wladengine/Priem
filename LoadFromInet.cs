@@ -77,7 +77,10 @@ namespace Priem
                 if (ds.Tables[0].Rows.Count == 0)
                     throw new Exception("Записей не найдено");
 
+                
+
                 DataRow row = ds.Tables[0].Rows[0];
+                
                 extPerson pers = new extPerson();
                
                 int iAbitTypeId = (int)row["AbiturientTypeId"];
@@ -142,8 +145,8 @@ namespace Priem
                 pers.HasExamPass = false;
                 pers.IsExcellent = QueryServ.ToBoolValue(row["IsExcellent"]);
                 pers.LanguageId = (int?)(Util.ToNullObject(row["LanguageId"]));
-                pers.SchoolCity = row["SchoolCity"].ToString();
-                pers.SchoolTypeId = (int?)(Util.ToNullObject(row["SchoolTypeId"]));
+                //pers.SchoolCity = row["SchoolCity"].ToString();
+                //pers.SchoolTypeId = (int?)(Util.ToNullObject(row["SchoolTypeId"]));
                 pers.SchoolName = row["SchoolName"].ToString();
                 pers.SchoolNum = row["SchoolNum"].ToString();
                 int SchoolExitYear = 0;
@@ -151,11 +154,13 @@ namespace Priem
                 pers.SchoolExitYear = SchoolExitYear;
                 pers.CountryEducId = (int?)(Util.ToNullObject(row["CountryEducId"]));
                 pers.RegionEducId = (int?)(Util.ToNullObject(row["RegionEducId"]));
-                pers.AttestatRegion = row["AttestatRegion"].ToString();
                 pers.AttestatSeries = row["AttestatSeries"].ToString();
                 pers.AttestatNum = row["AttestatNum"].ToString();
                 pers.DiplomSeries = row["DiplomSeries"].ToString();
                 pers.DiplomNum = row["DiplomNum"].ToString();
+
+                pers.HasTRKI = (bool)row["HasTRKI"];
+                pers.TRKICertificateNumber = row["TRKICertificateNumber"].ToString();
                 
                 double avg;                
                 if(!double.TryParse(row["SchoolAVG"].ToString(), out avg))
@@ -229,6 +234,25 @@ namespace Priem
             {
                 return null;
             }
+        }
+
+        public List<Person_EducationInfo> GetPersonEducationDocumentsByBarcode(int fileNum)
+        {
+            List<Person_EducationInfo> lstRet = new List<Person_EducationInfo>();
+
+            string PersonEducationFromInet = @"SELECT SchoolCity, SchoolTypeId, SchoolName, SchoolNum, SchoolExitYear, IsExcellent,
+                    CountryEducId, RegionEducId, AttestatSeries, AttestatNum, EducationDocumentSeries AS DiplomSeries, EducationDocumentNumber AS DiplomNum, AvgMark AS SchoolAVG,
+                    (case when SchoolTypeId=1 then '' else SchoolName end) AS HighEducation, HEProfession AS HEProfession, 
+                    HEQualification AS HEQualification, DiplomaTheme AS HEWork, HEEntryYear, HEExitYear, StudyFormId AS HEStudyFormId, 
+                    Parents AS PersonInfo, AddInfo AS ExtraInfo, StartEnglish, EnglishMark, AbiturientTypeId, HostelEduc, SNILS, KladrCode
+                    FROM extPerson_All";
+            DataSet ds_EducationInfo = _bdcInet.GetDataSet(PersonEducationFromInet + " AND extPerson_All.Barcode = " + fileNum);
+            if (ds_EducationInfo.Tables[0].Rows.Count == 0)
+                throw new Exception("Записей не найдено");
+
+
+
+            return lstRet;
         }
 
         public qAbiturient GetAbitByBarcode(int fileNum)

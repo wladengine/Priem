@@ -70,7 +70,7 @@ namespace Priem
                     item.FacultyId = (int)dr["FacultyId"];
                     item.LicenseProgramId = (int)dr["LicenseProgramId"];
                     item.ObrazProgramId = (int)dr["ObrazProgramId"];
-                    item.ProfileId = dr.Field<int>("ProfileId"); 
+                    item.ProfileId = dr.Field<int?>("ProfileId") ?? 0; 
                     //item.ProfileName = dr["ProfileName"].ToString();
                     item.StudyBasisId = (int)dr["StudyBasisId"];
                     item.StudyFormId = (int)dr["StudyFormId"];
@@ -81,9 +81,8 @@ namespace Priem
                     item.IsSecond = (bool)dr["IsSecond"];                    
                     item.KCP = dr.Field<int?>("KCP");
                     
-                    context.Entry_Insert(entryId, (int)dr["FacultyId"], (int)dr["LicenseProgramId"], dr["LicenseProgramName"].ToString(), 
-                            dr["LicenseProgramCode"].ToString(), (int)dr["ObrazProgramId"], dr["ObrazProgramName"].ToString(), dr["ObrazProgramNumber"].ToString(),
-                            dr["ObrazProgramCrypt"].ToString(), dr.Field<Guid?>("ProfileId"), dr["ProfileName"].ToString(), (int)dr["StudyBasisId"],
+                    context.Entry_Insert(entryId, (int)dr["FacultyId"], (int)dr["LicenseProgramId"],
+                            (int)dr["ObrazProgramId"], dr.Field<int?>("ProfileId") ?? 0, (int)dr["StudyBasisId"],
                             (int)dr["StudyFormId"], (int)dr["StudyLevelId"], (Guid)dr["StudyPlanId"], dr["StudyPlanNumber"].ToString(),
                             dr["ProgramModeShortName"].ToString(), (bool)dr["IsSecond"], (bool)dr["IsReduced"], (bool)dr["IsParallel"], dr.Field<int?>("KCP"), null, null);
 
@@ -232,13 +231,10 @@ namespace Priem
             if (!MainClass.IsEntryChanger())
                 return;
 
-            DataSet ds = _bdcEduc.GetDataSet(string.Format(@"SELECT Id, FacultyId, FacultyCode, LicenseProgramId, LicenseProgramName, LicenseProgramShortName, LicenseProgramCode, ObrazProgramId, 
-                      ObrazProgramName, ObrazProgramNumber, ObrazProgramCrypt, ProfileId, ProfileName, StudyBasisId, StudyBasisName, StudyBasisAcronym, 
-                      StudyFormId, StudyFormName, ProgramModeId, ProgramModeName, ProgramModeShortName, ProgramModeAcronym, KCP, StudyPlanId, 
-                      StudyPlanNumber, SeparateEntryProfileInSPId, StudyLevelName, FacultyName, PlanYearId, PlanYear, StudyLevelId, FacultyNameEng, 
-                      ObrazProgramNameEng, LicenseProgramNameEng, ProgramModeNameEng, ProgramTypeNameEng, StudyFormNameEng, StudyLevelNameEng, 
-                      ProfileNameEng, StudyBasisNameEng, IsSecond, IsSecondPrint, IsParallel, IsReduced, IsElectronic, IsDistance, QualificationId, QualificationCode, 
-                      QualificationName, AggregateGroupId, AggregateGroupName, EducationPeriodName, EducationPeriodId FROM ed.extCurrentEntry"));
+            DataSet ds = _bdcEduc.GetDataSet(string.Format(@"SELECT Id, FacultyId, LicenseProgramId, ObrazProgramId, 
+                      ProfileId, StudyBasisId, StudyFormId, ProgramModeId, KCP, StudyPlanId, 
+                      StudyPlanNumber, PlanYearId, PlanYear, StudyLevelId, IsSecond, IsSecondPrint, IsParallel, IsReduced, IsElectronic, IsDistance, QualificationId, 
+                      AggregateGroupId, EducationPeriodId FROM ed.extCurrentEntry"));
 
             using (PriemEntities context = new PriemEntities())
             using (System.Transactions.TransactionScope tran = new System.Transactions.TransactionScope())
@@ -261,7 +257,6 @@ namespace Priem
                             item.LicenseProgramId = (int)dr["LicenseProgramId"];
                             item.ObrazProgramId = (int)dr["ObrazProgramId"];
                             item.ProfileId = dr.Field<int?>("ProfileId") ?? 0;
-                            //item.ProfileName = dr["ProfileName"].ToString();
                             item.StudyBasisId = (int)dr["StudyBasisId"];
                             item.StudyFormId = (int)dr["StudyFormId"];
                             item.StudyLevelId = (int)dr["StudyLevelId"];
@@ -271,9 +266,8 @@ namespace Priem
                             item.IsSecond = (bool)dr["IsSecond"];
                             item.KCP = dr.Field<int?>("KCP");
 
-                            context.Entry_Insert(entryId, (int)dr["FacultyId"], (int)dr["LicenseProgramId"], dr["LicenseProgramName"].ToString(),
-                                    dr["LicenseProgramCode"].ToString(), (int)dr["ObrazProgramId"], dr["ObrazProgramName"].ToString(), dr["ObrazProgramNumber"].ToString(),
-                                    dr["ObrazProgramCrypt"].ToString(), dr.Field<Guid?>("ProfileId"), dr["ProfileName"].ToString(), (int)dr["StudyBasisId"],
+                            context.Entry_Insert(entryId, (int)dr["FacultyId"], (int)dr["LicenseProgramId"], (int)dr["ObrazProgramId"], 
+                                dr.Field<int?>("ProfileId") ?? 0, (int)dr["StudyBasisId"],
                                     (int)dr["StudyFormId"], (int)dr["StudyLevelId"], (Guid)dr["StudyPlanId"], dr["StudyPlanNumber"].ToString(),
                                     dr["ProgramModeShortName"].ToString(), (bool)dr["IsSecond"], (bool)dr["IsReduced"], (bool)dr["IsParallel"], dr.Field<int?>("KCP"), null, null);
                         }
@@ -285,18 +279,14 @@ namespace Priem
 
                         if (cntEnt == 0)
                         {
-                            query = @"INSERT INTO Entry (Id, SemesterId, StudyPlanId, StudyPlanNumber, FacultyId, FacultyName, LicenseProgramId, LicenseProgramName, 
-LicenseProgramNameEng, LicenseProgramCode, ObrazProgramId, ObrazProgramName, ObrazProgramNameEng, ObrazProgramCrypt, ProfileName, 
-ProfileNameEng, StudyBasisId, StudyBasisName, StudyBasisNameEng, StudyBasisAcronym, StudyFormId, StudyFormName, StudyFormNameEng, 
-StudyLevelId, StudyLevelName, SeparateEntryProfileInSPId, ProfileId, IsSecond, IsReduced, IsParallel, IsExpress, IsElectronic, IsDistance, 
-CampaignYear, QualificationId, QualificationName, AggregateGroupId, AggregateGroupName, ProgramModeId, ProgramModeName, EducationPeriodId, 
-EducationPeriodName, DateOfClose, DateOfStart, IsUsedForPriem) VALUES
-(@Id, 1, @StudyPlanId, @StudyPlanNumber, @FacultyId, @FacultyName, @LicenseProgramId, @LicenseProgramName, 
-@LicenseProgramNameEng, @LicenseProgramCode, @ObrazProgramId, @ObrazProgramName, @ObrazProgramNameEng, @ObrazProgramCrypt, @ProfileName, 
-@ProfileNameEng, @StudyBasisId, @StudyBasisName, @StudyBasisNameEng, @StudyBasisAcronym, @StudyFormId, @StudyFormName, @StudyFormNameEng, 
-@StudyLevelId, @StudyLevelName, @SeparateEntryProfileInSPId, @ProfileId, @IsSecond, @IsReduced, @IsParallel, @IsExpress, @IsElectronic, @IsDistance, 
-@CampaignYear, @QualificationId, @QualificationName, @AggregateGroupId, @AggregateGroupName, @ProgramModeId, @ProgramModeName, @EducationPeriodId, 
-@EducationPeriodName, @DateOfClose, @DateOfStart, @IsUsedForPriem)";
+                            query = @"INSERT INTO Entry (Id, SemesterId, StudyPlanId, StudyPlanNumber, FacultyId, LicenseProgramId, ObrazProgramId, StudyBasisId, StudyFormId, 
+StudyLevelId, ProfileId, IsSecond, IsReduced, IsParallel, IsExpress, IsElectronic, IsDistance, 
+CampaignYear, QualificationId, AggregateGroupId, ProgramModeId, EducationPeriodId, 
+DateOfClose, DateOfStart, IsUsedForPriem) VALUES
+(@Id, 1, @StudyPlanId, @StudyPlanNumber, @FacultyId, @LicenseProgramId, @ObrazProgramId, @StudyBasisId, @StudyFormId, 
+@StudyLevelId, @ProfileId, @IsSecond, @IsReduced, @IsParallel, @IsExpress, @IsElectronic, @IsDistance, 
+@CampaignYear, @QualificationId,  @AggregateGroupId, @ProgramModeId,  @EducationPeriodId, 
+@DateOfClose, @DateOfStart, @IsUsedForPriem)";
 
                             slParams.Clear();
                             slParams.Add("@Id", entryId);
@@ -305,26 +295,11 @@ EducationPeriodName, DateOfClose, DateOfStart, IsUsedForPriem) VALUES
                             slParams.Add("@FacultyId", dr.Field<int>("FacultyId"));
                             slParams.Add("@FacultyName", dr.Field<string>("FacultyName"));
                             slParams.Add("@LicenseProgramId", dr.Field<int>("LicenseProgramId"));
-                            slParams.Add("@LicenseProgramName", dr.Field<string>("LicenseProgramName"));
-                            slParams.Add("@LicenseProgramNameEng", dr.Field<string>("LicenseProgramNameEng"));
-                            slParams.Add("@LicenseProgramCode", dr.Field<string>("LicenseProgramCode"));
                             slParams.Add("@ObrazProgramId", dr.Field<int>("ObrazProgramId"));
-                            slParams.Add("@ObrazProgramName", dr.Field<string>("ObrazProgramName"));
-                            slParams.Add("@ObrazProgramNameEng", dr.Field<string>("ObrazProgramNameEng"));
-                            slParams.Add("@ObrazProgramCrypt", dr.Field<string>("ObrazProgramCrypt"));
-                            slParams.Add("@ProfileName", dr.Field<string>("ProfileName"));
-                            slParams.Add("@ProfileNameEng", dr.Field<string>("ProfileNameEng"));
                             slParams.Add("@StudyBasisId", dr.Field<int>("StudyBasisId"));
-                            slParams.Add("@StudyBasisName", dr.Field<string>("StudyBasisName"));
-                            slParams.Add("@StudyBasisNameEng", dr.Field<string>("StudyBasisNameEng"));
-                            slParams.Add("@StudyBasisAcronym", dr.Field<string>("StudyBasisAcronym"));
                             slParams.Add("@StudyFormId", dr.Field<int>("StudyFormId"));
-                            slParams.Add("@StudyFormName", dr.Field<string>("StudyFormName"));
-                            slParams.Add("@StudyFormNameEng", dr.Field<string>("StudyFormNameEng"));
                             slParams.Add("@StudyLevelId", dr.Field<int>("StudyLevelId"));
-                            slParams.Add("@StudyLevelName", dr.Field<string>("StudyLevelName"));
-                            slParams.Add("@SeparateEntryProfileInSPId", dr.Field<Guid>("SeparateEntryProfileInSPId"));
-                            slParams.Add("@ProfileId", dr.Field<Guid>("ProfileId"));
+                            slParams.Add("@ProfileId", dr.Field<int?>("ProfileId") ?? 0);
                             slParams.Add("@IsSecond", dr.Field<bool>("IsSecond"));
                             slParams.Add("@IsReduced", dr.Field<bool>("IsReduced"));
                             slParams.Add("@IsParallel", dr.Field<bool>("IsParallel"));
@@ -333,23 +308,18 @@ EducationPeriodName, DateOfClose, DateOfStart, IsUsedForPriem) VALUES
                             slParams.Add("@IsDistance", dr.Field<bool>("IsDistance"));
                             slParams.Add("@CampaignYear", MainClass.iPriemYear);
                             slParams.Add("@QualificationId", dr.Field<int>("QualificationId"));
-                            slParams.Add("@QualificationName", dr.Field<string>("QualificationName"));
                             slParams.Add("@AggregateGroupId", dr.Field<int>("AggregateGroupId"));
-                            slParams.Add("@AggregateGroupName", dr.Field<string>("AggregateGroupName"));
                             slParams.Add("@ProgramModeId", dr.Field<int>("ProgramModeId"));
-                            slParams.Add("@ProgramModeName", dr.Field<string>("ProgramModeName"));
                             slParams.Add("@EducationPeriodId", dr.Field<int>("EducationPeriodId"));
-                            slParams.Add("@EducationPeriodName", dr.Field<string>("EducationPeriodName"));
                             slParams.Add("@DateOfClose", new DateTime(MainClass.iPriemYear, 7, 20));
                             slParams.Add("@DateOfStart", dr.Field<int>("StudyLevelId") == 17 ? new DateTime(MainClass.iPriemYear, 6, 20) : new DateTime(MainClass.iPriemYear, 3, 1));
                             slParams.Add("@IsUsedForPriem", true);
 
-                            context.Entry_Insert(entryId, (int)dr["FacultyId"], (int)dr["LicenseProgramId"], dr["LicenseProgramName"].ToString(),
-                                    dr["LicenseProgramCode"].ToString(), (int)dr["ObrazProgramId"], dr["ObrazProgramName"].ToString(), dr["ObrazProgramNumber"].ToString(),
-                                    dr["ObrazProgramCrypt"].ToString(), dr.Field<Guid?>("ProfileId"), dr["ProfileName"].ToString(), (int)dr["StudyBasisId"],
-                                    (int)dr["StudyFormId"], (int)dr["StudyLevelId"], (Guid)dr["StudyPlanId"], dr["StudyPlanNumber"].ToString(),
+                            context.Entry_Insert(entryId, (int)dr["FacultyId"], (int)dr["LicenseProgramId"], (int)dr["ObrazProgramId"], dr.Field<int?>("ProfileId") ?? 0, 
+                                (int)dr["StudyBasisId"], (int)dr["StudyFormId"], (int)dr["StudyLevelId"], (Guid)dr["StudyPlanId"], dr["StudyPlanNumber"].ToString(),
                                     dr["ProgramModeShortName"].ToString(), (bool)dr["IsSecond"], (bool)dr["IsReduced"], (bool)dr["IsParallel"], dr.Field<int?>("KCP"), null, null);
 
+                            MainClass.BdcOnlineReadWrite.ExecuteQuery(query, slParams);
                         }
                     }
 
@@ -435,7 +405,6 @@ EducationPeriodName, DateOfClose, DateOfStart, IsUsedForPriem) VALUES
       ,[StudyFormId]
       ,[StudyLevelId]
       ,[ProfileId]
-      ,ProfileName
       ,[IsSecond]
       ,[IsReduced]
       ,[IsParallel]
@@ -455,7 +424,6 @@ VALUES
       ,@StudyFormId
       ,@StudyLevelId
       ,@ProfileId
-      ,@ProfileName
       ,@IsSecond
       ,@IsReduced
       ,@IsParallel
@@ -499,7 +467,6 @@ WHERE
                             slParams.Add("@IsReduced", Entr.IsReduced);
                             slParams.Add("@IsSecond", Entr.IsClosed);
                             slParams.AddVal("@ProfileId", Entr.ProfileId);
-                            
 
                             slParams.Add("@StudyLevelId", Entr.StudyLevelId);
                             slParams.Add("@StudyFormId", Entr.StudyFormId);

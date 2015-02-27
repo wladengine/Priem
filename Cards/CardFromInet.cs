@@ -27,6 +27,7 @@ namespace Priem
 
         LoadFromInet load;
         private List<ShortCompetition> LstCompetitions;
+        private List<Person_EducationInfo> lstEducationInfo;
 
         private DocsClass _docs;
 
@@ -637,29 +638,7 @@ namespace Priem
                 KladrCode = person.KladrCode;
                 HostelAbit = person.HostelAbit ?? false;
                 HostelEduc = person.HostelEduc ?? false;
-                IsExcellent = person.IsExcellent ?? false;
                 LanguageId = person.LanguageId;
-                SchoolCity = person.SchoolCity;
-                SchoolTypeId = person.SchoolTypeId;
-                SchoolName = person.SchoolName;
-                SchoolNum = person.SchoolNum;
-                SchoolExitYear = person.SchoolExitYear;
-                CountryEducId = person.CountryEducId;
-                RegionEducId = person.RegionEducId;
-                IsEqual = person.IsEqual ?? false;
-                AttestatRegion = person.AttestatRegion;
-                AttestatSeries = person.AttestatSeries;
-                AttestatNum = person.AttestatNum;
-                DiplomSeries = person.DiplomSeries;
-                DiplomNum = person.DiplomNum;
-                SchoolAVG = person.SchoolAVG;
-                HighEducation = person.HighEducation;
-                HEProfession = person.HEProfession;
-                HEQualification = person.HEQualification;
-                HEEntryYear = person.HEEntryYear;
-                HEExitYear = person.HEExitYear;
-                HEWork = person.HEWork;
-                HEStudyFormId = person.HEStudyFormId;
                 Stag = person.Stag;
                 WorkPlace = person.WorkPlace;
                 MSVuz = person.MSVuz;
@@ -671,6 +650,8 @@ namespace Priem
                 ScienceWork = person.ScienceWork;
                 StartEnglish = person.StartEnglish ?? false;
                 EnglishMark = person.EnglishMark;
+
+                FillEducationData(load.GetPersonEducationDocumentsByBarcode(_personBarc.Value));
 
                 if (MainClass.dbType == PriemType.Priem)
                 {
@@ -687,42 +668,6 @@ namespace Priem
                 WinFormsServ.Error("Ошибка при заполнении формы " + ex.Message);
             } 
         }
-
-        //старый метод FillApplication - прощай, молодость!
-        //public void FillApplication()
-        //{
-        //    try
-        //    {
-        //        if (_closeAbit || _abitBarc == null)
-        //            return;
-                               
-        //        qAbiturient abit = load.GetAbitByBarcode(_abitBarc.Value);
-                
-        //        if (abit == null)
-        //        {
-        //            WinFormsServ.Error("Заявления отсутствуют!");
-        //            _isModified = false;
-        //            this.Close();
-        //        }
-
-        //        IsSecond = abit.IsSecond;
-        //        LicenseProgramId = abit.LicenseProgramId;
-        //        ObrazProgramId = abit.ObrazProgramId;
-        //        ProfileId = abit.ProfileId;
-        //        FacultyId = abit.FacultyId;
-        //        StudyFormId = abit.StudyFormId;
-        //        StudyBasisId = abit.StudyBasisId;
-        //        DocDate = (MainClass.dbType == PriemType.PriemMag) ? abit.DocDate : DateTime.Now;
-        //        Priority = abit.Priority;
-
-        //        lblHasMotivationLetter.Visible = MainClass.GetHasMotivationLetter(_abitBarc, _personBarc);
-        //        lblHasEssay.Visible = MainClass.GetHasEssay(_abitBarc, _personBarc);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        WinFormsServ.Error("Ошибка при заполнении формы заявления" + ex.Message);
-        //    }
-        //}
 
         public void FillApplication()
         {
@@ -1013,7 +958,35 @@ FROM [extApplicationDetails] WHERE [ApplicationId]=@AppId";
                 WinFormsServ.Error("Ошибка при заполнении формы " + de.Message);
             }
         }
-           
+        private void FillEducationData(List<Person_EducationInfo> lstVals)
+        {
+            lstEducationInfo = lstVals;
+
+            dgvEducationDocuments.DataSource = lstVals.Select(x => new
+            {
+                x.Id,
+                School = x.SchoolName,
+                Series = (x.SchoolTypeId == 1 ? x.AttestatSeries : x.DiplomSeries),
+                Num = x.SchoolTypeId == 1 ? x.AttestatNum : x.DiplomNum,
+            });
+
+            dgvEducationDocuments.Columns["Id"].Visible = false;
+            dgvEducationDocuments.Columns["School"].HeaderText = "Уч. учреждение";
+            dgvEducationDocuments.Columns["School"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            dgvEducationDocuments.Columns["Series"].HeaderText = "Серия";
+            dgvEducationDocuments.Columns["Series"].AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells;
+            dgvEducationDocuments.Columns["Num"].HeaderText = "Номер";
+            dgvEducationDocuments.Columns["Num"].AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells;
+
+            if (lstVals.Count > 0)
+                ViewEducationInfo(lstVals.First().Id);
+        }
+
+        private void ViewEducationInfo(int id)
+        {
+
+        }
+
         #region Save
 
         // проверка на уникальность абитуриента
@@ -1024,9 +997,9 @@ FROM [extApplicationDetails] WHERE [ApplicationId]=@AppId";
                 ObjectParameter boolPar = new ObjectParameter("result", typeof(bool));
 
                 if(_Id == null)
-                    context.CheckPersonIdent(Surname, PersonName, SecondName, BirthDate, PassportSeries, PassportNumber, AttestatRegion, AttestatSeries, AttestatNum, boolPar);
+                    context.CheckPersonIdent(Surname, PersonName, SecondName, BirthDate, PassportSeries, PassportNumber, AttestatSeries, AttestatNum, boolPar);
                 else
-                    context.CheckPersonIdentWithId(Surname, PersonName, SecondName, BirthDate, PassportSeries, PassportNumber, AttestatRegion, AttestatSeries, AttestatNum, GuidId, boolPar);
+                    context.CheckPersonIdentWithId(Surname, PersonName, SecondName, BirthDate, PassportSeries, PassportNumber, AttestatSeries, AttestatNum, GuidId, boolPar);
 
                 return Convert.ToBoolean(boolPar.Value);
             }
@@ -1473,13 +1446,12 @@ FROM [extApplicationDetails] WHERE [ApplicationId]=@AppId";
                                 context.Person_insert(_personBarc, PersonName, SecondName, Surname, BirthDate, BirthPlace, PassportTypeId, PassportSeries, PassportNumber,
                                     PassportAuthor, PassportDate, Sex, CountryId, NationalityId, RegionId, Phone, Mobiles, Email,
                                     Code, City, Street, House, Korpus, Flat, CodeReal, CityReal, StreetReal, HouseReal, KorpusReal, FlatReal, KladrCode, HostelAbit, HostelEduc, false,
-                                    null, false, null, IsExcellent, LanguageId, SchoolCity, SchoolTypeId, SchoolName, SchoolNum, SchoolExitYear,
-                                    SchoolAVG, CountryEducId, RegionEducId, IsEqual, AttestatRegion, AttestatSeries, AttestatNum, DiplomSeries, DiplomNum, HighEducation, HEProfession,
-                                    HEQualification, HEEntryYear, HEExitYear, HEStudyFormId, HEWork, Stag, WorkPlace, MSVuz, MSCourse, MSStudyFormId, Privileges, PassportCode,
-                                    PersonalCode, PersonInfo, ExtraInfo, ScienceWork, StartEnglish, EnglishMark, EgeInSpbgu, SNILS, entId);
+                                    null, false, null, LanguageId, Stag, WorkPlace, MSVuz, MSCourse, MSStudyFormId, Privileges, PassportCode,
+                                    PersonalCode, PersonInfo, ExtraInfo, ScienceWork, StartEnglish, EnglishMark, EgeInSpbgu, SNILS, HasTRKI, TRKICertificateNumber, entId);
 
                                 personId = (Guid)entId.Value;
 
+                                SaveEducationDocuments();
                                 SaveEgeFirst();
                                 transaction.Complete();
                             }
@@ -1602,16 +1574,6 @@ FROM [extApplicationDetails] WHERE [ApplicationId]=@AppId";
                                     foreach (var ProfInOPIE in OPIE.ListProfiles)
                                     {
                                         context.Abiturient_UpdateProfileInObrazProgramInEntryPriority(ProfInOPIE.Id, ProfInOPIE.ProfileInObrazProgramInEntryPriority, ApplicationId);
-                                        //context.ApplicationDetails.AddObject(new ApplicationDetails()
-                                        //{
-                                        //    ApplicationId = ApplicationId,
-                                        //    Id = Guid.NewGuid(),
-                                        //    ObrazProgramInEntryId = OPIE.Id,
-                                        //    ObrazProgramInEntryPriority = OPIE.ObrazProgramInEntryPriority,
-                                        //    ProfileInObrazProgramInEntryId = ProfInOPIE.Id,
-                                        //    ProfileInObrazProgramInEntryPriority = ProfInOPIE.ProfileInObrazProgramInEntryPriority
-                                        //});
-
                                         context.ApplicationVersionDetails.AddObject(new ApplicationVersionDetails()
                                         {
                                             ApplicationVersionId = ApplicationVersionId,
@@ -1626,10 +1588,6 @@ FROM [extApplicationDetails] WHERE [ApplicationId]=@AppId";
                         }
 
                         context.SaveChanges();
-
-                        //context.Abiturient_Insert(personId, EntryId, CompetitionId, HostelEduc, IsListener, WithHE, false, false, null, DocDate, DateTime.Now,
-                        //AttDocOrigin, EgeDocOrigin, false, false, null, OtherCompetitionId, CelCompetitionId, CelCompetitionText, LanguageId, false,
-                        //Priority, _abitBarc, entId);
                     }
                     
                     trans.Complete();
@@ -1646,7 +1604,6 @@ FROM [extApplicationDetails] WHERE [ApplicationId]=@AppId";
                 return false;
             }
         }
-       
         private void SaveEgeFirst()
         {
             if (MainClass.dbType == PriemType.PriemMag)
@@ -1699,6 +1656,28 @@ FROM [extApplicationDetails] WHERE [ApplicationId]=@AppId";
             catch (Exception de)
             {          
                 WinFormsServ.Error("Ошибка сохранения данные ЕГЭ - данные не были сохранены. Введите их заново! \n" + de.Message);
+            }
+        }
+        private void SaveEducationDocuments()
+        {
+            try
+            {
+                ObjectParameter idParam = new ObjectParameter("id", typeof(int));
+
+                using (PriemEntities context = new PriemEntities())
+                {
+                    foreach (var ED in lstEducationInfo)
+                    {
+                        context.Person_EducationInfo_insert(personId, ED.IsExcellent, ED.SchoolCity, ED.SchoolTypeId, ED.SchoolName,
+                            ED.SchoolNum, ED.SchoolExitYear, ED.SchoolAVG, ED.CountryEducId, ED.RegionEducId, ED.IsEqual,
+                            ED.AttestatSeries, ED.AttestatNum, ED.DiplomSeries, ED.DiplomNum, ED.HighEducation,
+                            ED.HEProfession, ED.HEQualification, ED.HEEntryYear, ED.HEExitYear, ED.HEStudyFormId, ED.HEWork, idParam);
+                    }
+                }
+            }
+            catch (Exception de)
+            {
+                WinFormsServ.Error("Ошибка сохранения данных об образовании - данные не были сохранены. \n" + de.Message);
             }
         }
 

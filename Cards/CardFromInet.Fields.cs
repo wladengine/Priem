@@ -278,11 +278,6 @@ namespace Priem
             get { return chbIsExcellent.Checked; }
             set { chbIsExcellent.Checked = value; }
         }
-        public string AttestatRegion
-        {
-            get { return tbAttestatRegion.Text.Trim(); }
-            set { tbAttestatRegion.Text = value; }
-        }
         public string AttestatSeries
         {
             get { return cbAttestatSeries.Text.Trim(); }
@@ -305,8 +300,8 @@ namespace Priem
         }
         public string HighEducation
         {
-            get { return tbHighEducation.Text.Trim(); }
-            set { tbHighEducation.Text = value; }
+            get { return tbSchoolName.Text.Trim(); }
+            set { tbSchoolName.Text = value; }
         }
         public string HEProfession
         {
@@ -486,186 +481,15 @@ namespace Priem
             get { return chbEgeInSpbgu.Checked; }
             set { chbEgeInSpbgu.Checked = value; }
         }
-
-        //public Guid? EntryId
-        //{
-        //    get
-        //    {
-        //        try
-        //        {
-        //            using (PriemEntities context = new PriemEntities())
-        //            {
-        //                Guid? entId = (from ent in context.qEntry
-        //                               where ent.IsSecond == IsSecond
-        //                                && ent.LicenseProgramId == LicenseProgramId
-        //                                && ent.ObrazProgramId == ObrazProgramId
-        //                                && (ProfileId == null ? ent.ProfileId == null : ent.ProfileId == ProfileId)   
-        //                                && ent.StudyFormId == StudyFormId
-        //                                && ent.StudyBasisId == StudyBasisId
-        //                               select ent.Id).FirstOrDefault();
-        //                return entId;
-        //            }
-        //        }
-        //        catch
-        //        {
-        //            return null;
-        //        }
-        //    }
-        //}
-        //public int? FacultyId
-        //{
-        //    get { return ComboServ.GetComboIdInt(cbFaculty); }
-        //    set { ComboServ.SetComboId(cbFaculty, value); }
-        //}
-        //public int? LicenseProgramId
-        //{
-        //    get { return ComboServ.GetComboIdInt(cbLicenseProgram); }
-        //    set { ComboServ.SetComboId(cbLicenseProgram, value); }
-        //}
-        //public int? ObrazProgramId
-        //{
-        //    get { return ComboServ.GetComboIdInt(cbObrazProgram); }
-        //    set { ComboServ.SetComboId(cbObrazProgram, value); }
-        //}
-        //public Guid? ProfileId
-        //{
-        //    get
-        //    {
-        //        string prId = ComboServ.GetComboId(cbProfile);
-        //        if (string.IsNullOrEmpty(prId))
-        //            return null;
-        //        else
-        //            return new Guid(prId);
-        //    }
-        //    set
-        //    {
-        //        if (value == null)
-        //            ComboServ.SetComboId(cbProfile, (string)null);
-        //        else
-        //            ComboServ.SetComboId(cbProfile, value.ToString());
-        //    }
-        //}
-        //public int? StudyFormId
-        //{
-        //    get { return ComboServ.GetComboIdInt(cbStudyForm); }
-        //    set { ComboServ.SetComboId(cbStudyForm, value); }
-        //}
-        //public int? StudyBasisId
-        //{
-        //    get { return ComboServ.GetComboIdInt(cbStudyBasis); }
-        //    set { ComboServ.SetComboId(cbStudyBasis, value); }
-        //}
-
-        
-
-        //public int? CompetitionId
-        //{
-        //    get { return ComboServ.GetComboIdInt(cbCompetition); }
-        //    set { ComboServ.SetComboId(cbCompetition, value); }
-        //}
-        //public bool IsSecond
-        //{
-        //    get { return chbIsSecond.Checked; }
-        //    set { chbIsSecond.Checked = value; }
-        //}
-        //public bool WithHE
-        //{
-        //    get { return chbWithHE.Checked; }
-        //    set { chbWithHE.Checked = value; }
-        //}
-        //public bool IsListener
-        //{
-        //    get { return chbIsListener.Checked; }
-        //    set { chbIsListener.Checked = value; }
-        //}
-        //public DateTime? DocDate
-        //{
-        //    get { return dtDocDate.Value.Date; }
-        //    set
-        //    {
-        //        if (value.HasValue)
-        //            dtDocDate.Value = value.Value;
-        //    }
-        //}
-        //public DateTime? DocInsertDate
-        //{
-        //    get { return dtDocInsertDate.Value.Date; }
-        //    set
-        //    {
-        //        if (value.HasValue)
-        //            dtDocInsertDate.Value = value.Value;
-        //    }
-        //}
-        //public bool AttDocOrigin
-        //{
-        //    get { return chbAttOriginal.Checked; }
-        //    set { chbAttOriginal.Checked = value; }
-        //}
-        //public bool EgeDocOrigin
-        //{
-        //    get { return chbEgeDocOriginal.Checked; }
-        //    set { chbEgeDocOriginal.Checked = value; }
-        //}  
-       
-        //public int? OtherCompetitionId
-        //{
-        //    get
-        //    {
-        //        if (CompetitionId == 6 && cbOtherCompetition.SelectedIndex != 0)
-        //            return ComboServ.GetComboIdInt(cbOtherCompetition);
-        //        else
-        //            return null;
-        //    }
-        //    set
-        //    {
-        //        if (CompetitionId == 6)
-        //            if (value != null)
-        //                ComboServ.SetComboId(cbOtherCompetition, value);
-        //    }
-        //}
-        //public int? CelCompetitionId
-        //{
-        //    get
-        //    {
-        //        if (CompetitionId == 6 && cbCelCompetition.SelectedIndex != 0)
-        //            return ComboServ.GetComboIdInt(cbCelCompetition);
-        //        else
-        //            return null;
-        //    }
-        //    set
-        //    {
-        //        if (CompetitionId == 6)
-        //            if (value != null)
-        //                ComboServ.SetComboId(cbCelCompetition, value);
-        //    }
-        //}
-        //public string CelCompetitionText
-        //{
-        //    get
-        //    {
-        //        if (CompetitionId == 6)
-        //            return tbCelCompetitionText.Text;
-        //        else
-        //            return string.Empty;
-        //    }
-        //    set
-        //    {
-        //        if (CompetitionId == 6)
-        //            tbCelCompetitionText.Text = value;
-        //    }
-        //}  
-
-        //public double? Priority
-        //{
-        //    get
-        //    {
-        //        double j;
-        //        if (double.TryParse(tbPriority.Text.Trim(), out j))
-        //            return j;
-        //        else
-        //            return null;
-        //    }
-        //    set { tbPriority.Text = Util.ToStr(value); }
-        //}
+        public bool HasTRKI
+        {
+            get { return chbHasTRKI.Checked; }
+            set { chbHasTRKI.Checked = value; }
+        }
+        public string TRKICertificateNumber
+        {
+            get { return tbTRKICertificateNumber.Text.Trim(); }
+            set { tbTRKICertificateNumber.Text = value; }
+        }
     }
 }

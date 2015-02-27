@@ -266,29 +266,29 @@ namespace Priem
             HostelFacultyId = person.HostelFacultyId;
             HasExamPass = person.HasExamPass;
             ExamPassFacultyId = person.ExamPassFacultyId;
-            IsExcellent = person.IsExcellent;
+            //IsExcellent = person.IsExcellent;
             LanguageId = person.LanguageId;
-            SchoolCity = person.SchoolCity;
-            SchoolTypeId = person.SchoolTypeId;
-            SchoolName = person.SchoolName;
-            SchoolNum = person.SchoolNum;
-            SchoolExitYear = person.SchoolExitYear;
-            CountryEducId = person.CountryEducId;
-            RegionEducId = person.RegionEducId;
-            IsEqual = person.IsEqual;
-            AttestatRegion = person.AttestatRegion;
-            AttestatSeries = person.AttestatSeries;
-            AttestatNum = person.AttestatNum;
-            DiplomSeries = person.DiplomSeries;
-            DiplomNum = person.DiplomNum;
-            SchoolAVG = person.SchoolAVG;
-            HighEducation = person.HighEducation;
-            HEProfession = person.HEProfession;
-            HEQualification = person.HEQualification;
-            HEEntryYear = person.HEEntryYear;
-            HEExitYear = person.HEExitYear;
-            HEWork = person.HEWork;
-            HEStudyFormId = person.HEStudyFormId;
+            //SchoolCity = person.SchoolCity;
+            //SchoolTypeId = person.SchoolTypeId;
+            //SchoolName = person.SchoolName;
+            //SchoolNum = person.SchoolNum;
+            //SchoolExitYear = person.SchoolExitYear;
+            //CountryEducId = person.CountryEducId;
+            //RegionEducId = person.RegionEducId;
+            //IsEqual = person.IsEqual;
+            //AttestatRegion = person.AttestatRegion;
+            //AttestatSeries = person.AttestatSeries;
+            //AttestatNum = person.AttestatNum;
+            //DiplomSeries = person.DiplomSeries;
+            //DiplomNum = person.DiplomNum;
+            //SchoolAVG = person.SchoolAVG;
+            //HighEducation = person.HighEducation;
+            //HEProfession = person.HEProfession;
+            //HEQualification = person.HEQualification;
+            //HEEntryYear = person.HEEntryYear;
+            //HEExitYear = person.HEExitYear;
+            //HEWork = person.HEWork;
+            //HEStudyFormId = person.HEStudyFormId;
             Stag = person.Stag;
             WorkPlace = person.WorkPlace;
             MSVuz = person.MSVuz;
@@ -821,20 +821,6 @@ namespace Priem
 
         #region Save
 
-        //Вроде как эта функция пережёвывает апострофы в понятные серверу символы. Типа как mysql_escape_string()
-        private string GetOConnorString(string source)
-        {
-            string res = "";
-            foreach (char ch in source.ToCharArray())
-            {
-                if (ch == '\'')
-                    res += '\\' + '\'';
-                else
-                    res += ch;
-            }
-            return res;
-        }
-
         // проверка на уникальность абитуриента
         private bool CheckIdent()
         {
@@ -843,9 +829,9 @@ namespace Priem
                 ObjectParameter boolPar = new ObjectParameter("result", typeof(bool));
 
                 if(_Id == null)
-                    context.CheckPersonIdent(GetOConnorString(Surname), Name, SecondName, BirthDate, PassportSeries, PassportNumber, AttestatRegion, AttestatSeries, AttestatNum, boolPar);
+                    context.CheckPersonIdent(Surname, Name, SecondName, BirthDate, PassportSeries, PassportNumber, AttestatSeries, AttestatNum, boolPar);
                 else
-                    context.CheckPersonIdentWithId(GetOConnorString(Surname), Name, SecondName, BirthDate, PassportSeries, PassportNumber, AttestatRegion, AttestatSeries, AttestatNum, GuidId, boolPar);
+                    context.CheckPersonIdentWithId(Surname, Name, SecondName, BirthDate, PassportSeries, PassportNumber, AttestatSeries, AttestatNum, GuidId, boolPar);
 
                 return Convert.ToBoolean(boolPar.Value);
             }
@@ -1121,10 +1107,8 @@ namespace Priem
             context.Person_insert(personBarc, PersonName, SecondName, Surname, BirthDate, BirthPlace, PassportTypeId, PassportSeries, PassportNumber,
                 PassportAuthor, PassportDate, Sex, CountryId, NationalityId, RegionId, Phone, Mobiles, Email,
                 Code, City, Street, House, Korpus, Flat, CodeReal, CityReal, StreetReal, HouseReal, KorpusReal, FlatReal, KladrCode, HostelAbit, HostelEduc, HasAssignToHostel,
-                HostelFacultyId, HasExamPass, ExamPassFacultyId, IsExcellent, LanguageId, SchoolCity, SchoolTypeId, SchoolName, SchoolNum, SchoolExitYear,
-                SchoolAVG, CountryEducId, RegionEducId, IsEqual, AttestatRegion, AttestatSeries, AttestatNum, DiplomSeries, DiplomNum, HighEducation, HEProfession,
-                HEQualification, HEEntryYear, HEExitYear, HEStudyFormId, HEWork, Stag, WorkPlace, MSVuz, MSCourse, MSStudyFormId, Privileges, PassportCode,
-                PersonalCode, PersonInfo, ExtraInfo, ScienceWork, StartEnglish, EnglishMark, EgeInSpbgu, SNILS, idParam);
+                HostelFacultyId, HasExamPass, ExamPassFacultyId, LanguageId, Stag, WorkPlace, MSVuz, MSCourse, MSStudyFormId, Privileges, PassportCode,
+                PersonalCode, PersonInfo, ExtraInfo, ScienceWork, StartEnglish, EnglishMark, EgeInSpbgu, SNILS, HasTRKI, TRKICertificateNumber, idParam);
         }
         protected override void UpdateRec(PriemEntities context, Guid id)
         {

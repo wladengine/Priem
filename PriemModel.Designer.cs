@@ -60,11 +60,10 @@ using System.Xml.Serialization;
 [assembly: EdmRelationshipAttribute("Priem2012Model", "FK_Person_Contacts_Country", "Country", System.Data.Metadata.Edm.RelationshipMultiplicity.ZeroOrOne, typeof(Priem.Country), "Person_Contacts", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(Priem.Person_Contacts), true)]
 [assembly: EdmRelationshipAttribute("Priem2012Model", "FK_Person_EducationInfo_Country", "Country", System.Data.Metadata.Edm.RelationshipMultiplicity.ZeroOrOne, typeof(Priem.Country), "Person_EducationInfo", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(Priem.Person_EducationInfo), true)]
 [assembly: EdmRelationshipAttribute("Priem2012Model", "FK_EgeCertificate_Person", "Person", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(Priem.Person), "EgeCertificate", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(Priem.EgeCertificate), true)]
-[assembly: EdmRelationshipAttribute("Priem2012Model", "FK_Person_EducationInfo_Language", "Language", System.Data.Metadata.Edm.RelationshipMultiplicity.ZeroOrOne, typeof(Priem.Language), "Person_EducationInfo", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(Priem.Person_EducationInfo), true)]
 [assembly: EdmRelationshipAttribute("Priem2012Model", "FK_Person_PassportType", "PassportType", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(Priem.PassportType), "Person", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(Priem.Person), true)]
 [assembly: EdmRelationshipAttribute("Priem2012Model", "FK_Person_AdditionalInfo_Person", "Person", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(Priem.Person), "Person_AdditionalInfo", System.Data.Metadata.Edm.RelationshipMultiplicity.ZeroOrOne, typeof(Priem.Person_AdditionalInfo), true)]
 [assembly: EdmRelationshipAttribute("Priem2012Model", "FK_Person_Contacts_Person", "Person", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(Priem.Person), "Person_Contacts", System.Data.Metadata.Edm.RelationshipMultiplicity.ZeroOrOne, typeof(Priem.Person_Contacts), true)]
-[assembly: EdmRelationshipAttribute("Priem2012Model", "FK_Person_EducationInfo_Person", "Person", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(Priem.Person), "Person_EducationInfo", System.Data.Metadata.Edm.RelationshipMultiplicity.ZeroOrOne, typeof(Priem.Person_EducationInfo), true)]
+[assembly: EdmRelationshipAttribute("Priem2012Model", "FK_Person_EducationInfo_Person", "Person", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(Priem.Person), "Person_EducationInfo", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(Priem.Person_EducationInfo), true)]
 [assembly: EdmRelationshipAttribute("Priem2012Model", "FK_Person_AdditionalInfo_SP_ExamPassFaculty", "SP_Faculty", System.Data.Metadata.Edm.RelationshipMultiplicity.ZeroOrOne, typeof(Priem.SP_Faculty), "Person_AdditionalInfo", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(Priem.Person_AdditionalInfo), true)]
 [assembly: EdmRelationshipAttribute("Priem2012Model", "FK_Person_AdditionalInfo_SP_HostelFaculty", "SP_Faculty", System.Data.Metadata.Edm.RelationshipMultiplicity.ZeroOrOne, typeof(Priem.SP_Faculty), "Person_AdditionalInfo", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(Priem.Person_AdditionalInfo), true)]
 [assembly: EdmRelationshipAttribute("Priem2012Model", "FK_Person_Contacts_Region", "Region", System.Data.Metadata.Edm.RelationshipMultiplicity.ZeroOrOne, typeof(Priem.Region), "Person_Contacts", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(Priem.Person_Contacts), true)]
@@ -110,6 +109,7 @@ using System.Xml.Serialization;
 [assembly: EdmRelationshipAttribute("Priem2012Model", "FK_Person_EducationInfo_ForeignCountry", "ForeignCountry", System.Data.Metadata.Edm.RelationshipMultiplicity.ZeroOrOne, typeof(Priem.ForeignCountry), "Person_EducationInfo", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(Priem.Person_EducationInfo), true)]
 [assembly: EdmRelationshipAttribute("Priem2012Model", "FK_Entry_SP_Profile", "SP_Profile", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(Priem.SP_Profile), "Entry", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(Priem.Entry), true)]
 [assembly: EdmRelationshipAttribute("Priem2012Model", "FK_SP_LicenseProgram_SP_AggregateGroup", "SP_AggregateGroup", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(Priem.SP_AggregateGroup), "SP_LicenseProgram", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(Priem.SP_LicenseProgram), true)]
+[assembly: EdmRelationshipAttribute("Priem2012Model", "FK_Person_AdditionalInfo_Language", "Language", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(Priem.Language), "Person_AdditionalInfo", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(Priem.Person_AdditionalInfo), true)]
 
 #endregion
 
@@ -3078,11 +3078,10 @@ namespace Priem
         /// <param name="birth">No Metadata Documentation available.</param>
         /// <param name="passSeries">No Metadata Documentation available.</param>
         /// <param name="passNum">No Metadata Documentation available.</param>
-        /// <param name="attRegion">No Metadata Documentation available.</param>
         /// <param name="attSeries">No Metadata Documentation available.</param>
         /// <param name="attNum">No Metadata Documentation available.</param>
         /// <param name="result">No Metadata Documentation available.</param>
-        public int CheckPersonIdent(global::System.String surname, global::System.String name, global::System.String secondName, Nullable<global::System.DateTime> birth, global::System.String passSeries, global::System.String passNum, global::System.String attRegion, global::System.String attSeries, global::System.String attNum, ObjectParameter result)
+        public int CheckPersonIdent(global::System.String surname, global::System.String name, global::System.String secondName, Nullable<global::System.DateTime> birth, global::System.String passSeries, global::System.String passNum, global::System.String attSeries, global::System.String attNum, ObjectParameter result)
         {
             ObjectParameter surnameParameter;
             if (surname != null)
@@ -3142,16 +3141,6 @@ namespace Priem
             else
             {
                 passNumParameter = new ObjectParameter("PassNum", typeof(global::System.String));
-            }
-    
-            ObjectParameter attRegionParameter;
-            if (attRegion != null)
-            {
-                attRegionParameter = new ObjectParameter("AttRegion", attRegion);
-            }
-            else
-            {
-                attRegionParameter = new ObjectParameter("AttRegion", typeof(global::System.String));
             }
     
             ObjectParameter attSeriesParameter;
@@ -3174,7 +3163,7 @@ namespace Priem
                 attNumParameter = new ObjectParameter("AttNum", typeof(global::System.String));
             }
     
-            return base.ExecuteFunction("CheckPersonIdent", surnameParameter, nameParameter, secondNameParameter, birthParameter, passSeriesParameter, passNumParameter, attRegionParameter, attSeriesParameter, attNumParameter, result);
+            return base.ExecuteFunction("CheckPersonIdent", surnameParameter, nameParameter, secondNameParameter, birthParameter, passSeriesParameter, passNumParameter, attSeriesParameter, attNumParameter, result);
         }
     
         /// <summary>
@@ -3186,12 +3175,11 @@ namespace Priem
         /// <param name="birth">No Metadata Documentation available.</param>
         /// <param name="passSeries">No Metadata Documentation available.</param>
         /// <param name="passNum">No Metadata Documentation available.</param>
-        /// <param name="attRegion">No Metadata Documentation available.</param>
         /// <param name="attSeries">No Metadata Documentation available.</param>
         /// <param name="attNum">No Metadata Documentation available.</param>
         /// <param name="personId">No Metadata Documentation available.</param>
         /// <param name="result">No Metadata Documentation available.</param>
-        public int CheckPersonIdentWithId(global::System.String surname, global::System.String name, global::System.String secondName, Nullable<global::System.DateTime> birth, global::System.String passSeries, global::System.String passNum, global::System.String attRegion, global::System.String attSeries, global::System.String attNum, Nullable<global::System.Guid> personId, ObjectParameter result)
+        public int CheckPersonIdentWithId(global::System.String surname, global::System.String name, global::System.String secondName, Nullable<global::System.DateTime> birth, global::System.String passSeries, global::System.String passNum, global::System.String attSeries, global::System.String attNum, Nullable<global::System.Guid> personId, ObjectParameter result)
         {
             ObjectParameter surnameParameter;
             if (surname != null)
@@ -3251,16 +3239,6 @@ namespace Priem
             else
             {
                 passNumParameter = new ObjectParameter("PassNum", typeof(global::System.String));
-            }
-    
-            ObjectParameter attRegionParameter;
-            if (attRegion != null)
-            {
-                attRegionParameter = new ObjectParameter("AttRegion", attRegion);
-            }
-            else
-            {
-                attRegionParameter = new ObjectParameter("AttRegion", typeof(global::System.String));
             }
     
             ObjectParameter attSeriesParameter;
@@ -3293,7 +3271,7 @@ namespace Priem
                 personIdParameter = new ObjectParameter("PersonId", typeof(global::System.Guid));
             }
     
-            return base.ExecuteFunction("CheckPersonIdentWithId", surnameParameter, nameParameter, secondNameParameter, birthParameter, passSeriesParameter, passNumParameter, attRegionParameter, attSeriesParameter, attNumParameter, personIdParameter, result);
+            return base.ExecuteFunction("CheckPersonIdentWithId", surnameParameter, nameParameter, secondNameParameter, birthParameter, passSeriesParameter, passNumParameter, attSeriesParameter, attNumParameter, personIdParameter, result);
         }
     
         /// <summary>
@@ -3336,29 +3314,7 @@ namespace Priem
         /// <param name="hostelFacultyId">No Metadata Documentation available.</param>
         /// <param name="hasExamPass">No Metadata Documentation available.</param>
         /// <param name="examPassFacultyId">No Metadata Documentation available.</param>
-        /// <param name="isExcellent">No Metadata Documentation available.</param>
         /// <param name="languageId">No Metadata Documentation available.</param>
-        /// <param name="schoolCity">No Metadata Documentation available.</param>
-        /// <param name="schoolTypeId">No Metadata Documentation available.</param>
-        /// <param name="schoolName">No Metadata Documentation available.</param>
-        /// <param name="schoolNum">No Metadata Documentation available.</param>
-        /// <param name="schoolExitYear">No Metadata Documentation available.</param>
-        /// <param name="schoolAVG">No Metadata Documentation available.</param>
-        /// <param name="countryEducId">No Metadata Documentation available.</param>
-        /// <param name="regionEducId">No Metadata Documentation available.</param>
-        /// <param name="isEqual">No Metadata Documentation available.</param>
-        /// <param name="attestatRegion">No Metadata Documentation available.</param>
-        /// <param name="attestatSeries">No Metadata Documentation available.</param>
-        /// <param name="attestatNum">No Metadata Documentation available.</param>
-        /// <param name="diplomSeries">No Metadata Documentation available.</param>
-        /// <param name="diplomNum">No Metadata Documentation available.</param>
-        /// <param name="highEducation">No Metadata Documentation available.</param>
-        /// <param name="hEProfession">No Metadata Documentation available.</param>
-        /// <param name="hEQualification">No Metadata Documentation available.</param>
-        /// <param name="hEEntryYear">No Metadata Documentation available.</param>
-        /// <param name="hEExitYear">No Metadata Documentation available.</param>
-        /// <param name="hEStudyFormId">No Metadata Documentation available.</param>
-        /// <param name="hEWork">No Metadata Documentation available.</param>
         /// <param name="stag">No Metadata Documentation available.</param>
         /// <param name="workPlace">No Metadata Documentation available.</param>
         /// <param name="mSVuz">No Metadata Documentation available.</param>
@@ -3374,8 +3330,10 @@ namespace Priem
         /// <param name="englishMark">No Metadata Documentation available.</param>
         /// <param name="egeInSpbgu">No Metadata Documentation available.</param>
         /// <param name="sNILS">No Metadata Documentation available.</param>
+        /// <param name="hasTRKI">No Metadata Documentation available.</param>
+        /// <param name="tRKICertificateNumber">No Metadata Documentation available.</param>
         /// <param name="id">No Metadata Documentation available.</param>
-        public int Person_insert(Nullable<global::System.Int32> barcode, global::System.String name, global::System.String secondName, global::System.String surname, Nullable<global::System.DateTime> birthDate, global::System.String birthPlace, Nullable<global::System.Int32> passportTypeId, global::System.String passportSeries, global::System.String passportNumber, global::System.String passportAuthor, Nullable<global::System.DateTime> passportDate, Nullable<global::System.Boolean> sex, Nullable<global::System.Int32> countryId, Nullable<global::System.Int32> nationalityId, Nullable<global::System.Int32> regionId, global::System.String phone, global::System.String mobiles, global::System.String email, global::System.String code, global::System.String city, global::System.String street, global::System.String house, global::System.String korpus, global::System.String flat, global::System.String codeReal, global::System.String cityReal, global::System.String streetReal, global::System.String houseReal, global::System.String korpusReal, global::System.String flatReal, global::System.String kladrCode, Nullable<global::System.Boolean> hostelAbit, Nullable<global::System.Boolean> hostelEduc, Nullable<global::System.Boolean> hasAssignToHostel, Nullable<global::System.Int32> hostelFacultyId, Nullable<global::System.Boolean> hasExamPass, Nullable<global::System.Int32> examPassFacultyId, Nullable<global::System.Boolean> isExcellent, Nullable<global::System.Int32> languageId, global::System.String schoolCity, Nullable<global::System.Int32> schoolTypeId, global::System.String schoolName, global::System.String schoolNum, Nullable<global::System.Int32> schoolExitYear, Nullable<global::System.Double> schoolAVG, Nullable<global::System.Int32> countryEducId, Nullable<global::System.Int32> regionEducId, Nullable<global::System.Boolean> isEqual, global::System.String attestatRegion, global::System.String attestatSeries, global::System.String attestatNum, global::System.String diplomSeries, global::System.String diplomNum, global::System.String highEducation, global::System.String hEProfession, global::System.String hEQualification, Nullable<global::System.Int32> hEEntryYear, Nullable<global::System.Int32> hEExitYear, Nullable<global::System.Int32> hEStudyFormId, global::System.String hEWork, global::System.String stag, global::System.String workPlace, global::System.String mSVuz, global::System.String mSCourse, Nullable<global::System.Int32> mSStudyFormId, Nullable<global::System.Int32> privileges, global::System.String passportCode, global::System.String personalCode, global::System.String personInfo, global::System.String extraInfo, global::System.String scienceWork, Nullable<global::System.Boolean> startEnglish, Nullable<global::System.Int32> englishMark, Nullable<global::System.Boolean> egeInSpbgu, global::System.String sNILS, ObjectParameter id)
+        public int Person_insert(Nullable<global::System.Int32> barcode, global::System.String name, global::System.String secondName, global::System.String surname, Nullable<global::System.DateTime> birthDate, global::System.String birthPlace, Nullable<global::System.Int32> passportTypeId, global::System.String passportSeries, global::System.String passportNumber, global::System.String passportAuthor, Nullable<global::System.DateTime> passportDate, Nullable<global::System.Boolean> sex, Nullable<global::System.Int32> countryId, Nullable<global::System.Int32> nationalityId, Nullable<global::System.Int32> regionId, global::System.String phone, global::System.String mobiles, global::System.String email, global::System.String code, global::System.String city, global::System.String street, global::System.String house, global::System.String korpus, global::System.String flat, global::System.String codeReal, global::System.String cityReal, global::System.String streetReal, global::System.String houseReal, global::System.String korpusReal, global::System.String flatReal, global::System.String kladrCode, Nullable<global::System.Boolean> hostelAbit, Nullable<global::System.Boolean> hostelEduc, Nullable<global::System.Boolean> hasAssignToHostel, Nullable<global::System.Int32> hostelFacultyId, Nullable<global::System.Boolean> hasExamPass, Nullable<global::System.Int32> examPassFacultyId, Nullable<global::System.Int32> languageId, global::System.String stag, global::System.String workPlace, global::System.String mSVuz, global::System.String mSCourse, Nullable<global::System.Int32> mSStudyFormId, Nullable<global::System.Int32> privileges, global::System.String passportCode, global::System.String personalCode, global::System.String personInfo, global::System.String extraInfo, global::System.String scienceWork, Nullable<global::System.Boolean> startEnglish, Nullable<global::System.Int32> englishMark, Nullable<global::System.Boolean> egeInSpbgu, global::System.String sNILS, Nullable<global::System.Boolean> hasTRKI, global::System.String tRKICertificateNumber, ObjectParameter id)
         {
             ObjectParameter barcodeParameter;
             if (barcode.HasValue)
@@ -3747,16 +3705,6 @@ namespace Priem
                 examPassFacultyIdParameter = new ObjectParameter("ExamPassFacultyId", typeof(global::System.Int32));
             }
     
-            ObjectParameter isExcellentParameter;
-            if (isExcellent.HasValue)
-            {
-                isExcellentParameter = new ObjectParameter("IsExcellent", isExcellent);
-            }
-            else
-            {
-                isExcellentParameter = new ObjectParameter("IsExcellent", typeof(global::System.Boolean));
-            }
-    
             ObjectParameter languageIdParameter;
             if (languageId.HasValue)
             {
@@ -3765,216 +3713,6 @@ namespace Priem
             else
             {
                 languageIdParameter = new ObjectParameter("LanguageId", typeof(global::System.Int32));
-            }
-    
-            ObjectParameter schoolCityParameter;
-            if (schoolCity != null)
-            {
-                schoolCityParameter = new ObjectParameter("SchoolCity", schoolCity);
-            }
-            else
-            {
-                schoolCityParameter = new ObjectParameter("SchoolCity", typeof(global::System.String));
-            }
-    
-            ObjectParameter schoolTypeIdParameter;
-            if (schoolTypeId.HasValue)
-            {
-                schoolTypeIdParameter = new ObjectParameter("SchoolTypeId", schoolTypeId);
-            }
-            else
-            {
-                schoolTypeIdParameter = new ObjectParameter("SchoolTypeId", typeof(global::System.Int32));
-            }
-    
-            ObjectParameter schoolNameParameter;
-            if (schoolName != null)
-            {
-                schoolNameParameter = new ObjectParameter("SchoolName", schoolName);
-            }
-            else
-            {
-                schoolNameParameter = new ObjectParameter("SchoolName", typeof(global::System.String));
-            }
-    
-            ObjectParameter schoolNumParameter;
-            if (schoolNum != null)
-            {
-                schoolNumParameter = new ObjectParameter("SchoolNum", schoolNum);
-            }
-            else
-            {
-                schoolNumParameter = new ObjectParameter("SchoolNum", typeof(global::System.String));
-            }
-    
-            ObjectParameter schoolExitYearParameter;
-            if (schoolExitYear.HasValue)
-            {
-                schoolExitYearParameter = new ObjectParameter("SchoolExitYear", schoolExitYear);
-            }
-            else
-            {
-                schoolExitYearParameter = new ObjectParameter("SchoolExitYear", typeof(global::System.Int32));
-            }
-    
-            ObjectParameter schoolAVGParameter;
-            if (schoolAVG.HasValue)
-            {
-                schoolAVGParameter = new ObjectParameter("SchoolAVG", schoolAVG);
-            }
-            else
-            {
-                schoolAVGParameter = new ObjectParameter("SchoolAVG", typeof(global::System.Double));
-            }
-    
-            ObjectParameter countryEducIdParameter;
-            if (countryEducId.HasValue)
-            {
-                countryEducIdParameter = new ObjectParameter("CountryEducId", countryEducId);
-            }
-            else
-            {
-                countryEducIdParameter = new ObjectParameter("CountryEducId", typeof(global::System.Int32));
-            }
-    
-            ObjectParameter regionEducIdParameter;
-            if (regionEducId.HasValue)
-            {
-                regionEducIdParameter = new ObjectParameter("RegionEducId", regionEducId);
-            }
-            else
-            {
-                regionEducIdParameter = new ObjectParameter("RegionEducId", typeof(global::System.Int32));
-            }
-    
-            ObjectParameter isEqualParameter;
-            if (isEqual.HasValue)
-            {
-                isEqualParameter = new ObjectParameter("IsEqual", isEqual);
-            }
-            else
-            {
-                isEqualParameter = new ObjectParameter("IsEqual", typeof(global::System.Boolean));
-            }
-    
-            ObjectParameter attestatRegionParameter;
-            if (attestatRegion != null)
-            {
-                attestatRegionParameter = new ObjectParameter("AttestatRegion", attestatRegion);
-            }
-            else
-            {
-                attestatRegionParameter = new ObjectParameter("AttestatRegion", typeof(global::System.String));
-            }
-    
-            ObjectParameter attestatSeriesParameter;
-            if (attestatSeries != null)
-            {
-                attestatSeriesParameter = new ObjectParameter("AttestatSeries", attestatSeries);
-            }
-            else
-            {
-                attestatSeriesParameter = new ObjectParameter("AttestatSeries", typeof(global::System.String));
-            }
-    
-            ObjectParameter attestatNumParameter;
-            if (attestatNum != null)
-            {
-                attestatNumParameter = new ObjectParameter("AttestatNum", attestatNum);
-            }
-            else
-            {
-                attestatNumParameter = new ObjectParameter("AttestatNum", typeof(global::System.String));
-            }
-    
-            ObjectParameter diplomSeriesParameter;
-            if (diplomSeries != null)
-            {
-                diplomSeriesParameter = new ObjectParameter("DiplomSeries", diplomSeries);
-            }
-            else
-            {
-                diplomSeriesParameter = new ObjectParameter("DiplomSeries", typeof(global::System.String));
-            }
-    
-            ObjectParameter diplomNumParameter;
-            if (diplomNum != null)
-            {
-                diplomNumParameter = new ObjectParameter("DiplomNum", diplomNum);
-            }
-            else
-            {
-                diplomNumParameter = new ObjectParameter("DiplomNum", typeof(global::System.String));
-            }
-    
-            ObjectParameter highEducationParameter;
-            if (highEducation != null)
-            {
-                highEducationParameter = new ObjectParameter("HighEducation", highEducation);
-            }
-            else
-            {
-                highEducationParameter = new ObjectParameter("HighEducation", typeof(global::System.String));
-            }
-    
-            ObjectParameter hEProfessionParameter;
-            if (hEProfession != null)
-            {
-                hEProfessionParameter = new ObjectParameter("HEProfession", hEProfession);
-            }
-            else
-            {
-                hEProfessionParameter = new ObjectParameter("HEProfession", typeof(global::System.String));
-            }
-    
-            ObjectParameter hEQualificationParameter;
-            if (hEQualification != null)
-            {
-                hEQualificationParameter = new ObjectParameter("HEQualification", hEQualification);
-            }
-            else
-            {
-                hEQualificationParameter = new ObjectParameter("HEQualification", typeof(global::System.String));
-            }
-    
-            ObjectParameter hEEntryYearParameter;
-            if (hEEntryYear.HasValue)
-            {
-                hEEntryYearParameter = new ObjectParameter("HEEntryYear", hEEntryYear);
-            }
-            else
-            {
-                hEEntryYearParameter = new ObjectParameter("HEEntryYear", typeof(global::System.Int32));
-            }
-    
-            ObjectParameter hEExitYearParameter;
-            if (hEExitYear.HasValue)
-            {
-                hEExitYearParameter = new ObjectParameter("HEExitYear", hEExitYear);
-            }
-            else
-            {
-                hEExitYearParameter = new ObjectParameter("HEExitYear", typeof(global::System.Int32));
-            }
-    
-            ObjectParameter hEStudyFormIdParameter;
-            if (hEStudyFormId.HasValue)
-            {
-                hEStudyFormIdParameter = new ObjectParameter("HEStudyFormId", hEStudyFormId);
-            }
-            else
-            {
-                hEStudyFormIdParameter = new ObjectParameter("HEStudyFormId", typeof(global::System.Int32));
-            }
-    
-            ObjectParameter hEWorkParameter;
-            if (hEWork != null)
-            {
-                hEWorkParameter = new ObjectParameter("HEWork", hEWork);
-            }
-            else
-            {
-                hEWorkParameter = new ObjectParameter("HEWork", typeof(global::System.String));
             }
     
             ObjectParameter stagParameter;
@@ -4127,7 +3865,27 @@ namespace Priem
                 sNILSParameter = new ObjectParameter("SNILS", typeof(global::System.String));
             }
     
-            return base.ExecuteFunction("Person_insert", barcodeParameter, nameParameter, secondNameParameter, surnameParameter, birthDateParameter, birthPlaceParameter, passportTypeIdParameter, passportSeriesParameter, passportNumberParameter, passportAuthorParameter, passportDateParameter, sexParameter, countryIdParameter, nationalityIdParameter, regionIdParameter, phoneParameter, mobilesParameter, emailParameter, codeParameter, cityParameter, streetParameter, houseParameter, korpusParameter, flatParameter, codeRealParameter, cityRealParameter, streetRealParameter, houseRealParameter, korpusRealParameter, flatRealParameter, kladrCodeParameter, hostelAbitParameter, hostelEducParameter, hasAssignToHostelParameter, hostelFacultyIdParameter, hasExamPassParameter, examPassFacultyIdParameter, isExcellentParameter, languageIdParameter, schoolCityParameter, schoolTypeIdParameter, schoolNameParameter, schoolNumParameter, schoolExitYearParameter, schoolAVGParameter, countryEducIdParameter, regionEducIdParameter, isEqualParameter, attestatRegionParameter, attestatSeriesParameter, attestatNumParameter, diplomSeriesParameter, diplomNumParameter, highEducationParameter, hEProfessionParameter, hEQualificationParameter, hEEntryYearParameter, hEExitYearParameter, hEStudyFormIdParameter, hEWorkParameter, stagParameter, workPlaceParameter, mSVuzParameter, mSCourseParameter, mSStudyFormIdParameter, privilegesParameter, passportCodeParameter, personalCodeParameter, personInfoParameter, extraInfoParameter, scienceWorkParameter, startEnglishParameter, englishMarkParameter, egeInSpbguParameter, sNILSParameter, id);
+            ObjectParameter hasTRKIParameter;
+            if (hasTRKI.HasValue)
+            {
+                hasTRKIParameter = new ObjectParameter("HasTRKI", hasTRKI);
+            }
+            else
+            {
+                hasTRKIParameter = new ObjectParameter("HasTRKI", typeof(global::System.Boolean));
+            }
+    
+            ObjectParameter tRKICertificateNumberParameter;
+            if (tRKICertificateNumber != null)
+            {
+                tRKICertificateNumberParameter = new ObjectParameter("TRKICertificateNumber", tRKICertificateNumber);
+            }
+            else
+            {
+                tRKICertificateNumberParameter = new ObjectParameter("TRKICertificateNumber", typeof(global::System.String));
+            }
+    
+            return base.ExecuteFunction("Person_insert", barcodeParameter, nameParameter, secondNameParameter, surnameParameter, birthDateParameter, birthPlaceParameter, passportTypeIdParameter, passportSeriesParameter, passportNumberParameter, passportAuthorParameter, passportDateParameter, sexParameter, countryIdParameter, nationalityIdParameter, regionIdParameter, phoneParameter, mobilesParameter, emailParameter, codeParameter, cityParameter, streetParameter, houseParameter, korpusParameter, flatParameter, codeRealParameter, cityRealParameter, streetRealParameter, houseRealParameter, korpusRealParameter, flatRealParameter, kladrCodeParameter, hostelAbitParameter, hostelEducParameter, hasAssignToHostelParameter, hostelFacultyIdParameter, hasExamPassParameter, examPassFacultyIdParameter, languageIdParameter, stagParameter, workPlaceParameter, mSVuzParameter, mSCourseParameter, mSStudyFormIdParameter, privilegesParameter, passportCodeParameter, personalCodeParameter, personInfoParameter, extraInfoParameter, scienceWorkParameter, startEnglishParameter, englishMarkParameter, egeInSpbguParameter, sNILSParameter, hasTRKIParameter, tRKICertificateNumberParameter, id);
         }
     
         /// <summary>
@@ -8512,14 +8270,8 @@ namespace Priem
         /// <param name="id">No Metadata Documentation available.</param>
         /// <param name="facultyId">No Metadata Documentation available.</param>
         /// <param name="licenseProgramId">No Metadata Documentation available.</param>
-        /// <param name="licenseProgramName">No Metadata Documentation available.</param>
-        /// <param name="licenseProgramCode">No Metadata Documentation available.</param>
         /// <param name="obrazProgramId">No Metadata Documentation available.</param>
-        /// <param name="obrazProgramName">No Metadata Documentation available.</param>
-        /// <param name="obrazProgramNumber">No Metadata Documentation available.</param>
-        /// <param name="obrazProgramCrypt">No Metadata Documentation available.</param>
         /// <param name="profileId">No Metadata Documentation available.</param>
-        /// <param name="profileName">No Metadata Documentation available.</param>
         /// <param name="studyBasisId">No Metadata Documentation available.</param>
         /// <param name="studyFormId">No Metadata Documentation available.</param>
         /// <param name="studyLevelId">No Metadata Documentation available.</param>
@@ -8532,7 +8284,7 @@ namespace Priem
         /// <param name="kCP">No Metadata Documentation available.</param>
         /// <param name="kCPCrimea">No Metadata Documentation available.</param>
         /// <param name="comissionId">No Metadata Documentation available.</param>
-        public int Entry_Insert(Nullable<global::System.Guid> id, Nullable<global::System.Int32> facultyId, Nullable<global::System.Int32> licenseProgramId, global::System.String licenseProgramName, global::System.String licenseProgramCode, Nullable<global::System.Int32> obrazProgramId, global::System.String obrazProgramName, global::System.String obrazProgramNumber, global::System.String obrazProgramCrypt, Nullable<global::System.Guid> profileId, global::System.String profileName, Nullable<global::System.Int32> studyBasisId, Nullable<global::System.Int32> studyFormId, Nullable<global::System.Int32> studyLevelId, Nullable<global::System.Guid> studyPlanId, global::System.String studyPlanNumber, global::System.String programModeShortName, Nullable<global::System.Boolean> isSecond, Nullable<global::System.Boolean> isReduced, Nullable<global::System.Boolean> isParallel, Nullable<global::System.Int32> kCP, Nullable<global::System.Int32> kCPCrimea, Nullable<global::System.Int32> comissionId)
+        public int Entry_Insert(Nullable<global::System.Guid> id, Nullable<global::System.Int32> facultyId, Nullable<global::System.Int32> licenseProgramId, Nullable<global::System.Int32> obrazProgramId, Nullable<global::System.Int32> profileId, Nullable<global::System.Int32> studyBasisId, Nullable<global::System.Int32> studyFormId, Nullable<global::System.Int32> studyLevelId, Nullable<global::System.Guid> studyPlanId, global::System.String studyPlanNumber, global::System.String programModeShortName, Nullable<global::System.Boolean> isSecond, Nullable<global::System.Boolean> isReduced, Nullable<global::System.Boolean> isParallel, Nullable<global::System.Int32> kCP, Nullable<global::System.Int32> kCPCrimea, Nullable<global::System.Int32> comissionId)
         {
             ObjectParameter idParameter;
             if (id.HasValue)
@@ -8564,26 +8316,6 @@ namespace Priem
                 licenseProgramIdParameter = new ObjectParameter("LicenseProgramId", typeof(global::System.Int32));
             }
     
-            ObjectParameter licenseProgramNameParameter;
-            if (licenseProgramName != null)
-            {
-                licenseProgramNameParameter = new ObjectParameter("LicenseProgramName", licenseProgramName);
-            }
-            else
-            {
-                licenseProgramNameParameter = new ObjectParameter("LicenseProgramName", typeof(global::System.String));
-            }
-    
-            ObjectParameter licenseProgramCodeParameter;
-            if (licenseProgramCode != null)
-            {
-                licenseProgramCodeParameter = new ObjectParameter("LicenseProgramCode", licenseProgramCode);
-            }
-            else
-            {
-                licenseProgramCodeParameter = new ObjectParameter("LicenseProgramCode", typeof(global::System.String));
-            }
-    
             ObjectParameter obrazProgramIdParameter;
             if (obrazProgramId.HasValue)
             {
@@ -8594,36 +8326,6 @@ namespace Priem
                 obrazProgramIdParameter = new ObjectParameter("ObrazProgramId", typeof(global::System.Int32));
             }
     
-            ObjectParameter obrazProgramNameParameter;
-            if (obrazProgramName != null)
-            {
-                obrazProgramNameParameter = new ObjectParameter("ObrazProgramName", obrazProgramName);
-            }
-            else
-            {
-                obrazProgramNameParameter = new ObjectParameter("ObrazProgramName", typeof(global::System.String));
-            }
-    
-            ObjectParameter obrazProgramNumberParameter;
-            if (obrazProgramNumber != null)
-            {
-                obrazProgramNumberParameter = new ObjectParameter("ObrazProgramNumber", obrazProgramNumber);
-            }
-            else
-            {
-                obrazProgramNumberParameter = new ObjectParameter("ObrazProgramNumber", typeof(global::System.String));
-            }
-    
-            ObjectParameter obrazProgramCryptParameter;
-            if (obrazProgramCrypt != null)
-            {
-                obrazProgramCryptParameter = new ObjectParameter("ObrazProgramCrypt", obrazProgramCrypt);
-            }
-            else
-            {
-                obrazProgramCryptParameter = new ObjectParameter("ObrazProgramCrypt", typeof(global::System.String));
-            }
-    
             ObjectParameter profileIdParameter;
             if (profileId.HasValue)
             {
@@ -8631,17 +8333,7 @@ namespace Priem
             }
             else
             {
-                profileIdParameter = new ObjectParameter("ProfileId", typeof(global::System.Guid));
-            }
-    
-            ObjectParameter profileNameParameter;
-            if (profileName != null)
-            {
-                profileNameParameter = new ObjectParameter("ProfileName", profileName);
-            }
-            else
-            {
-                profileNameParameter = new ObjectParameter("ProfileName", typeof(global::System.String));
+                profileIdParameter = new ObjectParameter("ProfileId", typeof(global::System.Int32));
             }
     
             ObjectParameter studyBasisIdParameter;
@@ -8764,7 +8456,7 @@ namespace Priem
                 comissionIdParameter = new ObjectParameter("ComissionId", typeof(global::System.Int32));
             }
     
-            return base.ExecuteFunction("Entry_Insert", idParameter, facultyIdParameter, licenseProgramIdParameter, licenseProgramNameParameter, licenseProgramCodeParameter, obrazProgramIdParameter, obrazProgramNameParameter, obrazProgramNumberParameter, obrazProgramCryptParameter, profileIdParameter, profileNameParameter, studyBasisIdParameter, studyFormIdParameter, studyLevelIdParameter, studyPlanIdParameter, studyPlanNumberParameter, programModeShortNameParameter, isSecondParameter, isReducedParameter, isParallelParameter, kCPParameter, kCPCrimeaParameter, comissionIdParameter);
+            return base.ExecuteFunction("Entry_Insert", idParameter, facultyIdParameter, licenseProgramIdParameter, obrazProgramIdParameter, profileIdParameter, studyBasisIdParameter, studyFormIdParameter, studyLevelIdParameter, studyPlanIdParameter, studyPlanNumberParameter, programModeShortNameParameter, isSecondParameter, isReducedParameter, isParallelParameter, kCPParameter, kCPCrimeaParameter, comissionIdParameter);
         }
     
         /// <summary>
@@ -12932,6 +12624,548 @@ namespace Priem
     
             return base.ExecuteFunction("Abiturient_UpdateProfileInObrazProgramInEntryId", profileInObrazProgramInEntryIdParameter, idParameter);
         }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        /// <param name="personId">No Metadata Documentation available.</param>
+        /// <param name="id">No Metadata Documentation available.</param>
+        public int Person_EducationInfo_delete(Nullable<global::System.Guid> personId, Nullable<global::System.Int32> id)
+        {
+            ObjectParameter personIdParameter;
+            if (personId.HasValue)
+            {
+                personIdParameter = new ObjectParameter("PersonId", personId);
+            }
+            else
+            {
+                personIdParameter = new ObjectParameter("PersonId", typeof(global::System.Guid));
+            }
+    
+            ObjectParameter idParameter;
+            if (id.HasValue)
+            {
+                idParameter = new ObjectParameter("id", id);
+            }
+            else
+            {
+                idParameter = new ObjectParameter("id", typeof(global::System.Int32));
+            }
+    
+            return base.ExecuteFunction("Person_EducationInfo_delete", personIdParameter, idParameter);
+        }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        /// <param name="personId">No Metadata Documentation available.</param>
+        /// <param name="isExcellent">No Metadata Documentation available.</param>
+        /// <param name="schoolCity">No Metadata Documentation available.</param>
+        /// <param name="schoolTypeId">No Metadata Documentation available.</param>
+        /// <param name="schoolName">No Metadata Documentation available.</param>
+        /// <param name="schoolNum">No Metadata Documentation available.</param>
+        /// <param name="schoolExitYear">No Metadata Documentation available.</param>
+        /// <param name="schoolAVG">No Metadata Documentation available.</param>
+        /// <param name="countryEducId">No Metadata Documentation available.</param>
+        /// <param name="regionEducId">No Metadata Documentation available.</param>
+        /// <param name="isEqual">No Metadata Documentation available.</param>
+        /// <param name="attestatSeries">No Metadata Documentation available.</param>
+        /// <param name="attestatNum">No Metadata Documentation available.</param>
+        /// <param name="diplomSeries">No Metadata Documentation available.</param>
+        /// <param name="diplomNum">No Metadata Documentation available.</param>
+        /// <param name="highEducation">No Metadata Documentation available.</param>
+        /// <param name="hEProfession">No Metadata Documentation available.</param>
+        /// <param name="hEQualification">No Metadata Documentation available.</param>
+        /// <param name="hEEntryYear">No Metadata Documentation available.</param>
+        /// <param name="hEExitYear">No Metadata Documentation available.</param>
+        /// <param name="hEStudyFormId">No Metadata Documentation available.</param>
+        /// <param name="hEWork">No Metadata Documentation available.</param>
+        /// <param name="id">No Metadata Documentation available.</param>
+        public int Person_EducationInfo_insert(Nullable<global::System.Guid> personId, Nullable<global::System.Boolean> isExcellent, global::System.String schoolCity, Nullable<global::System.Int32> schoolTypeId, global::System.String schoolName, global::System.String schoolNum, Nullable<global::System.Int32> schoolExitYear, Nullable<global::System.Double> schoolAVG, Nullable<global::System.Int32> countryEducId, Nullable<global::System.Int32> regionEducId, Nullable<global::System.Boolean> isEqual, global::System.String attestatSeries, global::System.String attestatNum, global::System.String diplomSeries, global::System.String diplomNum, global::System.String highEducation, global::System.String hEProfession, global::System.String hEQualification, Nullable<global::System.Int32> hEEntryYear, Nullable<global::System.Int32> hEExitYear, Nullable<global::System.Int32> hEStudyFormId, global::System.String hEWork, ObjectParameter id)
+        {
+            ObjectParameter personIdParameter;
+            if (personId.HasValue)
+            {
+                personIdParameter = new ObjectParameter("PersonId", personId);
+            }
+            else
+            {
+                personIdParameter = new ObjectParameter("PersonId", typeof(global::System.Guid));
+            }
+    
+            ObjectParameter isExcellentParameter;
+            if (isExcellent.HasValue)
+            {
+                isExcellentParameter = new ObjectParameter("IsExcellent", isExcellent);
+            }
+            else
+            {
+                isExcellentParameter = new ObjectParameter("IsExcellent", typeof(global::System.Boolean));
+            }
+    
+            ObjectParameter schoolCityParameter;
+            if (schoolCity != null)
+            {
+                schoolCityParameter = new ObjectParameter("SchoolCity", schoolCity);
+            }
+            else
+            {
+                schoolCityParameter = new ObjectParameter("SchoolCity", typeof(global::System.String));
+            }
+    
+            ObjectParameter schoolTypeIdParameter;
+            if (schoolTypeId.HasValue)
+            {
+                schoolTypeIdParameter = new ObjectParameter("SchoolTypeId", schoolTypeId);
+            }
+            else
+            {
+                schoolTypeIdParameter = new ObjectParameter("SchoolTypeId", typeof(global::System.Int32));
+            }
+    
+            ObjectParameter schoolNameParameter;
+            if (schoolName != null)
+            {
+                schoolNameParameter = new ObjectParameter("SchoolName", schoolName);
+            }
+            else
+            {
+                schoolNameParameter = new ObjectParameter("SchoolName", typeof(global::System.String));
+            }
+    
+            ObjectParameter schoolNumParameter;
+            if (schoolNum != null)
+            {
+                schoolNumParameter = new ObjectParameter("SchoolNum", schoolNum);
+            }
+            else
+            {
+                schoolNumParameter = new ObjectParameter("SchoolNum", typeof(global::System.String));
+            }
+    
+            ObjectParameter schoolExitYearParameter;
+            if (schoolExitYear.HasValue)
+            {
+                schoolExitYearParameter = new ObjectParameter("SchoolExitYear", schoolExitYear);
+            }
+            else
+            {
+                schoolExitYearParameter = new ObjectParameter("SchoolExitYear", typeof(global::System.Int32));
+            }
+    
+            ObjectParameter schoolAVGParameter;
+            if (schoolAVG.HasValue)
+            {
+                schoolAVGParameter = new ObjectParameter("SchoolAVG", schoolAVG);
+            }
+            else
+            {
+                schoolAVGParameter = new ObjectParameter("SchoolAVG", typeof(global::System.Double));
+            }
+    
+            ObjectParameter countryEducIdParameter;
+            if (countryEducId.HasValue)
+            {
+                countryEducIdParameter = new ObjectParameter("CountryEducId", countryEducId);
+            }
+            else
+            {
+                countryEducIdParameter = new ObjectParameter("CountryEducId", typeof(global::System.Int32));
+            }
+    
+            ObjectParameter regionEducIdParameter;
+            if (regionEducId.HasValue)
+            {
+                regionEducIdParameter = new ObjectParameter("RegionEducId", regionEducId);
+            }
+            else
+            {
+                regionEducIdParameter = new ObjectParameter("RegionEducId", typeof(global::System.Int32));
+            }
+    
+            ObjectParameter isEqualParameter;
+            if (isEqual.HasValue)
+            {
+                isEqualParameter = new ObjectParameter("IsEqual", isEqual);
+            }
+            else
+            {
+                isEqualParameter = new ObjectParameter("IsEqual", typeof(global::System.Boolean));
+            }
+    
+            ObjectParameter attestatSeriesParameter;
+            if (attestatSeries != null)
+            {
+                attestatSeriesParameter = new ObjectParameter("AttestatSeries", attestatSeries);
+            }
+            else
+            {
+                attestatSeriesParameter = new ObjectParameter("AttestatSeries", typeof(global::System.String));
+            }
+    
+            ObjectParameter attestatNumParameter;
+            if (attestatNum != null)
+            {
+                attestatNumParameter = new ObjectParameter("AttestatNum", attestatNum);
+            }
+            else
+            {
+                attestatNumParameter = new ObjectParameter("AttestatNum", typeof(global::System.String));
+            }
+    
+            ObjectParameter diplomSeriesParameter;
+            if (diplomSeries != null)
+            {
+                diplomSeriesParameter = new ObjectParameter("DiplomSeries", diplomSeries);
+            }
+            else
+            {
+                diplomSeriesParameter = new ObjectParameter("DiplomSeries", typeof(global::System.String));
+            }
+    
+            ObjectParameter diplomNumParameter;
+            if (diplomNum != null)
+            {
+                diplomNumParameter = new ObjectParameter("DiplomNum", diplomNum);
+            }
+            else
+            {
+                diplomNumParameter = new ObjectParameter("DiplomNum", typeof(global::System.String));
+            }
+    
+            ObjectParameter highEducationParameter;
+            if (highEducation != null)
+            {
+                highEducationParameter = new ObjectParameter("HighEducation", highEducation);
+            }
+            else
+            {
+                highEducationParameter = new ObjectParameter("HighEducation", typeof(global::System.String));
+            }
+    
+            ObjectParameter hEProfessionParameter;
+            if (hEProfession != null)
+            {
+                hEProfessionParameter = new ObjectParameter("HEProfession", hEProfession);
+            }
+            else
+            {
+                hEProfessionParameter = new ObjectParameter("HEProfession", typeof(global::System.String));
+            }
+    
+            ObjectParameter hEQualificationParameter;
+            if (hEQualification != null)
+            {
+                hEQualificationParameter = new ObjectParameter("HEQualification", hEQualification);
+            }
+            else
+            {
+                hEQualificationParameter = new ObjectParameter("HEQualification", typeof(global::System.String));
+            }
+    
+            ObjectParameter hEEntryYearParameter;
+            if (hEEntryYear.HasValue)
+            {
+                hEEntryYearParameter = new ObjectParameter("HEEntryYear", hEEntryYear);
+            }
+            else
+            {
+                hEEntryYearParameter = new ObjectParameter("HEEntryYear", typeof(global::System.Int32));
+            }
+    
+            ObjectParameter hEExitYearParameter;
+            if (hEExitYear.HasValue)
+            {
+                hEExitYearParameter = new ObjectParameter("HEExitYear", hEExitYear);
+            }
+            else
+            {
+                hEExitYearParameter = new ObjectParameter("HEExitYear", typeof(global::System.Int32));
+            }
+    
+            ObjectParameter hEStudyFormIdParameter;
+            if (hEStudyFormId.HasValue)
+            {
+                hEStudyFormIdParameter = new ObjectParameter("HEStudyFormId", hEStudyFormId);
+            }
+            else
+            {
+                hEStudyFormIdParameter = new ObjectParameter("HEStudyFormId", typeof(global::System.Int32));
+            }
+    
+            ObjectParameter hEWorkParameter;
+            if (hEWork != null)
+            {
+                hEWorkParameter = new ObjectParameter("HEWork", hEWork);
+            }
+            else
+            {
+                hEWorkParameter = new ObjectParameter("HEWork", typeof(global::System.String));
+            }
+    
+            return base.ExecuteFunction("Person_EducationInfo_insert", personIdParameter, isExcellentParameter, schoolCityParameter, schoolTypeIdParameter, schoolNameParameter, schoolNumParameter, schoolExitYearParameter, schoolAVGParameter, countryEducIdParameter, regionEducIdParameter, isEqualParameter, attestatSeriesParameter, attestatNumParameter, diplomSeriesParameter, diplomNumParameter, highEducationParameter, hEProfessionParameter, hEQualificationParameter, hEEntryYearParameter, hEExitYearParameter, hEStudyFormIdParameter, hEWorkParameter, id);
+        }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        /// <param name="personId">No Metadata Documentation available.</param>
+        /// <param name="isExcellent">No Metadata Documentation available.</param>
+        /// <param name="schoolCity">No Metadata Documentation available.</param>
+        /// <param name="schoolTypeId">No Metadata Documentation available.</param>
+        /// <param name="schoolName">No Metadata Documentation available.</param>
+        /// <param name="schoolNum">No Metadata Documentation available.</param>
+        /// <param name="schoolExitYear">No Metadata Documentation available.</param>
+        /// <param name="schoolAVG">No Metadata Documentation available.</param>
+        /// <param name="countryEducId">No Metadata Documentation available.</param>
+        /// <param name="regionEducId">No Metadata Documentation available.</param>
+        /// <param name="isEqual">No Metadata Documentation available.</param>
+        /// <param name="attestatSeries">No Metadata Documentation available.</param>
+        /// <param name="attestatNum">No Metadata Documentation available.</param>
+        /// <param name="diplomSeries">No Metadata Documentation available.</param>
+        /// <param name="diplomNum">No Metadata Documentation available.</param>
+        /// <param name="highEducation">No Metadata Documentation available.</param>
+        /// <param name="hEProfession">No Metadata Documentation available.</param>
+        /// <param name="hEQualification">No Metadata Documentation available.</param>
+        /// <param name="hEEntryYear">No Metadata Documentation available.</param>
+        /// <param name="hEExitYear">No Metadata Documentation available.</param>
+        /// <param name="hEStudyFormId">No Metadata Documentation available.</param>
+        /// <param name="hEWork">No Metadata Documentation available.</param>
+        /// <param name="id">No Metadata Documentation available.</param>
+        public int Person_EducationInfo_update(Nullable<global::System.Guid> personId, Nullable<global::System.Boolean> isExcellent, global::System.String schoolCity, Nullable<global::System.Int32> schoolTypeId, global::System.String schoolName, global::System.String schoolNum, Nullable<global::System.Int32> schoolExitYear, Nullable<global::System.Double> schoolAVG, Nullable<global::System.Int32> countryEducId, Nullable<global::System.Int32> regionEducId, Nullable<global::System.Boolean> isEqual, global::System.String attestatSeries, global::System.String attestatNum, global::System.String diplomSeries, global::System.String diplomNum, global::System.String highEducation, global::System.String hEProfession, global::System.String hEQualification, Nullable<global::System.Int32> hEEntryYear, Nullable<global::System.Int32> hEExitYear, Nullable<global::System.Int32> hEStudyFormId, global::System.String hEWork, Nullable<global::System.Int32> id)
+        {
+            ObjectParameter personIdParameter;
+            if (personId.HasValue)
+            {
+                personIdParameter = new ObjectParameter("PersonId", personId);
+            }
+            else
+            {
+                personIdParameter = new ObjectParameter("PersonId", typeof(global::System.Guid));
+            }
+    
+            ObjectParameter isExcellentParameter;
+            if (isExcellent.HasValue)
+            {
+                isExcellentParameter = new ObjectParameter("IsExcellent", isExcellent);
+            }
+            else
+            {
+                isExcellentParameter = new ObjectParameter("IsExcellent", typeof(global::System.Boolean));
+            }
+    
+            ObjectParameter schoolCityParameter;
+            if (schoolCity != null)
+            {
+                schoolCityParameter = new ObjectParameter("SchoolCity", schoolCity);
+            }
+            else
+            {
+                schoolCityParameter = new ObjectParameter("SchoolCity", typeof(global::System.String));
+            }
+    
+            ObjectParameter schoolTypeIdParameter;
+            if (schoolTypeId.HasValue)
+            {
+                schoolTypeIdParameter = new ObjectParameter("SchoolTypeId", schoolTypeId);
+            }
+            else
+            {
+                schoolTypeIdParameter = new ObjectParameter("SchoolTypeId", typeof(global::System.Int32));
+            }
+    
+            ObjectParameter schoolNameParameter;
+            if (schoolName != null)
+            {
+                schoolNameParameter = new ObjectParameter("SchoolName", schoolName);
+            }
+            else
+            {
+                schoolNameParameter = new ObjectParameter("SchoolName", typeof(global::System.String));
+            }
+    
+            ObjectParameter schoolNumParameter;
+            if (schoolNum != null)
+            {
+                schoolNumParameter = new ObjectParameter("SchoolNum", schoolNum);
+            }
+            else
+            {
+                schoolNumParameter = new ObjectParameter("SchoolNum", typeof(global::System.String));
+            }
+    
+            ObjectParameter schoolExitYearParameter;
+            if (schoolExitYear.HasValue)
+            {
+                schoolExitYearParameter = new ObjectParameter("SchoolExitYear", schoolExitYear);
+            }
+            else
+            {
+                schoolExitYearParameter = new ObjectParameter("SchoolExitYear", typeof(global::System.Int32));
+            }
+    
+            ObjectParameter schoolAVGParameter;
+            if (schoolAVG.HasValue)
+            {
+                schoolAVGParameter = new ObjectParameter("SchoolAVG", schoolAVG);
+            }
+            else
+            {
+                schoolAVGParameter = new ObjectParameter("SchoolAVG", typeof(global::System.Double));
+            }
+    
+            ObjectParameter countryEducIdParameter;
+            if (countryEducId.HasValue)
+            {
+                countryEducIdParameter = new ObjectParameter("CountryEducId", countryEducId);
+            }
+            else
+            {
+                countryEducIdParameter = new ObjectParameter("CountryEducId", typeof(global::System.Int32));
+            }
+    
+            ObjectParameter regionEducIdParameter;
+            if (regionEducId.HasValue)
+            {
+                regionEducIdParameter = new ObjectParameter("RegionEducId", regionEducId);
+            }
+            else
+            {
+                regionEducIdParameter = new ObjectParameter("RegionEducId", typeof(global::System.Int32));
+            }
+    
+            ObjectParameter isEqualParameter;
+            if (isEqual.HasValue)
+            {
+                isEqualParameter = new ObjectParameter("IsEqual", isEqual);
+            }
+            else
+            {
+                isEqualParameter = new ObjectParameter("IsEqual", typeof(global::System.Boolean));
+            }
+    
+            ObjectParameter attestatSeriesParameter;
+            if (attestatSeries != null)
+            {
+                attestatSeriesParameter = new ObjectParameter("AttestatSeries", attestatSeries);
+            }
+            else
+            {
+                attestatSeriesParameter = new ObjectParameter("AttestatSeries", typeof(global::System.String));
+            }
+    
+            ObjectParameter attestatNumParameter;
+            if (attestatNum != null)
+            {
+                attestatNumParameter = new ObjectParameter("AttestatNum", attestatNum);
+            }
+            else
+            {
+                attestatNumParameter = new ObjectParameter("AttestatNum", typeof(global::System.String));
+            }
+    
+            ObjectParameter diplomSeriesParameter;
+            if (diplomSeries != null)
+            {
+                diplomSeriesParameter = new ObjectParameter("DiplomSeries", diplomSeries);
+            }
+            else
+            {
+                diplomSeriesParameter = new ObjectParameter("DiplomSeries", typeof(global::System.String));
+            }
+    
+            ObjectParameter diplomNumParameter;
+            if (diplomNum != null)
+            {
+                diplomNumParameter = new ObjectParameter("DiplomNum", diplomNum);
+            }
+            else
+            {
+                diplomNumParameter = new ObjectParameter("DiplomNum", typeof(global::System.String));
+            }
+    
+            ObjectParameter highEducationParameter;
+            if (highEducation != null)
+            {
+                highEducationParameter = new ObjectParameter("HighEducation", highEducation);
+            }
+            else
+            {
+                highEducationParameter = new ObjectParameter("HighEducation", typeof(global::System.String));
+            }
+    
+            ObjectParameter hEProfessionParameter;
+            if (hEProfession != null)
+            {
+                hEProfessionParameter = new ObjectParameter("HEProfession", hEProfession);
+            }
+            else
+            {
+                hEProfessionParameter = new ObjectParameter("HEProfession", typeof(global::System.String));
+            }
+    
+            ObjectParameter hEQualificationParameter;
+            if (hEQualification != null)
+            {
+                hEQualificationParameter = new ObjectParameter("HEQualification", hEQualification);
+            }
+            else
+            {
+                hEQualificationParameter = new ObjectParameter("HEQualification", typeof(global::System.String));
+            }
+    
+            ObjectParameter hEEntryYearParameter;
+            if (hEEntryYear.HasValue)
+            {
+                hEEntryYearParameter = new ObjectParameter("HEEntryYear", hEEntryYear);
+            }
+            else
+            {
+                hEEntryYearParameter = new ObjectParameter("HEEntryYear", typeof(global::System.Int32));
+            }
+    
+            ObjectParameter hEExitYearParameter;
+            if (hEExitYear.HasValue)
+            {
+                hEExitYearParameter = new ObjectParameter("HEExitYear", hEExitYear);
+            }
+            else
+            {
+                hEExitYearParameter = new ObjectParameter("HEExitYear", typeof(global::System.Int32));
+            }
+    
+            ObjectParameter hEStudyFormIdParameter;
+            if (hEStudyFormId.HasValue)
+            {
+                hEStudyFormIdParameter = new ObjectParameter("HEStudyFormId", hEStudyFormId);
+            }
+            else
+            {
+                hEStudyFormIdParameter = new ObjectParameter("HEStudyFormId", typeof(global::System.Int32));
+            }
+    
+            ObjectParameter hEWorkParameter;
+            if (hEWork != null)
+            {
+                hEWorkParameter = new ObjectParameter("HEWork", hEWork);
+            }
+            else
+            {
+                hEWorkParameter = new ObjectParameter("HEWork", typeof(global::System.String));
+            }
+    
+            ObjectParameter idParameter;
+            if (id.HasValue)
+            {
+                idParameter = new ObjectParameter("id", id);
+            }
+            else
+            {
+                idParameter = new ObjectParameter("id", typeof(global::System.Int32));
+            }
+    
+            return base.ExecuteFunction("Person_EducationInfo_update", personIdParameter, isExcellentParameter, schoolCityParameter, schoolTypeIdParameter, schoolNameParameter, schoolNumParameter, schoolExitYearParameter, schoolAVGParameter, countryEducIdParameter, regionEducIdParameter, isEqualParameter, attestatSeriesParameter, attestatNumParameter, diplomSeriesParameter, diplomNumParameter, highEducationParameter, hEProfessionParameter, hEQualificationParameter, hEEntryYearParameter, hEExitYearParameter, hEStudyFormIdParameter, hEWorkParameter, idParameter);
+        }
 
         #endregion
 
@@ -16185,6 +16419,30 @@ namespace Priem
         private global::System.String _Name;
         partial void OnNameChanging(global::System.String value);
         partial void OnNameChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Int32> Priority
+        {
+            get
+            {
+                return _Priority;
+            }
+            set
+            {
+                OnPriorityChanging(value);
+                ReportPropertyChanging("Priority");
+                _Priority = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("Priority");
+                OnPriorityChanged();
+            }
+        }
+        private Nullable<global::System.Int32> _Priority;
+        partial void OnPriorityChanging(Nullable<global::System.Int32> value);
+        partial void OnPriorityChanged();
 
         #endregion
 
@@ -32760,30 +33018,6 @@ namespace Priem
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
-        public global::System.String AttestatRegion
-        {
-            get
-            {
-                return _AttestatRegion;
-            }
-            set
-            {
-                OnAttestatRegionChanging(value);
-                ReportPropertyChanging("AttestatRegion");
-                _AttestatRegion = StructuralObject.SetValidValue(value, true);
-                ReportPropertyChanged("AttestatRegion");
-                OnAttestatRegionChanged();
-            }
-        }
-        private global::System.String _AttestatRegion;
-        partial void OnAttestatRegionChanging(global::System.String value);
-        partial void OnAttestatRegionChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
-        [DataMemberAttribute()]
         public global::System.String AttestatSeries
         {
             get
@@ -33858,6 +34092,54 @@ namespace Priem
         private Nullable<global::System.Int32> _ForeignCountryId;
         partial void OnForeignCountryIdChanging(Nullable<global::System.Int32> value);
         partial void OnForeignCountryIdChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Boolean> HasTRKI
+        {
+            get
+            {
+                return _HasTRKI;
+            }
+            set
+            {
+                OnHasTRKIChanging(value);
+                ReportPropertyChanging("HasTRKI");
+                _HasTRKI = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("HasTRKI");
+                OnHasTRKIChanged();
+            }
+        }
+        private Nullable<global::System.Boolean> _HasTRKI;
+        partial void OnHasTRKIChanging(Nullable<global::System.Boolean> value);
+        partial void OnHasTRKIChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String TRKICertificateNumber
+        {
+            get
+            {
+                return _TRKICertificateNumber;
+            }
+            set
+            {
+                OnTRKICertificateNumberChanging(value);
+                ReportPropertyChanging("TRKICertificateNumber");
+                _TRKICertificateNumber = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("TRKICertificateNumber");
+                OnTRKICertificateNumberChanged();
+            }
+        }
+        private global::System.String _TRKICertificateNumber;
+        partial void OnTRKICertificateNumberChanging(global::System.String value);
+        partial void OnTRKICertificateNumberChanged();
 
         #endregion
 
@@ -34992,30 +35274,6 @@ namespace Priem
         private Nullable<global::System.Int32> _CountryEducId;
         partial void OnCountryEducIdChanging(Nullable<global::System.Int32> value);
         partial void OnCountryEducIdChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
-        [DataMemberAttribute()]
-        public global::System.String AttestatRegion
-        {
-            get
-            {
-                return _AttestatRegion;
-            }
-            set
-            {
-                OnAttestatRegionChanging(value);
-                ReportPropertyChanging("AttestatRegion");
-                _AttestatRegion = StructuralObject.SetValidValue(value, true);
-                ReportPropertyChanged("AttestatRegion");
-                OnAttestatRegionChanged();
-            }
-        }
-        private global::System.String _AttestatRegion;
-        partial void OnAttestatRegionChanging(global::System.String value);
-        partial void OnAttestatRegionChanged();
     
         /// <summary>
         /// No Metadata Documentation available.
@@ -39436,18 +39694,18 @@ namespace Priem
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
         [DataMemberAttribute()]
-        [EdmRelationshipNavigationPropertyAttribute("Priem2012Model", "FK_Person_EducationInfo_Language", "Person_EducationInfo")]
-        public EntityCollection<Person_EducationInfo> Person_EducationInfo
+        [EdmRelationshipNavigationPropertyAttribute("Priem2012Model", "FK_Person_AdditionalInfo_Language", "Person_AdditionalInfo")]
+        public EntityCollection<Person_AdditionalInfo> Person_AdditionalInfo
         {
             get
             {
-                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<Person_EducationInfo>("Priem2012Model.FK_Person_EducationInfo_Language", "Person_EducationInfo");
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<Person_AdditionalInfo>("Priem2012Model.FK_Person_AdditionalInfo_Language", "Person_AdditionalInfo");
             }
             set
             {
                 if ((value != null))
                 {
-                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<Person_EducationInfo>("Priem2012Model.FK_Person_EducationInfo_Language", "Person_EducationInfo", value);
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<Person_AdditionalInfo>("Priem2012Model.FK_Person_AdditionalInfo_Language", "Person_AdditionalInfo", value);
                 }
             }
         }
@@ -45351,33 +45609,17 @@ namespace Priem
         [SoapIgnoreAttribute()]
         [DataMemberAttribute()]
         [EdmRelationshipNavigationPropertyAttribute("Priem2012Model", "FK_Person_EducationInfo_Person", "Person_EducationInfo")]
-        public Person_EducationInfo Person_EducationInfo
+        public EntityCollection<Person_EducationInfo> Person_EducationInfo
         {
             get
             {
-                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<Person_EducationInfo>("Priem2012Model.FK_Person_EducationInfo_Person", "Person_EducationInfo").Value;
-            }
-            set
-            {
-                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<Person_EducationInfo>("Priem2012Model.FK_Person_EducationInfo_Person", "Person_EducationInfo").Value = value;
-            }
-        }
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [BrowsableAttribute(false)]
-        [DataMemberAttribute()]
-        public EntityReference<Person_EducationInfo> Person_EducationInfoReference
-        {
-            get
-            {
-                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<Person_EducationInfo>("Priem2012Model.FK_Person_EducationInfo_Person", "Person_EducationInfo");
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<Person_EducationInfo>("Priem2012Model.FK_Person_EducationInfo_Person", "Person_EducationInfo");
             }
             set
             {
                 if ((value != null))
                 {
-                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<Person_EducationInfo>("Priem2012Model.FK_Person_EducationInfo_Person", "Person_EducationInfo", value);
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<Person_EducationInfo>("Priem2012Model.FK_Person_EducationInfo_Person", "Person_EducationInfo", value);
                 }
             }
         }
@@ -45462,12 +45704,22 @@ namespace Priem
         /// <param name="personId">Initial value of the PersonId property.</param>
         /// <param name="hostelAbit">Initial value of the HostelAbit property.</param>
         /// <param name="hostelEduc">Initial value of the HostelEduc property.</param>
-        public static Person_AdditionalInfo CreatePerson_AdditionalInfo(global::System.Guid personId, global::System.Boolean hostelAbit, global::System.Boolean hostelEduc)
+        /// <param name="hasTRKI">Initial value of the HasTRKI property.</param>
+        /// <param name="startEnglish">Initial value of the StartEnglish property.</param>
+        /// <param name="englishMark">Initial value of the EnglishMark property.</param>
+        /// <param name="languageId">Initial value of the LanguageId property.</param>
+        /// <param name="egeInSPbgu">Initial value of the EgeInSPbgu property.</param>
+        public static Person_AdditionalInfo CreatePerson_AdditionalInfo(global::System.Guid personId, global::System.Boolean hostelAbit, global::System.Boolean hostelEduc, global::System.Boolean hasTRKI, global::System.Boolean startEnglish, global::System.Double englishMark, global::System.Int32 languageId, global::System.Boolean egeInSPbgu)
         {
             Person_AdditionalInfo person_AdditionalInfo = new Person_AdditionalInfo();
             person_AdditionalInfo.PersonId = personId;
             person_AdditionalInfo.HostelAbit = hostelAbit;
             person_AdditionalInfo.HostelEduc = hostelEduc;
+            person_AdditionalInfo.HasTRKI = hasTRKI;
+            person_AdditionalInfo.StartEnglish = startEnglish;
+            person_AdditionalInfo.EnglishMark = englishMark;
+            person_AdditionalInfo.LanguageId = languageId;
+            person_AdditionalInfo.EgeInSPbgu = egeInSPbgu;
             return person_AdditionalInfo;
         }
 
@@ -45861,6 +46113,150 @@ namespace Priem
         private global::System.Boolean _HostelEduc;
         partial void OnHostelEducChanging(global::System.Boolean value);
         partial void OnHostelEducChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Boolean HasTRKI
+        {
+            get
+            {
+                return _HasTRKI;
+            }
+            set
+            {
+                OnHasTRKIChanging(value);
+                ReportPropertyChanging("HasTRKI");
+                _HasTRKI = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("HasTRKI");
+                OnHasTRKIChanged();
+            }
+        }
+        private global::System.Boolean _HasTRKI;
+        partial void OnHasTRKIChanging(global::System.Boolean value);
+        partial void OnHasTRKIChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String TRKICertificateNumber
+        {
+            get
+            {
+                return _TRKICertificateNumber;
+            }
+            set
+            {
+                OnTRKICertificateNumberChanging(value);
+                ReportPropertyChanging("TRKICertificateNumber");
+                _TRKICertificateNumber = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("TRKICertificateNumber");
+                OnTRKICertificateNumberChanged();
+            }
+        }
+        private global::System.String _TRKICertificateNumber;
+        partial void OnTRKICertificateNumberChanging(global::System.String value);
+        partial void OnTRKICertificateNumberChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Boolean StartEnglish
+        {
+            get
+            {
+                return _StartEnglish;
+            }
+            set
+            {
+                OnStartEnglishChanging(value);
+                ReportPropertyChanging("StartEnglish");
+                _StartEnglish = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("StartEnglish");
+                OnStartEnglishChanged();
+            }
+        }
+        private global::System.Boolean _StartEnglish;
+        partial void OnStartEnglishChanging(global::System.Boolean value);
+        partial void OnStartEnglishChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Double EnglishMark
+        {
+            get
+            {
+                return _EnglishMark;
+            }
+            set
+            {
+                OnEnglishMarkChanging(value);
+                ReportPropertyChanging("EnglishMark");
+                _EnglishMark = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("EnglishMark");
+                OnEnglishMarkChanged();
+            }
+        }
+        private global::System.Double _EnglishMark;
+        partial void OnEnglishMarkChanging(global::System.Double value);
+        partial void OnEnglishMarkChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 LanguageId
+        {
+            get
+            {
+                return _LanguageId;
+            }
+            set
+            {
+                OnLanguageIdChanging(value);
+                ReportPropertyChanging("LanguageId");
+                _LanguageId = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("LanguageId");
+                OnLanguageIdChanged();
+            }
+        }
+        private global::System.Int32 _LanguageId;
+        partial void OnLanguageIdChanging(global::System.Int32 value);
+        partial void OnLanguageIdChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Boolean EgeInSPbgu
+        {
+            get
+            {
+                return _EgeInSPbgu;
+            }
+            set
+            {
+                OnEgeInSPbguChanging(value);
+                ReportPropertyChanging("EgeInSPbgu");
+                _EgeInSPbgu = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("EgeInSPbgu");
+                OnEgeInSPbguChanged();
+            }
+        }
+        private global::System.Boolean _EgeInSPbgu;
+        partial void OnEgeInSPbguChanging(global::System.Boolean value);
+        partial void OnEgeInSPbguChanged();
 
         #endregion
 
@@ -45977,6 +46373,44 @@ namespace Priem
                 if ((value != null))
                 {
                     ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<SP_Faculty>("Priem2012Model.FK_Person_AdditionalInfo_SP_HostelFaculty", "SP_Faculty", value);
+                }
+            }
+        }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("Priem2012Model", "FK_Person_AdditionalInfo_Language", "Language")]
+        public Language Language
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<Language>("Priem2012Model.FK_Person_AdditionalInfo_Language", "Language").Value;
+            }
+            set
+            {
+                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<Language>("Priem2012Model.FK_Person_AdditionalInfo_Language", "Language").Value = value;
+            }
+        }
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [BrowsableAttribute(false)]
+        [DataMemberAttribute()]
+        public EntityReference<Language> LanguageReference
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<Language>("Priem2012Model.FK_Person_AdditionalInfo_Language", "Language");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<Language>("Priem2012Model.FK_Person_AdditionalInfo_Language", "Language", value);
                 }
             }
         }
@@ -46694,14 +47128,14 @@ namespace Priem
         /// <param name="personId">Initial value of the PersonId property.</param>
         /// <param name="isExcellent">Initial value of the IsExcellent property.</param>
         /// <param name="isEqual">Initial value of the IsEqual property.</param>
-        /// <param name="hasTRKI">Initial value of the HasTRKI property.</param>
-        public static Person_EducationInfo CreatePerson_EducationInfo(global::System.Guid personId, global::System.Boolean isExcellent, global::System.Boolean isEqual, global::System.Boolean hasTRKI)
+        /// <param name="id">Initial value of the Id property.</param>
+        public static Person_EducationInfo CreatePerson_EducationInfo(global::System.Guid personId, global::System.Boolean isExcellent, global::System.Boolean isEqual, global::System.Int32 id)
         {
             Person_EducationInfo person_EducationInfo = new Person_EducationInfo();
             person_EducationInfo.PersonId = personId;
             person_EducationInfo.IsExcellent = isExcellent;
             person_EducationInfo.IsEqual = isEqual;
-            person_EducationInfo.HasTRKI = hasTRKI;
+            person_EducationInfo.Id = id;
             return person_EducationInfo;
         }
 
@@ -46712,7 +47146,7 @@ namespace Priem
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
         public global::System.Guid PersonId
         {
@@ -46722,14 +47156,11 @@ namespace Priem
             }
             set
             {
-                if (_PersonId != value)
-                {
-                    OnPersonIdChanging(value);
-                    ReportPropertyChanging("PersonId");
-                    _PersonId = StructuralObject.SetValidValue(value);
-                    ReportPropertyChanged("PersonId");
-                    OnPersonIdChanged();
-                }
+                OnPersonIdChanging(value);
+                ReportPropertyChanging("PersonId");
+                _PersonId = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("PersonId");
+                OnPersonIdChanged();
             }
         }
         private global::System.Guid _PersonId;
@@ -46759,30 +47190,6 @@ namespace Priem
         private global::System.Boolean _IsExcellent;
         partial void OnIsExcellentChanging(global::System.Boolean value);
         partial void OnIsExcellentChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
-        [DataMemberAttribute()]
-        public Nullable<global::System.Int32> LanguageId
-        {
-            get
-            {
-                return _LanguageId;
-            }
-            set
-            {
-                OnLanguageIdChanging(value);
-                ReportPropertyChanging("LanguageId");
-                _LanguageId = StructuralObject.SetValidValue(value);
-                ReportPropertyChanged("LanguageId");
-                OnLanguageIdChanged();
-            }
-        }
-        private Nullable<global::System.Int32> _LanguageId;
-        partial void OnLanguageIdChanging(Nullable<global::System.Int32> value);
-        partial void OnLanguageIdChanged();
     
         /// <summary>
         /// No Metadata Documentation available.
@@ -46927,30 +47334,6 @@ namespace Priem
         private Nullable<global::System.Int32> _CountryEducId;
         partial void OnCountryEducIdChanging(Nullable<global::System.Int32> value);
         partial void OnCountryEducIdChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
-        [DataMemberAttribute()]
-        public global::System.String AttestatRegion
-        {
-            get
-            {
-                return _AttestatRegion;
-            }
-            set
-            {
-                OnAttestatRegionChanging(value);
-                ReportPropertyChanging("AttestatRegion");
-                _AttestatRegion = StructuralObject.SetValidValue(value, true);
-                ReportPropertyChanged("AttestatRegion");
-                OnAttestatRegionChanged();
-            }
-        }
-        private global::System.String _AttestatRegion;
-        partial void OnAttestatRegionChanging(global::System.String value);
-        partial void OnAttestatRegionChanged();
     
         /// <summary>
         /// No Metadata Documentation available.
@@ -47245,78 +47628,6 @@ namespace Priem
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
-        public Nullable<global::System.Boolean> StartEnglish
-        {
-            get
-            {
-                return _StartEnglish;
-            }
-            set
-            {
-                OnStartEnglishChanging(value);
-                ReportPropertyChanging("StartEnglish");
-                _StartEnglish = StructuralObject.SetValidValue(value);
-                ReportPropertyChanged("StartEnglish");
-                OnStartEnglishChanged();
-            }
-        }
-        private Nullable<global::System.Boolean> _StartEnglish;
-        partial void OnStartEnglishChanging(Nullable<global::System.Boolean> value);
-        partial void OnStartEnglishChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
-        [DataMemberAttribute()]
-        public Nullable<global::System.Int32> EnglishMark
-        {
-            get
-            {
-                return _EnglishMark;
-            }
-            set
-            {
-                OnEnglishMarkChanging(value);
-                ReportPropertyChanging("EnglishMark");
-                _EnglishMark = StructuralObject.SetValidValue(value);
-                ReportPropertyChanged("EnglishMark");
-                OnEnglishMarkChanged();
-            }
-        }
-        private Nullable<global::System.Int32> _EnglishMark;
-        partial void OnEnglishMarkChanging(Nullable<global::System.Int32> value);
-        partial void OnEnglishMarkChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
-        [DataMemberAttribute()]
-        public Nullable<global::System.Boolean> EgeInSPbgu
-        {
-            get
-            {
-                return _EgeInSPbgu;
-            }
-            set
-            {
-                OnEgeInSPbguChanging(value);
-                ReportPropertyChanging("EgeInSPbgu");
-                _EgeInSPbgu = StructuralObject.SetValidValue(value);
-                ReportPropertyChanged("EgeInSPbgu");
-                OnEgeInSPbguChanged();
-            }
-        }
-        private Nullable<global::System.Boolean> _EgeInSPbgu;
-        partial void OnEgeInSPbguChanging(Nullable<global::System.Boolean> value);
-        partial void OnEgeInSPbguChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
-        [DataMemberAttribute()]
         public Nullable<global::System.Int32> ForeignCountryEducId
         {
             get
@@ -47387,54 +47698,6 @@ namespace Priem
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
-        [DataMemberAttribute()]
-        public global::System.Boolean HasTRKI
-        {
-            get
-            {
-                return _HasTRKI;
-            }
-            set
-            {
-                OnHasTRKIChanging(value);
-                ReportPropertyChanging("HasTRKI");
-                _HasTRKI = StructuralObject.SetValidValue(value);
-                ReportPropertyChanged("HasTRKI");
-                OnHasTRKIChanged();
-            }
-        }
-        private global::System.Boolean _HasTRKI;
-        partial void OnHasTRKIChanging(global::System.Boolean value);
-        partial void OnHasTRKIChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
-        [DataMemberAttribute()]
-        public global::System.String TRKICertificateNumber
-        {
-            get
-            {
-                return _TRKICertificateNumber;
-            }
-            set
-            {
-                OnTRKICertificateNumberChanging(value);
-                ReportPropertyChanging("TRKICertificateNumber");
-                _TRKICertificateNumber = StructuralObject.SetValidValue(value, true);
-                ReportPropertyChanged("TRKICertificateNumber");
-                OnTRKICertificateNumberChanged();
-            }
-        }
-        private global::System.String _TRKICertificateNumber;
-        partial void OnTRKICertificateNumberChanging(global::System.String value);
-        partial void OnTRKICertificateNumberChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
         public Nullable<global::System.Int32> RegionEducId
@@ -47455,6 +47718,33 @@ namespace Priem
         private Nullable<global::System.Int32> _RegionEducId;
         partial void OnRegionEducIdChanging(Nullable<global::System.Int32> value);
         partial void OnRegionEducIdChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 Id
+        {
+            get
+            {
+                return _Id;
+            }
+            set
+            {
+                if (_Id != value)
+                {
+                    OnIdChanging(value);
+                    ReportPropertyChanging("Id");
+                    _Id = StructuralObject.SetValidValue(value);
+                    ReportPropertyChanged("Id");
+                    OnIdChanged();
+                }
+            }
+        }
+        private global::System.Int32 _Id;
+        partial void OnIdChanging(global::System.Int32 value);
+        partial void OnIdChanged();
 
         #endregion
 
@@ -47495,44 +47785,6 @@ namespace Priem
                 if ((value != null))
                 {
                     ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<Country>("Priem2012Model.FK_Person_EducationInfo_Country", "Country", value);
-                }
-            }
-        }
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [XmlIgnoreAttribute()]
-        [SoapIgnoreAttribute()]
-        [DataMemberAttribute()]
-        [EdmRelationshipNavigationPropertyAttribute("Priem2012Model", "FK_Person_EducationInfo_Language", "Language")]
-        public Language Language
-        {
-            get
-            {
-                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<Language>("Priem2012Model.FK_Person_EducationInfo_Language", "Language").Value;
-            }
-            set
-            {
-                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<Language>("Priem2012Model.FK_Person_EducationInfo_Language", "Language").Value = value;
-            }
-        }
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [BrowsableAttribute(false)]
-        [DataMemberAttribute()]
-        public EntityReference<Language> LanguageReference
-        {
-            get
-            {
-                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<Language>("Priem2012Model.FK_Person_EducationInfo_Language", "Language");
-            }
-            set
-            {
-                if ((value != null))
-                {
-                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<Language>("Priem2012Model.FK_Person_EducationInfo_Language", "Language", value);
                 }
             }
         }

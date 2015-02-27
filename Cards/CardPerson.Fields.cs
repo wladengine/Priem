@@ -358,7 +358,11 @@ namespace Priem
                 { chbEkvivEduc.Checked = value.Value; }
             }
         }
-
+        public string EqualDocumentNumber
+        {
+            get { return tbEqualityDocumentNumber.Text.Trim(); }
+            set { tbEqualityDocumentNumber.Text = value; }
+        }
         public string AttestatRegion
         {
             get { return tbAttestatRegion.Text.Trim(); }
@@ -386,8 +390,8 @@ namespace Priem
         }
         public string HighEducation
         {
-            get { return tbHighEducation.Text.Trim(); }
-            set { tbHighEducation.Text = value; }
+            get { return tbSchoolName.Text.Trim(); }
+            set { tbSchoolName.Text = value; }
         }
         public string HEProfession
         {

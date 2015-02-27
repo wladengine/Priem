@@ -243,7 +243,7 @@ namespace Priem
 Person.Id as PersonId
 , PersonEducationDocument.Id as EducationDocumentId
 , SchoolCity, SchoolTypeId, SchoolName, SchoolNum, SchoolExitYear, CountryEducId
-, RegionEducId,  IsEqual, Series , Number, AvgMark
+, RegionEducId,  IsEqual, EqualDocumentNumber, Series , Number, AvgMark
 , PersonHighEducationInfo.EducationDocumentId as PersonHighEducationInfoId
 , Qualification.Name as Qualification
       , EntryYear
@@ -290,6 +290,7 @@ where Person.Barcode =" + fileNum ;
                         RegionEducId = row.Field<int>("RegionEducId"),
                         IsExcellent = row.Field<bool>("IsExcellent"),
                         IsEqual = row.Field<bool>("IsEqual"),
+                        EqualDocumentNumber = row.Field<string>("EqualDocumentNumber"),
                         AttestatSeries = row.Field<string>("Series"),
                         AttestatNum = row.Field<string>("Number"),
                         DiplomSeries = row.Field<string>("Series"),

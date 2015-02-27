@@ -19,9 +19,11 @@ namespace Priem
     public partial class CardPerson : CardFromList
     { 
         private int? personBarc;
+        private int _currentEducRow;
      
         private bool inEnableProtocol;
-        private bool inEntryView;        
+        private bool inEntryView;
+        private List<Person_EducationInfo> lstEducationInfo;
 
         // конструктор формы
         public CardPerson(string id, int? rowInd, BaseFormEx formOwner)
@@ -301,7 +303,10 @@ namespace Priem
             StartEnglish = person.StartEnglish;
             EnglishMark = person.EnglishMark;
             EgeInSpbgu = person.EgeInSPbgu;
-            
+
+            FillEducationData(GetPersonEducationDocumentsByBarcode(person.Barcode.Value));
+
+
             personBarc = person.Barcode;
         }
 
@@ -1643,6 +1648,143 @@ namespace Priem
             if (MessageBox.Show("Удалить запись?", "Внимание", MessageBoxButtons.YesNo) == System.Windows.Forms.DialogResult.Yes)
             {
                 
+            }
+        }
+
+        private void dgvEducationDocuments_CurrentCellChanged(object sender, EventArgs e)
+        {
+            if (dgvEducationDocuments.CurrentRow != null)
+                if (dgvEducationDocuments.CurrentRow.Index != _currentEducRow)
+                {
+                    _currentEducRow = dgvEducationDocuments.CurrentRow.Index;
+                    ViewEducationInfo(lstEducationInfo[_currentEducRow].Id);
+                }
+        }
+
+        private void FillEducationData(List<Person_EducationInfo> lstVals)
+        {
+            lstEducationInfo = lstVals;
+
+            dgvEducationDocuments.DataSource = lstVals.Select(x => new
+            {
+                x.Id,
+                School = x.SchoolName,
+                Series = (x.SchoolTypeId == 1 ? x.AttestatSeries : x.DiplomSeries),
+                Num = x.SchoolTypeId == 1 ? x.AttestatNum : x.DiplomNum,
+            }).ToList();
+
+            dgvEducationDocuments.Columns["Id"].Visible = false;
+            dgvEducationDocuments.Columns["School"].HeaderText = "Уч. учреждение";
+            dgvEducationDocuments.Columns["School"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            dgvEducationDocuments.Columns["Series"].HeaderText = "Серия";
+            dgvEducationDocuments.Columns["Series"].AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells;
+            dgvEducationDocuments.Columns["Num"].HeaderText = "Номер";
+            dgvEducationDocuments.Columns["Num"].AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells;
+
+            if (lstVals.Count > 0)
+                ViewEducationInfo(lstVals.First().Id);
+
+            _currentEducRow = 0;
+        }
+
+        private void ViewEducationInfo(int id)
+        {
+            int ind = lstEducationInfo.FindIndex(x => x.Id == id);
+
+            CountryEducId = lstEducationInfo[ind].CountryEducId;
+            RegionEducId = lstEducationInfo[ind].RegionEducId;
+            IsEqual = lstEducationInfo[ind].IsEqual;
+            EqualDocumentNumber = lstEducationInfo[ind].EqualDocumentNumber;
+            AttestatSeries = lstEducationInfo[ind].AttestatSeries;
+            AttestatNum = lstEducationInfo[ind].AttestatNum;
+            DiplomSeries = lstEducationInfo[ind].DiplomSeries;
+            DiplomNum = lstEducationInfo[ind].DiplomNum;
+            SchoolAVG = lstEducationInfo[ind].SchoolAVG;
+            HighEducation = lstEducationInfo[ind].HighEducation;
+            HEProfession = lstEducationInfo[ind].HEProfession;
+            HEQualification = lstEducationInfo[ind].HEQualification;
+            HEEntryYear = lstEducationInfo[ind].HEEntryYear;
+            HEExitYear = lstEducationInfo[ind].HEExitYear;
+            HEWork = lstEducationInfo[ind].HEWork;
+            HEStudyFormId = lstEducationInfo[ind].HEStudyFormId;
+            IsExcellent = lstEducationInfo[ind].IsExcellent;
+            SchoolCity = lstEducationInfo[ind].SchoolCity;
+            SchoolTypeId = lstEducationInfo[ind].SchoolTypeId;
+            SchoolName = lstEducationInfo[ind].SchoolName;
+            SchoolNum = lstEducationInfo[ind].SchoolNum;
+            SchoolExitYear = lstEducationInfo[ind].SchoolExitYear;
+        }
+
+        public List<Person_EducationInfo> GetPersonEducationDocumentsByBarcode(int fileNum)
+        {
+            using (PriemEntities context = new PriemEntities())
+            {
+            List<Person_EducationInfo> lstRet = new List<Person_EducationInfo>();
+
+            string query = @"select
+Person.Id as PersonId
+, PersonEducationDocument.Id as EducationDocumentId
+, SchoolCity, SchoolTypeId, SchoolName, SchoolNum, SchoolExitYear, CountryEducId
+, RegionEducId,  IsEqual, Series , Number, AvgMark
+, PersonHighEducationInfo.EducationDocumentId as PersonHighEducationInfoId
+, Qualification.Name as Qualification
+      , EntryYear
+      , ExitYear
+      , DiplomaTheme
+      , QualificationId
+      , StudyFormId
+      , ProgramName
+, IsExcellent
+from dbo.PersonEducationDocument 
+inner join Person on Person.Id = PersonEducationDocument.PersonId
+left join PersonHighEducationInfo on PersonHighEducationInfo.EducationDocumentId = PersonEducationDocument.Id
+left join Qualification on Qualification.Id = QualificationId
+where Person.Barcode =" + fileNum;
+ 
+            DataSet ds_EducationInfo = null;//_bdcInet.GetDataSet(query);
+
+            var EducationInfo = (from pEd in context.Person_EducationInfo
+                                 join p in context.Person on pEd.PersonId equals p.Id
+                                 where p.Barcode == fileNum
+                                 select pEd).ToList();
+
+            if (ds_EducationInfo.Tables[0].Rows.Count == 0)
+                throw new Exception("Записей не найдено");
+
+            foreach (var row in EducationInfo)
+            {
+                lstRet.Add(
+                    new Person_EducationInfo()
+                    {
+                        Id = row.Id,
+                        PersonId = row.PersonId,
+                        SchoolCity = row.SchoolCity,
+                        SchoolTypeId = row.SchoolTypeId,
+                        SchoolName = row.SchoolName,
+                        SchoolNum = row.SchoolNum,
+                        SchoolExitYear = row.SchoolExitYear,
+                        CountryEducId = row.CountryEducId,
+                        RegionEducId = row.RegionEducId,
+                        IsExcellent = row.IsExcellent,
+                        IsEqual = row.IsEqual,
+                        EqualDocumentNumber = row.EqualDocumentNumber,
+                        AttestatSeries = row.AttestatSeries,
+                        AttestatNum = row.AttestatNum,
+                        DiplomSeries = row.DiplomSeries,
+                        DiplomNum = row.DiplomNum,
+                        SchoolAVG = row.SchoolAVG,
+                        HighEducation = row.HighEducation,
+                        HEProfession = row.HEProfession,
+                        HEQualification = row.HEQualification,
+                        HEEntryYear = row.HEEntryYear,
+                        HEExitYear = row.HEExitYear,
+                        HEWork = row.HEWork,
+                        HEStudyFormId = row.HEStudyFormId,
+                    }
+                    );
+            }
+
+            return lstRet;
             }
         }
     }

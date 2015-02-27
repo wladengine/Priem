@@ -273,6 +273,11 @@ namespace Priem
             get { return chbEkvivEduc.Checked; }
             set { chbEkvivEduc.Checked = value; }
         }
+        public string EqualDocumentNumber
+        {
+            get { return tbEqualityDocumentNumber.Text.Trim(); }
+            set { tbEqualityDocumentNumber.Text = value; }
+        }
         public bool IsExcellent
         {
             get { return chbIsExcellent.Checked; }

@@ -992,6 +992,7 @@ FROM [extApplicationDetails] WHERE [ApplicationId]=@AppId";
             CountryEducId = lstEducationInfo[ind].CountryEducId;
             RegionEducId = lstEducationInfo[ind].RegionEducId;
             IsEqual = lstEducationInfo[ind].IsEqual;
+            EqualDocumentNumber = lstEducationInfo[ind].EqualDocumentNumber;
             AttestatSeries = lstEducationInfo[ind].AttestatSeries;
             AttestatNum = lstEducationInfo[ind].AttestatNum;
             DiplomSeries = lstEducationInfo[ind].DiplomSeries;

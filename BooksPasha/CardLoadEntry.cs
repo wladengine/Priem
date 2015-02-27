@@ -62,32 +62,55 @@ namespace Priem
                                   && lst.Contains(ent.StudyLevelId)
                                   select ent).Count();
 
-                    if (cntEnt > 0)
-                        continue;
-
-                    Entry item = new Entry();
-                    item.Id = entryId;
-                    item.FacultyId = (int)dr["FacultyId"];
-                    item.LicenseProgramId = (int)dr["LicenseProgramId"];
-                    item.ObrazProgramId = (int)dr["ObrazProgramId"];
-                    item.ProfileId = dr.Field<int?>("ProfileId") ?? 0; 
-                    //item.ProfileName = dr["ProfileName"].ToString();
-                    item.StudyBasisId = (int)dr["StudyBasisId"];
-                    item.StudyFormId = (int)dr["StudyFormId"];
-                    item.StudyLevelId = (int)dr["StudyLevelId"];
-                    item.StudyPlanId = (Guid)dr["StudyPlanId"];
-                    item.StudyPlanNumber = dr["StudyPlanNumber"].ToString();
-                    item.ProgramModeShortName = dr["ProgramModeShortName"].ToString();
-                    item.IsSecond = (bool)dr["IsSecond"];                    
-                    item.KCP = dr.Field<int?>("KCP");
+                    int iObrazProgramId = (int)dr["ObrazProgramId"];
+                    Guid gStudyPlanId = (Guid)dr["StudyPlanId"];
                     
-                    context.Entry_Insert(entryId, (int)dr["FacultyId"], (int)dr["LicenseProgramId"],
-                            (int)dr["ObrazProgramId"], dr.Field<int?>("ProfileId") ?? 0, (int)dr["StudyBasisId"],
-                            (int)dr["StudyFormId"], (int)dr["StudyLevelId"], (Guid)dr["StudyPlanId"], dr["StudyPlanNumber"].ToString(),
-                            dr["ProgramModeShortName"].ToString(), (bool)dr["IsSecond"], (bool)dr["IsReduced"], (bool)dr["IsParallel"], dr.Field<int?>("KCP"), null, null);
+                    if (cntEnt == 0)
+                    {
+                        Entry item = new Entry();
+                        item.Id = entryId;
+                        item.FacultyId = (int)dr["FacultyId"];
+                        item.LicenseProgramId = (int)dr["LicenseProgramId"];
+                        item.ObrazProgramId = iObrazProgramId;
+                        item.ProfileId = dr.Field<int?>("ProfileId") ?? 0;
+                        //item.ProfileName = dr["ProfileName"].ToString();
+                        item.StudyBasisId = (int)dr["StudyBasisId"];
+                        item.StudyFormId = (int)dr["StudyFormId"];
+                        item.StudyLevelId = (int)dr["StudyLevelId"];
+                        item.StudyPlanId = gStudyPlanId;
+                        item.StudyPlanNumber = dr["StudyPlanNumber"].ToString();
+                        item.ProgramModeShortName = dr["ProgramModeShortName"].ToString();
+                        item.IsSecond = (bool)dr["IsSecond"];
+                        item.KCP = dr.Field<int?>("KCP");
+
+                        context.Entry_Insert(entryId, (int)dr["FacultyId"], (int)dr["LicenseProgramId"],
+                                (int)dr["ObrazProgramId"], dr.Field<int?>("ProfileId") ?? 0, (int)dr["StudyBasisId"],
+                                (int)dr["StudyFormId"], (int)dr["StudyLevelId"], (Guid)dr["StudyPlanId"], dr["StudyPlanNumber"].ToString(),
+                                dr["ProgramModeShortName"].ToString(), (bool)dr["IsSecond"], (bool)dr["IsReduced"], (bool)dr["IsParallel"], dr.Field<int?>("KCP"), null, null);
+                    }
 
                     //inner profiles
-                    DataSet dsProf = _bdcEduc.GetDataSet("SELECT ProfileId, ProfileNameNoNumber FROM ed.extStudyPlanProfiles");
+                    DataSet dsProf = _bdcEduc.GetDataSet("SELECT ProfileId FROM ed.extStudyPlanProfiles WHERE StudyPlanId=@SP", new SortedList<string,object>() { {"@SP", gStudyPlanId}});
+                    DataTable tbl = dsProf.Tables[0];
+                    //если план многопрофильный
+                    if (tbl.Rows.Count > 1)
+                    {
+                        foreach (DataRow row in tbl.Rows)
+                        {
+                            int iProfileId = row.Field<int?>("ProfileId") ?? 0;
+                            if (context.InnerEntryInEntry.Where(x => x.EntryId == entryId && x.ObrazProgramId == iObrazProgramId && x.ProfileId == iProfileId).Count() == 0)
+                            {
+                                InnerEntryInEntry innEntry = new InnerEntryInEntry();
+                                innEntry.Id = Guid.NewGuid();
+                                innEntry.ObrazProgramId = iObrazProgramId;
+                                innEntry.ProfileId = iProfileId;
+                                innEntry.EntryId = entryId;
+
+                                context.InnerEntryInEntry.AddObject(innEntry);
+                                context.SaveChanges();
+                            }
+                        }
+                    }
                 }
 
                 MessageBox.Show("Выполнено");
@@ -378,6 +401,7 @@ DateOfClose, DateOfStart, IsUsedForPriem) VALUES
             using (PriemEntities context = new PriemEntities())
             {
                 var EntryList = context.Entry.ToList();
+                var InnerEntiesData = context.InnerEntryInEntry.ToList();
                 ProgressForm pf = new ProgressForm();
                 pf.Show();
                 pf.MaxPrBarValue = EntryList.Count;
@@ -479,6 +503,28 @@ WHERE
                             slParams.Add("@SemesterId", 1);
                             slParams.Add("@Id", Entr.Id);
                             _bdcPriemOnline.ExecuteQuery(query, slParams);
+
+                            var lstInnerEntries = InnerEntiesData.Where(x => x.EntryId == Entr.Id).Select(x => new { x.Id, x.EntryId, x.ObrazProgramId, x.ProfileId }).ToList();
+                            if (lstInnerEntries.Count > 1)
+                            {
+                                foreach (var inEnt in lstInnerEntries)
+                                {
+                                    query = "SELECT COUNT(*) FROM InnerEntryInEntry WHERE Id=@Id";
+                                    slParams.Clear();
+                                    slParams.Add("@Id", inEnt.Id);
+                                    cnt = (int)_bdcPriemOnline.GetValue(query, slParams);
+
+                                    if (cnt == 0)
+                                        query = "INSERT INTO InnerEntryInEntry (Id, EntryId, ObrazProgramId, ProfileId) VALUES (@Id, @EntryId, @ObrazProgramId, @ProfileId)";
+                                    else
+                                        query = "UPDATE InnerEntryInEntry SET EntryId=@EntryId, ObrazProgramId=@ObrazProgramId, ProfileId=@ProfileId WHERE Id=@Id";
+                                    
+                                    slParams.Add("@EntryId", inEnt.EntryId);
+                                    slParams.Add("@ObrazProgramId", inEnt.ObrazProgramId);
+                                    slParams.Add("@ProfileId", inEnt.ProfileId);
+                                    _bdcPriemOnline.ExecuteQuery(query, slParams);
+                                }
+                            }
                         }
 
                         tran.Complete();

@@ -117,18 +117,19 @@ namespace Priem
                     tpSecond.Parent = null;
                     btnDocs.Visible = true;
 
-                    ComboServ.FillCombo(cbSchoolType, HelpClass.GetComboListByQuery("SELECT Cast(ed.SchoolType.Id as nvarchar(100)) AS Id, ed.SchoolType.Name FROM ed.SchoolType WHERE ed.SchoolType.Id = 4 ORDER BY 1"), false, false);
+                    ComboServ.FillCombo(cbSchoolType, HelpClass.GetComboListByTable("ed.SchoolType", "ORDER BY 1"), false, false);
+                    //ComboServ.FillCombo(cbSchoolType, HelpClass.GetComboListByQuery("SELECT Cast(ed.SchoolType.Id as nvarchar(100)) AS Id, ed.SchoolType.Name FROM ed.SchoolType WHERE ed.SchoolType.Id = 4 ORDER BY 1"), false, false);
                     tbSchoolNum.Visible = false;
-                    tbSchoolName.Width = 200;
+                    //tbSchoolName.Width = 200;
                     lblSchoolNum.Visible = false;
                     gbAtt.Visible = false;
                     gbDipl.Visible = true;
                     chbIsExcellent.Text = "Диплом с отличием";
                     btnAttMarks.Visible = false;
-                    gbSchool.Visible = false;                    
+                    //gbSchool.Visible = false;                    
 
-                    gbEduc.Location = new Point(11, 7);
-                    gbFinishStudy.Location = new Point(11, 222);
+                    //gbEduc.Location = new Point(11, 7);
+                    //gbFinishStudy.Location = new Point(11, 222);
                 }
                 else
                 {
@@ -177,16 +178,31 @@ namespace Priem
             {
                 gbAtt.Visible = true;
                 gbDipl.Visible = false;
-                tbSchoolName.Width = 217;
+                //tbSchoolName.Width = 217;
+                gbFinishStudy.Visible = false;
+                tbSchoolNum.Visible = true;
+                lblSchoolNum.Visible = true;
+                chbIsExcellent.Text = "Медалист (отличник)";
+                tbEqualityDocumentNumber.Visible = false;
+                chbEkvivEduc.Visible = false;
+                btnAttMarks.Visible = true;
             }               
             else
             {
-                if (SchoolTypeId == 4)
+                /*if (SchoolTypeId == 4)
                     tbSchoolName.Width = 281;
                 else
                     tbSchoolName.Width = 217;
+                */
                 gbAtt.Visible = false;
                 gbDipl.Visible = true;
+                gbFinishStudy.Visible = true;
+                tbSchoolNum.Visible = false;
+                lblSchoolNum.Visible = false;
+                chbIsExcellent.Text = "Диплом с отличием";
+                tbEqualityDocumentNumber.Visible = true;
+                chbEkvivEduc.Visible = true;
+                btnAttMarks.Visible = false;
             }
         }
         private void UpdateAfterCountry(object sender, EventArgs e)

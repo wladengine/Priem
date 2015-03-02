@@ -242,7 +242,8 @@ namespace Priem
             string query = @"select
 Person.Id as PersonId
 , PersonEducationDocument.Id as EducationDocumentId
-, SchoolCity, SchoolTypeId, SchoolName, SchoolNum, SchoolExitYear, CountryEducId
+, SchoolCity, SchoolTypeId, SchoolName, SchoolNum, SchoolExitYear
+, Country.PriemDictionaryId as CountryEducId
 , RegionEducId,  IsEqual, EqualDocumentNumber, Series , Number, AvgMark
 , PersonHighEducationInfo.EducationDocumentId as PersonHighEducationInfoId
 , Qualification.Name as Qualification
@@ -255,6 +256,7 @@ Person.Id as PersonId
 , IsExcellent
 from dbo.PersonEducationDocument 
 inner join Person on Person.Id = PersonEducationDocument.PersonId
+inner join Country on Country.Id = PersonEducationDocument.CountryEducId
 left join PersonHighEducationInfo on PersonHighEducationInfo.EducationDocumentId = PersonEducationDocument.Id
 left join Qualification on Qualification.Id = QualificationId
 where Person.Barcode =" + fileNum ;

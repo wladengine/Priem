@@ -34,29 +34,73 @@ namespace Priem
 
             this.CenterToParent();
 
-            List<KeyValuePair<string, string>> lstFiles = _docs.UpdateFiles();
-            if (lstFiles == null || lstFiles.Count == 0)
-                return;
-
-            chlbFile.DataSource = new BindingSource(lstFiles, null);
-            chlbFile.ValueMember = "Key";
-            chlbFile.DisplayMember = "Value";
-
             dgvFiles.DataSource = _docs.UpdateFilesTable();
-            DataGridViewCheckBoxColumn clm = new DataGridViewCheckBoxColumn();
-            clm.Name = "Открыть";
-            dgvFiles.Columns.Add(clm);
-            dgvFiles.Columns["Открыть"].DisplayIndex = 0;
+            if (dgvFiles.Rows.Count > 0)
+            {
+                dgvFiles.ReadOnly = false;
+                foreach (DataGridViewColumn clm in dgvFiles.Columns)
+                {
+                    clm.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+                }
+                if (!dgvFiles.Columns.Contains("Открыть"))
+                {
+                    DataGridViewCheckBoxCell cl = new DataGridViewCheckBoxCell();
+                    cl.TrueValue = true;
+                    cl.FalseValue = false;
+
+                    DataGridViewCheckBoxColumn clm = new DataGridViewCheckBoxColumn();
+                    clm.CellTemplate = cl;
+                    clm.Name = "Открыть";
+                    dgvFiles.Columns.Add(clm);
+                    dgvFiles.Columns["Открыть"].DisplayIndex = 0;
+                    dgvFiles.Columns["Открыть"].AutoSizeMode = DataGridViewAutoSizeColumnMode.ColumnHeader;
+                }
+                if (dgvFiles.Columns.Contains("Id"))
+                    dgvFiles.Columns["Id"].Visible = false;
+
+                if (dgvFiles.Columns.Contains("FileExtention"))
+                    dgvFiles.Columns["FileExtention"].Visible = false;
+
+                dgvFiles.Columns["FileName"].HeaderText = "Файл";
+                
+                foreach (DataGridViewRow rw in dgvFiles.Rows)
+                {
+                    string filename = rw.Cells["FileName"].Value.ToString();
+                    string fileext = rw.Cells["FileExtention"].Value.ToString();
+                    if (!String.IsNullOrEmpty(fileext))
+                    {
+                        if (filename.EndsWith(fileext))
+                            filename = filename.Substring(0, filename.Length - fileext.Length);
+                    }
+                    filename += " (" + rw.Cells["LoadDate"].Value.ToString() + ")";
+                    filename += fileext;
+                    rw.Cells["FileName"].Value = filename;
+                    rw.ReadOnly = false;
+                    rw.Cells["Открыть"].ReadOnly = false;
+                    rw.Cells["FileName"].ReadOnly = true;
+                    rw.Cells["Comment"].ReadOnly = true;
+                }
+                dgvFiles.Columns["LoadDate"].Visible = false;
+
+            }
         }
 
         private void btnOpenFile_Click(object sender, EventArgs e)
         {
             List<KeyValuePair<string, string>> lstFiles = new List<KeyValuePair<string, string>>();
-            foreach (KeyValuePair<string, string> file in chlbFile.CheckedItems)
+            foreach (DataGridViewRow rw in dgvFiles.Rows)
             {
-                lstFiles.Add(file);
+                DataGridViewCheckBoxCell cell = rw.Cells["Открыть"] as DataGridViewCheckBoxCell;
+                if (cell.Value == cell.TrueValue)
+                {
+                    if (dgvFiles.Columns.Contains("Файл"))
+                    {
+                        string fileName = rw.Cells["Файл"].Value.ToString();
+                        KeyValuePair<string, string> file = new KeyValuePair<string, string>(rw.Cells["Id"].Value.ToString(), fileName);
+                        lstFiles.Add(file);
+                    }
+                }
             }
-
             _docs.OpenFile(lstFiles);
         }
 

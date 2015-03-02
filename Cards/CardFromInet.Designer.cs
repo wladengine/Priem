@@ -206,7 +206,6 @@
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.gbFile = new System.Windows.Forms.GroupBox();
             this.dgvFiles = new System.Windows.Forms.DataGridView();
-            this.chlbFile = new System.Windows.Forms.CheckedListBox();
             this.btnOpenFile = new System.Windows.Forms.Button();
             this.tpApplication = new System.Windows.Forms.TabPage();
             this.label26 = new System.Windows.Forms.Label();
@@ -2074,7 +2073,6 @@
             // gbFile
             // 
             this.gbFile.Controls.Add(this.dgvFiles);
-            this.gbFile.Controls.Add(this.chlbFile);
             this.gbFile.Controls.Add(this.btnOpenFile);
             this.gbFile.Location = new System.Drawing.Point(8, 3);
             this.gbFile.Name = "gbFile";
@@ -2087,24 +2085,11 @@
             this.dgvFiles.AllowUserToAddRows = false;
             this.dgvFiles.AllowUserToDeleteRows = false;
             this.dgvFiles.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvFiles.Location = new System.Drawing.Point(6, 89);
+            this.dgvFiles.Location = new System.Drawing.Point(6, 12);
             this.dgvFiles.Name = "dgvFiles";
-            this.dgvFiles.Size = new System.Drawing.Size(529, 157);
+            this.dgvFiles.ReadOnly = true;
+            this.dgvFiles.Size = new System.Drawing.Size(529, 234);
             this.dgvFiles.TabIndex = 11;
-            // 
-            // chlbFile
-            // 
-            this.chlbFile.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.chlbFile.BackColor = System.Drawing.SystemColors.Control;
-            this.chlbFile.CheckOnClick = true;
-            this.chlbFile.FormattingEnabled = true;
-            this.chlbFile.HorizontalScrollbar = true;
-            this.chlbFile.Location = new System.Drawing.Point(6, 19);
-            this.chlbFile.Name = "chlbFile";
-            this.chlbFile.Size = new System.Drawing.Size(531, 64);
-            this.chlbFile.TabIndex = 9;
             // 
             // btnOpenFile
             // 
@@ -2385,7 +2370,6 @@
         private System.Windows.Forms.Label label42;
         private System.Windows.Forms.TextBox tbStag;
         private System.Windows.Forms.GroupBox gbFile;
-        protected System.Windows.Forms.CheckedListBox chlbFile;
         protected System.Windows.Forms.Button btnOpenFile;
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.TextBox textBox1;

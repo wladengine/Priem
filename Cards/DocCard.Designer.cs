@@ -28,26 +28,11 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.chlbFile = new System.Windows.Forms.CheckedListBox();
             this.btnOpenFile = new System.Windows.Forms.Button();
             this.btnClose = new System.Windows.Forms.Button();
             this.dgvFiles = new System.Windows.Forms.DataGridView();
             ((System.ComponentModel.ISupportInitialize)(this.dgvFiles)).BeginInit();
             this.SuspendLayout();
-            // 
-            // chlbFile
-            // 
-            this.chlbFile.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.chlbFile.BackColor = System.Drawing.SystemColors.Control;
-            this.chlbFile.CheckOnClick = true;
-            this.chlbFile.FormattingEnabled = true;
-            this.chlbFile.HorizontalScrollbar = true;
-            this.chlbFile.Location = new System.Drawing.Point(12, 12);
-            this.chlbFile.Name = "chlbFile";
-            this.chlbFile.Size = new System.Drawing.Size(614, 154);
-            this.chlbFile.TabIndex = 9;
             // 
             // btnOpenFile
             // 
@@ -76,10 +61,10 @@
             this.dgvFiles.AllowUserToAddRows = false;
             this.dgvFiles.AllowUserToDeleteRows = false;
             this.dgvFiles.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvFiles.Location = new System.Drawing.Point(14, 184);
+            this.dgvFiles.Location = new System.Drawing.Point(14, 12);
             this.dgvFiles.Name = "dgvFiles";
             this.dgvFiles.ReadOnly = true;
-            this.dgvFiles.Size = new System.Drawing.Size(611, 280);
+            this.dgvFiles.Size = new System.Drawing.Size(611, 452);
             this.dgvFiles.TabIndex = 12;
             // 
             // DocCard
@@ -90,7 +75,6 @@
             this.Controls.Add(this.dgvFiles);
             this.Controls.Add(this.btnClose);
             this.Controls.Add(this.btnOpenFile);
-            this.Controls.Add(this.chlbFile);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Name = "DocCard";
             this.Text = "Документы";
@@ -102,7 +86,6 @@
 
         #endregion
 
-        protected System.Windows.Forms.CheckedListBox chlbFile;
         protected System.Windows.Forms.Button btnOpenFile;
         protected System.Windows.Forms.Button btnClose;
         private System.Windows.Forms.DataGridView dgvFiles;

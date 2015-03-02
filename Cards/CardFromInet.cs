@@ -130,18 +130,20 @@ namespace Priem
                     tpEge.Parent = null;
                     tpSecond.Parent = null;
 
-                    ComboServ.FillCombo(cbSchoolType, HelpClass.GetComboListByQuery("SELECT Cast(ed.SchoolType.Id as nvarchar(100)) AS Id, ed.SchoolType.Name FROM ed.SchoolType WHERE ed.SchoolType.Id = 4 ORDER BY 1"), true, false);
+                    //ComboServ.FillCombo(cbSchoolType, HelpClass.GetComboListByQuery("SELECT Cast(ed.SchoolType.Id as nvarchar(100)) AS Id, ed.SchoolType.Name FROM ed.SchoolType WHERE ed.SchoolType.Id = 4 ORDER BY 1"), true, false);
+                    ComboServ.FillCombo(cbSchoolType, HelpClass.GetComboListByTable("ed.SchoolType", "ORDER BY 1"), true, false);                        
+
                     tbSchoolNum.Visible = false;
-                    tbSchoolName.Width = 200;
-                    lblSchoolNum.Visible = false;
+                    //tbSchoolName.Width = 200;
+                    //lblSchoolNum.Visible = false;
                     gbAtt.Visible = false;
                     gbDipl.Visible = true;
                     chbIsExcellent.Text = "Диплом с отличием";
                     btnAttMarks.Visible = false;
-                    gbSchool.Visible = false;                   
+                    //gbSchool.Visible = false;                   
 
-                    gbEduc.Location = new Point(11, 7);
-                    gbFinishStudy.Location = new Point(11, 222);
+                    //gbEduc.Location = new Point(11, 7);
+                    //gbFinishStudy.Location = new Point(11, 222);
 
                     //chbEgeDocOriginal.Visible = false;
                     //chbWithHE.Visible = chbIsSecond.Visible = false;
@@ -476,11 +478,25 @@ namespace Priem
             {
                 gbAtt.Visible = true;
                 gbDipl.Visible = false;
+                gbFinishStudy.Visible = false;
+                tbSchoolNum.Visible = true;
+                lblSchoolNum.Visible = true;
+                chbIsExcellent.Text = "Медалист (отличник)";
+                tbEqualityDocumentNumber.Visible = false;
+                chbEkvivEduc.Visible = false;
+                btnAttMarks.Visible = true;
             }
             else
             {
                 gbDipl.Visible = true;
                 gbAtt.Visible = false;
+                gbFinishStudy.Visible = true;
+                tbSchoolNum.Visible = false;
+                lblSchoolNum.Visible = false;
+                chbIsExcellent.Text = "Диплом с отличием";
+                tbEqualityDocumentNumber.Visible = true;
+                chbEkvivEduc.Visible = true;
+                btnAttMarks.Visible = false;
             }
         }
         private void UpdateAfterCountry(object sender, EventArgs e)
@@ -533,18 +549,11 @@ namespace Priem
         }
 
         private void FillFiles()
-        {
-            List<KeyValuePair<string, string>> lstFiles = _docs.UpdateFiles();
-            if (lstFiles == null || lstFiles.Count == 0)
-                return;
-
-            chlbFile.DataSource = new BindingSource(lstFiles, null);
-            chlbFile.ValueMember = "Key";
-            chlbFile.DisplayMember = "Value";
-
+        { 
             dgvFiles.DataSource = _docs.UpdateFilesTable();
             if (dgvFiles.Rows.Count > 0)
             {
+                dgvFiles.ReadOnly =false;
                 foreach (DataGridViewColumn clm in dgvFiles.Columns)
                     clm.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
                 
@@ -557,16 +566,37 @@ namespace Priem
                     DataGridViewCheckBoxColumn clm = new DataGridViewCheckBoxColumn();
                     clm.CellTemplate = cl;
                     clm.Name = "Открыть";
+                    clm.HeaderText = "Открыть";
                     dgvFiles.Columns.Add(clm);
                     dgvFiles.Columns["Открыть"].DisplayIndex = 0;
                     dgvFiles.Columns["Открыть"].AutoSizeMode = DataGridViewAutoSizeColumnMode.ColumnHeader; 
                 }
                 if (dgvFiles.Columns.Contains("Id"))
                     dgvFiles.Columns["Id"].Visible = false;
+
                 if (dgvFiles.Columns.Contains("FileExtention"))
                     dgvFiles.Columns["FileExtention"].Visible = false;
-                dgvFiles.Columns["FileName"].Name = "Файл";
 
+                dgvFiles.Columns["FileName"].HeaderText = "Файл";
+                dgvFiles.Columns["Comment"].HeaderText = "Комментарий";
+                foreach (DataGridViewRow rw in dgvFiles.Rows)
+                {
+                    string filename = rw.Cells["FileName"].Value.ToString();
+                    string fileext = rw.Cells["FileExtention"].Value.ToString();
+                    if (!String.IsNullOrEmpty(fileext))
+                    {
+                        if (filename.EndsWith(fileext))
+                            filename = filename.Substring(0, filename.Length - fileext.Length); 
+                    }
+                    filename += " (" + rw.Cells["LoadDate"].Value.ToString() +")";
+                    filename += fileext;
+                    rw.Cells["FileName"].Value = filename;
+                    rw.ReadOnly = false;
+                    rw.Cells["Открыть"].ReadOnly = false;
+                    rw.Cells["FileName"].ReadOnly = true;
+                    rw.Cells["Comment"].ReadOnly = true;
+                }
+                dgvFiles.Columns["LoadDate"].Visible = false;
             }
         }
 
@@ -1038,6 +1068,8 @@ FROM [extApplicationDetails] WHERE [ApplicationId]=@AppId";
             SchoolName = lstEducationInfo[ind].SchoolName;
             SchoolNum = lstEducationInfo[ind].SchoolNum;
             SchoolExitYear = lstEducationInfo[ind].SchoolExitYear;
+
+
         }
 
         #region Save
@@ -1753,15 +1785,7 @@ FROM [extApplicationDetails] WHERE [ApplicationId]=@AppId";
 
         private void btnOpenFile_Click(object sender, EventArgs e)
         {
-            List<KeyValuePair<string, string>> lstFiles = new List<KeyValuePair<string, string>>();
-            foreach (KeyValuePair<string, string> file in chlbFile.CheckedItems)
-            {
-                lstFiles.Add(file);
-            }
-
-            _docs.OpenFile(lstFiles);
-
-            lstFiles = new List<KeyValuePair<string, string>>();
+            List<KeyValuePair<string, string>>  lstFiles = new List<KeyValuePair<string, string>>();
             foreach ( DataGridViewRow rw in dgvFiles.Rows)
             {
                 DataGridViewCheckBoxCell cell = rw.Cells["Открыть"] as DataGridViewCheckBoxCell;
@@ -1770,8 +1794,6 @@ FROM [extApplicationDetails] WHERE [ApplicationId]=@AppId";
                     if (dgvFiles.Columns.Contains("Файл"))
                     {
                         string fileName = rw.Cells["Файл"].Value.ToString();
-                        if (!fileName.EndsWith(rw.Cells["FileExtention"].Value.ToString()))
-                            fileName += "."+rw.Cells["FileExtention"].Value.ToString();
                         KeyValuePair<string, string> file = new KeyValuePair<string, string>(rw.Cells["Id"].Value.ToString(), fileName);
                         lstFiles.Add(file);
                     }

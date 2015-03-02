@@ -46,6 +46,8 @@ namespace Priem
 
         public static bool b1kCheckProtocolsEnabled;
         public static bool bMagCheckProtocolsEnabled;
+
+        public static bool bMagImportApplicationsEnabled;
         //-----------------------------------------------------
 
         public static QueryBuilder qBuilder;
@@ -110,6 +112,9 @@ namespace Priem
 
                     tmp = dicSettings.ContainsKey("bMagCheckProtocolsEnabled") ? dicSettings["bMagCheckProtocolsEnabled"] : "False";
                     bMagCheckProtocolsEnabled = bool.Parse(tmp);
+
+                    tmp = dicSettings.ContainsKey("bMagImportApplicationsEnabled") ? dicSettings["bMagImportApplicationsEnabled"] : "False";
+                    bMagImportApplicationsEnabled = bool.Parse(tmp);
                 }
 
                 if(dbType == PriemType.Priem)
@@ -205,6 +210,7 @@ namespace Priem
                     context.SetApplicationValue("bMagCheckProtocolsEnabled", bMagCheckProtocolsEnabled.ToString());
                     context.SetApplicationValue("b1kCheckProtocolsEnabled", b1kCheckProtocolsEnabled.ToString());
                     context.SetApplicationValue("PriemYear", sPriemYear);
+                    context.SetApplicationValue("bMagImportApplicationsEnabled", bMagImportApplicationsEnabled.ToString());
                 }
             }
         }

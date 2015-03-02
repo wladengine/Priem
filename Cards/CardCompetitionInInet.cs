@@ -490,7 +490,7 @@ namespace Priem
 
         private void btnHasInnerObrazProgram_Click(object sender, EventArgs e)
         {
-            new CardObrazProgramInEntryInCompetitionInInet(_competition).Show();
+            new CardInnerEntryInEntryInCompetitionInInet(_competition).Show();
         }
     }
 }

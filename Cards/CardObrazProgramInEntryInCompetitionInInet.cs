@@ -9,10 +9,10 @@ using System.Windows.Forms;
 
 namespace Priem
 {
-    public partial class CardObrazProgramInEntryInCompetitionInInet : Form
+    public partial class CardInnerEntryInEntryInCompetitionInInet : Form
     {
         private ShortCompetition comp;
-        public CardObrazProgramInEntryInCompetitionInInet(ShortCompetition _comp)
+        public CardInnerEntryInEntryInCompetitionInInet(ShortCompetition _comp)
         {
             this.MdiParent = MainClass.mainform;
             InitializeComponent();
@@ -24,29 +24,42 @@ namespace Priem
         private void InitGrid()
         {
             var src =
-                comp.lstObrazProgramsInEntry.Select(x => new
+                comp.lstObrazProgramsInEntry.OrderBy(x => x.InnerEntryInEntryPriority)
+                .Select(x => new
                 {
                     x.Id,
                     x.InnerEntryInEntryPriority,
                     x.ObrazProgramName,
+                    x.ProfileName
                 }).ToList();
 
             dgvObrazProgramInEntryList.DataSource = src;
             dgvObrazProgramInEntryList.Columns["Id"].Visible = false;
 
-            dgvObrazProgramInEntryList.Columns["ObrazProgramInEntryPriority"].HeaderText = "Приоритет";
+            dgvObrazProgramInEntryList.Columns["InnerEntryInEntryPriority"].HeaderText = "Приоритет";
             dgvObrazProgramInEntryList.Columns["ObrazProgramName"].HeaderText = "Обр. программа";
-            dgvObrazProgramInEntryList.Columns["ObrazProgramName"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-        }
+            dgvObrazProgramInEntryList.Columns["ObrazProgramName"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+            dgvObrazProgramInEntryList.Columns["ProfileName"].HeaderText = "Профиль";
+            dgvObrazProgramInEntryList.Columns["ProfileName"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
 
-        private void dgvObrazProgramInEntryList_CellContentClick(object sender, DataGridViewCellEventArgs e)
-        {
-            if (e.RowIndex >= 0 && dgvObrazProgramInEntryList["HasProfiles", e.RowIndex].Value.ToString() == "по профилям")
+            //проверка на сортировку
+            int i = 0;
+            var OPS = comp.lstObrazProgramsInEntry.OrderBy(x => x.ObrazProgramName).ThenBy(x => x.ProfileName)
+                .Select(x => new
+                {
+                    x.Id,
+                    x.InnerEntryInEntryPriority,
+                    x.ObrazProgramName,
+                    x.ProfileName
+                }).ToList();
+            bool bIsSortedByAlpabet = true;
+            foreach (var xOP in OPS)
             {
-                Guid gId = (Guid)dgvObrazProgramInEntryList["Id", e.RowIndex].Value;
-
-                var OPIE = comp.lstObrazProgramsInEntry.Where(x => x.Id == gId).FirstOrDefault();
+                if (src[i].ObrazProgramName != xOP.ObrazProgramName || src[i].ProfileName != xOP.ProfileName)
+                    bIsSortedByAlpabet = false;
             }
+
+            lblHasAlpabetSort.Visible = bIsSortedByAlpabet;
         }
     }
 }

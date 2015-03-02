@@ -1,6 +1,6 @@
 ﻿namespace Priem
 {
-    partial class CardObrazProgramInEntryInCompetitionInInet
+    partial class CardInnerEntryInEntryInCompetitionInInet
     {
         /// <summary>
         /// Required designer variable.
@@ -31,6 +31,7 @@
             this.label1 = new System.Windows.Forms.Label();
             this.tbLicenseProgramName = new System.Windows.Forms.TextBox();
             this.dgvObrazProgramInEntryList = new System.Windows.Forms.DataGridView();
+            this.lblHasAlpabetSort = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dgvObrazProgramInEntryList)).BeginInit();
             this.SuspendLayout();
             // 
@@ -50,7 +51,7 @@
             this.tbLicenseProgramName.Location = new System.Drawing.Point(93, 12);
             this.tbLicenseProgramName.Name = "tbLicenseProgramName";
             this.tbLicenseProgramName.ReadOnly = true;
-            this.tbLicenseProgramName.Size = new System.Drawing.Size(516, 20);
+            this.tbLicenseProgramName.Size = new System.Drawing.Size(404, 20);
             this.tbLicenseProgramName.TabIndex = 1;
             // 
             // dgvObrazProgramInEntryList
@@ -64,20 +65,32 @@
             this.dgvObrazProgramInEntryList.Location = new System.Drawing.Point(12, 38);
             this.dgvObrazProgramInEntryList.Name = "dgvObrazProgramInEntryList";
             this.dgvObrazProgramInEntryList.ReadOnly = true;
-            this.dgvObrazProgramInEntryList.Size = new System.Drawing.Size(597, 294);
+            this.dgvObrazProgramInEntryList.Size = new System.Drawing.Size(646, 352);
             this.dgvObrazProgramInEntryList.TabIndex = 2;
-            this.dgvObrazProgramInEntryList.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvObrazProgramInEntryList_CellContentClick);
             // 
-            // CardObrazProgramInEntryInCompetitionInInet
+            // lblHasAlpabetSort
+            // 
+            this.lblHasAlpabetSort.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.lblHasAlpabetSort.ForeColor = System.Drawing.Color.DarkRed;
+            this.lblHasAlpabetSort.Location = new System.Drawing.Point(503, 5);
+            this.lblHasAlpabetSort.Name = "lblHasAlpabetSort";
+            this.lblHasAlpabetSort.Size = new System.Drawing.Size(155, 30);
+            this.lblHasAlpabetSort.TabIndex = 3;
+            this.lblHasAlpabetSort.Text = "Внимание! Приоритеты отсортированы по алфавиту!";
+            this.lblHasAlpabetSort.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            this.lblHasAlpabetSort.Visible = false;
+            // 
+            // CardInnerEntryInEntryInCompetitionInInet
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(621, 344);
+            this.ClientSize = new System.Drawing.Size(670, 402);
+            this.Controls.Add(this.lblHasAlpabetSort);
             this.Controls.Add(this.dgvObrazProgramInEntryList);
             this.Controls.Add(this.tbLicenseProgramName);
             this.Controls.Add(this.label1);
-            this.Name = "CardObrazProgramInEntryInCompetitionInInet";
-            this.Text = "Приоритеты образовательных программ в конкурсе";
+            this.Name = "CardInnerEntryInEntryInCompetitionInInet";
+            this.Text = "Приоритеты образовательных программ и профилей в конкурсе";
             ((System.ComponentModel.ISupportInitialize)(this.dgvObrazProgramInEntryList)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -89,5 +102,6 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox tbLicenseProgramName;
         private System.Windows.Forms.DataGridView dgvObrazProgramInEntryList;
+        private System.Windows.Forms.Label lblHasAlpabetSort;
     }
 }

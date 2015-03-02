@@ -39,11 +39,15 @@ namespace Priem
             get { return ComboServ.GetComboIdInt(cbLicenseProgram).Value; }
             set { ComboServ.SetComboId(cbLicenseProgram, value); }
         }
-
-        public CardObrazProgram(string id) : base(id)
+        private int? StudyLevelId;
+        public CardObrazProgram(string id, int? iFacultyId, int? iStudyLevelId)
+            : base(id)
         {
             InitializeComponent();
+            StudyLevelId = iStudyLevelId;
             InitControls();
+            if (iFacultyId.HasValue)
+                FacultyId = iFacultyId.Value;
         }
 
         protected override void ExtraInit()
@@ -57,7 +61,8 @@ namespace Priem
                     .Select(x => new KeyValuePair<string, string>(x.Id.ToString(), x.Name)).ToList();
                 ComboServ.FillCombo(cbFaculty, src, false, false);
 
-                src = context.SP_LicenseProgram.Select(x => new { x.Id, x.Code, x.Name }).ToList()
+                src = context.SP_LicenseProgram.Where(x => StudyLevelId.HasValue ? x.StudyLevelId == StudyLevelId : true)
+                    .Select(x => new { x.Id, x.Code, x.Name }).ToList()
                     .Select(x => new KeyValuePair<string, string>(x.Id.ToString(), "(" + x.Code + ") " + x.Name)).OrderBy(x => x.Value).ToList();
                 ComboServ.FillCombo(cbLicenseProgram, src, false, false);
             }

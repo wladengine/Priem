@@ -88,7 +88,7 @@ namespace Priem
 
         protected override void OpenCard(string itemId)
         {
-            var crd = new CardObrazProgram(itemId);
+            var crd = new CardObrazProgram(itemId, FacultyId, StudyLevelId);
             crd.ToUpdateList += UpdateDataGrid;
             crd.Show();
         }

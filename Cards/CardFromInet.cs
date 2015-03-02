@@ -17,6 +17,7 @@ namespace Priem
 {
     public partial class CardFromInet : CardFromList
     {
+        #region Fields
         private DBPriem _bdcInet;
         private int? _abitBarc;
         private int? _personBarc;
@@ -31,6 +32,7 @@ namespace Priem
         private List<Person_EducationInfo> lstEducationInfo;
 
         private DocsClass _docs;
+        #endregion
 
         // конструктор формы
         public CardFromInet(int? personBarcode, int? abitBarcode, bool closeAbit)
@@ -102,26 +104,7 @@ namespace Priem
                     cbSchoolCity.SelectedIndex = -1;
                     cbHEQualification.SelectedIndex = -1;
                     
-                    //FillLicenseProgram();
-                    //FillObrazProgram();
-                    //FillProfile();
-                    //FillFaculty();
-                    //FillStudyForm();
-                    //FillStudyBasis();
-                    //FillCompetition();
-
                     ComboServ.FillCombo(cbLanguage, HelpClass.GetComboListByTable("ed.Language"), true, false);
-                    //ComboServ.FillCombo(cbCelCompetition, HelpClass.GetComboListByTable("ed.CelCompetition"), true, false);
-
-                    //cbOtherCompetition.Visible = false;
-                    //lblOtherCompetition.Visible = false;
-                    //cbCelCompetition.Visible = false;
-                    //lblCelCompetition.Visible = false;
-                    //tbCelCompetitionText.Visible = false;
-                    //chbAttOriginal.Checked = false;
-                    //chbEgeDocOriginal.Checked = false;
-                    
-                    //dtDocInsertDate.Enabled = false;
                 }               
 
                 // магистратура!
@@ -132,25 +115,20 @@ namespace Priem
 
                     ComboServ.FillCombo(cbSchoolType, HelpClass.GetComboListByQuery("SELECT Cast(ed.SchoolType.Id as nvarchar(100)) AS Id, ed.SchoolType.Name FROM ed.SchoolType WHERE ed.SchoolType.Id = 4 ORDER BY 1"), true, false);
                     tbSchoolNum.Visible = false;
-                    tbSchoolName.Width = 200;
+                    //tbSchoolName.Width = 200;
                     lblSchoolNum.Visible = false;
-                    gbAtt.Visible = false;
+                    //gbAtt.Visible = false;
                     gbDipl.Visible = true;
                     chbIsExcellent.Text = "Диплом с отличием";
                     btnAttMarks.Visible = false;
-                    gbSchool.Visible = false;                   
+                    //gbSchool.Visible = false;
 
-                    gbEduc.Location = new Point(11, 7);
-                    gbFinishStudy.Location = new Point(11, 222);
-
-                    //chbEgeDocOriginal.Visible = false;
-                    //chbWithHE.Visible = chbIsSecond.Visible = false;
+                    //gbEduc.Location = new Point(11, 7);
+                    //gbFinishStudy.Location = new Point(11, 222);
                 }
                 else
                 {
                     tpDocs.Parent = null;
-                    //lblProfile.Text = "Профиль";
-
                     ComboServ.FillCombo(cbSchoolType, HelpClass.GetComboListByTable("ed.SchoolType", "ORDER BY 1"), true, false);                        
                 }
 
@@ -162,313 +140,57 @@ namespace Priem
                 WinFormsServ.Error("Ошибка при инициализации формы " + exc.Message);
             }
         }
-
         protected override bool IsForReadOnly()
         {
-            return !MainClass.RightsToEditCards();
-        }
-                
-        #region handlers
-
-        //инициализация обработчиков мегакомбов
-        protected override void InitHandlers()
-        {
-            //chbIsSecond.CheckedChanged += new EventHandler(chbIsSecond_CheckedChanged);
-            //chbWithHE.CheckedChanged += new System.EventHandler(this.chbWithHE_CheckedChanged);
-            //cbLicenseProgram.SelectedIndexChanged += new EventHandler(cbLicenseProgram_SelectedIndexChanged);
-            //cbObrazProgram.SelectedIndexChanged += new EventHandler(cbObrazProgram_SelectedIndexChanged);
-            //cbProfile.SelectedIndexChanged += new EventHandler(cbProfile_SelectedIndexChanged);
-            //cbStudyForm.SelectedIndexChanged += new EventHandler(cbStudyForm_SelectedIndexChanged);
-            //cbStudyBasis.SelectedIndexChanged += new EventHandler(cbStudyBasis_SelectedIndexChanged);
-            //cbCompetition.SelectedIndexChanged += new EventHandler(cbCompetition_SelectedIndexChanged);
             
 
+            return !MainClass.RightsToEditCards();
+        }
+        protected override void SetReadOnlyFieldsAfterFill()
+        {
+            base.SetReadOnlyFieldsAfterFill();
+
+            if (_closePerson)
+            {
+                tcCard.SelectedTab = tpApplication;
+
+                foreach (TabPage tp in tcCard.TabPages)
+                {
+                    if (tp != tpApplication && tp != tpDocs)
+                    {
+                        foreach (Control control in tp.Controls)
+                        {
+                            control.Enabled = false;
+                            foreach (Control crl in control.Controls)
+                                crl.Enabled = false;
+                        }
+                    }
+                }
+            }
+
+            if (MainClass.dbType == PriemType.PriemMag)
+            {
+                btnSaveChange.Text = "Одобрить";
+                
+                if (MainClass.bMagImportApplicationsEnabled)
+                    btnSaveChange.Enabled = false;
+            }
+        }
+
+        #region handlers
+
+        protected override void InitHandlers()
+        {
             cbSchoolType.SelectedIndexChanged += new EventHandler(UpdateAfterSchool);
             cbCountry.SelectedIndexChanged += new EventHandler(UpdateAfterCountry);
             cbCountryEduc.SelectedIndexChanged += new EventHandler(UpdateAfterCountryEduc);
         }
-
         protected override void NullHandlers()
         {
-            //chbIsSecond.CheckedChanged -= new EventHandler(chbIsSecond_CheckedChanged);
-            //chbWithHE.CheckedChanged -= new EventHandler(chbWithHE_CheckedChanged);
-            //cbLicenseProgram.SelectedIndexChanged -= new EventHandler(cbLicenseProgram_SelectedIndexChanged);
-            //cbObrazProgram.SelectedIndexChanged -= new EventHandler(cbObrazProgram_SelectedIndexChanged);
-            //cbProfile.SelectedIndexChanged -= new EventHandler(cbProfile_SelectedIndexChanged);
-            //cbStudyForm.SelectedIndexChanged -= new EventHandler(cbStudyForm_SelectedIndexChanged);
-            //cbStudyBasis.SelectedIndexChanged -= new EventHandler(cbStudyBasis_SelectedIndexChanged);
-            //cbCompetition.SelectedIndexChanged -= new EventHandler(cbCompetition_SelectedIndexChanged);
-
             cbSchoolType.SelectedIndexChanged -= new EventHandler(UpdateAfterSchool);
             cbCountry.SelectedIndexChanged -= new EventHandler(UpdateAfterCountry);
             cbCountryEduc.SelectedIndexChanged -= new EventHandler(UpdateAfterCountryEduc);
         }
-
-        //private void chbWithHE_CheckedChanged(object sender, EventArgs e)
-        //{
-        //    FillLicenseProgram();
-        //}
-        //void chbIsSecond_CheckedChanged(object sender, EventArgs e)
-        //{
-        //    FillLicenseProgram();
-        //} 
-        //void cbLicenseProgram_SelectedIndexChanged(object sender, EventArgs e)
-        //{
-        //    FillObrazProgram();
-        //}
-        //void cbObrazProgram_SelectedIndexChanged(object sender, EventArgs e)
-        //{
-        //    FillProfile();
-        //    FillFaculty();
-        //    FillStudyForm();
-        //    FillStudyBasis();
-        //}
-        //void cbProfile_SelectedIndexChanged(object sender, EventArgs e)
-        //{
-        //    FillFaculty();
-        //    FillStudyForm();
-        //    FillStudyBasis();
-        //}
-        //void cbStudyForm_SelectedIndexChanged(object sender, EventArgs e)
-        //{
-        //    FillStudyBasis();
-        //}
-        //void cbStudyBasis_SelectedIndexChanged(object sender, EventArgs e)
-        //{
-        //    FillCompetition();
-        //}
-        //void cbCompetition_SelectedIndexChanged(object sender, EventArgs e)
-        //{
-        //    UpdateAfterCompetition();
-        //}
-
-        //private IEnumerable<qEntry> GetEntry(PriemEntities context)
-        //{
-        //    IEnumerable<qEntry> entry = MainClass.GetEntry(context);
-        //    entry = entry.Where(c => c.IsSecond == IsSecond && c.IsReduced == WithHE);
-
-        //    return entry;
-        //}
-        //private void FillLicenseProgram()
-        //{
-        //    try
-        //    {
-        //        using (PriemEntities context = new PriemEntities())
-        //        {
-        //            List<KeyValuePair<string, string>> lst = ((from ent in GetEntry(context)
-        //                                                       select new
-        //                                                       {
-        //                                                           Id = ent.LicenseProgramId,
-        //                                                           Name = ent.LicenseProgramName
-        //                                                       }).Distinct()).ToList().Select(u => new KeyValuePair<string, string>(u.Id.ToString(), u.Name)).ToList();
-
-        //            ComboServ.FillCombo(cbLicenseProgram, lst, false, false);
-        //        }
-        //    }
-        //    catch (Exception exc)
-        //    {
-        //        WinFormsServ.Error("Ошибка при инициализации формы FillLicenseProgram" + exc.Message);
-        //    }
-        //}
-        //private void FillObrazProgram()
-        //{
-        //    try
-        //    {
-        //        using (PriemEntities context = new PriemEntities())
-        //        {
-        //            List<KeyValuePair<string, string>> lst = ((from ent in GetEntry(context)
-        //                                                       where ent.LicenseProgramId == LicenseProgramId
-        //                                                       select new
-        //                                                       {
-        //                                                           Id = ent.ObrazProgramId,
-        //                                                           Name = ent.ObrazProgramName,
-        //                                                           Crypt = ent.ObrazProgramCrypt
-        //                                                       }).Distinct()).ToList().Select(u => new KeyValuePair<string, string>(u.Id.ToString(), u.Name + ' ' + u.Crypt)).ToList();
-
-        //            ComboServ.FillCombo(cbObrazProgram, lst, false, false);
-        //        }
-        //    }
-        //    catch (Exception exc)
-        //    {
-        //        WinFormsServ.Error("Ошибка при инициализации формы FillObrazProgram" + exc.Message);
-        //    }
-        //}
-        //private void FillProfile()
-        //{
-        //    try
-        //    {
-        //        using (PriemEntities context = new PriemEntities())
-        //        {
-        //            List<KeyValuePair<string, string>> lst = ((from ent in GetEntry(context)
-        //                                                       where ent.LicenseProgramId == LicenseProgramId && ent.ObrazProgramId == ObrazProgramId && ent.ProfileId != null
-        //                                                       select new
-        //                                                       {
-        //                                                           Id = ent.ProfileId,
-        //                                                           Name = ent.ProfileName
-        //                                                       }).Distinct()).ToList().Select(u => new KeyValuePair<string, string>(u.Id.ToString(), u.Name)).ToList();
-
-        //            if (lst.Count() > 0)
-        //            {
-        //                ComboServ.FillCombo(cbProfile, lst, false, false);
-        //                cbProfile.Enabled = true;
-        //            }
-        //            else
-        //            {
-        //                ComboServ.FillCombo(cbProfile, new List<KeyValuePair<string, string>>(), true, false);
-        //                cbProfile.Enabled = false; 
-        //            }                   
-        //        }
-        //    }
-        //    catch (Exception exc)
-        //    {
-        //        WinFormsServ.Error("Ошибка при инициализации формы FillProfile" + exc.Message);
-        //    }
-        //}
-        //private void FillFaculty()
-        //{
-        //    try
-        //    {
-        //        using (PriemEntities context = new PriemEntities())
-        //        {
-        //            List<KeyValuePair<string, string>> lst = ((from ent in GetEntry(context)
-        //                                                       where ent.LicenseProgramId == LicenseProgramId 
-        //                                                       && ent.ObrazProgramId == ObrazProgramId
-        //                                                       && (ProfileId == null ? ent.ProfileId == null : ent.ProfileId == ProfileId)   
-        //                                                       select new
-        //                                                       {
-        //                                                           Id = ent.FacultyId,
-        //                                                           Name = ent.FacultyName
-        //                                                       }).Distinct()).ToList().Select(u => new KeyValuePair<string, string>(u.Id.ToString(), u.Name)).ToList();
-
-        //            ComboServ.FillCombo(cbFaculty, lst, false, false);
-        //        }
-        //    }
-        //    catch (Exception exc)
-        //    {
-        //        WinFormsServ.Error("Ошибка при инициализации формы FillFaculty" + exc.Message);
-        //    }
-        //}
-        //private void FillStudyForm()
-        //{
-        //    try
-        //    {
-        //        using (PriemEntities context = new PriemEntities())
-        //        {
-        //            List<KeyValuePair<string, string>> lst = ((from ent in GetEntry(context)
-        //                                                       where ent.LicenseProgramId == LicenseProgramId
-        //                                                       && ent.ObrazProgramId == ObrazProgramId
-        //                                                       && (ProfileId == null ? ent.ProfileId == null : ent.ProfileId == ProfileId)   
-        //                                                       && ent.FacultyId == FacultyId
-        //                                                       select new
-        //                                                       {
-        //                                                           Id = ent.StudyFormId,
-        //                                                           Name = ent.StudyFormName
-        //                                                       }).Distinct()).ToList().Select(u => new KeyValuePair<string, string>(u.Id.ToString(), u.Name)).ToList();
-
-        //            ComboServ.FillCombo(cbStudyForm, lst, false, false);
-        //        }
-        //    }
-        //    catch (Exception exc)
-        //    {
-        //        WinFormsServ.Error("Ошибка при инициализации формы FillStudyForm" + exc.Message);
-        //    }
-        //}
-        //private void FillStudyBasis()
-        //{
-        //    try
-        //    {
-        //        using (PriemEntities context = new PriemEntities())
-        //        {
-        //            List<KeyValuePair<string, string>> lst = ((from ent in GetEntry(context)
-        //                                                       where ent.LicenseProgramId == LicenseProgramId
-        //                                                       && ent.ObrazProgramId == ObrazProgramId
-        //                                                       && (ProfileId == null ? ent.ProfileId == null : ent.ProfileId == ProfileId)   
-        //                                                       && ent.FacultyId == FacultyId
-        //                                                       && ent.StudyFormId == StudyFormId
-        //                                                       select new
-        //                                                       {
-        //                                                           Id = ent.StudyBasisId,
-        //                                                           Name = ent.StudyBasisName
-        //                                                       }).Distinct()).ToList().Select(u => new KeyValuePair<string, string>(u.Id.ToString(), u.Name)).ToList();
-
-        //            ComboServ.FillCombo(cbStudyBasis, lst, false, false);
-        //        }
-        //    }
-        //    catch (Exception exc)
-        //    {
-        //        WinFormsServ.Error("Ошибка при инициализации формы FillStudyBasis" + exc.Message);
-        //    }
-        //}
-        //private void FillCompetition()
-        //{
-        //    try
-        //    {
-        //        using (PriemEntities context = new PriemEntities())
-        //        {
-        //            List<KeyValuePair<string, string>> lst = ((from cp in context.Competition
-        //                                                       where cp.StudyBasisId == StudyBasisId
-        //                                                       select new
-        //                                                       {
-        //                                                           cp.Id,
-        //                                                           cp.Name
-        //                                                       }).Distinct()).ToList().Select(u => new KeyValuePair<string, string>(u.Id.ToString(), u.Name)).ToList();
-
-        //            ComboServ.FillCombo(cbCompetition, lst, false, false);
-
-        //            lst = ((from cp in context.Competition
-        //                    where cp.Id == StudyBasisId && cp.Id < 6
-        //                    select new
-        //                    {
-        //                        cp.Id,
-        //                        cp.Name
-        //                    }).Distinct()).ToList().Select(u => new KeyValuePair<string, string>(u.Id.ToString(), u.Name)).ToList();
-
-        //            ComboServ.FillCombo(cbOtherCompetition, lst, true, false);
-
-        //            if (StudyBasisId == 1)
-        //            {
-        //                chbIsListener.Checked = false;
-        //                chbIsListener.Enabled = false;                        
-        //                ComboServ.SetComboId(cbCompetition, 4);
-        //            }
-        //            else
-        //            {
-        //                chbIsListener.Enabled = true;                      
-        //                ComboServ.SetComboId(cbCompetition, 3);
-        //            }
-        //        }
-        //    }
-        //    catch (Exception exc)
-        //    {
-        //        WinFormsServ.Error("Ошибка при инициализации формы FillCompetition" + exc.Message);
-        //    }
-        //}
-        //private void UpdateAfterCompetition()
-        //{            
-        //    if (CompetitionId == 6)
-        //    {               
-        //        cbOtherCompetition.SelectedIndex = 0;
-        //        cbCelCompetition.SelectedIndex = 0;
-        //        lblOtherCompetition.Visible = true;
-        //        cbOtherCompetition.Visible = true;
-
-        //        lblCelCompetition.Visible = true;
-        //        cbCelCompetition.Visible = true;
-        //        tbCelCompetitionText.Visible = true;
-        //    }
-        //    else
-        //    {                
-        //        cbOtherCompetition.SelectedIndex = 0;
-        //        lblOtherCompetition.Visible = false;
-        //        cbOtherCompetition.Visible = false;
-        //        tbCelCompetitionText.Text = "";
-        //        tbCelCompetitionText.Visible = false;
-
-        //        lblCelCompetition.Visible = false;
-        //        cbCelCompetition.Visible = false;
-        //        cbCelCompetition.SelectedIndex = 0;
-        //    }
-        //}        
 
         private void UpdateAfterSchool(object sender, EventArgs e)
         {
@@ -498,21 +220,44 @@ namespace Priem
         }
         private void UpdateAfterCountryEduc(object sender, EventArgs e)
         {
-            if (CountryEducId == MainClass.countryRussiaId)           
+            if (CountryEducId == MainClass.countryRussiaId)
                 chbEkvivEduc.Visible = false;
             else
                 chbEkvivEduc.Visible = true;
         }
         private void chbHostelAbitYes_CheckedChanged(object sender, EventArgs e)
         {
-            chbHostelAbitNo.Checked = !chbHostelAbitYes.Checked;           
+            chbHostelAbitNo.Checked = !chbHostelAbitYes.Checked;
         }
         private void chbHostelAbitNo_CheckedChanged(object sender, EventArgs e)
         {
             chbHostelAbitYes.Checked = !chbHostelAbitNo.Checked;
         }
+        private void tabCard_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Control && e.KeyCode == Keys.D1)
+                this.tcCard.SelectedIndex = 0;
+            if (e.Control && e.KeyCode == Keys.D2)
+                this.tcCard.SelectedIndex = 1;
+            if (e.Control && e.KeyCode == Keys.D3)
+                this.tcCard.SelectedIndex = 2;
+            if (e.Control && e.KeyCode == Keys.D4)
+                this.tcCard.SelectedIndex = 3;
+            if (e.Control && e.KeyCode == Keys.D5)
+                this.tcCard.SelectedIndex = 4;
+            if (e.Control && e.KeyCode == Keys.D6)
+                this.tcCard.SelectedIndex = 5;
+            if (e.Control && e.KeyCode == Keys.D7)
+                this.tcCard.SelectedIndex = 6;
+            if (e.Control && e.KeyCode == Keys.D8)
+                this.tcCard.SelectedIndex = 7;
+            if (e.Control && e.KeyCode == Keys.S)
+                SaveRecord();
+        }
 
         #endregion
+
+        #region Fill Card
 
         protected override void FillCard()
         {
@@ -531,45 +276,6 @@ namespace Priem
                 WinFormsServ.Error("Ошибка при заполнении формы " + ex.Message);
             }
         }
-
-        private void FillFiles()
-        {
-            List<KeyValuePair<string, string>> lstFiles = _docs.UpdateFiles();
-            if (lstFiles == null || lstFiles.Count == 0)
-                return;
-
-            chlbFile.DataSource = new BindingSource(lstFiles, null);
-            chlbFile.ValueMember = "Key";
-            chlbFile.DisplayMember = "Value";
-
-            dgvFiles.DataSource = _docs.UpdateFilesTable();
-            if (dgvFiles.Rows.Count > 0)
-            {
-                foreach (DataGridViewColumn clm in dgvFiles.Columns)
-                    clm.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-                
-                if (!dgvFiles.Columns.Contains("Открыть"))
-                {
-                    DataGridViewCheckBoxCell cl = new DataGridViewCheckBoxCell();
-                    cl.TrueValue = true;
-                    cl.FalseValue = false;
-
-                    DataGridViewCheckBoxColumn clm = new DataGridViewCheckBoxColumn();
-                    clm.CellTemplate = cl;
-                    clm.Name = "Открыть";
-                    dgvFiles.Columns.Add(clm);
-                    dgvFiles.Columns["Открыть"].DisplayIndex = 0;
-                    dgvFiles.Columns["Открыть"].AutoSizeMode = DataGridViewAutoSizeColumnMode.ColumnHeader; 
-                }
-                if (dgvFiles.Columns.Contains("Id"))
-                    dgvFiles.Columns["Id"].Visible = false;
-                if (dgvFiles.Columns.Contains("FileExtention"))
-                    dgvFiles.Columns["FileExtention"].Visible = false;
-                dgvFiles.Columns["FileName"].Name = "Файл";
-
-            }
-        }
-
         private extPerson GetPerson()
         {
             if (_personBarc == null)
@@ -591,7 +297,7 @@ namespace Priem
 
                         tbNum.Text = person.PersonNum.ToString();
                         this.Text = "ПРОВЕРКА ДАННЫХ " + person.FIO;
-                        
+
                         return person;
                     }
                 }
@@ -606,8 +312,8 @@ namespace Priem
                     tcCard.SelectedIndex = 0;
                     tbSurname.Focus();
 
-                    extPerson person = load.GetPersonByBarcode(_personBarc.Value); 
-                    
+                    extPerson person = load.GetPersonByBarcode(_personBarc.Value);
+
                     this.Text = "ЗАГРУЗКА " + person.FIO;
                     return person;
                 }
@@ -619,7 +325,6 @@ namespace Priem
                 return null;
             }
         }
-
         private void FillPersonData(extPerson person)
         {
             if (person == null)
@@ -694,9 +399,145 @@ namespace Priem
             catch (Exception ex)
             {
                 WinFormsServ.Error("Ошибка при заполнении формы " + ex.Message);
-            } 
+            }
+        }
+        private void FillEgeFirst(DataTable dtEge)
+        {
+            if (MainClass.dbType == PriemType.PriemMag)
+                return;
+
+            try
+            {
+                DataTable examTable = new DataTable();
+
+                DataColumn clm;
+                clm = new DataColumn();
+                clm.ColumnName = "Предмет";
+                clm.ReadOnly = true;
+                examTable.Columns.Add(clm);
+
+                clm = new DataColumn();
+                clm.ColumnName = "ExamId";
+                clm.ReadOnly = true;
+                examTable.Columns.Add(clm);
+
+                clm = new DataColumn();
+                clm.ColumnName = "Баллы";
+                examTable.Columns.Add(clm);
+
+                clm = new DataColumn();
+                clm.ColumnName = "Номер сертификата";
+                examTable.Columns.Add(clm);
+
+                clm = new DataColumn();
+                clm.ColumnName = "Типографский номер";
+                examTable.Columns.Add(clm);
+
+                clm = new DataColumn();
+                clm.ColumnName = "EgeCertificateId";
+                examTable.Columns.Add(clm);
+
+
+                string defQuery = "SELECT ed.EgeExamName.Name AS 'Предмет', ed.EgeExamName.Id AS ExamId FROM ed.EgeExamName";
+                DataSet ds = _bdc.GetDataSet(defQuery);
+                foreach (DataRow dsRow in ds.Tables[0].Rows)
+                {
+                    DataRow newRow;
+                    newRow = examTable.NewRow();
+                    newRow["Предмет"] = dsRow["Предмет"].ToString();
+                    newRow["ExamId"] = dsRow["ExamId"].ToString();
+                    examTable.Rows.Add(newRow);
+                }
+
+                foreach (DataRow dsRow in dtEge.Rows)
+                {
+                    for (int i = 0; i < examTable.Rows.Count; i++)
+                    {
+                        if (examTable.Rows[i]["ExamId"].ToString() == dsRow["ExamId"].ToString())
+                        {
+                            examTable.Rows[i]["Баллы"] = dsRow["Value"].ToString();
+                            examTable.Rows[i]["Номер сертификата"] = dsRow["Number"].ToString();
+                        }
+                    }
+                }
+
+                DataView dv = new DataView(examTable);
+                dv.AllowNew = false;
+
+                dgvEGE.DataSource = dv;
+                dgvEGE.Columns["ExamId"].Visible = false;
+                dgvEGE.Columns["EgeCertificateId"].Visible = false;
+
+                dgvEGE.Columns["Предмет"].Width = 162;
+                dgvEGE.Columns["Баллы"].Width = 45;
+                dgvEGE.Columns["Номер сертификата"].Width = 110;
+                dgvEGE.ReadOnly = false;
+
+                dgvEGE.Update();
+            }
+            catch (DataException de)
+            {
+                WinFormsServ.Error("Ошибка при заполнении формы " + de.Message);
+            }
+        }
+        private void FillFiles()
+        {
+            List<KeyValuePair<string, string>> lstFiles = _docs.UpdateFiles();
+            if (lstFiles == null || lstFiles.Count == 0)
+                return;
+
+            dgvFiles.DataSource = _docs.UpdateFilesTable();
+            if (dgvFiles.Rows.Count > 0)
+            {
+                foreach (DataGridViewColumn clm in dgvFiles.Columns)
+                    clm.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+                
+                if (!dgvFiles.Columns.Contains("Открыть"))
+                {
+                    DataGridViewCheckBoxCell cl = new DataGridViewCheckBoxCell();
+                    cl.TrueValue = true;
+                    cl.FalseValue = false;
+
+                    DataGridViewCheckBoxColumn clm = new DataGridViewCheckBoxColumn();
+                    clm.CellTemplate = cl;
+                    clm.Name = "Открыть";
+                    dgvFiles.Columns.Add(clm);
+                    dgvFiles.Columns["Открыть"].DisplayIndex = 0;
+                    dgvFiles.Columns["Открыть"].AutoSizeMode = DataGridViewAutoSizeColumnMode.ColumnHeader; 
+                }
+                if (dgvFiles.Columns.Contains("Id"))
+                    dgvFiles.Columns["Id"].Visible = false;
+                if (dgvFiles.Columns.Contains("FileExtention"))
+                    dgvFiles.Columns["FileExtention"].Visible = false;
+                dgvFiles.Columns["FileName"].HeaderText = "Файл";
+                dgvFiles.Columns["Comment"].HeaderText = "Комментарий";
+                dgvFiles.Columns["FileTypeName"].HeaderText = "Тип файла";
+
+            }
+        }
+        private void btnOpenFile_Click(object sender, EventArgs e)
+        {
+            List<KeyValuePair<string, string>> lstFiles = new List<KeyValuePair<string, string>>();
+            lstFiles = new List<KeyValuePair<string, string>>();
+            foreach (DataGridViewRow rw in dgvFiles.Rows)
+            {
+                DataGridViewCheckBoxCell cell = rw.Cells["Открыть"] as DataGridViewCheckBoxCell;
+                if (cell.Value == cell.TrueValue)
+                {
+                    if (dgvFiles.Columns.Contains("FileName"))
+                    {
+                        string fileName = rw.Cells["FileName"].Value.ToString();
+                        if (!fileName.EndsWith(rw.Cells["FileExtention"].Value.ToString()))
+                            fileName += "." + rw.Cells["FileExtention"].Value.ToString();
+                        KeyValuePair<string, string> file = new KeyValuePair<string, string>(rw.Cells["Id"].Value.ToString(), fileName);
+                        lstFiles.Add(file);
+                    }
+                }
+            }
+            _docs.OpenFile(lstFiles);
         }
 
+        #region Applications
         public void FillApplication()
         {
             try
@@ -778,7 +619,7 @@ WHERE IsCommited = 1 AND IntNumber=@CommitId";
                               HasInnerPriorities = rw.Field<bool>("HasInnerPriorities"),
                               IsApprovedByComission = rw.Field<bool>("IsApprovedByComission"),
                               ApproverName = rw.Field<string>("ApproverName"),
-                              lstObrazProgramsInEntry = new List<ShortObrazProgramInEntry>(),
+                              lstObrazProgramsInEntry = new List<ShortInnerEntryInEntry>(),
                               IsCommonRussianCompetition = rw.Field<bool>("IsCommonRussianCompetition"),
                           }).ToList();
 
@@ -792,57 +633,46 @@ WHERE IsCommited = 1 AND IntNumber=@CommitId";
                 tbApplicationVersion.Text = (LstCompetitions[0].VersionNum.HasValue ? "№ " + LstCompetitions[0].VersionNum.Value.ToString() : "n/a") +
                     (LstCompetitions[0].VersionDate.HasValue ? (" от " + LstCompetitions[0].VersionDate.Value.ToShortDateString() + " " + LstCompetitions[0].VersionDate.Value.ToShortTimeString()) : "n/a");
 
-
                 //ObrazProgramInEntry
                 foreach (var C in LstCompetitions.Where(x => x.HasInnerPriorities))
                 {
-                    C.lstObrazProgramsInEntry = new List<ShortObrazProgramInEntry>();
-                    query = @"SELECT ObrazProgramInEntryId, ObrazProgramInEntryPriority, ObrazProgramName, ProfileInObrazProgramInEntryId, ProfileInObrazProgramInEntryPriority, ProfileName, 
+                    C.lstObrazProgramsInEntry = new List<ShortInnerEntryInEntry>();
+                    query = @"SELECT InnerEntryInEntryId, InnerEntryInEntryPriority, ObrazProgramName, ProfileName, 
 ISNULL(CurrVersion, 1) AS CurrVersion, ISNULL(CurrDate, GETDATE()) AS CurrDate
 FROM [extApplicationDetails] WHERE [ApplicationId]=@AppId";
                     tbl = _bdcInet.GetDataSet(query, new SortedList<string, object>() { { "@AppId", C.Id } }).Tables[0];
 
                     var data = (from DataRow rw in tbl.Rows
-                               select new
-                               {
-                                   ObrazProgramInEntryId = rw.Field<Guid>("ObrazProgramInEntryId"),
-                                   ObrazProgramInEntryPriority = rw.Field<int>("ObrazProgramInEntryPriority"),
-                                   ObrazProgramName = rw.Field<string>("ObrazProgramName"),
-                                   ProfileInObrazProgramInEntryId = rw.Field<Guid?>("ProfileInObrazProgramInEntryId"),
-                                   ProfileInObrazProgramInEntryPriority = rw.Field<int?>("ProfileInObrazProgramInEntryPriority"),
-                                   ProfileName = rw.Field<string>("ProfileName"),
-                                   CurrVersion = rw.Field<int>("CurrVersion"),
-                                   CurrDate = rw.Field<DateTime>("CurrDate")
-                               }).ToList();
+                                select new
+                                {
+                                    InnerEntryInEntryId = rw.Field<Guid>("InnerEntryInEntryId"),
+                                    InnerEntryInEntryPriority = rw.Field<int>("InnerEntryInEntryPriority"),
+                                    ObrazProgramName = rw.Field<string>("ObrazProgramName"),
+                                    ProfileName = rw.Field<string>("ProfileName"),
+                                    CurrVersion = rw.Field<int>("CurrVersion"),
+                                    CurrDate = rw.Field<DateTime>("CurrDate")
+                                }).ToList().OrderBy(x => x.InnerEntryInEntryPriority).ToList();
+
                     using (PriemEntities context = new PriemEntities())
                     {
-                        //foreach (var OPIE in data.Select(x => new { x.ObrazProgramInEntryId, x.ObrazProgramInEntryPriority, x.ObrazProgramName, x.CurrDate, x.CurrVersion }).Distinct().OrderBy(x => x.ObrazProgramInEntryPriority))
-                        //{
-                        //    var OP = new ShortObrazProgramInEntry(OPIE.ObrazProgramInEntryId, OPIE.ObrazProgramName) { ObrazProgramInEntryPriority = OPIE.ObrazProgramInEntryPriority, CurrVersion = OPIE.CurrVersion, CurrDate = OPIE.CurrDate };
-                        //    OP.ListProfiles = new List<ShortProfileInObrazProgramInEntry>();
-                        //    int profPriorVal = 0;
-                        //    foreach (var PROF in data.Where(x => x.ObrazProgramInEntryId == OPIE.ObrazProgramInEntryId && x.ProfileInObrazProgramInEntryId.HasValue).Select(x => new { x.ProfileInObrazProgramInEntryId, ProfileInObrazProgramInEntryPriority = x.ProfileInObrazProgramInEntryPriority, x.ProfileName }).OrderBy(x => x.ProfileInObrazProgramInEntryPriority))
-                        //    {
-                        //        profPriorVal++;
-                        //        OP.ListProfiles.Add(new ShortProfileInObrazProgramInEntry(PROF.ProfileInObrazProgramInEntryId.Value, PROF.ProfileName) { ProfileInObrazProgramInEntryPriority = PROF.ProfileInObrazProgramInEntryPriority ?? profPriorVal });
-                        //    }
-                        
-                        //    C.lstObrazProgramsInEntry.Add(OP);
-                        //}
+                        foreach (var OPIE in data)
+                        {
+                            var OP = new ShortInnerEntryInEntry(OPIE.InnerEntryInEntryId, OPIE.ObrazProgramName, OPIE.ProfileName); 
+                            OP.InnerEntryInEntryPriority = OPIE.InnerEntryInEntryPriority;
+                            OP.CurrVersion = OPIE.CurrVersion;
+                            OP.CurrDate = OPIE.CurrDate;
+                            C.lstObrazProgramsInEntry.Add(OP);
+                        }
                     }
                 }
 
                 UpdateApplicationGrid();
-
-                //if (_closeAbit || _abitBarc == null)
-                //    return;
             }
             catch (Exception ex)
             {
                 WinFormsServ.Error("Ошибка при заполнении формы заявления" + ex.Message);
             }
         }
-
         private void UpdateApplicationGrid()
         {
             dgvApplications.DataSource = LstCompetitions.OrderBy(x => x.Priority)
@@ -858,6 +688,7 @@ FROM [extApplicationDetails] WHERE [ApplicationId]=@AppId";
                     HasCompetition = x.HasCompetition || x.IsApprovedByComission,
                     comp = x.lstObrazProgramsInEntry.Count > 0 ? "есть приоритеты" : ""
                 }).ToList();
+
             dgvApplications.Columns["Id"].Visible = false;
             dgvApplications.Columns["Priority"].HeaderText = "Приор";
             dgvApplications.Columns["Priority"].AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCellsExceptHeader;
@@ -878,114 +709,101 @@ FROM [extApplicationDetails] WHERE [ApplicationId]=@AppId";
                     e.CellStyle.BackColor = Color.Cyan;
                     e.CellStyle.SelectionBackColor = Color.Cyan;
                 }
-            }
-        }
-
-        protected override void SetReadOnlyFieldsAfterFill()
-        {
-            base.SetReadOnlyFieldsAfterFill();
-            
-            if (_closePerson)
-            {
-                tcCard.SelectedTab = tpApplication;
-
-                foreach (TabPage tp in tcCard.TabPages)
+                else
                 {
-                    if (tp != tpApplication && tp != tpDocs)
-                    {
-                        foreach (Control control in tp.Controls)
-                        {
-                            control.Enabled = false;
-                            foreach (Control crl in control.Controls)
-                                crl.Enabled = false;
-                        }
-                    }
+                    e.CellStyle.BackColor = Color.Coral;
+                    e.CellStyle.SelectionBackColor = Color.Coral;
                 }
             }
-
-            if (MainClass.dbType == PriemType.PriemMag)
-                btnSaveChange.Text = "Одобрить";
         }
-       
-        private void FillEgeFirst(DataTable dtEge)
+        private void dgvApplications_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (MainClass.dbType == PriemType.PriemMag)
+            int rwNum = e.RowIndex;
+            OpenCardCompetitionInInet(rwNum);
+        }
+        private void btnOpenCompetition_Click(object sender, EventArgs e)
+        {
+            if (dgvApplications.SelectedCells.Count == 0)
                 return;
-            
-            try
-            {                
-                DataTable examTable = new DataTable();
 
-                DataColumn clm;
-                clm = new DataColumn();
-                clm.ColumnName = "Предмет";
-                clm.ReadOnly = true;
-                examTable.Columns.Add(clm);
+            int rwNum = dgvApplications.SelectedCells[0].RowIndex;
+            OpenCardCompetitionInInet(rwNum);
+        }
+        private ShortCompetition GetCompFromGrid(int rwNum)
+        {
+            if (rwNum < 0)
+                return null;
 
-                clm = new DataColumn();
-                clm.ColumnName = "ExamId";
-                clm.ReadOnly = true;
-                examTable.Columns.Add(clm);
-
-                clm = new DataColumn();
-                clm.ColumnName = "Баллы";
-                examTable.Columns.Add(clm);
-
-                clm = new DataColumn();
-                clm.ColumnName = "Номер сертификата";
-                examTable.Columns.Add(clm);
-
-                clm = new DataColumn();
-                clm.ColumnName = "Типографский номер";
-                examTable.Columns.Add(clm);
-
-                clm = new DataColumn();
-                clm.ColumnName = "EgeCertificateId";
-                examTable.Columns.Add(clm);
-
-
-                string defQuery = "SELECT ed.EgeExamName.Name AS 'Предмет', ed.EgeExamName.Id AS ExamId FROM ed.EgeExamName";
-                DataSet ds = _bdc.GetDataSet(defQuery);
-                foreach (DataRow dsRow in ds.Tables[0].Rows)
-                {
-                    DataRow newRow;
-                    newRow = examTable.NewRow();
-                    newRow["Предмет"] = dsRow["Предмет"].ToString();
-                    newRow["ExamId"] = dsRow["ExamId"].ToString();
-                    examTable.Rows.Add(newRow);
-                }
-
-                foreach (DataRow dsRow in dtEge.Rows)
-                {
-                    for (int i = 0; i < examTable.Rows.Count; i++)
-                    {
-                        if (examTable.Rows[i]["ExamId"].ToString() == dsRow["ExamId"].ToString())
-                        {
-                            examTable.Rows[i]["Баллы"] = dsRow["Value"].ToString();
-                            examTable.Rows[i]["Номер сертификата"] = dsRow["Number"].ToString();                            
-                        }
-                    }
-                }
-
-                DataView dv = new DataView(examTable);
-                dv.AllowNew = false;
-
-                dgvEGE.DataSource = dv;
-                dgvEGE.Columns["ExamId"].Visible = false;
-                dgvEGE.Columns["EgeCertificateId"].Visible = false;               
-
-                dgvEGE.Columns["Предмет"].Width = 162;
-                dgvEGE.Columns["Баллы"].Width = 45;
-                dgvEGE.Columns["Номер сертификата"].Width = 110;
-                dgvEGE.ReadOnly = false;
-
-                dgvEGE.Update();
-            }
-            catch (DataException de)
+            Guid Id = (Guid)dgvApplications["Id", rwNum].Value;
+            return LstCompetitions.Where(x => x.Id == Id).FirstOrDefault();
+        }
+        private void OpenCardCompetitionInInet(int rwNum)
+        {
+            if (rwNum >= 0)
             {
-                WinFormsServ.Error("Ошибка при заполнении формы " + de.Message);
+                var ent = GetCompFromGrid(rwNum);
+                if (ent != null)
+                {
+                    var crd = new CardCompetitionInInet(ent);
+                    crd.OnUpdate += UpdateCommitCompetition;
+                    crd.Show();
+                }
             }
         }
+        private void UpdateCommitCompetition(ShortCompetition comp)
+        {
+            int ind = LstCompetitions.FindIndex(x => comp.Id == x.Id);
+            if (ind > -1)
+            {
+                LstCompetitions[ind].HasCompetition = true;
+                LstCompetitions[ind].IsApprovedByComission = true;
+                LstCompetitions[ind].CompetitionId = comp.CompetitionId;
+                LstCompetitions[ind].CompetitionName = comp.CompetitionName;
+
+                LstCompetitions[ind].DocInsertDate = comp.DocInsertDate;
+                LstCompetitions[ind].IsGosLine = comp.IsGosLine;
+                LstCompetitions[ind].IsListener = comp.IsListener;
+                LstCompetitions[ind].IsReduced = comp.IsReduced;
+
+                LstCompetitions[ind].FacultyId = comp.FacultyId;
+                LstCompetitions[ind].FacultyName = comp.FacultyName;
+                LstCompetitions[ind].LicenseProgramId = comp.LicenseProgramId;
+                LstCompetitions[ind].LicenseProgramName = comp.LicenseProgramName;
+                LstCompetitions[ind].ObrazProgramId = comp.ObrazProgramId;
+                LstCompetitions[ind].ObrazProgramName = comp.ObrazProgramName;
+                LstCompetitions[ind].ProfileId = comp.ProfileId;
+                LstCompetitions[ind].ProfileName = comp.ProfileName;
+
+                LstCompetitions[ind].StudyFormId = comp.StudyFormId;
+                LstCompetitions[ind].StudyFormName = comp.StudyFormName;
+                LstCompetitions[ind].StudyBasisId = comp.StudyBasisId;
+                LstCompetitions[ind].StudyBasisName = comp.StudyBasisName;
+                LstCompetitions[ind].StudyLevelId = comp.StudyLevelId;
+                LstCompetitions[ind].StudyLevelName = comp.StudyLevelName;
+
+                LstCompetitions[ind].HasCompetition = comp.HasCompetition;
+                LstCompetitions[ind].ChangeEntry();
+
+                string userName = MainClass.GetUserName();
+
+                string query = @"UPDATE [Application] SET IsApprovedByComission=1, ApproverName=@ApproverName, CompetitionId=@CompId, DocInsertDate=@DocInsertDate, 
+IsCommonRussianCompetition=@IsCommonRussianCompetition, IsGosLine=@IsGosLine WHERE Id=@Id";
+                _bdcInet.ExecuteQuery(query, new SortedList<string, object>()
+                {
+                    { "@Id", comp.Id },
+                    { "@CompId", comp.CompetitionId },
+                    { "@DocInsertDate", comp.DocInsertDate },
+                    { "@ApproverName", userName },
+                    { "@IsGosLine", comp.IsGosLine },
+                    { "@IsCommonRussianCompetition", comp.IsCommonRussianCompetition }
+                });
+
+                UpdateApplicationGrid();
+            }
+        }
+        #endregion
+
+        #region EducationInfo
         private void FillEducationData(List<Person_EducationInfo> lstVals)
         {
             lstEducationInfo = lstVals;
@@ -1008,10 +826,18 @@ FROM [extApplicationDetails] WHERE [ApplicationId]=@AppId";
 
             if (lstVals.Count > 0)
                 ViewEducationInfo(lstVals.First().Id);
-            
+
             _currentEducRow = 0;
         }
-
+        private void dgvEducationDocuments_CurrentCellChanged(object sender, EventArgs e)
+        {
+            if (dgvEducationDocuments.CurrentRow != null)
+                if (dgvEducationDocuments.CurrentRow.Index != _currentEducRow)
+                {
+                    _currentEducRow = dgvEducationDocuments.CurrentRow.Index;
+                    ViewEducationInfo(lstEducationInfo[_currentEducRow].Id);
+                }
+        }
         private void ViewEducationInfo(int id)
         {
             int ind = lstEducationInfo.FindIndex(x => x.Id == id);
@@ -1039,6 +865,9 @@ FROM [extApplicationDetails] WHERE [ApplicationId]=@AppId";
             SchoolNum = lstEducationInfo[ind].SchoolNum;
             SchoolExitYear = lstEducationInfo[ind].SchoolExitYear;
         }
+        #endregion
+
+        #endregion
 
         #region Save
 
@@ -1731,13 +1560,12 @@ FROM [extApplicationDetails] WHERE [ApplicationId]=@AppId";
         }
 
         #endregion 
-        
+
         protected override void OnClosed()
         {
             base.OnClosed();
             load.CloseDB();                
         }
-
         protected override void OnSave()
         {
             base.OnSave();
@@ -1749,149 +1577,6 @@ FROM [extApplicationDetails] WHERE [ApplicationId]=@AppId";
 
                 MainClass.OpenCardPerson(perId.ToString(), null, null);
             }
-        }
-
-        private void btnOpenFile_Click(object sender, EventArgs e)
-        {
-            List<KeyValuePair<string, string>> lstFiles = new List<KeyValuePair<string, string>>();
-            foreach (KeyValuePair<string, string> file in chlbFile.CheckedItems)
-            {
-                lstFiles.Add(file);
-            }
-
-            _docs.OpenFile(lstFiles);
-
-            lstFiles = new List<KeyValuePair<string, string>>();
-            foreach ( DataGridViewRow rw in dgvFiles.Rows)
-            {
-                DataGridViewCheckBoxCell cell = rw.Cells["Открыть"] as DataGridViewCheckBoxCell;
-                if (cell.Value == cell.TrueValue)
-                {
-                    if (dgvFiles.Columns.Contains("Файл"))
-                    {
-                        string fileName = rw.Cells["Файл"].Value.ToString();
-                        if (!fileName.EndsWith(rw.Cells["FileExtention"].Value.ToString()))
-                            fileName += "."+rw.Cells["FileExtention"].Value.ToString();
-                        KeyValuePair<string, string> file = new KeyValuePair<string, string>(rw.Cells["Id"].Value.ToString(), fileName);
-                        lstFiles.Add(file);
-                    }
-                }
-            }
-            _docs.OpenFile(lstFiles);
-        }
-
-        private void tabCard_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.Control && e.KeyCode == Keys.D1)
-                this.tcCard.SelectedIndex = 0;
-            if (e.Control && e.KeyCode == Keys.D2)
-                this.tcCard.SelectedIndex = 1;
-            if (e.Control && e.KeyCode == Keys.D3)
-                this.tcCard.SelectedIndex = 2;
-            if (e.Control && e.KeyCode == Keys.D4)
-                this.tcCard.SelectedIndex = 3;
-            if (e.Control && e.KeyCode == Keys.D5)
-                this.tcCard.SelectedIndex = 4;
-            if (e.Control && e.KeyCode == Keys.D6)
-                this.tcCard.SelectedIndex = 5;
-            if (e.Control && e.KeyCode == Keys.D7)
-                this.tcCard.SelectedIndex = 6;
-            if (e.Control && e.KeyCode == Keys.D8)
-                this.tcCard.SelectedIndex = 7;
-            if (e.Control && e.KeyCode == Keys.S)
-                SaveRecord();
-        }
-
-        private void dgvApplications_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
-        {
-            int rwNum = e.RowIndex;
-            OpenCardCompetitionInInet(rwNum);
-        }
-        private void btnOpenCompetition_Click(object sender, EventArgs e)
-        {
-            if (dgvApplications.SelectedCells.Count == 0)
-                return;
-
-            int rwNum = dgvApplications.SelectedCells[0].RowIndex;
-            OpenCardCompetitionInInet(rwNum);
-        }
-        private ShortCompetition GetCompFromGrid(int rwNum)
-        {
-            if (rwNum < 0)
-                return null;
-
-            Guid Id = (Guid)dgvApplications["Id", rwNum].Value;
-            return LstCompetitions.Where(x => x.Id == Id).FirstOrDefault();
-        }
-        private void OpenCardCompetitionInInet(int rwNum)
-        {
-            if (rwNum >= 0)
-            {
-                var ent = GetCompFromGrid(rwNum);
-                if (ent != null)
-                {
-                    var crd = new CardCompetitionInInet(ent);
-                    crd.OnUpdate += UpdateCommitCompetition;
-                    crd.Show();
-                }
-            }
-        }
-        private void UpdateCommitCompetition(ShortCompetition comp)
-        {
-            int ind = LstCompetitions.FindIndex(x => comp.Id == x.Id);
-            if (ind > -1)
-            {
-                LstCompetitions[ind].HasCompetition = true;
-                LstCompetitions[ind].IsApprovedByComission = true;
-                LstCompetitions[ind].CompetitionId = comp.CompetitionId;
-                LstCompetitions[ind].CompetitionName = comp.CompetitionName;
-
-                LstCompetitions[ind].DocInsertDate = comp.DocInsertDate;
-                LstCompetitions[ind].IsGosLine = comp.IsGosLine;
-                LstCompetitions[ind].IsListener = comp.IsListener;
-                LstCompetitions[ind].IsReduced = comp.IsReduced;
-
-                LstCompetitions[ind].FacultyId = comp.FacultyId;
-                LstCompetitions[ind].FacultyName = comp.FacultyName;
-                LstCompetitions[ind].LicenseProgramId = comp.LicenseProgramId;
-                LstCompetitions[ind].LicenseProgramName = comp.LicenseProgramName;
-                LstCompetitions[ind].ObrazProgramId = comp.ObrazProgramId;
-                LstCompetitions[ind].ObrazProgramName = comp.ObrazProgramName;
-                LstCompetitions[ind].ProfileId = comp.ProfileId;
-                LstCompetitions[ind].ProfileName = comp.ProfileName;
-
-                LstCompetitions[ind].StudyFormId = comp.StudyFormId;
-                LstCompetitions[ind].StudyFormName = comp.StudyFormName;
-                LstCompetitions[ind].StudyBasisId = comp.StudyBasisId;
-                LstCompetitions[ind].StudyBasisName = comp.StudyBasisName;
-                LstCompetitions[ind].StudyLevelId = comp.StudyLevelId;
-                LstCompetitions[ind].StudyLevelName = comp.StudyLevelName;
-
-                LstCompetitions[ind].HasCompetition = comp.HasCompetition;
-                LstCompetitions[ind].ChangeEntry();
-
-                string userName = MainClass.GetUserName();
-
-                string query = "UPDATE [Application] SET IsApprovedByComission=1, ApproverName=@ApproverName, CompetitionId=@CompId, DocInsertDate=@DocInsertDate, IsCommonRussianCompetition=@IsCommonRussianCompetition, IsGosLine=@IsGosLine WHERE Id=@Id";
-                _bdcInet.ExecuteQuery(query, new SortedList<string, object>() { { "@Id", comp.Id }, { "@CompId", comp.CompetitionId }, { "@DocInsertDate", comp.DocInsertDate }, 
-                { "@ApproverName", userName }, 
-                { "@IsGosLine", comp.IsGosLine },
-                { "@IsCommonRussianCompetition", comp.IsCommonRussianCompetition }
-                });
-
-                UpdateApplicationGrid();
-            }
-        }
-
-        private void dgvEducationDocuments_CurrentCellChanged(object sender, EventArgs e)
-        {
-            if (dgvEducationDocuments.CurrentRow != null)
-                if (dgvEducationDocuments.CurrentRow.Index != _currentEducRow)
-                {
-                    _currentEducRow = dgvEducationDocuments.CurrentRow.Index;
-                    ViewEducationInfo(lstEducationInfo[_currentEducRow].Id);
-
-                }
         }
     }
 }

@@ -206,7 +206,6 @@
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.gbFile = new System.Windows.Forms.GroupBox();
             this.dgvFiles = new System.Windows.Forms.DataGridView();
-            this.chlbFile = new System.Windows.Forms.CheckedListBox();
             this.btnOpenFile = new System.Windows.Forms.Button();
             this.tpApplication = new System.Windows.Forms.TabPage();
             this.label26 = new System.Windows.Forms.Label();
@@ -2056,9 +2055,9 @@
             // groupBox2
             // 
             this.groupBox2.Controls.Add(this.textBox1);
-            this.groupBox2.Location = new System.Drawing.Point(8, 300);
+            this.groupBox2.Location = new System.Drawing.Point(8, 323);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(543, 202);
+            this.groupBox2.Size = new System.Drawing.Size(628, 229);
             this.groupBox2.TabIndex = 115;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Участие в научно-исследовательской работе";
@@ -2068,17 +2067,16 @@
             this.textBox1.Location = new System.Drawing.Point(6, 22);
             this.textBox1.Multiline = true;
             this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(531, 174);
+            this.textBox1.Size = new System.Drawing.Size(614, 201);
             this.textBox1.TabIndex = 111;
             // 
             // gbFile
             // 
             this.gbFile.Controls.Add(this.dgvFiles);
-            this.gbFile.Controls.Add(this.chlbFile);
             this.gbFile.Controls.Add(this.btnOpenFile);
             this.gbFile.Location = new System.Drawing.Point(8, 3);
             this.gbFile.Name = "gbFile";
-            this.gbFile.Size = new System.Drawing.Size(543, 281);
+            this.gbFile.Size = new System.Drawing.Size(628, 314);
             this.gbFile.TabIndex = 12;
             this.gbFile.TabStop = false;
             // 
@@ -2086,30 +2084,19 @@
             // 
             this.dgvFiles.AllowUserToAddRows = false;
             this.dgvFiles.AllowUserToDeleteRows = false;
-            this.dgvFiles.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvFiles.Location = new System.Drawing.Point(6, 89);
-            this.dgvFiles.Name = "dgvFiles";
-            this.dgvFiles.Size = new System.Drawing.Size(529, 157);
-            this.dgvFiles.TabIndex = 11;
-            // 
-            // chlbFile
-            // 
-            this.chlbFile.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+            this.dgvFiles.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.chlbFile.BackColor = System.Drawing.SystemColors.Control;
-            this.chlbFile.CheckOnClick = true;
-            this.chlbFile.FormattingEnabled = true;
-            this.chlbFile.HorizontalScrollbar = true;
-            this.chlbFile.Location = new System.Drawing.Point(6, 19);
-            this.chlbFile.Name = "chlbFile";
-            this.chlbFile.Size = new System.Drawing.Size(531, 64);
-            this.chlbFile.TabIndex = 9;
+            this.dgvFiles.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvFiles.Location = new System.Drawing.Point(6, 19);
+            this.dgvFiles.Name = "dgvFiles";
+            this.dgvFiles.RowHeadersVisible = false;
+            this.dgvFiles.Size = new System.Drawing.Size(614, 260);
+            this.dgvFiles.TabIndex = 11;
             // 
             // btnOpenFile
             // 
             this.btnOpenFile.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnOpenFile.Location = new System.Drawing.Point(6, 252);
+            this.btnOpenFile.Location = new System.Drawing.Point(6, 285);
             this.btnOpenFile.Name = "btnOpenFile";
             this.btnOpenFile.Size = new System.Drawing.Size(100, 23);
             this.btnOpenFile.TabIndex = 10;
@@ -2122,8 +2109,6 @@
             this.tpApplication.Controls.Add(this.label26);
             this.tpApplication.Controls.Add(this.tbApplicationVersion);
             this.tpApplication.Controls.Add(this.groupBox7);
-            this.tpApplication.Controls.Add(this.lblHasMotivationLetter);
-            this.tpApplication.Controls.Add(this.lblHasEssay);
             this.tpApplication.Location = new System.Drawing.Point(4, 22);
             this.tpApplication.Name = "tpApplication";
             this.tpApplication.Size = new System.Drawing.Size(644, 555);
@@ -2152,15 +2137,18 @@
             // 
             this.groupBox7.Controls.Add(this.btnOpenCompetition);
             this.groupBox7.Controls.Add(this.dgvApplications);
+            this.groupBox7.Controls.Add(this.lblHasMotivationLetter);
+            this.groupBox7.Controls.Add(this.lblHasEssay);
             this.groupBox7.Location = new System.Drawing.Point(8, 39);
             this.groupBox7.Name = "groupBox7";
-            this.groupBox7.Size = new System.Drawing.Size(543, 428);
+            this.groupBox7.Size = new System.Drawing.Size(628, 428);
             this.groupBox7.TabIndex = 159;
             this.groupBox7.TabStop = false;
             this.groupBox7.Text = "Конкурсы";
             // 
             // btnOpenCompetition
             // 
+            this.btnOpenCompetition.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btnOpenCompetition.Location = new System.Drawing.Point(6, 348);
             this.btnOpenCompetition.Name = "btnOpenCompetition";
             this.btnOpenCompetition.Size = new System.Drawing.Size(75, 23);
@@ -2173,12 +2161,15 @@
             // 
             this.dgvApplications.AllowUserToAddRows = false;
             this.dgvApplications.AllowUserToDeleteRows = false;
+            this.dgvApplications.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.dgvApplications.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvApplications.Location = new System.Drawing.Point(6, 19);
             this.dgvApplications.Name = "dgvApplications";
             this.dgvApplications.ReadOnly = true;
             this.dgvApplications.RowHeadersVisible = false;
-            this.dgvApplications.Size = new System.Drawing.Size(529, 323);
+            this.dgvApplications.Size = new System.Drawing.Size(616, 323);
             this.dgvApplications.TabIndex = 0;
             this.dgvApplications.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvApplications_CellDoubleClick);
             this.dgvApplications.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.dgvApplications_CellFormatting);
@@ -2188,7 +2179,7 @@
             this.lblHasMotivationLetter.AutoSize = true;
             this.lblHasMotivationLetter.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.lblHasMotivationLetter.ForeColor = System.Drawing.Color.DarkGreen;
-            this.lblHasMotivationLetter.Location = new System.Drawing.Point(351, 482);
+            this.lblHasMotivationLetter.Location = new System.Drawing.Point(430, 390);
             this.lblHasMotivationLetter.Name = "lblHasMotivationLetter";
             this.lblHasMotivationLetter.Size = new System.Drawing.Size(192, 13);
             this.lblHasMotivationLetter.TabIndex = 158;
@@ -2200,7 +2191,7 @@
             this.lblHasEssay.AutoSize = true;
             this.lblHasEssay.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.lblHasEssay.ForeColor = System.Drawing.Color.DarkGreen;
-            this.lblHasEssay.Location = new System.Drawing.Point(425, 495);
+            this.lblHasEssay.Location = new System.Drawing.Point(504, 403);
             this.lblHasEssay.Name = "lblHasEssay";
             this.lblHasEssay.Size = new System.Drawing.Size(118, 13);
             this.lblHasEssay.TabIndex = 157;
@@ -2285,6 +2276,7 @@
             this.tpApplication.ResumeLayout(false);
             this.tpApplication.PerformLayout();
             this.groupBox7.ResumeLayout(false);
+            this.groupBox7.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvApplications)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -2385,7 +2377,6 @@
         private System.Windows.Forms.Label label42;
         private System.Windows.Forms.TextBox tbStag;
         private System.Windows.Forms.GroupBox gbFile;
-        protected System.Windows.Forms.CheckedListBox chlbFile;
         protected System.Windows.Forms.Button btnOpenFile;
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.TextBox textBox1;

@@ -88,7 +88,7 @@
             this.tabPage4 = new System.Windows.Forms.TabPage();
             this.btnDelete = new System.Windows.Forms.Button();
             this.btnAdd = new System.Windows.Forms.Button();
-            this.dgvObrazProgramInEntry = new System.Windows.Forms.DataGridView();
+            this.dgvInnerEntryInEntry = new System.Windows.Forms.DataGridView();
             ((System.ComponentModel.ISupportInitialize)(this.epError)).BeginInit();
             this.tcCard.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -101,7 +101,7 @@
             this.groupBox2.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.tabPage4.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvObrazProgramInEntry)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvInnerEntryInEntry)).BeginInit();
             this.SuspendLayout();
             // 
             // btnClose
@@ -691,13 +691,13 @@
             // 
             this.tabPage4.Controls.Add(this.btnDelete);
             this.tabPage4.Controls.Add(this.btnAdd);
-            this.tabPage4.Controls.Add(this.dgvObrazProgramInEntry);
+            this.tabPage4.Controls.Add(this.dgvInnerEntryInEntry);
             this.tabPage4.Location = new System.Drawing.Point(4, 22);
             this.tabPage4.Name = "tabPage4";
             this.tabPage4.Padding = new System.Windows.Forms.Padding(3);
             this.tabPage4.Size = new System.Drawing.Size(421, 507);
             this.tabPage4.TabIndex = 3;
-            this.tabPage4.Text = "Обр. программы";
+            this.tabPage4.Text = "Внутр. подконкурсы";
             this.tabPage4.UseVisualStyleBackColor = true;
             // 
             // btnDelete
@@ -720,17 +720,17 @@
             this.btnAdd.UseVisualStyleBackColor = true;
             this.btnAdd.Click += new System.EventHandler(this.btnAdd_Click);
             // 
-            // dgvObrazProgramInEntry
+            // dgvInnerEntryInEntry
             // 
-            this.dgvObrazProgramInEntry.AllowUserToAddRows = false;
-            this.dgvObrazProgramInEntry.AllowUserToDeleteRows = false;
-            this.dgvObrazProgramInEntry.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvObrazProgramInEntry.Location = new System.Drawing.Point(6, 6);
-            this.dgvObrazProgramInEntry.Name = "dgvObrazProgramInEntry";
-            this.dgvObrazProgramInEntry.ReadOnly = true;
-            this.dgvObrazProgramInEntry.Size = new System.Drawing.Size(409, 252);
-            this.dgvObrazProgramInEntry.TabIndex = 0;
-            this.dgvObrazProgramInEntry.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvObrazProgramInEntry_CellDoubleClick);
+            this.dgvInnerEntryInEntry.AllowUserToAddRows = false;
+            this.dgvInnerEntryInEntry.AllowUserToDeleteRows = false;
+            this.dgvInnerEntryInEntry.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvInnerEntryInEntry.Location = new System.Drawing.Point(6, 6);
+            this.dgvInnerEntryInEntry.Name = "dgvInnerEntryInEntry";
+            this.dgvInnerEntryInEntry.ReadOnly = true;
+            this.dgvInnerEntryInEntry.Size = new System.Drawing.Size(409, 252);
+            this.dgvInnerEntryInEntry.TabIndex = 0;
+            this.dgvInnerEntryInEntry.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvObrazProgramInEntry_CellDoubleClick);
             // 
             // CardEntry
             // 
@@ -761,7 +761,7 @@
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.tabPage4.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.dgvObrazProgramInEntry)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvInnerEntryInEntry)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -819,7 +819,7 @@
         private System.Windows.Forms.TabPage tabPage4;
         private System.Windows.Forms.Button btnDelete;
         private System.Windows.Forms.Button btnAdd;
-        private System.Windows.Forms.DataGridView dgvObrazProgramInEntry;
+        private System.Windows.Forms.DataGridView dgvInnerEntryInEntry;
         private System.Windows.Forms.ComboBox cbComission;
         private System.Windows.Forms.Label label19;
         private System.Windows.Forms.Label label20;

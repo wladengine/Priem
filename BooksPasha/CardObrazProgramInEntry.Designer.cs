@@ -1,6 +1,6 @@
 ﻿namespace Priem
 {
-    partial class CardObrazProgramInEntry
+    partial class CardInnerEntryInEntry
     {
         /// <summary>
         /// Required designer variable.
@@ -41,7 +41,7 @@
             // 
             // btnClose
             // 
-            this.btnClose.Location = new System.Drawing.Point(403, 169);
+            this.btnClose.Location = new System.Drawing.Point(617, 169);
             // 
             // btnSaveChange
             // 
@@ -49,7 +49,7 @@
             // 
             // btnSaveAsNew
             // 
-            this.btnSaveAsNew.Location = new System.Drawing.Point(336, 135);
+            this.btnSaveAsNew.Location = new System.Drawing.Point(550, 135);
             // 
             // cbObrazProgram
             // 
@@ -59,7 +59,7 @@
             this.cbObrazProgram.FormattingEnabled = true;
             this.cbObrazProgram.Location = new System.Drawing.Point(120, 38);
             this.cbObrazProgram.Name = "cbObrazProgram";
-            this.cbObrazProgram.Size = new System.Drawing.Size(347, 21);
+            this.cbObrazProgram.Size = new System.Drawing.Size(561, 21);
             this.cbObrazProgram.TabIndex = 0;
             // 
             // label1
@@ -78,7 +78,7 @@
             this.tbLicenseProgram.Location = new System.Drawing.Point(120, 12);
             this.tbLicenseProgram.Name = "tbLicenseProgram";
             this.tbLicenseProgram.ReadOnly = true;
-            this.tbLicenseProgram.Size = new System.Drawing.Size(347, 20);
+            this.tbLicenseProgram.Size = new System.Drawing.Size(561, 20);
             this.tbLicenseProgram.TabIndex = 4;
             // 
             // label2
@@ -124,14 +124,14 @@
             this.cbProfile.FormattingEnabled = true;
             this.cbProfile.Location = new System.Drawing.Point(120, 65);
             this.cbProfile.Name = "cbProfile";
-            this.cbProfile.Size = new System.Drawing.Size(347, 21);
+            this.cbProfile.Size = new System.Drawing.Size(561, 21);
             this.cbProfile.TabIndex = 25;
             // 
-            // CardObrazProgramInEntry
+            // CardInnerEntryInEntry
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(479, 170);
+            this.ClientSize = new System.Drawing.Size(693, 170);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.cbProfile);
             this.Controls.Add(this.tbKCP);
@@ -140,8 +140,10 @@
             this.Controls.Add(this.tbLicenseProgram);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.cbObrazProgram);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Sizable;
             this.Location = new System.Drawing.Point(0, 0);
-            this.Name = "CardObrazProgramInEntry";
+            this.Name = "CardInnerEntryInEntry";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Образовательная программа в году";
             this.Controls.SetChildIndex(this.cbObrazProgram, 0);
             this.Controls.SetChildIndex(this.label1, 0);

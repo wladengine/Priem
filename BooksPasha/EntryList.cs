@@ -209,9 +209,19 @@ namespace Priem
 
         protected override void OpenCard(string itemId)
         {
-            CardEntry crd = new CardEntry(itemId);
-            crd.ToUpdateList += new UpdateListHandler(UpdateDataGrid);
-            crd.Show();
+            int? iSLId = ComboServ.GetComboIdInt(cbStudyLevel);
+            if (string.IsNullOrEmpty(itemId) && iSLId.HasValue)
+            {
+                CardEntry crd = new CardEntry(iSLId.Value);
+                crd.ToUpdateList += new UpdateListHandler(UpdateDataGrid);
+                crd.Show();
+            }
+            else
+            {
+                CardEntry crd = new CardEntry(itemId);
+                crd.ToUpdateList += new UpdateListHandler(UpdateDataGrid);
+                crd.Show();
+            }
         }
 
         protected override void Delete(string tableName, string id)

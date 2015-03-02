@@ -233,6 +233,15 @@ namespace Priem
             InitializeComponent();            
             InitControls();            
         }
+
+        public CardEntry(int iStudyLevelId)
+            : base()
+        {
+            InitializeComponent();
+            InitControls();
+            StudyLevelId = iStudyLevelId;
+        }
+
       
         protected override void ExtraInit()
         {
@@ -392,7 +401,7 @@ namespace Priem
                     DateOfClose_GosLine = ent.DateOfClose_GosLine;
 
                     UpdateExams();
-                    UpdateObrazProgramInEntry();
+                    UpdateInnerEntryInEntry();
                 }
             }
             catch (Exception exc)
@@ -408,6 +417,11 @@ namespace Priem
             //    btnSaveChange.Enabled = false;
             if (!MainClass.IsEntryChanger())
                 btnSaveChange.Enabled = false;
+
+            if (MainClass.IsEntryChanger())
+            {
+                WinFormsServ.SetSubControlsEnabled(tabPage4, true);
+            }
         }
 
         protected override void SetAllFieldsEnabled()
@@ -665,18 +679,20 @@ WHERE Id=@Id";
         #endregion   
 
         #region ObrazProgramInEntry
-        private void UpdateObrazProgramInEntry()
+        private void UpdateInnerEntryInEntry()
         {
             if (string.IsNullOrEmpty(_Id))
                 return;
 
             using (PriemEntities context = new PriemEntities())
             {
-                var src = context.InnerEntryInEntry.Where(x => x.EntryId == GuidId).Select(x => new { x.Id, x.SP_ObrazProgram.Name, x.KCP }).ToArray();
-                dgvObrazProgramInEntry.DataSource = Util.ConvertToDataTable(src);
-                dgvObrazProgramInEntry.Columns["Id"].Visible = false;
-                dgvObrazProgramInEntry.Columns["Name"].HeaderText = "Образовательная программа";
-                dgvObrazProgramInEntry.Columns["KCP"].HeaderText = "КЦП";
+                var src = context.InnerEntryInEntry.Where(x => x.EntryId == GuidId)
+                    .Select(x => new { x.Id, x.SP_ObrazProgram.Name, Profile = x.SP_Profile.Name, x.KCP }).ToArray();
+                dgvInnerEntryInEntry.DataSource = Util.ConvertToDataTable(src);
+                dgvInnerEntryInEntry.Columns["Id"].Visible = false;
+                dgvInnerEntryInEntry.Columns["Name"].HeaderText = "Образовательная программа";
+                dgvInnerEntryInEntry.Columns["Profile"].HeaderText = "Профиль";
+                dgvInnerEntryInEntry.Columns["KCP"].HeaderText = "КЦП";
             }
         }
 
@@ -690,18 +706,18 @@ WHERE Id=@Id";
 
             if (LicenseProgramId.HasValue)
             {
-                var crd = new CardObrazProgramInEntry(GuidId.Value, LicenseProgramId.Value);
-                crd.ToUpdateList += UpdateObrazProgramInEntry;
+                var crd = new CardInnerEntryInEntry(GuidId.Value, LicenseProgramId.Value);
+                crd.ToUpdateList += UpdateInnerEntryInEntry;
                 crd.Show();
             }
         }
         private void btnDelete_Click(object sender, EventArgs e)
         {
-            if (dgvObrazProgramInEntry.SelectedCells.Count == 0)
+            if (dgvInnerEntryInEntry.SelectedCells.Count == 0)
                 return;
 
-            int rwInd = dgvObrazProgramInEntry.SelectedCells[0].RowIndex;
-            Guid gId = (Guid)dgvObrazProgramInEntry["Id", rwInd].Value;
+            int rwInd = dgvInnerEntryInEntry.SelectedCells[0].RowIndex;
+            Guid gId = (Guid)dgvInnerEntryInEntry["Id", rwInd].Value;
 
             using (PriemEntities context = new PriemEntities())
             {
@@ -715,16 +731,16 @@ WHERE Id=@Id";
                 MainClass.BdcOnlineReadWrite.ExecuteQuery(query, slParams);
             }
 
-            UpdateObrazProgramInEntry();
+            UpdateInnerEntryInEntry();
         }
         private void dgvObrazProgramInEntry_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
             if (e.RowIndex < 0)
                 return;
 
-            Guid gId = (Guid)dgvObrazProgramInEntry["Id", e.RowIndex].Value;
-            var crd = new CardObrazProgramInEntry(gId);
-            crd.ToUpdateList += UpdateObrazProgramInEntry;
+            Guid gId = (Guid)dgvInnerEntryInEntry["Id", e.RowIndex].Value;
+            var crd = new CardInnerEntryInEntry(gId);
+            crd.ToUpdateList += UpdateInnerEntryInEntry;
             crd.Show();
         }
 

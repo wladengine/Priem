@@ -56,7 +56,7 @@ namespace Priem
         public bool HasInnerPriorities { get; set; }
         public bool IsApprovedByComission { get; set; }
         public string ApproverName { get; set; }
-        public List<ShortObrazProgramInEntry> lstObrazProgramsInEntry { get; set; }
+        public List<ShortInnerEntryInEntry> lstObrazProgramsInEntry { get; set; }
 
         public ShortCompetition(Guid _Id, Guid _CommitId, Guid _EntryId, Guid _PersonId, int? _VersionNum, DateTime? _VersionDate)
         {
@@ -85,7 +85,7 @@ namespace Priem
             }
         }
     }
-    public class ShortObrazProgramInEntry
+    public class ShortInnerEntryInEntry
     {
         public Guid Id { get; private set; }
         public string ObrazProgramName { get; private set; }
@@ -93,24 +93,13 @@ namespace Priem
         public int InnerEntryInEntryPriority { get; set; }
         public int CurrVersion { get; set; }
         public DateTime CurrDate { get; set; }
-        //public List<ShortProfileInObrazProgramInEntry> ListProfiles { get; set; }
 
-        public ShortObrazProgramInEntry(Guid _id, string _obrazProgramName)
+        public ShortInnerEntryInEntry(Guid _id, string _obrazProgramName, string _profileName)
         {
             Id = _id;
             ObrazProgramName = _obrazProgramName;
+            ProfileName = _profileName;
         }
     }
-    //public class ShortProfileInObrazProgramInEntry
-    //{
-    //    public Guid Id { get; private set; }
-    //    public string ProfileName { get; private set; }
-    //    public int ProfileInObrazProgramInEntryPriority { get; set; }
-
-    //    public ShortProfileInObrazProgramInEntry(Guid _Id, string _ProfileName)
-    //    {
-    //        Id = _Id;
-    //        ProfileName = _ProfileName;
-    //    }
-    //}
+    
 }

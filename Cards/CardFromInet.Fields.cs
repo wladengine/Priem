@@ -229,7 +229,7 @@ namespace Priem
         public string SchoolCity
         {
             get { return cbSchoolCity.Text.Trim(); }
-            set { cbSchoolCity.SelectedItem = value; }
+            set { cbSchoolCity.Text = value; }
         }
         protected int? SchoolTypeId
         {

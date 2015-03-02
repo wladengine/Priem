@@ -13,8 +13,9 @@ using System.Transactions;
 
 namespace Priem
 {
-    public partial class CardObrazProgramInEntry : BaseCard
+    public partial class CardInnerEntryInEntry : BaseCard
     {
+        #region Fields
         public event UpdateListHandler ToUpdateList;
         private Guid? GuidId;
         private Guid EntryId;
@@ -52,8 +53,9 @@ namespace Priem
             get { return ComboServ.GetComboIdInt(cbProfile).Value; }
             set { ComboServ.SetComboId(cbProfile, value); }
         }
-        
-        public CardObrazProgramInEntry(Guid entryId, int licenseProgramId)
+        #endregion
+
+        public CardInnerEntryInEntry(Guid entryId, int licenseProgramId)
         {
             InitializeComponent();
             EntryId = entryId;
@@ -61,7 +63,7 @@ namespace Priem
             UpdateCombo();
             InitControls();
         }
-        public CardObrazProgramInEntry(Guid Id)
+        public CardInnerEntryInEntry(Guid Id)
         {
             InitializeComponent();
             GuidId = Id;
@@ -89,6 +91,7 @@ namespace Priem
                     WinFormsServ.Error("Не удалось получить значение InnerEntryInEntry");
                     return;
                 }
+
                 EntryId = z.Entry.Id;
                 LicenseProgramId = z.Entry.LicenseProgramId;
                 UpdateCombo();
@@ -133,7 +136,7 @@ namespace Priem
                         GuidId = Guid.NewGuid();
                         context.InnerEntryInEntry.AddObject(new InnerEntryInEntry() { Id = GuidId.Value, ObrazProgramId = ObrazProgramId, ProfileId = ProfileId, KCP = KCP, EntryId = EntryId });
 
-                        query = "INSERT INTO ObrazProgramInEntry(Id, ObrazProgramId, @ProfileId, EntryId) VALUES (@Id, @ObrazProgramId, @ProfileId, @EntryId)";
+                        query = "INSERT INTO InnerEntryInEntry (Id, ObrazProgramId, ProfileId, EntryId) VALUES (@Id, @ObrazProgramId, @ProfileId, @EntryId)";
                     }
                     else
                     {
@@ -161,12 +164,12 @@ namespace Priem
                     MainClass.BdcOnlineReadWrite.ExecuteQuery(query, slParams);
 
                     tran.Complete();
-
-                    if (ToUpdateList != null)
-                        ToUpdateList();
-
-                    return true;
                 }
+
+                if (ToUpdateList != null)
+                    ToUpdateList();
+
+                return true;
             }
             catch (Exception ex)
             {

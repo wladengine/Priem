@@ -1894,7 +1894,7 @@ namespace Priem
                 if (persBarcode == null || persBarcode == 0)
                     return;
 
-                new DocCard(persBarcode.Value, abitBarcode.Value).Show();
+                new DocCard(persBarcode.Value, abitBarcode.Value, true).Show();
             }
         }
         private void btnDocInventory_Click(object sender, EventArgs e)

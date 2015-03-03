@@ -1542,7 +1542,7 @@ namespace Priem
             }
 
             if(personBarc != null)
-                new DocCard(personBarc.Value, null).Show();
+                new DocCard(personBarc.Value, null, true).Show();
         }
 
         private void btnGetAssignToHostel_Click(object sender, EventArgs e)

@@ -216,6 +216,7 @@
             this.lblHasMotivationLetter = new System.Windows.Forms.Label();
             this.lblHasEssay = new System.Windows.Forms.Label();
             this.lblBarcode = new System.Windows.Forms.Label();
+            this.btnDocCardOpen = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.epError)).BeginInit();
             this.tabCard.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -2072,6 +2073,7 @@
             // 
             // gbFile
             // 
+            this.gbFile.Controls.Add(this.btnDocCardOpen);
             this.gbFile.Controls.Add(this.dgvFiles);
             this.gbFile.Controls.Add(this.btnOpenFile);
             this.gbFile.Location = new System.Drawing.Point(8, 3);
@@ -2207,6 +2209,17 @@
             this.lblBarcode.Name = "lblBarcode";
             this.lblBarcode.Size = new System.Drawing.Size(0, 13);
             this.lblBarcode.TabIndex = 41;
+            // 
+            // btnDocCardOpen
+            // 
+            this.btnDocCardOpen.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.btnDocCardOpen.Location = new System.Drawing.Point(404, 285);
+            this.btnDocCardOpen.Name = "btnDocCardOpen";
+            this.btnDocCardOpen.Size = new System.Drawing.Size(216, 23);
+            this.btnDocCardOpen.TabIndex = 12;
+            this.btnDocCardOpen.Text = "Открыть список файлов в новом окне";
+            this.btnDocCardOpen.UseVisualStyleBackColor = true;
+            this.btnDocCardOpen.Click += new System.EventHandler(this.btnDocCardOpen_Click);
             // 
             // CardFromInet
             // 
@@ -2473,5 +2486,6 @@
         private System.Windows.Forms.TextBox tbTRKICertificateNumber;
         private System.Windows.Forms.CheckBox chbHasTRKI;
         private System.Windows.Forms.DataGridView dgvFiles;
+        protected System.Windows.Forms.Button btnDocCardOpen;
     }
 }

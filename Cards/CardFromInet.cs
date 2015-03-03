@@ -512,7 +512,9 @@ namespace Priem
                 dgvFiles.Columns["FileName"].HeaderText = "Файл";
                 dgvFiles.Columns["Comment"].HeaderText = "Комментарий";
                 dgvFiles.Columns["FileTypeName"].HeaderText = "Тип файла";
-
+                dgvFiles.Columns["FileName"].ReadOnly = true;
+                dgvFiles.Columns["Comment"].ReadOnly = true;
+                dgvFiles.Columns["FileTypeName"].ReadOnly = true;
             }
         }
         private void btnOpenFile_Click(object sender, EventArgs e)
@@ -526,9 +528,7 @@ namespace Priem
                 {
                     if (dgvFiles.Columns.Contains("FileName"))
                     {
-                        string fileName = rw.Cells["FileName"].Value.ToString();
-                        if (!fileName.EndsWith(rw.Cells["FileExtention"].Value.ToString()))
-                            fileName += "." + rw.Cells["FileExtention"].Value.ToString();
+                        string fileName = rw.Cells["FileName"].Value.ToString(); 
                         KeyValuePair<string, string> file = new KeyValuePair<string, string>(rw.Cells["Id"].Value.ToString(), fileName);
                         lstFiles.Add(file);
                     }
@@ -536,6 +536,13 @@ namespace Priem
             }
             _docs.OpenFile(lstFiles);
         }
+
+        private void btnDocCardOpen_Click(object sender, EventArgs e)
+        {
+            if (_personBarc != null)
+                new DocCard(_personBarc.Value, null, false).Show();
+        }
+
 
         #region Applications
         public void FillApplication()
@@ -1578,5 +1585,6 @@ IsCommonRussianCompetition=@IsCommonRussianCompetition, IsGosLine=@IsGosLine WHE
                 MainClass.OpenCardPerson(perId.ToString(), null, null);
             }
         }
+
     }
 }

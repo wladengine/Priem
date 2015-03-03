@@ -280,30 +280,6 @@ namespace Priem
             btnRemove.Enabled = false;
             btnUpdate.Enabled = false;
             gbWait.Visible = true;
-            
-            //HelpClass.FillDataGrid(this.dgvAbitList, this._bdc, MainClass.qBuilder.GetQuery(MainClass._config.ColumnListAbit, lTables, null), filters, orderby);
-
-            //if (_groupList == null)
-            //{
-            //    try
-            //    {
-            //        if (dgvAbitList.Rows.Count > 0)
-            //        {
-            //            if (sorted && dgvAbitList.Columns.Contains(sortedColumn))
-            //                dgvAbitList.Sort(dgvAbitList.Columns[sortedColumn], order);
-            //            if (index >= 0 && index <= dgvAbitList.Rows.Count)
-            //                dgvAbitList.CurrentCell = dgvAbitList[1, index];
-            //        }
-            //    }
-            //    catch
-            //    {
-            //    }
-            //}
-            //else
-            //    _groupList = null;
-
-            //lblCount.Text = dgvAbitList.RowCount.ToString();
-            //btnCard.Enabled = (dgvAbitList.RowCount != 0);
         }
 
         //поиск по номеру

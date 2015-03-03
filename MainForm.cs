@@ -547,12 +547,6 @@ namespace Priem
             new MinEgeList().Show();
         }
 
-        private void smiImportMags_Click(object sender, EventArgs e)
-        {
-            if(MainClass.IsOwner())
-                SomeMethodsClass.ImportMagAbits();
-        }
-
         private void smiHelp_Click(object sender, EventArgs e)
         {
             Process.Start(string.Format(@"{0}\Templates\Help.doc", Application.StartupPath));

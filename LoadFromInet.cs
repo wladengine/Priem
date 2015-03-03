@@ -137,43 +137,13 @@ namespace Priem
                 pers.KladrCode = pers.CountryId != 1 ? "иностр" : row["KladrCode"].ToString();
                 pers.HostelAbit = QueryServ.ToBoolValue(row["HostelAbit"]);
                 pers.HostelEduc = QueryServ.ToBoolValue(row["HostelEduc"]);
-                    
                 pers.HasAssignToHostel = false;
                 pers.HasExamPass = false;
-                //pers.IsExcellent = QueryServ.ToBoolValue(row["IsExcellent"]);
                 pers.LanguageId = (int?)(Util.ToNullObject(row["LanguageId"]));
-                //pers.SchoolCity = row["SchoolCity"].ToString();
-                //pers.SchoolTypeId = (int?)(Util.ToNullObject(row["SchoolTypeId"]));
-                /*pers.SchoolName = row["SchoolName"].ToString();
-                pers.SchoolNum = row["SchoolNum"].ToString();
-                int SchoolExitYear = 0;
-                int.TryParse(row["SchoolExitYear"].ToString(), out SchoolExitYear);
-                pers.SchoolExitYear = SchoolExitYear;
-                pers.CountryEducId = (int?)(Util.ToNullObject(row["CountryEducId"]));
-                pers.RegionEducId = (int?)(Util.ToNullObject(row["RegionEducId"]));
-                pers.AttestatSeries = row["AttestatSeries"].ToString();
-                pers.AttestatNum = row["AttestatNum"].ToString();
-                pers.DiplomSeries = row["DiplomSeries"].ToString();
-                pers.DiplomNum = row["DiplomNum"].ToString();
-                */
+                
                 pers.HasTRKI = (bool)row["HasTRKI"];
                 pers.TRKICertificateNumber = row["TRKICertificateNumber"].ToString();
-                /*
-                double avg;                
-                if(!double.TryParse(row["SchoolAVG"].ToString(), out avg))
-                    pers.SchoolAVG = null;
-                else
-                    pers.SchoolAVG = avg;
-                */
-                /*
-                pers.HighEducation = row["HighEducation"].ToString();
-                pers.HEProfession = row["HEProfession"].ToString();
-                pers.HEQualification = row["HEQualification"].ToString();
-                pers.HEEntryYear = (int?)(Util.ToNullObject(row["HEEntryYear"]));
-                pers.HEExitYear = (int?)(Util.ToNullObject(row["HEExitYear"]));
-                pers.HEStudyFormId = (int?)(Util.ToNullObject(row["HEStudyFormId"]));
-                pers.HEWork = row["HEWork"].ToString();
-                 */
+                
                 pers.PersonInfo = row["PersonInfo"].ToString();
                 pers.ExtraInfo = row["ExtraInfo"].ToString();
                 pers.StartEnglish = QueryServ.ToBoolValue(row["StartEnglish"]);
@@ -221,12 +191,8 @@ namespace Priem
                         work += dr["ScienseWork"].ToString() + ";" + Environment.NewLine;
                     }
                     pers.ScienceWork = work;
-                }  
+                }
                
-                //pers.MSVuz = row["MSVuz"].ToString();
-                //pers.MSCourse = row["MSCourse"].ToString();
-                //pers.MSStudyFormId = (int?)row["MSStudyFormId"];  
-              
                 return pers;
             }
             catch
@@ -244,7 +210,7 @@ Person.Id as PersonId
 , PersonEducationDocument.Id as EducationDocumentId
 , SchoolCity, SchoolTypeId, SchoolName, SchoolNum, SchoolExitYear
 , Country.PriemDictionaryId as CountryEducId
-, RegionEducId,  IsEqual, EqualDocumentNumber, Series , Number, AvgMark
+, Region.PriemDictionaryId AS RegionEducId,  IsEqual, EqualDocumentNumber, Series , Number, AvgMark
 , PersonHighEducationInfo.EducationDocumentId as PersonHighEducationInfoId
 , Qualification.Name as Qualification
       , EntryYear
@@ -257,6 +223,7 @@ Person.Id as PersonId
 from dbo.PersonEducationDocument 
 inner join Person on Person.Id = PersonEducationDocument.PersonId
 inner join Country on Country.Id = PersonEducationDocument.CountryEducId
+inner join Region on Region.Id = PersonEducationDocument.RegionEducId
 left join PersonHighEducationInfo on PersonHighEducationInfo.EducationDocumentId = PersonEducationDocument.Id
 left join Qualification on Qualification.Id = QualificationId
 where Person.Barcode =" + fileNum ;
@@ -312,52 +279,5 @@ where Person.Barcode =" + fileNum ;
             return lstRet;
         }
 
-        public qAbiturient GetAbitByBarcode(int fileNum)
-        {
-            try
-            {
-                string abitQueryInet = @"SELECT qAbiturient.Barcode, EntryId, qAbiturient.HostelEduc, 
-                            (Case when qAbiturient.Enabled = 1 then 0 else 1 end) AS BackDoc, 
-                            qAbiturient.DateOfDisable AS BackDocDate, qAbiturient.DateOfStart AS DocDate,                           
-                            qAbiturient.Priority, qAbiturient.LicenseProgramId, qAbiturient.ObrazProgramId, 
-                            qAbiturient.ProfileId, qAbiturient.FacultyId, qAbiturient.StudyFormId, 
-                            qAbiturient.StudyBasisId, qAbiturient.IsSecond
-                            FROM qAbiturient WHERE 0=0";
-
-                DataSet ds = _bdcInet.GetDataSet(abitQueryInet + " AND qAbiturient.Barcode = " + fileNum);
-                if (ds.Tables[0].Rows.Count == 0)
-                    throw new Exception("Записей не найдено");
-
-                DataRow row = ds.Tables[0].Rows[0];
-                qAbiturient abit = new qAbiturient();
-
-                abit.IsSecond = (bool)row["IsSecond"];
-                abit.EntryId = (Guid)row["EntryId"];
-                abit.FacultyId = (int)row["FacultyId"];
-                abit.LicenseProgramId = (int)row["LicenseProgramId"];
-                abit.ObrazProgramId = (int)row["ObrazProgramId"];
-                abit.ProfileId = (int)(row["ProfileId"]);
-                abit.StudyFormId = (int)row["StudyFormId"];
-                abit.StudyBasisId = (int)row["StudyBasisId"];
-               
-                abit.BackDoc = QueryServ.ToBoolValue(row["BackDoc"]);
-                abit.BackDocDate = row.Field<DateTime?>("BackDocDate");
-                abit.DocDate = (DateTime)row["DocDate"];
-         
-                int prior;
-                if (!int.TryParse(row["Priority"].ToString(), out prior))
-                    abit.Priority = null;
-                else
-                    abit.Priority = prior;
-
-                abit.Barcode = int.Parse(row["Barcode"].ToString());
-
-                return abit;
-            }
-            catch
-            {
-                return null;
-            }
-        }    
     }
 }

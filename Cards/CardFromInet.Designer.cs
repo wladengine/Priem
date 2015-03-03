@@ -485,7 +485,7 @@
             this.tbBirthPlace.Location = new System.Drawing.Point(187, 175);
             this.tbBirthPlace.MaxLength = 100;
             this.tbBirthPlace.Name = "tbBirthPlace";
-            this.tbBirthPlace.Size = new System.Drawing.Size(149, 20);
+            this.tbBirthPlace.Size = new System.Drawing.Size(303, 20);
             this.tbBirthPlace.TabIndex = 6;
             // 
             // label38

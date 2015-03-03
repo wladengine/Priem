@@ -1350,7 +1350,8 @@ namespace Priem
                 }
 
             }
-            dgvAbitList.Columns["Id"].Visible = false;
+            if (dgvAbitList.Columns.Contains("Id"))
+                dgvAbitList.Columns["Id"].Visible = false;
             btn_GreenList.Enabled = true;
         }
     }

@@ -17,7 +17,8 @@ namespace Priem
     {
         protected DBPriem _bdcInet;       
         private LoadFromInet loadClass;
-        
+        private BackgroundWorker bw;
+
         //конструктор
         public ApplicationInetList()
         {            
@@ -29,53 +30,11 @@ namespace Priem
             InitControls();            
         }
 
+        #region Fields
         public DBPriem BdcInet
         {
             get { return _bdcInet; }
         }
-
-        protected override void ExtraInit()
-        {
-            base.ExtraInit();
-
-            btnCard.Visible = btnAdd.Visible = btnRemove.Visible = false;
-            
-            loadClass = new LoadFromInet();
-            _bdcInet = loadClass.BDCInet;
-
-            if (MainClass.IsReadOnly())
-                btnLoad.Enabled = false;
-
-            try
-            {
-                using (PriemEntities context = new PriemEntities())
-                {
-                    ComboServ.FillCombo(cbFaculty, HelpClass.GetComboListByTable("ed.qFaculty", "ORDER BY Acronym"), false, true);
-                    ComboServ.FillCombo(cbStudyBasis, HelpClass.GetComboListByTable("ed.StudyBasis", "ORDER BY Name"), false, true);
-
-                    cbStudyBasis.SelectedIndex = 0;
-                    FillLicenseProgram();
-                    FillObrazProgram();
-                    FillProfile();
-
-                    UpdateDataGrid();
-
-                    if (MainClass.IsPasha())
-                        gbUpdateImport.Visible = true;
-                    else
-                        gbUpdateImport.Visible = false;
-
-                    chbSelectAll.Checked = false;
-
-                    tbAbitBarcode.Focus();
-                }
-            }
-            catch (Exception exc)
-            {
-                WinFormsServ.Error("Ошибка при инициализации формы " + exc.Message);
-            } 
-        } 
-
         public int? FacultyId
         {
             get { return ComboServ.GetComboIdInt(cbFaculty); }
@@ -108,12 +67,60 @@ namespace Priem
                 else
                     ComboServ.SetComboId(cbProfile, value.ToString());
             }
-        }        
+        }
         public int? StudyBasisId
         {
             get { return ComboServ.GetComboIdInt(cbStudyBasis); }
             set { ComboServ.SetComboId(cbStudyBasis, value); }
         }
+        #endregion
+
+        protected override void ExtraInit()
+        {
+            base.ExtraInit();
+
+            btnCard.Visible = btnAdd.Visible = btnRemove.Visible = false;
+            
+            loadClass = new LoadFromInet();
+            _bdcInet = loadClass.BDCInet;
+
+            if (MainClass.IsReadOnly())
+                btnLoad.Enabled = false;
+
+            try
+            {
+                using (PriemEntities context = new PriemEntities())
+                {
+                    ComboServ.FillCombo(cbFaculty, HelpClass.GetComboListByTable("ed.qFaculty", "ORDER BY Acronym"), false, true);
+                    ComboServ.FillCombo(cbStudyBasis, HelpClass.GetComboListByTable("ed.StudyBasis", "ORDER BY Name"), false, true);
+
+                    cbStudyBasis.SelectedIndex = 0;
+                    FillLicenseProgram();
+                    FillObrazProgram();
+                    FillProfile();
+
+                    //UpdateDataGrid();
+                    bw = new BackgroundWorker();
+                    bw.WorkerSupportsCancellation = true;
+                    bw.DoWork += bw_DoWork;
+                    bw.RunWorkerCompleted += bw_RunWorkerCompleted;
+
+                    if (MainClass.IsPasha())
+                        gbUpdateImport.Visible = true;
+                    else
+                        gbUpdateImport.Visible = false;
+
+                    chbSelectAll.Checked = false;
+
+                    tbAbitBarcode.Focus();
+                }
+            }
+            catch (Exception exc)
+            {
+                WinFormsServ.Error("Ошибка при инициализации формы " + exc.Message);
+            } 
+        }
+
         private void FillLicenseProgram()
         {
             using (PriemEntities context = new PriemEntities())
@@ -172,11 +179,12 @@ namespace Priem
                     ComboServ.FillCombo(cbProfile, new List<KeyValuePair<string, string>>(), true, false);
                     cbProfile.Enabled = false;
                 }
-            }             
+            }
         }
 
+        #region Handlers
         //инициализация обработчиков мегакомбов
-        public override void  InitHandlers()
+        public override void InitHandlers()
         {
             cbFaculty.SelectedIndexChanged += new EventHandler(cbFaculty_SelectedIndexChanged);
             cbLicenseProgram.SelectedIndexChanged += new EventHandler(cbLicenseProgram_SelectedIndexChanged);
@@ -184,7 +192,6 @@ namespace Priem
             cbProfile.SelectedIndexChanged += new EventHandler(cbProfile_SelectedIndexChanged);
             cbStudyBasis.SelectedIndexChanged += new EventHandler(cbStudyBasis_SelectedIndexChanged);            
         }
-
         void cbStudyBasis_SelectedIndexChanged(object sender, EventArgs e)
         {
             UpdateDataGrid();
@@ -207,7 +214,8 @@ namespace Priem
         {            
             FillProfile();
             UpdateDataGrid();
-        }        
+        }
+        #endregion
 
         //строим запрос фильтров
         private string GetFilterString()
@@ -244,21 +252,88 @@ namespace Priem
             _orderBy = " ORDER BY [Приложены файлы], [Дата обновления файлов] DESC, ФИО";
             _sQuery = @"SELECT DISTINCT qAbiturient.CommitId AS Id, extPerson.Surname + ' ' + extPerson.Name + ' ' + extPerson.SecondName as ФИО, 
                        extPerson.BirthDate AS Дата_рождения, qAbiturient.CommitNumber AS Barcode, 
-                       (Case When EXISTS(SELECT extAbitFiles.Id FROM [extAbitFileNames] extAbitFiles WHERE extAbitFiles.PersonId = extPerson.Id) then 'Да' else 'Нет' end) AS [Приложены файлы],
-                       (SELECT Max(extAbitFiles.LoadDate) FROM [extAbitFileNames] extAbitFiles WHERE extAbitFiles.PersonId = extPerson.Id AND (extAbitFiles.CommitId = qAbiturient.CommitId OR extAbitFiles.CommitId IS NULL)) AS [Дата обновления файлов],
+                       (Case When EXISTS(SELECT extAbitFileNames.Id FROM extAbitFileNames WHERE extAbitFileNames.PersonId = extPerson.Id) then 'Да' else 'Нет' end) AS [Приложены файлы],
+                       (SELECT Max(extAbitFileNames.LoadDate) FROM extAbitFileNames WHERE extAbitFileNames.PersonId = extPerson.Id AND (extAbitFileNames.CommitId = qAbiturient.CommitId OR extAbitFileNames.CommitId IS NULL)) AS [Дата обновления файлов],
                        (CASE WHEN EXISTS(SELECT * FROM qAbitFiles_OnlyEssayMotivLetter q WHERE q.PersonId=qAbiturient.PersonId AND FileTypeId=2) THEN 'Да' ELSE 'Нет' END) AS [Мотивац письмо],
                        (CASE WHEN EXISTS(SELECT * FROM qAbitFiles_OnlyEssayMotivLetter q WHERE q.PersonId=qAbiturient.PersonId AND FileTypeId=3) THEN 'Да' ELSE 'Нет' END) AS [Эссе]
                        FROM qAbiturient INNER JOIN extPerson ON qAbiturient.PersonId = extPerson.Id
                        WHERE qAbiturient.IsImported = 0 AND Enabled = 1 AND qAbiturient.Id NOT IN (SELECT Id FROM qForeignApplicationOnly)";
-            //--FacultyName as Факультет, LicenseProgramName AS Направление, 
-            //--ObrazProgramName AS Образ_программа, ProfileName AS Профиль, 
-            //--StudyBasisName AS Основа,  
-
-            HelpClass.FillDataGrid(dgvAbiturients, _bdcInet, _sQuery + GetFilterString(), _orderBy);
-            DataGridViewButtonColumn col = new DataGridViewButtonColumn();
             
+//            HelpClass.FillDataGrid(dgvAbiturients, _bdcInet, _sQuery + GetFilterString(), _orderBy);
+//            DataGridViewButtonColumn col = new DataGridViewButtonColumn();
+            
+//            dgvAbiturients.Columns["ФИО"].AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCellsExceptHeader;
+//            btnLoad.Enabled = !(dgvAbiturients.RowCount == 0);
+            if (bw.IsBusy)
+                return;
+
+            bw.RunWorkerAsync(new { dgv = this.dgvAbiturients, _bdc = _bdcInet, query = _sQuery, filters = GetFilterString(), orderby = _orderBy });
+
+            cbFaculty.Enabled = false;
+            cbLicenseProgram.Enabled = false;
+            cbObrazProgram.Enabled = false;
+            cbProfile.Enabled = false;
+            cbStudyBasis.Enabled = false;
+            tbAbitBarcode.Enabled = false;
+            tbSearch.Enabled = false;
+
+            btnCard.Enabled = false;
+            btnClose.Enabled = false;
+            btnRemove.Enabled = false;
+            btnUpdate.Enabled = false;
+            gbWait.Visible = true;
+        }
+
+        void bw_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            cbFaculty.Enabled = true;
+
+            if (!e.Cancelled)
+            {
+                HelpClass.FillDataGrid(this.Dgv, (DataView)e.Result);
+
+                lblCount.Text = dgvAbiturients.RowCount.ToString();
+                btnCard.Enabled = (dgvAbiturients.RowCount != 0);
+            }
+
+            cbFaculty.Enabled = true;
+            btnCard.Enabled = true;
+            btnClose.Enabled = true;
+            btnRemove.Enabled = true;
+            btnUpdate.Enabled = true;
+            gbWait.Visible = false;
+
+            cbFaculty.Enabled = true;
+            cbLicenseProgram.Enabled = true;
+            cbObrazProgram.Enabled = true;
+            cbProfile.Enabled = true;
+            cbStudyBasis.Enabled = true;
+            tbAbitBarcode.Enabled = true;
+            tbSearch.Enabled = true;
+
+            DataGridViewButtonColumn col = new DataGridViewButtonColumn();
+
             dgvAbiturients.Columns["ФИО"].AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCellsExceptHeader;
             btnLoad.Enabled = !(dgvAbiturients.RowCount == 0);
+        }
+
+        void bw_DoWork(object sender, DoWorkEventArgs e)
+        {
+            BackgroundWorker _bw = sender as BackgroundWorker;
+
+            _orderBy = " ORDER BY [Приложены файлы], [Дата обновления файлов] DESC, ФИО";
+            _sQuery = @"SELECT DISTINCT qAbiturient.CommitId AS Id, extPerson.Surname + ' ' + extPerson.Name + ' ' + extPerson.SecondName as ФИО, 
+                       extPerson.BirthDate AS Дата_рождения, qAbiturient.CommitNumber AS Barcode, 
+                       (Case When EXISTS(SELECT extAbitFileNames.Id FROM extAbitFileNames WHERE extAbitFileNames.PersonId = extPerson.Id) then 'Да' else 'Нет' end) AS [Приложены файлы],
+                       (SELECT Max(extAbitFileNames.LoadDate) FROM extAbitFileNames WHERE extAbitFileNames.PersonId = extPerson.Id AND (extAbitFileNames.CommitId = qAbiturient.CommitId OR extAbitFileNames.CommitId IS NULL)) AS [Дата обновления файлов],
+                       (CASE WHEN EXISTS(SELECT * FROM qAbitFiles_OnlyEssayMotivLetter q WHERE q.PersonId=qAbiturient.PersonId AND FileTypeId=2) THEN 'Да' ELSE 'Нет' END) AS [Мотивац письмо],
+                       (CASE WHEN EXISTS(SELECT * FROM qAbitFiles_OnlyEssayMotivLetter q WHERE q.PersonId=qAbiturient.PersonId AND FileTypeId=3) THEN 'Да' ELSE 'Нет' END) AS [Эссе]
+                       FROM qAbiturient INNER JOIN extPerson ON qAbiturient.PersonId = extPerson.Id
+                       WHERE qAbiturient.IsImported = 0 AND Enabled = 1 AND qAbiturient.Id NOT IN (SELECT Id FROM qForeignApplicationOnly)";
+
+            e.Result = HelpClass.GetDataView(((dynamic)e.Argument).dgv, ((dynamic)e.Argument)._bdc, ((dynamic)e.Argument).query, ((dynamic)e.Argument).filters, ((dynamic)e.Argument).orderby);
+            if (_bw.CancellationPending)
+                e.Cancel = true;
         }
 
         //поле поиска

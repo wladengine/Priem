@@ -171,9 +171,7 @@ namespace Priem
             if (MainClass.dbType == PriemType.PriemMag)
             {
                 btnSaveChange.Text = "Одобрить";
-                
-                if (MainClass.bMagImportApplicationsEnabled)
-                    btnSaveChange.Enabled = false;
+                btnSaveChange.Enabled = MainClass.bMagImportApplicationsEnabled;
             }
         }
 

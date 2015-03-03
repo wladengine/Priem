@@ -73,7 +73,6 @@
             // 
             // btnCheckNone
             // 
-            this.btnCheckNone.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btnCheckNone.Location = new System.Drawing.Point(131, 12);
             this.btnCheckNone.Name = "btnCheckNone";
             this.btnCheckNone.Size = new System.Drawing.Size(114, 23);
@@ -84,7 +83,6 @@
             // 
             // btnCheckAll
             // 
-            this.btnCheckAll.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btnCheckAll.Location = new System.Drawing.Point(14, 12);
             this.btnCheckAll.Name = "btnCheckAll";
             this.btnCheckAll.Size = new System.Drawing.Size(111, 23);

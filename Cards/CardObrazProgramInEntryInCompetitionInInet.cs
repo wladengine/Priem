@@ -24,7 +24,7 @@ namespace Priem
         private void InitGrid()
         {
             var src =
-                comp.lstObrazProgramsInEntry.OrderBy(x => x.InnerEntryInEntryPriority)
+                comp.lstInnerEntryInEntry.OrderBy(x => x.InnerEntryInEntryPriority)
                 .Select(x => new
                 {
                     x.Id,
@@ -44,7 +44,7 @@ namespace Priem
 
             //проверка на сортировку
             int i = 0;
-            var OPS = comp.lstObrazProgramsInEntry.OrderBy(x => x.ObrazProgramName).ThenBy(x => x.ProfileName)
+            var OPS = comp.lstInnerEntryInEntry.OrderBy(x => x.ObrazProgramName).ThenBy(x => x.ProfileName)
                 .Select(x => new
                 {
                     x.Id,

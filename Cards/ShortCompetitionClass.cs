@@ -56,7 +56,7 @@ namespace Priem
         public bool HasInnerPriorities { get; set; }
         public bool IsApprovedByComission { get; set; }
         public string ApproverName { get; set; }
-        public List<ShortInnerEntryInEntry> lstObrazProgramsInEntry { get; set; }
+        public List<ShortInnerEntryInEntry> lstInnerEntryInEntry { get; set; }
 
         public ShortCompetition(Guid _Id, Guid _CommitId, Guid _EntryId, Guid _PersonId, int? _VersionNum, DateTime? _VersionDate)
         {

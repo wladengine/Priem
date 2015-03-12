@@ -12210,88 +12210,6 @@ namespace Priem
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        /// <param name="obrazProgramInEntryId">No Metadata Documentation available.</param>
-        /// <param name="priority">No Metadata Documentation available.</param>
-        /// <param name="applicationId">No Metadata Documentation available.</param>
-        public int Abiturient_UpdateObrazProgramInEntryPriority(Nullable<global::System.Guid> obrazProgramInEntryId, Nullable<global::System.Int32> priority, Nullable<global::System.Guid> applicationId)
-        {
-            ObjectParameter obrazProgramInEntryIdParameter;
-            if (obrazProgramInEntryId.HasValue)
-            {
-                obrazProgramInEntryIdParameter = new ObjectParameter("ObrazProgramInEntryId", obrazProgramInEntryId);
-            }
-            else
-            {
-                obrazProgramInEntryIdParameter = new ObjectParameter("ObrazProgramInEntryId", typeof(global::System.Guid));
-            }
-    
-            ObjectParameter priorityParameter;
-            if (priority.HasValue)
-            {
-                priorityParameter = new ObjectParameter("Priority", priority);
-            }
-            else
-            {
-                priorityParameter = new ObjectParameter("Priority", typeof(global::System.Int32));
-            }
-    
-            ObjectParameter applicationIdParameter;
-            if (applicationId.HasValue)
-            {
-                applicationIdParameter = new ObjectParameter("applicationId", applicationId);
-            }
-            else
-            {
-                applicationIdParameter = new ObjectParameter("applicationId", typeof(global::System.Guid));
-            }
-    
-            return base.ExecuteFunction("Abiturient_UpdateObrazProgramInEntryPriority", obrazProgramInEntryIdParameter, priorityParameter, applicationIdParameter);
-        }
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        /// <param name="profileInObrazProgramInEntryId">No Metadata Documentation available.</param>
-        /// <param name="priority">No Metadata Documentation available.</param>
-        /// <param name="applicationId">No Metadata Documentation available.</param>
-        public int Abiturient_UpdateProfileInObrazProgramInEntryPriority(Nullable<global::System.Guid> profileInObrazProgramInEntryId, Nullable<global::System.Int32> priority, Nullable<global::System.Guid> applicationId)
-        {
-            ObjectParameter profileInObrazProgramInEntryIdParameter;
-            if (profileInObrazProgramInEntryId.HasValue)
-            {
-                profileInObrazProgramInEntryIdParameter = new ObjectParameter("ProfileInObrazProgramInEntryId", profileInObrazProgramInEntryId);
-            }
-            else
-            {
-                profileInObrazProgramInEntryIdParameter = new ObjectParameter("ProfileInObrazProgramInEntryId", typeof(global::System.Guid));
-            }
-    
-            ObjectParameter priorityParameter;
-            if (priority.HasValue)
-            {
-                priorityParameter = new ObjectParameter("Priority", priority);
-            }
-            else
-            {
-                priorityParameter = new ObjectParameter("Priority", typeof(global::System.Int32));
-            }
-    
-            ObjectParameter applicationIdParameter;
-            if (applicationId.HasValue)
-            {
-                applicationIdParameter = new ObjectParameter("applicationId", applicationId);
-            }
-            else
-            {
-                applicationIdParameter = new ObjectParameter("applicationId", typeof(global::System.Guid));
-            }
-    
-            return base.ExecuteFunction("Abiturient_UpdateProfileInObrazProgramInEntryPriority", profileInObrazProgramInEntryIdParameter, priorityParameter, applicationIdParameter);
-        }
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
         /// <param name="isCommonRussianCompetition">No Metadata Documentation available.</param>
         /// <param name="id">No Metadata Documentation available.</param>
         public int Abiturient_UpdateIsCommonRussianCompetition(Nullable<global::System.Boolean> isCommonRussianCompetition, Nullable<global::System.Guid> id)
@@ -12536,66 +12454,6 @@ namespace Priem
             }
     
             return base.ExecuteFunction("PayDataEntry_Delete", entryIdParameter);
-        }
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        /// <param name="obrazProgramInEntryId">No Metadata Documentation available.</param>
-        /// <param name="id">No Metadata Documentation available.</param>
-        public int Abiturient_UpdateObrazProgramInEntryId(Nullable<global::System.Guid> obrazProgramInEntryId, Nullable<global::System.Guid> id)
-        {
-            ObjectParameter obrazProgramInEntryIdParameter;
-            if (obrazProgramInEntryId.HasValue)
-            {
-                obrazProgramInEntryIdParameter = new ObjectParameter("ObrazProgramInEntryId", obrazProgramInEntryId);
-            }
-            else
-            {
-                obrazProgramInEntryIdParameter = new ObjectParameter("ObrazProgramInEntryId", typeof(global::System.Guid));
-            }
-    
-            ObjectParameter idParameter;
-            if (id.HasValue)
-            {
-                idParameter = new ObjectParameter("id", id);
-            }
-            else
-            {
-                idParameter = new ObjectParameter("id", typeof(global::System.Guid));
-            }
-    
-            return base.ExecuteFunction("Abiturient_UpdateObrazProgramInEntryId", obrazProgramInEntryIdParameter, idParameter);
-        }
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        /// <param name="profileInObrazProgramInEntryId">No Metadata Documentation available.</param>
-        /// <param name="id">No Metadata Documentation available.</param>
-        public int Abiturient_UpdateProfileInObrazProgramInEntryId(Nullable<global::System.Guid> profileInObrazProgramInEntryId, Nullable<global::System.Guid> id)
-        {
-            ObjectParameter profileInObrazProgramInEntryIdParameter;
-            if (profileInObrazProgramInEntryId.HasValue)
-            {
-                profileInObrazProgramInEntryIdParameter = new ObjectParameter("ProfileInObrazProgramInEntryId", profileInObrazProgramInEntryId);
-            }
-            else
-            {
-                profileInObrazProgramInEntryIdParameter = new ObjectParameter("ProfileInObrazProgramInEntryId", typeof(global::System.Guid));
-            }
-    
-            ObjectParameter idParameter;
-            if (id.HasValue)
-            {
-                idParameter = new ObjectParameter("id", id);
-            }
-            else
-            {
-                idParameter = new ObjectParameter("id", typeof(global::System.Guid));
-            }
-    
-            return base.ExecuteFunction("Abiturient_UpdateProfileInObrazProgramInEntryId", profileInObrazProgramInEntryIdParameter, idParameter);
         }
     
         /// <summary>
@@ -13138,6 +12996,107 @@ namespace Priem
             }
     
             return base.ExecuteFunction("Person_EducationInfo_update", personIdParameter, isExcellentParameter, schoolCityParameter, schoolTypeIdParameter, schoolNameParameter, schoolNumParameter, schoolExitYearParameter, schoolAVGParameter, countryEducIdParameter, regionEducIdParameter, isEqualParameter, attestatSeriesParameter, attestatNumParameter, diplomSeriesParameter, diplomNumParameter, highEducationParameter, hEProfessionParameter, hEQualificationParameter, hEEntryYearParameter, hEExitYearParameter, hEStudyFormIdParameter, hEWorkParameter, idParameter);
+        }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        /// <param name="innerEntryInEntryId">No Metadata Documentation available.</param>
+        /// <param name="id">No Metadata Documentation available.</param>
+        public int Abiturient_UpdateInnerEntryInEntryId(Nullable<global::System.Guid> innerEntryInEntryId, Nullable<global::System.Guid> id)
+        {
+            ObjectParameter innerEntryInEntryIdParameter;
+            if (innerEntryInEntryId.HasValue)
+            {
+                innerEntryInEntryIdParameter = new ObjectParameter("InnerEntryInEntryId", innerEntryInEntryId);
+            }
+            else
+            {
+                innerEntryInEntryIdParameter = new ObjectParameter("InnerEntryInEntryId", typeof(global::System.Guid));
+            }
+    
+            ObjectParameter idParameter;
+            if (id.HasValue)
+            {
+                idParameter = new ObjectParameter("id", id);
+            }
+            else
+            {
+                idParameter = new ObjectParameter("id", typeof(global::System.Guid));
+            }
+    
+            return base.ExecuteFunction("Abiturient_UpdateInnerEntryInEntryId", innerEntryInEntryIdParameter, idParameter);
+        }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        /// <param name="innerEntryInEntryId">No Metadata Documentation available.</param>
+        /// <param name="priority">No Metadata Documentation available.</param>
+        /// <param name="applicationId">No Metadata Documentation available.</param>
+        public int Abiturient_UpdateInnerEntryInEntryPriority(Nullable<global::System.Guid> innerEntryInEntryId, Nullable<global::System.Int32> priority, Nullable<global::System.Guid> applicationId)
+        {
+            ObjectParameter innerEntryInEntryIdParameter;
+            if (innerEntryInEntryId.HasValue)
+            {
+                innerEntryInEntryIdParameter = new ObjectParameter("InnerEntryInEntryId", innerEntryInEntryId);
+            }
+            else
+            {
+                innerEntryInEntryIdParameter = new ObjectParameter("InnerEntryInEntryId", typeof(global::System.Guid));
+            }
+    
+            ObjectParameter priorityParameter;
+            if (priority.HasValue)
+            {
+                priorityParameter = new ObjectParameter("Priority", priority);
+            }
+            else
+            {
+                priorityParameter = new ObjectParameter("Priority", typeof(global::System.Int32));
+            }
+    
+            ObjectParameter applicationIdParameter;
+            if (applicationId.HasValue)
+            {
+                applicationIdParameter = new ObjectParameter("applicationId", applicationId);
+            }
+            else
+            {
+                applicationIdParameter = new ObjectParameter("applicationId", typeof(global::System.Guid));
+            }
+    
+            return base.ExecuteFunction("Abiturient_UpdateInnerEntryInEntryPriority", innerEntryInEntryIdParameter, priorityParameter, applicationIdParameter);
+        }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        /// <param name="isGosLine">No Metadata Documentation available.</param>
+        /// <param name="id">No Metadata Documentation available.</param>
+        public int Abiturient_UpdateIsGosLine(Nullable<global::System.Boolean> isGosLine, Nullable<global::System.Guid> id)
+        {
+            ObjectParameter isGosLineParameter;
+            if (isGosLine.HasValue)
+            {
+                isGosLineParameter = new ObjectParameter("IsGosLine", isGosLine);
+            }
+            else
+            {
+                isGosLineParameter = new ObjectParameter("IsGosLine", typeof(global::System.Boolean));
+            }
+    
+            ObjectParameter idParameter;
+            if (id.HasValue)
+            {
+                idParameter = new ObjectParameter("id", id);
+            }
+            else
+            {
+                idParameter = new ObjectParameter("id", typeof(global::System.Guid));
+            }
+    
+            return base.ExecuteFunction("Abiturient_UpdateIsGosLine", isGosLineParameter, idParameter);
         }
 
         #endregion

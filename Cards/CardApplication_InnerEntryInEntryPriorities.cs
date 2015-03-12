@@ -191,7 +191,7 @@ namespace Priem
                     foreach (DataRow rw in tblPrior.Rows)
                     {
                         Guid ObrazProgramInEntryId = rw.Field<Guid>("Id");
-                        context.Abiturient_UpdateObrazProgramInEntryPriority(ObrazProgramInEntryId, rw.Field<int>("Priority"), _ApplicationId);
+                        context.Abiturient_UpdateInnerEntryInEntryPriority(ObrazProgramInEntryId, rw.Field<int>("Priority"), _ApplicationId);
                     }
                 }
 

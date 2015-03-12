@@ -4517,7 +4517,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_ObrazProgramInEntry_Entry">
-          <End Role="Entry" Type="Priem2012Model.Store.Entry" Multiplicity="1" />
+          <End Role="Entry" Type="Priem2012Model.Store.Entry" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="InnerEntryInEntry" Type="Priem2012Model.Store.InnerEntryInEntry" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Entry">
@@ -5175,34 +5177,29 @@
           <Parameter Name="HasOriginals" Type="bit" Mode="In" />
           <Parameter Name="id" Type="uniqueidentifier" Mode="In" />
         </Function>
+        <Function Name="Abiturient_UpdateInnerEntryInEntryId" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="ed">
+          <Parameter Name="InnerEntryInEntryId" Type="uniqueidentifier" Mode="In" />
+          <Parameter Name="id" Type="uniqueidentifier" Mode="In" />
+        </Function>
+        <Function Name="Abiturient_UpdateInnerEntryInEntryPriority" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="ed">
+          <Parameter Name="InnerEntryInEntryId" Type="uniqueidentifier" Mode="In" />
+          <Parameter Name="Priority" Type="int" Mode="In" />
+          <Parameter Name="applicationId" Type="uniqueidentifier" Mode="In" />
+        </Function>
         <Function Name="Abiturient_UpdateIsCommonRussianCompetition" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="ed">
           <Parameter Name="IsCommonRussianCompetition" Type="bit" Mode="In" />
+          <Parameter Name="id" Type="uniqueidentifier" Mode="In" />
+        </Function>
+        <Function Name="Abiturient_UpdateIsGosLine" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="ed">
+          <Parameter Name="IsGosLine" Type="bit" Mode="In" />
           <Parameter Name="id" Type="uniqueidentifier" Mode="In" />
         </Function>
         <Function Name="Abiturient_UpdateIsViewed" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="ed">
           <Parameter Name="id" Type="uniqueidentifier" Mode="In" />
         </Function>
-        <Function Name="Abiturient_UpdateObrazProgramInEntryId" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="ed">
-          <Parameter Name="ObrazProgramInEntryId" Type="uniqueidentifier" Mode="In" />
-          <Parameter Name="id" Type="uniqueidentifier" Mode="In" />
-        </Function>
-        <Function Name="Abiturient_UpdateObrazProgramInEntryPriority" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="ed">
-          <Parameter Name="ObrazProgramInEntryId" Type="uniqueidentifier" Mode="In" />
-          <Parameter Name="Priority" Type="int" Mode="In" />
-          <Parameter Name="applicationId" Type="uniqueidentifier" Mode="In" />
-        </Function>
         <Function Name="Abiturient_UpdatePriority" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="ed">
           <Parameter Name="Priority" Type="float" Mode="In" />
           <Parameter Name="id" Type="uniqueidentifier" Mode="In" />
-        </Function>
-        <Function Name="Abiturient_UpdateProfileInObrazProgramInEntryId" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="ed">
-          <Parameter Name="ProfileInObrazProgramInEntryId" Type="uniqueidentifier" Mode="In" />
-          <Parameter Name="id" Type="uniqueidentifier" Mode="In" />
-        </Function>
-        <Function Name="Abiturient_UpdateProfileInObrazProgramInEntryPriority" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="ed">
-          <Parameter Name="ProfileInObrazProgramInEntryId" Type="uniqueidentifier" Mode="In" />
-          <Parameter Name="Priority" Type="int" Mode="In" />
-          <Parameter Name="applicationId" Type="uniqueidentifier" Mode="In" />
         </Function>
         <Function Name="Abiturient_UpdateSN" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="ed">
           <Parameter Name="StudyNumber" Type="nvarchar" Mode="In" />
@@ -7685,16 +7682,6 @@
             <Parameter Name="result" Mode="InOut" Type="Boolean" />
           </FunctionImport>
           <EntitySet Name="qAbiturient_WhoSetHasOriginals" EntityType="Priem2012Model.qAbiturient_WhoSetHasOriginals" />
-          <FunctionImport Name="Abiturient_UpdateObrazProgramInEntryPriority">
-            <Parameter Name="ObrazProgramInEntryId" Mode="In" Type="Guid" />
-            <Parameter Name="Priority" Mode="In" Type="Int32" />
-            <Parameter Name="applicationId" Mode="In" Type="Guid" />
-          </FunctionImport>
-          <FunctionImport Name="Abiturient_UpdateProfileInObrazProgramInEntryPriority">
-            <Parameter Name="ProfileInObrazProgramInEntryId" Mode="In" Type="Guid" />
-            <Parameter Name="Priority" Mode="In" Type="Int32" />
-            <Parameter Name="applicationId" Mode="In" Type="Guid" />
-          </FunctionImport>
           <FunctionImport Name="Abiturient_UpdateIsCommonRussianCompetition">
             <Parameter Name="IsCommonRussianCompetition" Mode="In" Type="Boolean" />
             <Parameter Name="id" Mode="In" Type="Guid" />
@@ -7750,14 +7737,6 @@
           </AssociationSet>
           <FunctionImport Name="PayDataEntry_Delete">
           <Parameter Name="EntryId" Mode="In" Type="Guid" />
-          </FunctionImport>
-          <FunctionImport Name="Abiturient_UpdateObrazProgramInEntryId">
-            <Parameter Name="ObrazProgramInEntryId" Mode="In" Type="Guid" />
-            <Parameter Name="id" Mode="In" Type="Guid" />
-          </FunctionImport>
-          <FunctionImport Name="Abiturient_UpdateProfileInObrazProgramInEntryId">
-            <Parameter Name="ProfileInObrazProgramInEntryId" Mode="In" Type="Guid" />
-            <Parameter Name="id" Mode="In" Type="Guid" />
           </FunctionImport>
           <EntitySet Name="qAbiturient_WhoSetIsPaid" EntityType="Priem2012Model.qAbiturient_WhoSetIsPaid" />
           <EntitySet Name="Signer" EntityType="Priem2012Model.Signer" />
@@ -7864,6 +7843,19 @@
             <End Role="InnerEntryInEntry" EntitySet="InnerEntryInEntry" />
           </AssociationSet>
           <EntitySet Name="extAbit" EntityType="Priem2012Model.extAbit" />
+          <FunctionImport Name="Abiturient_UpdateInnerEntryInEntryId">
+            <Parameter Name="InnerEntryInEntryId" Mode="In" Type="Guid" />
+            <Parameter Name="id" Mode="In" Type="Guid" />
+          </FunctionImport>
+          <FunctionImport Name="Abiturient_UpdateInnerEntryInEntryPriority">
+            <Parameter Name="InnerEntryInEntryId" Mode="In" Type="Guid" />
+            <Parameter Name="Priority" Mode="In" Type="Int32" />
+            <Parameter Name="applicationId" Mode="In" Type="Guid" />
+          </FunctionImport>
+          <FunctionImport Name="Abiturient_UpdateIsGosLine">
+            <Parameter Name="IsGosLine" Mode="In" Type="Boolean" />
+            <Parameter Name="id" Mode="In" Type="Guid" />
+          </FunctionImport>
           </EntityContainer>
         <EntityType Name="AttMarks">
           <Key>
@@ -13413,8 +13405,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <FunctionImportMapping FunctionImportName="Abiturient_UpdateObrazProgramInEntryPriority" FunctionName="Priem2012Model.Store.Abiturient_UpdateObrazProgramInEntryPriority" />
-          <FunctionImportMapping FunctionImportName="Abiturient_UpdateProfileInObrazProgramInEntryPriority" FunctionName="Priem2012Model.Store.Abiturient_UpdateProfileInObrazProgramInEntryPriority" />
           <FunctionImportMapping FunctionImportName="Abiturient_UpdateIsCommonRussianCompetition" FunctionName="Priem2012Model.Store.Abiturient_UpdateIsCommonRussianCompetition" />
           <EntitySetMapping Name="qAbiturient_WhoSetBackDoc">
             <EntityTypeMapping TypeName="Priem2012Model.qAbiturient_WhoSetBackDoc">
@@ -13539,8 +13529,6 @@
           <FunctionImportMapping FunctionImportName="OlympSubjectToExam_Insert" FunctionName="Priem2012Model.Store.OlympSubjectToExam_Insert" />
           <FunctionImportMapping FunctionImportName="OlympSubjectToExam_Update" FunctionName="Priem2012Model.Store.OlympSubjectToExam_Update" />
           <FunctionImportMapping FunctionImportName="PayDataEntry_Delete" FunctionName="Priem2012Model.Store.PayDataEntry_Delete" />
-          <FunctionImportMapping FunctionImportName="Abiturient_UpdateObrazProgramInEntryId" FunctionName="Priem2012Model.Store.Abiturient_UpdateObrazProgramInEntryId" />
-          <FunctionImportMapping FunctionImportName="Abiturient_UpdateProfileInObrazProgramInEntryId" FunctionName="Priem2012Model.Store.Abiturient_UpdateProfileInObrazProgramInEntryId" />
           <EntitySetMapping Name="qAbiturient_WhoSetIsPaid">
             <EntityTypeMapping TypeName="Priem2012Model.qAbiturient_WhoSetIsPaid">
               <MappingFragment StoreEntitySet="qAbiturient_WhoSetIsPaid">
@@ -13725,6 +13713,9 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="Abiturient_UpdateInnerEntryInEntryId" FunctionName="Priem2012Model.Store.Abiturient_UpdateInnerEntryInEntryId" />
+          <FunctionImportMapping FunctionImportName="Abiturient_UpdateInnerEntryInEntryPriority" FunctionName="Priem2012Model.Store.Abiturient_UpdateInnerEntryInEntryPriority" />
+          <FunctionImportMapping FunctionImportName="Abiturient_UpdateIsGosLine" FunctionName="Priem2012Model.Store.Abiturient_UpdateIsGosLine" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

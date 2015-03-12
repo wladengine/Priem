@@ -74,8 +74,6 @@ namespace Priem
                 if (ds.Tables[0].Rows.Count == 0)
                     throw new Exception("Записей не найдено");
 
-                
-
                 DataRow row = ds.Tables[0].Rows[0];
                 
                 extPerson pers = new extPerson();
@@ -206,20 +204,12 @@ namespace Priem
             List<Person_EducationInfo> lstRet = new List<Person_EducationInfo>();
 
             string query = @"select
-Person.Id as PersonId
-, PersonEducationDocument.Id as EducationDocumentId
+Person.Id as PersonId, PersonEducationDocument.Id as EducationDocumentId
 , SchoolCity, SchoolTypeId, SchoolName, SchoolNum, SchoolExitYear
-, Country.PriemDictionaryId as CountryEducId
-, Region.PriemDictionaryId AS RegionEducId,  IsEqual, EqualDocumentNumber, Series , Number, AvgMark
+, Country.PriemDictionaryId as CountryEducId, Region.PriemDictionaryId AS RegionEducId
+, IsEqual, EqualDocumentNumber, Series , Number, AvgMark, IsExcellent
 , PersonHighEducationInfo.EducationDocumentId as PersonHighEducationInfoId
-, Qualification.Name as Qualification
-      , EntryYear
-      , ExitYear
-      , DiplomaTheme
-      , QualificationId
-      , StudyFormId
-      , ProgramName
-, IsExcellent
+, Qualification.Name as Qualification, EntryYear, ExitYear, DiplomaTheme, QualificationId, StudyFormId, ProgramName
 from dbo.PersonEducationDocument 
 inner join Person on Person.Id = PersonEducationDocument.PersonId
 inner join Country on Country.Id = PersonEducationDocument.CountryEducId
@@ -227,17 +217,7 @@ inner join Region on Region.Id = PersonEducationDocument.RegionEducId
 left join PersonHighEducationInfo on PersonHighEducationInfo.EducationDocumentId = PersonEducationDocument.Id
 left join Qualification on Qualification.Id = QualificationId
 where Person.Barcode =" + fileNum ;
-
-            /*
-            string PersonEducationFromInet = @"SELECT SchoolCity, SchoolTypeId, SchoolName, SchoolNum, SchoolExitYear, IsExcellent,
-                    CountryEducId, RegionEducId, AttestatSeries, AttestatNum, EducationDocumentSeries AS DiplomSeries, EducationDocumentNumber AS DiplomNum, AvgMark AS SchoolAVG,
-                    (case when SchoolTypeId=1 then '' else SchoolName end) AS HighEducation, HEProfession AS HEProfession, 
-                    HEQualification AS HEQualification, DiplomaTheme AS HEWork, HEEntryYear, HEExitYear, StudyFormId AS HEStudyFormId, 
-                    Parents AS PersonInfo, AddInfo AS ExtraInfo, StartEnglish, EnglishMark, AbiturientTypeId, HostelEduc, SNILS, KladrCode
-                    FROM extPerson_All";
             
-            DataSet ds_EducationInfo = _bdcInet.GetDataSet(PersonEducationFromInet + " AND extPerson_All.Barcode = " + fileNum);
-            */
             DataSet ds_EducationInfo = _bdcInet.GetDataSet(query);
 
             if (ds_EducationInfo.Tables[0].Rows.Count == 0)
@@ -272,12 +252,155 @@ where Person.Barcode =" + fileNum ;
                         HEExitYear = row.Field<int?>("ExitYear"),
                         HEWork = row.Field<string>("DiplomaTheme") ?? "",
                         HEStudyFormId = row.Field<int?>("StudyFormId"),
-                    }
-                    );
+                    });
             }
 
             return lstRet;
         }
 
+        public List<ShortCompetition> GetCompetitionList(int _abitBarc)
+        {
+            List<ShortCompetition> LstCompetitions = new List<ShortCompetition>();
+            try
+            {
+                string query =
+    @"SELECT Abiturient.[Id]
+,[Priority]
+,[PersonId]
+,[Priority]
+,[Barcode]
+,[DateOfStart]
+,[EntryId]
+,[FacultyId]
+,[FacultyName]
+,[LicenseProgramId]
+,[LicenseProgramCode]
+,[LicenseProgramName]
+,[ObrazProgramId]
+,[ObrazProgramCrypt]
+,[ObrazProgramName]
+,[ProfileId]
+,[ProfileName]
+,[StudyBasisId]
+,[StudyBasisName]
+,[StudyFormId]
+,[StudyFormName]
+,[StudyLevelId]
+,[StudyLevelName]
+,[IsSecond]
+,[IsReduced]
+,[IsParallel]
+,[IsGosLine]
+,[CommitId]
+,[DateOfStart]
+,(SELECT MAX(ApplicationCommitVersion.Id) FROM ApplicationCommitVersion WHERE ApplicationCommitVersion.CommitId = [Abiturient].CommitId) AS VersionNum
+,(SELECT MAX(ApplicationCommitVersion.VersionDate) FROM ApplicationCommitVersion WHERE ApplicationCommitVersion.CommitId = [Abiturient].CommitId) AS VersionDate
+,ApplicationCommit.IntNumber
+,[Abiturient].HasInnerPriorities
+,[Abiturient].IsApprovedByComission
+,[Abiturient].CompetitionId
+,[Abiturient].ApproverName
+,[Abiturient].DocInsertDate
+,[Abiturient].IsCommonRussianCompetition
+FROM [Abiturient] 
+INNER JOIN ApplicationCommit ON ApplicationCommit.Id = Abiturient.CommitId
+WHERE IsCommited = 1 AND IntNumber=@CommitId";
+
+                DataTable tbl = _bdcInet.GetDataSet(query, new SortedList<string, object>() { { "@CommitId", _abitBarc } }).Tables[0];
+
+                LstCompetitions =
+                             (from DataRow rw in tbl.Rows
+                              select new ShortCompetition(rw.Field<Guid>("Id"), rw.Field<Guid>("CommitId"), rw.Field<Guid>("EntryId"), rw.Field<Guid>("PersonId"),
+                                  rw.Field<int?>("VersionNum"), rw.Field<DateTime?>("VersionDate"))
+                              {
+                                  Barcode = rw.Field<int>("Barcode"),
+                                  CompetitionId = rw.Field<int?>("CompetitionId") ?? (rw.Field<int>("StudyBasisId") == 1 ? 4 : 3),
+                                  CompetitionName = "не указана",
+                                  HasCompetition = rw.Field<bool>("IsApprovedByComission"),
+                                  LicenseProgramId = rw.Field<int>("LicenseProgramId"),
+                                  LicenseProgramName = rw.Field<string>("LicenseProgramName"),
+                                  ObrazProgramId = rw.Field<int>("ObrazProgramId"),
+                                  ObrazProgramName = rw.Field<string>("ObrazProgramName"),
+                                  ProfileId = rw.Field<int?>("ProfileId") ?? 0,
+                                  ProfileName = rw.Field<string>("ProfileName"),
+                                  StudyBasisId = rw.Field<int>("StudyBasisId"),
+                                  StudyBasisName = rw.Field<string>("StudyBasisName"),
+                                  StudyFormId = rw.Field<int>("StudyFormId"),
+                                  StudyFormName = rw.Field<string>("StudyFormName"),
+                                  StudyLevelId = rw.Field<int>("StudyLevelId"),
+                                  StudyLevelName = rw.Field<string>("StudyLevelName"),
+                                  FacultyId = rw.Field<int>("FacultyId"),
+                                  FacultyName = rw.Field<string>("FacultyName"),
+                                  DocDate = rw.Field<DateTime>("DateOfStart"),
+                                  DocInsertDate = rw.Field<DateTime?>("DocInsertDate") ?? DateTime.Now,
+                                  Priority = rw.Field<int>("Priority"),
+                                  IsGosLine = rw.Field<bool>("IsGosLine"),
+                                  IsReduced = rw.Field<bool>("IsReduced"),
+                                  IsSecond = rw.Field<bool>("IsSecond"),
+                                  HasInnerPriorities = rw.Field<bool>("HasInnerPriorities"),
+                                  IsApprovedByComission = rw.Field<bool>("IsApprovedByComission"),
+                                  ApproverName = rw.Field<string>("ApproverName"),
+                                  lstInnerEntryInEntry = new List<ShortInnerEntryInEntry>(),
+                                  IsCommonRussianCompetition = rw.Field<bool>("IsCommonRussianCompetition"),
+                              }).ToList();
+
+                //ObrazProgramInEntry
+                foreach (var C in LstCompetitions.Where(x => x.HasInnerPriorities))
+                {
+                    C.lstInnerEntryInEntry = new List<ShortInnerEntryInEntry>();
+                    query = @"SELECT InnerEntryInEntryId, InnerEntryInEntryPriority, ObrazProgramName, ProfileName, 
+ISNULL(CurrVersion, 1) AS CurrVersion, ISNULL(CurrDate, GETDATE()) AS CurrDate
+FROM [extApplicationDetails] WHERE [ApplicationId]=@AppId";
+                    tbl = _bdcInet.GetDataSet(query, new SortedList<string, object>() { { "@AppId", C.Id } }).Tables[0];
+
+                    var data = (from DataRow rw in tbl.Rows
+                                select new
+                                {
+                                    InnerEntryInEntryId = rw.Field<Guid>("InnerEntryInEntryId"),
+                                    InnerEntryInEntryPriority = rw.Field<int>("InnerEntryInEntryPriority"),
+                                    ObrazProgramName = rw.Field<string>("ObrazProgramName"),
+                                    ProfileName = rw.Field<string>("ProfileName"),
+                                    CurrVersion = rw.Field<int>("CurrVersion"),
+                                    CurrDate = rw.Field<DateTime>("CurrDate")
+                                }).ToList().OrderBy(x => x.InnerEntryInEntryPriority).ToList();
+
+                    foreach (var OPIE in data)
+                    {
+                        var OP = new ShortInnerEntryInEntry(OPIE.InnerEntryInEntryId, OPIE.ObrazProgramName, OPIE.ProfileName);
+                        OP.InnerEntryInEntryPriority = OPIE.InnerEntryInEntryPriority;
+                        OP.CurrVersion = OPIE.CurrVersion;
+                        OP.CurrDate = OPIE.CurrDate;
+                        C.lstInnerEntryInEntry.Add(OP);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                WinFormsServ.Error("Ошибка при заполнении формы заявления" + ex.Message);
+            }
+
+            return LstCompetitions;
+        }
+
+        public void UpdateApplicationSetApprovedByComission(ShortCompetition comp)
+        {
+            string query = @"UPDATE [Application] SET IsApprovedByComission=1, ApproverName=@ApproverName, CompetitionId=@CompId, DocInsertDate=@DocInsertDate, 
+IsCommonRussianCompetition=@IsCommonRussianCompetition, IsGosLine=@IsGosLine WHERE Id=@Id";
+            _bdcInet.ExecuteQuery(query, new SortedList<string, object>()
+                {
+                    { "@Id", comp.Id },
+                    { "@CompId", comp.CompetitionId },
+                    { "@DocInsertDate", comp.DocInsertDate },
+                    { "@ApproverName", MainClass.GetUserName() },
+                    { "@IsGosLine", comp.IsGosLine },
+                    { "@IsCommonRussianCompetition", comp.IsCommonRussianCompetition }
+                });
+        }
+
+        public void UpdateApplicationCommitSetIsImported(int? _abitBarc)
+        {
+            if (!MainClass.IsTestDB)
+                _bdcInet.ExecuteQuery("UPDATE ApplicationCommit SET IsImported = 1 WHERE IntNumber = '" + _abitBarc + "'");
+        }
     }
 }

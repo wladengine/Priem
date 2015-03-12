@@ -127,7 +127,7 @@
             this.cbObrazProgramInEntry = new System.Windows.Forms.ComboBox();
             this.label11 = new System.Windows.Forms.Label();
             this.label10 = new System.Windows.Forms.Label();
-            this.cbProfileInObrazProgramInEntry = new System.Windows.Forms.ComboBox();
+            this.cbProfileInEntry = new System.Windows.Forms.ComboBox();
             this.lblFIO = new System.Windows.Forms.Label();
             this.btnCardPerson = new System.Windows.Forms.Button();
             this.epErrorInput = new System.Windows.Forms.ErrorProvider(this.components);
@@ -1195,7 +1195,7 @@
             this.gbObrazProgramInEntry.Controls.Add(this.cbObrazProgramInEntry);
             this.gbObrazProgramInEntry.Controls.Add(this.label11);
             this.gbObrazProgramInEntry.Controls.Add(this.label10);
-            this.gbObrazProgramInEntry.Controls.Add(this.cbProfileInObrazProgramInEntry);
+            this.gbObrazProgramInEntry.Controls.Add(this.cbProfileInEntry);
             this.gbObrazProgramInEntry.Location = new System.Drawing.Point(4, 25);
             this.gbObrazProgramInEntry.Name = "gbObrazProgramInEntry";
             this.gbObrazProgramInEntry.Size = new System.Drawing.Size(605, 112);
@@ -1233,12 +1233,12 @@
             // 
             // cbProfileInObrazProgramInEntry
             // 
-            this.cbProfileInObrazProgramInEntry.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbProfileInObrazProgramInEntry.FormattingEnabled = true;
-            this.cbProfileInObrazProgramInEntry.Location = new System.Drawing.Point(9, 72);
-            this.cbProfileInObrazProgramInEntry.Name = "cbProfileInObrazProgramInEntry";
-            this.cbProfileInObrazProgramInEntry.Size = new System.Drawing.Size(377, 21);
-            this.cbProfileInObrazProgramInEntry.TabIndex = 2;
+            this.cbProfileInEntry.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbProfileInEntry.FormattingEnabled = true;
+            this.cbProfileInEntry.Location = new System.Drawing.Point(9, 72);
+            this.cbProfileInEntry.Name = "cbProfileInObrazProgramInEntry";
+            this.cbProfileInEntry.Size = new System.Drawing.Size(377, 21);
+            this.cbProfileInEntry.TabIndex = 2;
             // 
             // lblFIO
             // 
@@ -1419,7 +1419,7 @@
         private System.Windows.Forms.CheckBox chbIsGosLine;
         private System.Windows.Forms.TabPage tpEntry;
         private System.Windows.Forms.Label label11;
-        private System.Windows.Forms.ComboBox cbProfileInObrazProgramInEntry;
+        private System.Windows.Forms.ComboBox cbProfileInEntry;
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.ComboBox cbObrazProgramInEntry;
         private System.Windows.Forms.GroupBox gbObrazProgramInEntry;

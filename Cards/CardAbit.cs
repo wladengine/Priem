@@ -1406,12 +1406,9 @@ namespace Priem
 
             context.Abiturient_UpdateIsCommonRussianCompetition(IsCommonRussianCompetition, id);
 
-            // set ObrazProgramInEntryId
-            if (ObrazProgramInEntryId.HasValue)
-                context.Abiturient_UpdateObrazProgramInEntryId(ObrazProgramInEntryId, GuidId);
-            // set ProfileInObrazProgramId
-            if (ProfileInObrazProgramInEntryId.HasValue)
-                context.Abiturient_UpdateProfileInObrazProgramInEntryId(ProfileInObrazProgramInEntryId, GuidId);
+            // set InnerEntryInEntryId
+            if (InnerEntryInEntryId.HasValue)
+                context.Abiturient_UpdateInnerEntryInEntryId(InnerEntryInEntryId, GuidId);
         }
 
         protected override void OnSave()
@@ -1972,7 +1969,7 @@ namespace Priem
                                  .Select(x => new KeyValuePair<string, string>(x.Id.ToString(), x.Name))
                                  .ToList();
 
-                ComboServ.FillCombo(cbProfileInObrazProgramInEntry, ProfileInObrazProgramInEntryList, false, false);
+                ComboServ.FillCombo(cbProfileInEntry, ProfileInObrazProgramInEntryList, false, false);
             }
         }
 

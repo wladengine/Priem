@@ -240,15 +240,22 @@ namespace Priem
             InitializeComponent();
             InitControls();
             StudyLevelId = iStudyLevelId;
+            UpdateAfterStudyLevel();
+            UpdateAfterAggregateGroup();
+            UpdateAfterLicenseProgram();
+            UpdateAfterObrazProgram();
         }
 
-      
         protected override void ExtraInit()
         {
             base.ExtraInit();
             _title = "Прием";
             _tableName = "ed.[Entry]";
             InitCombos();
+
+            btnSaveAsNew.Visible = true;
+
+            //DoSmth();
         }
 
         private void InitCombos()
@@ -535,7 +542,6 @@ DateOfStart, DateOfClose, DateOfStart_Foreign, DateOfClose_Foreign, DateOfStart_
 
             MainClass.BdcOnlineReadWrite.ExecuteQuery(query, sl);
         }
-
         protected override void UpdateRec(PriemEntities context, Guid id)
         {
             context.Entry_UpdateCEl(GuidId, KCPCel);
@@ -678,7 +684,7 @@ WHERE Id=@Id";
 
         #endregion   
 
-        #region ObrazProgramInEntry
+        #region InnerEntryInEntry
         private void UpdateInnerEntryInEntry()
         {
             if (string.IsNullOrEmpty(_Id))
@@ -779,10 +785,15 @@ WHERE Id=@Id";
         {
 
         }
-
         private void cbAggregateGroup_SelectedIndexChanged(object sender, EventArgs e)
         {
             UpdateAfterAggregateGroup();
         }
+
+        //private void DoSmth()
+        //{
+        //    DevelopmentStudentService.SQL_StudentSoapClient client = new DevelopmentStudentService.SQL_StudentSoapClient();
+        //    var students = client.GetStudents("FIO", new System.Data.SqlTypes.SqlDateTime(DateTime.Now), 111);
+        //}
     }
 }

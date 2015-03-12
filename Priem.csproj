@@ -70,6 +70,7 @@
     <Reference Include="System.DirectoryServices.AccountManagement" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Security" />
+    <Reference Include="System.ServiceModel" />
     <Reference Include="System.Transactions" />
     <Reference Include="System.Windows.Forms.DataVisualization" />
     <Reference Include="System.Xml.Linq" />
@@ -680,7 +681,9 @@
     <Compile Include="Lists\VedExamLists.designer.cs">
       <DependentUpon>VedExamLists.cs</DependentUpon>
     </Compile>
-    <Compile Include="LoadFromInet.cs" />
+    <Compile Include="Providers\ApplicationCommitProvider.cs" />
+    <Compile Include="Providers\EgeDataProvider.cs" />
+    <Compile Include="Providers\LoadFromInet.cs" />
     <Compile Include="MainClass.Cards.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -704,9 +707,7 @@
     <Compile Include="Migrator.designer.cs">
       <DependentUpon>Migrator.cs</DependentUpon>
     </Compile>
-    <Compile Include="MigratorFISEGE.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="MigratorFISEGE.cs" />
     <Compile Include="MigratorFISEGE.Designer.cs">
       <DependentUpon>MigratorFISEGE.cs</DependentUpon>
     </Compile>
@@ -784,6 +785,12 @@
     </Compile>
     <Compile Include="Protocols\ProtocolList.Fields.cs">
       <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Providers\PersonDataProvider.cs" />
+    <Compile Include="Service References\DevelopmentStudentService\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
     <Compile Include="SomeMethodsClass.cs" />
     <Compile Include="Statistics\AbitFacultyIntersection.cs">
@@ -1340,6 +1347,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <None Include="Service References\DevelopmentStudentService\Student.wsdl" />
     <None Include="XML Schemes\запрос-детали по справочнику.xsd">
       <SubType>Designer</SubType>
     </None>
@@ -1396,9 +1404,20 @@
   <ItemGroup>
     <Content Include="1kurs.ico" />
     <Content Include="Magistery.ico" />
+    <None Include="Service References\DevelopmentStudentService\configuration91.svcinfo" />
+    <None Include="Service References\DevelopmentStudentService\configuration.svcinfo" />
+    <None Include="Service References\DevelopmentStudentService\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
     <Content Include="Shwz-Disney-Timon.ico" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadataStorage Include="Service References\DevelopmentStudentService\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

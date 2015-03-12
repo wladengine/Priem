@@ -18,16 +18,12 @@ namespace Priem
     public partial class DisEntryViewList : BaseForm
     {
         private DBPriem _bdc;
-        private string sQuery;
         protected ProtocolRefreshHandler prh = null;
 
         public DisEntryViewList()
         {            
             this.CenterToParent();
             this.MdiParent = MainClass.mainform;
-
-            this.sQuery = @"SELECT DISTINCT ed.extPerson.Id, ed.extPerson.PersonNum as Ид_номер, ed.extPerson.Surname AS Фамилия, ed.extPerson.Name AS Имя, ed.extPerson.SecondName AS Отчество, 
-                            ed.extPerson.BirthDate AS Дата_рождения FROM ed.extPerson INNER JOIN ed.ExamsVedHistory ON ed.ExamsVedHistory.PersonId = ed.extPerson.Id ";
 
             InitializeComponent();
             InitControls();
@@ -60,83 +56,88 @@ namespace Priem
             FillLicenseProgram();
 
             UpdateDataGrid();
+        }
 
+        #region Handlers
+        protected override void InitFocusHandlers()
+        {
+            base.InitFocusHandlers();
             cbFaculty.SelectedIndexChanged += new EventHandler(cbFaculty_SelectedIndexChanged);
             cbStudyForm.SelectedIndexChanged += new EventHandler(cbStudyForm_SelectedIndexChanged);
             cbStudyBasis.SelectedIndexChanged += new EventHandler(cbStudyBasis_SelectedIndexChanged);
-            cbLicenseProgram.SelectedIndexChanged += new EventHandler(cbLicenseProgram_SelectedIndexChanged);  
+            cbLicenseProgram.SelectedIndexChanged += new EventHandler(cbLicenseProgram_SelectedIndexChanged);
 
-            prh = new ProtocolRefreshHandler(UpdateDataGrid);                  
+            prh = new ProtocolRefreshHandler(UpdateDataGrid);
             MainClass.AddProtocolHandler(prh);
         }
-
         void cbFaculty_SelectedIndexChanged(object sender, EventArgs e)
         {
             FillStudyForm();
         }
-
         void cbStudyBasis_SelectedIndexChanged(object sender, EventArgs e)
         {
             FillStudyForm();
         }
-
         void cbStudyForm_SelectedIndexChanged(object sender, EventArgs e)
         {
             FillLicenseProgram();
         }
-
         void cbLicenseProgram_SelectedIndexChanged(object sender, EventArgs e)
         {
             UpdateDataGrid();
         }
+        private void chbIsListener_CheckedChanged(object sender, EventArgs e)
+        {
+            UpdateDataGrid();
+        }
+        private void chbIsSecond_CheckedChanged(object sender, EventArgs e)
+        {
+            UpdateDataGrid();
+        }
+        #endregion
 
+        #region Fields
         public int? FacultyId
         {
             get { return ComboServ.GetComboIdInt(cbFaculty); }
             set { ComboServ.SetComboId(cbFaculty, value); }
         }
-
         public int? LicenseProgramId
         {
             get { return ComboServ.GetComboIdInt(cbLicenseProgram); }
             set { ComboServ.SetComboId(cbLicenseProgram, value); }
         }
-
         public int? StudyBasisId
         {
             get { return ComboServ.GetComboIdInt(cbStudyBasis); }
             set { ComboServ.SetComboId(cbStudyBasis, value); }
         }
-
         public int? StudyFormId
         {
             get { return ComboServ.GetComboIdInt(cbStudyForm); }
             set { ComboServ.SetComboId(cbStudyForm, value); }
         }
-
         public bool IsSecond
         {
             get { return chbIsSecond.Checked; }
             set { chbIsSecond.Checked = value; }
         }
-
         public bool IsReduced
         {
             get { return chbIsReduced.Checked; }
             set { chbIsReduced.Checked = value; }
         }
-
         public bool IsParallel
         {
             get { return chbIsParallel.Checked; }
             set { chbIsParallel.Checked = value; }
         }
-
         public bool IsListener
         {
             get { return chbIsListener.Checked; }
             set { chbIsListener.Checked = value; }
         }
+        #endregion
 
         private void FillStudyForm()
         {
@@ -151,7 +152,6 @@ namespace Priem
                 ComboServ.FillCombo(cbStudyForm, lst, false, false);
             }
         }
-
         private void FillLicenseProgram()
         {
             using (PriemEntities context = new PriemEntities())
@@ -178,6 +178,7 @@ namespace Priem
                 dgvViews.DataSource = null;
                 return;
             }
+
             string query = string.Format("SELECT DISTINCT Id, Number as 'Номер представления' FROM ed.extDisEntryView WHERE StudyFormId={0} AND StudyBasisId={1} AND FacultyId= {2} AND LicenseProgramId = {3} AND IsListener = {4} AND IsSecond = {5} AND IsReduced = {6} AND IsParallel = {7} order by 2", StudyFormId, StudyBasisId, FacultyId, LicenseProgramId, QueryServ.StringParseFromBool(IsListener), QueryServ.StringParseFromBool(IsSecond), QueryServ.StringParseFromBool(IsReduced), QueryServ.StringParseFromBool(IsParallel));
             HelpClass.FillDataGrid(dgvViews, _bdc, query, ""); 
         }
@@ -259,14 +260,6 @@ namespace Priem
             Print.PrintDisEntryView(protocolId);
         }
 
-        private void chbIsListener_CheckedChanged(object sender, EventArgs e)
-        {
-            UpdateDataGrid();
-        }
-
-        private void chbIsSecond_CheckedChanged(object sender, EventArgs e)
-        {
-            UpdateDataGrid();
-        }
+        
     }
 }

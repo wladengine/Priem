@@ -36,11 +36,6 @@ namespace Priem
             InitControls();
         }
 
-        protected Guid? GuidId
-        {
-            get { return new Guid(_Id); }
-        }
-       
         protected override void ExtraInit()
         {
             base.ExtraInit();

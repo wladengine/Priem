@@ -546,12 +546,12 @@ namespace Priem
             { tbSchoolAVG.Text = Util.ToStr(value); }
         }
 
-        public int? EnglishMark
+        public double? EnglishMark
         {
             get
             {
-                int j;
-                if (int.TryParse(tbEnglishMark.Text.Trim(), out j))
+                double j;
+                if (double.TryParse(tbEnglishMark.Text.Trim(), out j))
                     return j;
                 else
                     return null;

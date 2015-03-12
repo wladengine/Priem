@@ -20,8 +20,6 @@ namespace Priem
     {
         private DataRefreshHandler _drh;
         private DBPriem _bdc;
-        private static bool isBlock = false;
-
         private BackgroundWorker bw;
 
         public string FacultyId
@@ -221,11 +219,7 @@ namespace Priem
 
         private void DoUpdate(dynamic data)
         {
-            isBlock = true;
-            //WinFormsServ.BlockForm(this);
             DoUpdate(data.sFilters, data.sOrderBy, null);
-            //WinFormsServ.UnblockForm(this);
-            isBlock = false;
         }
 
         private void DoUpdate(string filters, string orderby, List<string> tableList)
@@ -249,12 +243,10 @@ namespace Priem
 
             string sortedColumn = string.Empty;
             ListSortDirection order = ListSortDirection.Ascending;
-            bool sorted = false;
             int index = dgvAbitList.CurrentRow == null ? -1 : dgvAbitList.CurrentRow.Index;
 
             if (dgvAbitList.SortOrder != SortOrder.None)
             {
-                sorted = true;
                 sortedColumn = dgvAbitList.SortedColumn.Name;
                 order = dgvAbitList.SortOrder == SortOrder.Ascending ? ListSortDirection.Ascending : ListSortDirection.Descending;
             }

@@ -203,7 +203,7 @@ namespace Priem
                 {
                     List<KeyValuePair<string, string>> lst =
                         ((from ent in GetEntry(context)
-                          where ent.LicenseProgramId == LicenseProgramId && ent.ObrazProgramId == ObrazProgramId && ent.ProfileId != null
+                          where ent.LicenseProgramId == LicenseProgramId && ent.ObrazProgramId == ObrazProgramId
                           select new
                           {
                               Id = ent.ProfileId,
@@ -234,15 +234,16 @@ namespace Priem
             {
                 using (PriemEntities context = new PriemEntities())
                 {
-                    List<KeyValuePair<string, string>> lst = ((from ent in GetEntry(context)
-                                                               where ent.LicenseProgramId == LicenseProgramId
-                                                               && ent.ObrazProgramId == ObrazProgramId
-                                                               && (ProfileId == null ? ent.ProfileId == null : ent.ProfileId == ProfileId)
-                                                               select new
-                                                               {
-                                                                   Id = ent.FacultyId,
-                                                                   Name = ent.SP_Faculty.Name
-                                                               }).Distinct()).ToList().Select(u => new KeyValuePair<string, string>(u.Id.ToString(), u.Name)).ToList();
+                    List<KeyValuePair<string, string>> lst =
+                        ((from ent in GetEntry(context)
+                          where ent.LicenseProgramId == LicenseProgramId
+                          && ent.ObrazProgramId == ObrazProgramId
+                          && ent.ProfileId == ProfileId
+                          select new
+                          {
+                              Id = ent.FacultyId,
+                              Name = ent.SP_Faculty.Name
+                          }).Distinct()).ToList().Select(u => new KeyValuePair<string, string>(u.Id.ToString(), u.Name)).ToList();
 
                     ComboServ.FillCombo(cbFaculty, lst, false, false);
                 }
@@ -258,16 +259,17 @@ namespace Priem
             {
                 using (PriemEntities context = new PriemEntities())
                 {
-                    List<KeyValuePair<string, string>> lst = ((from ent in GetEntry(context)
-                                                               where ent.LicenseProgramId == LicenseProgramId
-                                                               && ent.ObrazProgramId == ObrazProgramId
-                                                               && (ProfileId == null ? ent.ProfileId == null : ent.ProfileId == ProfileId)
-                                                               && ent.FacultyId == FacultyId
-                                                               select new
-                                                               {
-                                                                   Id = ent.StudyFormId,
-                                                                   Name = ent.StudyForm.Name
-                                                               }).Distinct()).ToList().Select(u => new KeyValuePair<string, string>(u.Id.ToString(), u.Name)).ToList();
+                    List<KeyValuePair<string, string>> lst =
+                        ((from ent in GetEntry(context)
+                          where ent.LicenseProgramId == LicenseProgramId
+                          && ent.ObrazProgramId == ObrazProgramId
+                          && ent.ProfileId == ProfileId
+                          && ent.FacultyId == FacultyId
+                          select new
+                          {
+                              Id = ent.StudyFormId,
+                              Name = ent.StudyForm.Name
+                          }).Distinct()).ToList().Select(u => new KeyValuePair<string, string>(u.Id.ToString(), u.Name)).ToList();
 
                     ComboServ.FillCombo(cbStudyForm, lst, false, false);
                 }
@@ -283,17 +285,18 @@ namespace Priem
             {
                 using (PriemEntities context = new PriemEntities())
                 {
-                    List<KeyValuePair<string, string>> lst = ((from ent in GetEntry(context)
-                                                               where ent.LicenseProgramId == LicenseProgramId
-                                                               && ent.ObrazProgramId == ObrazProgramId
-                                                               && (ProfileId == null ? ent.ProfileId == null : ent.ProfileId == ProfileId)
-                                                               && ent.FacultyId == FacultyId
-                                                               && ent.StudyFormId == StudyFormId
-                                                               select new
-                                                               {
-                                                                   Id = ent.StudyBasisId,
-                                                                   Name = ent.StudyBasis.Name
-                                                               }).Distinct()).ToList().Select(u => new KeyValuePair<string, string>(u.Id.ToString(), u.Name)).ToList();
+                    List<KeyValuePair<string, string>> lst =
+                        ((from ent in GetEntry(context)
+                          where ent.LicenseProgramId == LicenseProgramId
+                          && ent.ObrazProgramId == ObrazProgramId
+                          && ent.ProfileId == ProfileId
+                          && ent.FacultyId == FacultyId
+                          && ent.StudyFormId == StudyFormId
+                          select new
+                          {
+                              Id = ent.StudyBasisId,
+                              Name = ent.StudyBasis.Name
+                          }).Distinct()).ToList().Select(u => new KeyValuePair<string, string>(u.Id.ToString(), u.Name)).ToList();
 
                     ComboServ.FillCombo(cbStudyBasis, lst, false, false);
                 }

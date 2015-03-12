@@ -92,14 +92,14 @@ namespace Priem
         {
         }
 
-        protected virtual void InsertRec(PriemEntities context, ObjectParameter idParam)
+        protected override void InsertRec(PriemEntities context, ObjectParameter idParam)
         {
-            EducServLib.WinFormsServ.Error("Метод не реализован");
+            throw new NotImplementedException("Метод не реализован");
         }
 
         protected virtual void UpdateRec(PriemEntities context, int id)
         {
-            EducServLib.WinFormsServ.Error("Метод не реализован");
+            throw new NotImplementedException("Метод не реализован");
         } 
     }
 }

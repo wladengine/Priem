@@ -23,7 +23,6 @@ namespace Priem
         string _queryFrom;
         string _queryBody;
         string _queryOlymps;
-        string _queryFWJoin;
         string _queryOrange;
 
         bool bMagAddNabor1Enabled = false;
@@ -81,8 +80,6 @@ namespace Priem
             if (MainClass.dbType == PriemType.PriemMag)
                 _queryFrom += " LEFT JOIN ed.hlpMinMarkMag ON hlpMinMarkMag.AbiturientId = qAbiturient.Id";
 
-            _queryFWJoin = "";                       
-            
             Dgv = dgvAbits;
             _title = "Рейтинговый список";
 
@@ -686,7 +683,7 @@ AND ed.FixierenView.IsSecond = {7} AND ed.FixierenView.IsReduced = {8} AND ed.Fi
             }
             catch (Exception ex)
             {
-                WinFormsServ.Error("Ошибка при обновлении списка.");
+                WinFormsServ.Error(ex, "Ошибка при обновлении списка.");
             }
         }
       
@@ -829,7 +826,7 @@ AND ed.FixierenView.IsSecond = {7} AND ed.FixierenView.IsReduced = {8} AND ed.Fi
                     }
                     catch (Exception ex)
                     {
-                        WinFormsServ.Error("Ошибка при сохранении списка");
+                        WinFormsServ.Error(ex, "Ошибка при сохранении списка");
                         return;
                     }                   
                 }
@@ -969,7 +966,7 @@ AND ed.FixierenView.IsSecond = {7} AND ed.FixierenView.IsReduced = {8} AND ed.Fi
             }
             catch (Exception ex)
             {
-                WinFormsServ.Error("Ошибка при локе/анлоке");
+                WinFormsServ.Error(ex, "Ошибка при локе/анлоке");
             }
             return;            
         }
@@ -1040,7 +1037,7 @@ AND ed.FixierenView.IsSecond = {7} AND ed.FixierenView.IsReduced = {8} AND ed.Fi
                             }
                             else
                                 context.FirstWave_INSERTCEL(abId, cnt);
-                            //context.FirstWave_INSERT(f.AbiturientId, f.Number);
+                            
                         }
                         transaction.Complete();
                     }
@@ -1048,7 +1045,7 @@ AND ed.FixierenView.IsSecond = {7} AND ed.FixierenView.IsReduced = {8} AND ed.Fi
             }
             catch (Exception ex)
             {
-                WinFormsServ.Error("Ошибка при WEB FIXIEREN !");
+                WinFormsServ.Error(ex, "Ошибка при WEB FIXIEREN !");
             }
             MessageBox.Show("DONE!");
         }        
@@ -1079,8 +1076,9 @@ AND ed.FixierenView.IsSecond = {7} AND ed.FixierenView.IsReduced = {8} AND ed.Fi
             }
             catch (Exception ex)
             {
-                WinFormsServ.Error("Ошибка при WEB FIXIEREN !");
+                WinFormsServ.Error(ex, "Ошибка при WEB FIXIEREN!");
             }
+
             MessageBox.Show("DONE!");
         }
 

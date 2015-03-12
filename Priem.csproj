@@ -317,6 +317,7 @@
       <DependentUpon>CardAbit.cs</DependentUpon>
     </Compile>
     <Compile Include="Cards\CardAbit.Fields.cs">
+      <DependentUpon>CardAbit.cs</DependentUpon>
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Cards\CardApplication_InnerEntryInEntryPriorities.cs">
@@ -350,6 +351,7 @@
       <DependentUpon>CardCompetitionInInet.cs</DependentUpon>
     </Compile>
     <Compile Include="Cards\CardCompetitionInInet.Fields.cs">
+      <DependentUpon>CardCompetitionInInet.cs</DependentUpon>
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Cards\CardDocInventory.cs">
@@ -365,6 +367,7 @@
       <DependentUpon>CardFromInet.cs</DependentUpon>
     </Compile>
     <Compile Include="Cards\CardFromInet.Fields.cs">
+      <DependentUpon>CardFromInet.cs</DependentUpon>
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Cards\CardObrazProgramInEntryInCompetitionInInet.cs">
@@ -380,6 +383,7 @@
       <DependentUpon>CardPaidData.cs</DependentUpon>
     </Compile>
     <Compile Include="Cards\CardPaidData.Fields.cs">
+      <DependentUpon>CardPaidData.cs</DependentUpon>
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Cards\CardPerson.cs">
@@ -389,6 +393,7 @@
       <DependentUpon>CardPerson.cs</DependentUpon>
     </Compile>
     <Compile Include="Cards\CardPerson.Fields.cs">
+      <DependentUpon>CardPerson.cs</DependentUpon>
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Cards\DocCard.cs">
@@ -405,6 +410,7 @@
       <DependentUpon>EgeCard.cs</DependentUpon>
     </Compile>
     <Compile Include="Cards\EgeCard.Fields.cs">
+      <DependentUpon>EgeCard.cs</DependentUpon>
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Cards\FormExamResultExportCSV.cs">
@@ -420,6 +426,7 @@
       <DependentUpon>OlympCard.cs</DependentUpon>
     </Compile>
     <Compile Include="Cards\OlympCard.Fields.cs">
+      <DependentUpon>OlympCard.cs</DependentUpon>
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Cards\ShortCompetitionClass.cs" />
@@ -784,14 +791,10 @@
       <DependentUpon>ProtocolList.cs</DependentUpon>
     </Compile>
     <Compile Include="Protocols\ProtocolList.Fields.cs">
+      <DependentUpon>ProtocolList.cs</DependentUpon>
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Providers\PersonDataProvider.cs" />
-    <Compile Include="Service References\DevelopmentStudentService\Reference.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </Compile>
     <Compile Include="SomeMethodsClass.cs" />
     <Compile Include="Statistics\AbitFacultyIntersection.cs">
       <SubType>Form</SubType>
@@ -830,6 +833,7 @@
       <DependentUpon>EgeStatistics.cs</DependentUpon>
     </Compile>
     <Compile Include="Statistics\EgeStatistics.Fields.cs">
+      <DependentUpon>EgeStatistics.cs</DependentUpon>
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Statistics\Form2.cs">
@@ -1347,7 +1351,6 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <None Include="Service References\DevelopmentStudentService\Student.wsdl" />
     <None Include="XML Schemes\запрос-детали по справочнику.xsd">
       <SubType>Designer</SubType>
     </None>
@@ -1404,19 +1407,10 @@
   <ItemGroup>
     <Content Include="1kurs.ico" />
     <Content Include="Magistery.ico" />
-    <None Include="Service References\DevelopmentStudentService\configuration91.svcinfo" />
-    <None Include="Service References\DevelopmentStudentService\configuration.svcinfo" />
-    <None Include="Service References\DevelopmentStudentService\Reference.svcmap">
-      <Generator>WCF Proxy Generator</Generator>
-      <LastGenOutput>Reference.cs</LastGenOutput>
-    </None>
     <Content Include="Shwz-Disney-Timon.ico" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
-  </ItemGroup>
-  <ItemGroup>
-    <WCFMetadataStorage Include="Service References\DevelopmentStudentService\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

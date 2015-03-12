@@ -73,5 +73,25 @@ namespace Priem
             else
                 return false;
         }
+
+        public static string GetEgeCertificateNumbers(Guid PersonId, Guid EntryId)
+        {
+            using (PriemEntities context = new PriemEntities())
+            {
+                string egecert =
+                    (from egeCertificate in context.EgeCertificate
+                     join egeMark in context.EgeMark on egeCertificate.Id equals egeMark.EgeCertificateId
+                     join egeToExam in context.EgeToExam on egeMark.EgeExamNameId equals egeToExam.EgeExamNameId
+                     where egeCertificate.PersonId == PersonId
+                            && egeToExam.ExamId == (from examInEntry in context.ExamInEntry
+                                                    where examInEntry.EntryId == EntryId && examInEntry.IsProfil
+                                                    select examInEntry.ExamId).FirstOrDefault()
+                     select new { egeCertificate.Year, egeCertificate.Number }).ToList().Distinct()
+                     .Select(x => string.IsNullOrEmpty(x.Number) ? "Сертификат " + x.Year + " г." : x.Number).DefaultIfEmpty("")
+                     .Aggregate((x, tail) => x + ", " + tail);
+
+                return egecert;
+            }
+        }
     }
 }

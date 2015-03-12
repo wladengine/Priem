@@ -12,7 +12,6 @@ namespace Priem
         private string _tipograf;
         private string _year;
         private int _FBSStatusId;
-        private string _FBSComment;
         private List<FBSEgeMark> _markList;//оценки
 
         //constructor
@@ -31,7 +30,7 @@ namespace Priem
             _markList = markList;
         }
 
-        //property
+        #region Fields
         public string Name
         {
             get
@@ -39,7 +38,6 @@ namespace Priem
                 return _name;
             }
         }
-
         public string Tipograf
         {
             get
@@ -47,7 +45,6 @@ namespace Priem
                 return _tipograf;
             }
         }
-
         public string Year
         {
             get
@@ -55,20 +52,11 @@ namespace Priem
                 return _year;
             }
         }
-
         public int FBSStatusId 
         {
             get { return _FBSStatusId; }
             set { _FBSStatusId = value; }
         }
-
-        public string FBSComment 
-        {
-            get { return _FBSComment; }
-        }
-
-
-        //property
         public List<FBSEgeMark> Marks
         {
             get
@@ -76,6 +64,7 @@ namespace Priem
                 return _markList;
             }
         }
+        #endregion
 
         //add new mark in list
         public void AddMark(FBSEgeMark mark)

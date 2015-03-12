@@ -17,9 +17,6 @@ namespace Priem
 {
     public partial class ListAbitWithInnerPriorities : BookList
     {
-
-        int _steps = 0;
-
         List<string> HideColumnsList;
         Brush BrushText, BrushBackGroundLP, BrushBackGroundOP;
         Color BrushBackGroundOPP, BrushBackGroundProf;

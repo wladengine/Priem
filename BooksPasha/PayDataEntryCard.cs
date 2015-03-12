@@ -13,12 +13,10 @@ namespace Priem
 {
     public partial class PayDataEntryCard : BookCard
     {
-        bool _isNew = false;
         bool _isOpen = false;
         public PayDataEntryCard(int? studyLevelId, int? studyFormId, int? facultyId, int? licenseProgramId)
         {
             InitializeComponent();
-            _isNew = true;
             _tableName = "ed.PayDataEntry";
             InitControls();
             if (studyLevelId.HasValue)
@@ -44,7 +42,6 @@ namespace Priem
                 cbProfile_SelectedIndexChanged(null, null);
             }
         }
-
         public PayDataEntryCard(Guid id)
         {
             InitializeComponent();
@@ -78,6 +75,48 @@ namespace Priem
                 _isOpen = false;
             }
         }
+
+        #region Handlers
+        private void cbStudyLevel_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            FillComboStudyForm();
+        }
+        private void cbStudyForm_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            FillComboFaculty();
+        }
+        private void cbFaculty_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            FillComboLicenseProgram();
+        }
+        private void cbLicenseProgram_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            FillComboObrazProgram();
+        }
+        private void cbObrazProgram_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            FillComboProfile();
+            FillComboProrector();
+        }
+        private void cbProfile_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            using (PriemEntities context = new PriemEntities())
+            {
+                var EntryList = context.qEntry.Where(x => x.StudyBasisId == 2 && x.StudyLevelId == StudyLevelId && x.StudyFormId == StudyFormId && x.FacultyId == FacultyId
+                    && x.LicenseProgramId == LicenseProgramId && x.ObrazProgramId == ObrazProgramId && (ProfileId.HasValue ? x.ProfileId == ProfileId : true)).Select(x => x.Id);
+
+                if (EntryList.Count() == 0)
+                    tbEntryId.Text = "!НЕ НАЙДЕНО!";
+                else if (EntryList.Count() > 1)
+                    tbEntryId.Text = "!НАЙДЕНО " + EntryList.Count().ToString();
+                else
+                {
+                    tbEntryId.Text = EntryList.First().ToString();
+                    EntryId = EntryList.First();
+                }
+            }
+        }
+        #endregion
 
         private void FillComboStudyLevel()
         {
@@ -162,6 +201,7 @@ namespace Priem
             }
         }
 
+        #region Fields
         public int? StudyLevelId
         {
             get { return ComboServ.GetComboIdInt(cbStudyLevel); }
@@ -197,10 +237,6 @@ namespace Priem
             get 
             {
                 return ComboServ.GetComboIdInt(cbProfile);
-                //Guid gRet = Guid.Empty;
-                //if (string.IsNullOrEmpty(ComboServ.GetComboId(cbProfile)) || !Guid.TryParse(ComboServ.GetComboId(cbProfile), out gRet))
-                //    return null;
-                //return gRet;
             }
             set 
             { 
@@ -214,6 +250,7 @@ namespace Priem
             get { return tbProps.Text.Trim(); }
             set { tbProps.Text = (value ?? "").Replace("\n", "\r\n").Replace("\r\r\n", "\r\n"); }
         }
+        #endregion
 
         protected override void FillCard()
         {
@@ -233,11 +270,7 @@ namespace Priem
                         x.EntryId
                     }).FirstOrDefault();
 
-                if (data == null)
-                {
-                    _isNew = true;
-                }
-                else
+                if (data != null)
                 {
                     StudyLevelId = data.StudyLevelId;
                     StudyFormId = data.StudyFormId;
@@ -252,46 +285,6 @@ namespace Priem
             }
         }
 
-        private void cbStudyLevel_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            FillComboStudyForm();
-        }
-        private void cbStudyForm_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            FillComboFaculty();
-        }
-        private void cbFaculty_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            FillComboLicenseProgram();
-        }
-        private void cbLicenseProgram_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            FillComboObrazProgram();
-        }
-        private void cbObrazProgram_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            FillComboProfile();
-            FillComboProrector();
-        }
-        private void cbProfile_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            using (PriemEntities context = new PriemEntities())
-            {
-                var EntryList = context.qEntry.Where(x => x.StudyBasisId == 2 && x.StudyLevelId == StudyLevelId && x.StudyFormId == StudyFormId && x.FacultyId == FacultyId
-                    && x.LicenseProgramId == LicenseProgramId && x.ObrazProgramId == ObrazProgramId && (ProfileId.HasValue ? x.ProfileId == ProfileId : true)).Select(x => x.Id);
-
-                if (EntryList.Count() == 0)
-                    tbEntryId.Text = "!НЕ НАЙДЕНО!";
-                else if (EntryList.Count() > 1)
-                    tbEntryId.Text = "!НАЙДЕНО " + EntryList.Count().ToString();
-                else
-                {
-                    tbEntryId.Text = EntryList.First().ToString();
-                    EntryId = EntryList.First();
-                }
-            }
-        }
-
         protected override void InsertRec(PriemEntities context, System.Data.Objects.ObjectParameter idParam)
         {
             context.PayDataEntry_Insert(EntryId, "Санкт-Петербургский государственный университет", 
@@ -300,7 +293,6 @@ namespace Priem
                 "", "", ProrectorId, "", "", new DateTime(2013, 9, 1), new DateTime(2017, 8, 31), Props);
             idParam.Value = EntryId;
         }
-
         protected override void UpdateRec(PriemEntities context, Guid id)
         {
             context.PayDataEntry_Update(EntryId, "Санкт-Петербургский государственный университет", 

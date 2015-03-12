@@ -182,9 +182,9 @@ namespace Priem
 
                     if (_Id == null)
                     {
-                        extPerson pers = (from per in context.extPerson
-                                          where per.Id == _personId
-                                          select per).FirstOrDefault();
+                        var pers = (from per in context.Person_AdditionalInfo
+                                    where per.PersonId == _personId
+                                    select per).FirstOrDefault();
 
                         int? lanId = pers.LanguageId;
                         ComboServ.SetComboId(cbLanguage, lanId);

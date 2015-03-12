@@ -34,7 +34,7 @@ namespace Priem
                     if (value.HasValue)
                         dtBirthDate.Value = value.Value;
                 }
-                catch (ArgumentOutOfRangeException ex)
+                catch (ArgumentOutOfRangeException)
                 {
                     WinFormsServ.Error("Некорректная дата рождения!");
                 }
@@ -85,7 +85,7 @@ namespace Priem
                     if (value.HasValue)
                         dtPassportDate.Value = value.Value;
                 }
-                catch (ArgumentOutOfRangeException ex)
+                catch (ArgumentOutOfRangeException)
                 {
                     WinFormsServ.Error("Некорректная дата выдачи паспорта");
                 }
@@ -464,12 +464,12 @@ namespace Priem
                 chbExtPoss.Checked = res[8];
             }
         }
-        public int? EnglishMark
+        public double? EnglishMark
         {
             get
             {
-                int j;
-                if (int.TryParse(tbEnglishMark.Text.Trim(), out j))
+                double j;
+                if (double.TryParse(tbEnglishMark.Text.Trim(), out j))
                     return j;
                 else
                     return null;

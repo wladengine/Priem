@@ -138,6 +138,7 @@ namespace Priem
                 }
                 catch (Exception e)
                 {
+                    WinFormsServ.Error(e);
                 }      
                 
                 //взяли конфиг

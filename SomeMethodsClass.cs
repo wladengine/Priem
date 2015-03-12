@@ -138,14 +138,14 @@ namespace Priem
         }
 
         // проверка на уникальность абитуриента
-        private static bool CheckIdent(extPerson person)
+        private static bool CheckIdent(extPerson person, string AttestatSeries, string AttestatNum)
         {
             using (PriemEntities context = new PriemEntities())
             {
                 ObjectParameter boolPar = new ObjectParameter("result", typeof(bool));
 
                 context.CheckPersonIdent(person.Surname, person.Name, person.SecondName, person.BirthDate, person.PassportSeries, person.PassportNumber,
-                    person.AttestatSeries, person.AttestatNum, boolPar);
+                    AttestatSeries, AttestatNum, boolPar);
                
                 return Convert.ToBoolean(boolPar.Value);
             }

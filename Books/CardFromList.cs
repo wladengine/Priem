@@ -8,6 +8,7 @@ using System.Text;
 using System.Windows.Forms;
 
 using BaseFormsLib;
+using EducServLib;
 
 namespace Priem
 {
@@ -104,9 +105,9 @@ namespace Priem
             }
             catch (Exception exc)
             {
+                WinFormsServ.Error(exc);
             }
         }
-
         protected virtual void btnPrev_Click(object sender, EventArgs e)
         {
             try
@@ -121,6 +122,7 @@ namespace Priem
             }
             catch (Exception exc)
             {
+                WinFormsServ.Error(exc);
             }
         }
     }

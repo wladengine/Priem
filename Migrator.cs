@@ -353,7 +353,7 @@ namespace Priem
                     if (educNum.Length > 15)
                         educNum = educNum.Substring(0, 15);
 
-                    string educYear = StudyLevelGroupId == 1 ? (Abit.SchoolExitYear.HasValue ? Abit.SchoolExitYear.ToString() : "") : (Abit.HEExitYear.HasValue ? Abit.HEExitYear.ToString() : "");
+                    string educYear = StudyLevelGroupId == 1 ? Abit.SchoolExitYear.ToString() : (Abit.HEExitYear.HasValue ? Abit.HEExitYear.ToString() : "");
                     if (string.IsNullOrEmpty(educYear))
                         educYear = "0";
 
@@ -401,7 +401,7 @@ namespace Priem
                         Abit.DocDate.ToString(), regionId, IsFor ? regionId : (Abit.RegionId.HasValue ? Abit.RegionId.ToString() : "1"),
                         Abit.LanguageId.HasValue ? Abit.LanguageId.Value.ToString() : "1",
                         educSeries, "", educNum, QueryServ.QueryForBool(Abit.HasOriginals.ToString()),
-                        AbitSchoolName ?? "", Abit.SchoolCity ?? "", Abit.SchoolNum ?? "", (Abit.SchoolTypeId ?? 1).ToString(), 
+                        AbitSchoolName ?? "", Abit.SchoolCity ?? "", Abit.SchoolNum ?? "", Abit.SchoolTypeId.ToString(),
                         (string.IsNullOrEmpty(educYear) ? DateTime.Now.Year.ToString() : educYear),
                         ph, zc, a, la,
                         Abit.BirthDate.ToString(), QueryServ.QueryForBool(Abit.Sex.ToString()),

@@ -394,32 +394,14 @@ namespace Priem
                             return;
                         }
 
-                        bool t = false;
                         for (int i = 0; i < dgvAbiturients.Rows.Count; i++)
                         {
                             if (dgvAbiturients.Rows[i].Cells["Barcode"].Value.ToString() == code.ToString())
                             {
                                 dgvAbiturients.CurrentCell = dgvAbiturients[1, i];
-                                t = true;
                                 break;
                             }
                         }
-
-                        //if (!t)
-                        //{
-                        //    ////поиск заявления в зоне видимости приёмной комиссии
-                        //    //var entries = context.qEntry.Select(x => x.Id).ToList();
-                        //    //string lstEntries = Util.BuildStringWithCollection(entries.Select(x => "'" + x.ToString() + "'").ToList());
-
-                        //    //query = string.Format("SELECT Barcode, FacultyId, LicenseProgramId, ObrazProgramId, ProfileId, StudyBasisId FROM qAbiturient WHERE Barcode=@Barcode AND EntryId IN ({0})", lstEntries);
-                        //    //DataTable tbl = BdcInet.GetDataSet(query, new SortedList<string, object>() { { "@Barcode", code } }).Tables[0];
-
-                        //    //if (tbl.Rows.Count == 0)
-                        //    //{
-                        //    //    WinFormsServ.Error("Запись не найдена!");
-                        //    //    return;
-                        //    //}
-                        //}
 
                         tbAbitBarcode.Text = string.Empty;
 

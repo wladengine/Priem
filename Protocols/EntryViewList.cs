@@ -16,16 +16,12 @@ namespace Priem
     public partial class EntryViewList : BaseForm
     {
         private DBPriem _bdc;
-        private string sQuery;
         protected ProtocolRefreshHandler prh = null;
 
         public EntryViewList()
         {            
             this.CenterToParent();
             this.MdiParent = MainClass.mainform;
-
-            //this.sQuery = string.Format("SELECT DISTINCT Person.Id, {0} as Ид_номер, Person.Surname AS Фамилия, Person.Name AS Имя, Person.SecondName AS Отчество, Person.BirthDate AS Дата_рождения " +
-            //                       "FROM Person INNER JOIN ExamsVedHistory ON ExamsVedHistory.PersonId = Person.Id ", MainClass.GetStringPersonNumber());
 
             InitializeComponent();
             InitControls();
@@ -39,9 +35,7 @@ namespace Priem
             {                
                 btnPrintOrder.Visible = btnPrintOrder.Enabled = btnCancelView.Enabled = btnCancelView.Visible = true;
                 chbIsForeign.Visible = true;
-               
-                //btnCreate.Enabled = false;
-            } 
+            }
 
             if (MainClass.IsPrintOrder())
             {
@@ -56,12 +50,8 @@ namespace Priem
                 chbIsForeign.Visible = chbIsForeign.Enabled = true;
             }
 
-            //// посомтреть, почему отдельные факультеты
-            //if (_bdc.IsMed() || _bdc.GetFacultyId() == "9" || _bdc.GetFacultyId() == "14" || _bdc.GetFacultyId() == "20")
-            //    btnCreate.Enabled = true;
-
-            //if (_bdc.IsReadOnly())
-            //    btnPrintOrder.Visible = btnPrintOrder.Enabled = true;
+            if (MainClass.IsReadOnly())
+                btnPrintOrder.Visible = btnPrintOrder.Enabled = true;
         }
 
         //дополнительная инициализация контролов
@@ -92,17 +82,14 @@ namespace Priem
         {
             FillStudyForm();            
         }
-
         void cbStudyBasis_SelectedIndexChanged(object sender, EventArgs e)
         {
             FillStudyForm();            
         }
-
         void cbStudyForm_SelectedIndexChanged(object sender, EventArgs e)
         {
             FillLicenseProgram();
         }
-
         void cbLicenseProgram_SelectedIndexChanged(object sender, EventArgs e)
         {
             UpdateDataGrid();
@@ -113,43 +100,36 @@ namespace Priem
             get { return ComboServ.GetComboIdInt(cbFaculty); }
             set { ComboServ.SetComboId(cbFaculty, value); }
         }
-
         public int? LicenseProgramId
         {
             get { return ComboServ.GetComboIdInt(cbLicenseProgram); }
             set { ComboServ.SetComboId(cbLicenseProgram, value); }
         }
-        
         public int? StudyBasisId
         {
             get { return ComboServ.GetComboIdInt(cbStudyBasis); }
             set { ComboServ.SetComboId(cbStudyBasis, value); }
         }
-
         public int? StudyFormId
         {
             get { return ComboServ.GetComboIdInt(cbStudyForm); }
             set { ComboServ.SetComboId(cbStudyForm, value); }
         }
-
         public bool IsSecond
         {
             get { return chbIsSecond.Checked; }
             set { chbIsSecond.Checked = value; }
         }
-
         public bool IsReduced
         {
             get { return chbIsReduced.Checked; }
             set { chbIsReduced.Checked = value; }
         }
-
         public bool IsParallel
         {
             get { return chbIsParallel.Checked; }
             set { chbIsParallel.Checked = value; }
         }
-
         public bool IsListener
         {
             get { return chbIsListener.Checked; }
@@ -160,31 +140,29 @@ namespace Priem
         {
             using (PriemEntities context = new PriemEntities())
             {
-                var ent = MainClass.GetEntry(context).Where(c => c.FacultyId == FacultyId).Where(c => c.StudyBasisId == StudyBasisId);
+                var ent = MainClass.GetEntry(context)
+                    .Where(c => c.FacultyId == FacultyId && c.StudyBasisId == StudyBasisId && c.IsSecond == IsSecond && c.IsReduced == IsReduced && c.IsParallel == IsParallel);
 
-                ent = ent.Where(c => c.IsSecond == IsSecond && c.IsReduced == IsReduced && c.IsParallel == IsParallel);
-
-                List<KeyValuePair<string, string>> lst = ent.ToList().Select(u => new KeyValuePair<string, string>(u.StudyFormId.ToString(), u.StudyFormName)).Distinct().ToList();
-
+                List<KeyValuePair<string, string>> lst = ent.ToList()
+                    .Select(u => new KeyValuePair<string, string>(u.StudyFormId.ToString(), u.StudyFormName))
+                    .Distinct().ToList();
                 ComboServ.FillCombo(cbStudyForm, lst, false, false);
             }
         }
-
         private void FillLicenseProgram()
         {
             using (PriemEntities context = new PriemEntities())
             {
-                var ent = MainClass.GetEntry(context).Where(c => c.FacultyId == FacultyId);
-
-                ent = ent.Where(c => c.IsSecond == IsSecond && c.IsReduced == IsReduced && c.IsParallel == IsParallel);
+                var ent = MainClass.GetEntry(context).Where(c => c.FacultyId == FacultyId && c.IsSecond == IsSecond && c.IsReduced == IsReduced && c.IsParallel == IsParallel);
 
                 if (StudyBasisId != null)
                     ent = ent.Where(c => c.StudyBasisId == StudyBasisId);
                 if (StudyFormId != null)
                     ent = ent.Where(c => c.StudyFormId == StudyFormId);
 
-                List<KeyValuePair<string, string>> lst = ent.ToList().Select(u => new KeyValuePair<string, string>(u.LicenseProgramId.ToString(), u.LicenseProgramCode + " " + u.LicenseProgramName)).Distinct().ToList();
-
+                List<KeyValuePair<string, string>> lst = ent.ToList()
+                    .Select(u => new KeyValuePair<string, string>(u.LicenseProgramId.ToString(), u.LicenseProgramCode + " " + u.LicenseProgramName))
+                    .Distinct().ToList();
                 ComboServ.FillCombo(cbLicenseProgram, lst, false, false);
             }
         }

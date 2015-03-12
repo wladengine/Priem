@@ -199,9 +199,9 @@
       [extAbit].[CommitNumber] AS [CommitNumber], 
       [extAbit].[IsGosLine] AS [IsGosLine], 
       [extAbit].[InnerEntryInEntryId] AS [InnerEntryInEntryId], 
-      [extAbit].[ProfileInObrazProgramInEntryName] AS [ProfileInObrazProgramInEntryName], 
-      [extAbit].[ObrazProgramInEntryCrypt] AS [ObrazProgramInEntryCrypt], 
-      [extAbit].[ObrazProgramInEntryName] AS [ObrazProgramInEntryName], 
+      [extAbit].[InnerEntryInEntryProfileName] AS [InnerEntryInEntryProfileName], 
+      [extAbit].[InnerEntryInEntryObrazProgramCrypt] AS [InnerEntryInEntryObrazProgramCrypt], 
+      [extAbit].[InnerEntryInEntryObrazProgramName] AS [InnerEntryInEntryObrazProgramName], 
       [extAbit].[InnerEntryInEntryObrazProgramId] AS [InnerEntryInEntryObrazProgramId]
       FROM [ed].[extAbit] AS [extAbit]</DefiningQuery>
           </EntitySet>
@@ -590,27 +590,7 @@
       [extPerson].[HostelFacultyId] AS [HostelFacultyId], 
       [extPerson].[ExamPassFacultyId] AS [ExamPassFacultyId], 
       [extPerson].[HasExamPass] AS [HasExamPass], 
-      [extPerson].[IsExcellent] AS [IsExcellent], 
       [extPerson].[LanguageId] AS [LanguageId], 
-      [extPerson].[SchoolTypeId] AS [SchoolTypeId], 
-      [extPerson].[SchoolCity] AS [SchoolCity], 
-      [extPerson].[SchoolName] AS [SchoolName], 
-      [extPerson].[SchoolNum] AS [SchoolNum], 
-      [extPerson].[SchoolExitYear] AS [SchoolExitYear], 
-      [extPerson].[CountryEducId] AS [CountryEducId], 
-      [extPerson].[IsEqual] AS [IsEqual], 
-      [extPerson].[AttestatSeries] AS [AttestatSeries], 
-      [extPerson].[AttestatNum] AS [AttestatNum], 
-      [extPerson].[DiplomSeries] AS [DiplomSeries], 
-      [extPerson].[DiplomNum] AS [DiplomNum], 
-      [extPerson].[SchoolAVG] AS [SchoolAVG], 
-      [extPerson].[HighEducation] AS [HighEducation], 
-      [extPerson].[HEProfession] AS [HEProfession], 
-      [extPerson].[HEQualification] AS [HEQualification], 
-      [extPerson].[HEStudyFormId] AS [HEStudyFormId], 
-      [extPerson].[HEEntryYear] AS [HEEntryYear], 
-      [extPerson].[HEExitYear] AS [HEExitYear], 
-      [extPerson].[HEWork] AS [HEWork], 
       [extPerson].[MSVuz] AS [MSVuz], 
       [extPerson].[MSStudyFormId] AS [MSStudyFormId], 
       [extPerson].[MSCourse] AS [MSCourse], 
@@ -634,7 +614,6 @@
       [extPerson].[HostelEduc] AS [HostelEduc], 
       [extPerson].[KladrCode] AS [KladrCode], 
       [extPerson].[SNILS] AS [SNILS], 
-      [extPerson].[RegionEducId] AS [RegionEducId], 
       [extPerson].[RegionNumber] AS [RegionNumber], 
       [extPerson].[ForeignNationality] AS [ForeignNationality], 
       [extPerson].[ForeignNationalityId] AS [ForeignNationalityId], 
@@ -644,8 +623,89 @@
       [extPerson].[EnglishMark] AS [EnglishMark], 
       [extPerson].[EgeInSPbgu] AS [EgeInSPbgu], 
       [extPerson].[HasTRKI] AS [HasTRKI], 
-      [extPerson].[TRKICertificateNumber] AS [TRKICertificateNumber]
+      [extPerson].[TRKICertificateNumber] AS [TRKICertificateNumber], 
+      [extPerson].[Expr1] AS [Expr1]
       FROM [ed].[extPerson] AS [extPerson]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="extPerson_EducationInfo" EntityType="Priem2012Model.Store.extPerson_EducationInfo" store:Type="Views" store:Schema="ed" store:Name="extPerson_EducationInfo">
+            <DefiningQuery>SELECT 
+      [extPerson_EducationInfo].[Id] AS [Id], 
+      [extPerson_EducationInfo].[PersonId] AS [PersonId], 
+      [extPerson_EducationInfo].[SchoolTypeId] AS [SchoolTypeId], 
+      [extPerson_EducationInfo].[SchoolTypeName] AS [SchoolTypeName], 
+      [extPerson_EducationInfo].[SchoolTypeFullName] AS [SchoolTypeFullName], 
+      [extPerson_EducationInfo].[CountryEducId] AS [CountryEducId], 
+      [extPerson_EducationInfo].[CountryEducName] AS [CountryEducName], 
+      [extPerson_EducationInfo].[CountryEducOSKMCode] AS [CountryEducOSKMCode], 
+      [extPerson_EducationInfo].[RegionEducId] AS [RegionEducId], 
+      [extPerson_EducationInfo].[RegionEducName] AS [RegionEducName], 
+      [extPerson_EducationInfo].[RegionEducNumber] AS [RegionEducNumber], 
+      [extPerson_EducationInfo].[ForeignCountryEducId] AS [ForeignCountryEducId], 
+      [extPerson_EducationInfo].[ForeignCountryEducName] AS [ForeignCountryEducName], 
+      [extPerson_EducationInfo].[ForeignCountryEducOSKMCode] AS [ForeignCountryEducOSKMCode], 
+      [extPerson_EducationInfo].[ForeignCountryEducPriemDictionaryId] AS [ForeignCountryEducPriemDictionaryId], 
+      [extPerson_EducationInfo].[SchoolCity] AS [SchoolCity], 
+      [extPerson_EducationInfo].[SchoolName] AS [SchoolName], 
+      [extPerson_EducationInfo].[SchoolNum] AS [SchoolNum], 
+      [extPerson_EducationInfo].[SchoolExitYear] AS [SchoolExitYear], 
+      [extPerson_EducationInfo].[AttestatSeries] AS [AttestatSeries], 
+      [extPerson_EducationInfo].[AttestatNum] AS [AttestatNum], 
+      [extPerson_EducationInfo].[DiplomSeries] AS [DiplomSeries], 
+      [extPerson_EducationInfo].[DiplomNum] AS [DiplomNum], 
+      [extPerson_EducationInfo].[SchoolAVG] AS [SchoolAVG], 
+      [extPerson_EducationInfo].[IsExcellent] AS [IsExcellent], 
+      [extPerson_EducationInfo].[IsEqual] AS [IsEqual], 
+      [extPerson_EducationInfo].[EqualDocumentNumber] AS [EqualDocumentNumber], 
+      [extPerson_EducationInfo].[HighEducation] AS [HighEducation], 
+      [extPerson_EducationInfo].[HEProfession] AS [HEProfession], 
+      [extPerson_EducationInfo].[HEQualification] AS [HEQualification], 
+      [extPerson_EducationInfo].[HEStudyFormId] AS [HEStudyFormId], 
+      [extPerson_EducationInfo].[HEStudyFormName] AS [HEStudyFormName], 
+      [extPerson_EducationInfo].[HEStudyFormFISName] AS [HEStudyFormFISName], 
+      [extPerson_EducationInfo].[HEEntryYear] AS [HEEntryYear], 
+      [extPerson_EducationInfo].[HEExitYear] AS [HEExitYear], 
+      [extPerson_EducationInfo].[HEWork] AS [HEWork]
+      FROM [ed].[extPerson_EducationInfo] AS [extPerson_EducationInfo]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="extPerson_EducationInfo_Current" EntityType="Priem2012Model.Store.extPerson_EducationInfo_Current" store:Type="Views" store:Schema="ed" store:Name="extPerson_EducationInfo_Current">
+            <DefiningQuery>SELECT 
+      [extPerson_EducationInfo_Current].[Id] AS [Id], 
+      [extPerson_EducationInfo_Current].[PersonId] AS [PersonId], 
+      [extPerson_EducationInfo_Current].[SchoolTypeId] AS [SchoolTypeId], 
+      [extPerson_EducationInfo_Current].[SchoolTypeName] AS [SchoolTypeName], 
+      [extPerson_EducationInfo_Current].[SchoolTypeFullName] AS [SchoolTypeFullName], 
+      [extPerson_EducationInfo_Current].[CountryEducId] AS [CountryEducId], 
+      [extPerson_EducationInfo_Current].[CountryEducName] AS [CountryEducName], 
+      [extPerson_EducationInfo_Current].[CountryEducOSKMCode] AS [CountryEducOSKMCode], 
+      [extPerson_EducationInfo_Current].[RegionEducId] AS [RegionEducId], 
+      [extPerson_EducationInfo_Current].[RegionEducName] AS [RegionEducName], 
+      [extPerson_EducationInfo_Current].[RegionEducNumber] AS [RegionEducNumber], 
+      [extPerson_EducationInfo_Current].[ForeignCountryEducId] AS [ForeignCountryEducId], 
+      [extPerson_EducationInfo_Current].[ForeignCountryEducName] AS [ForeignCountryEducName], 
+      [extPerson_EducationInfo_Current].[ForeignCountryEducOSKMCode] AS [ForeignCountryEducOSKMCode], 
+      [extPerson_EducationInfo_Current].[ForeignCountryEducPriemDictionaryId] AS [ForeignCountryEducPriemDictionaryId], 
+      [extPerson_EducationInfo_Current].[SchoolCity] AS [SchoolCity], 
+      [extPerson_EducationInfo_Current].[SchoolName] AS [SchoolName], 
+      [extPerson_EducationInfo_Current].[SchoolNum] AS [SchoolNum], 
+      [extPerson_EducationInfo_Current].[SchoolExitYear] AS [SchoolExitYear], 
+      [extPerson_EducationInfo_Current].[AttestatSeries] AS [AttestatSeries], 
+      [extPerson_EducationInfo_Current].[AttestatNum] AS [AttestatNum], 
+      [extPerson_EducationInfo_Current].[DiplomSeries] AS [DiplomSeries], 
+      [extPerson_EducationInfo_Current].[DiplomNum] AS [DiplomNum], 
+      [extPerson_EducationInfo_Current].[SchoolAVG] AS [SchoolAVG], 
+      [extPerson_EducationInfo_Current].[IsExcellent] AS [IsExcellent], 
+      [extPerson_EducationInfo_Current].[IsEqual] AS [IsEqual], 
+      [extPerson_EducationInfo_Current].[EqualDocumentNumber] AS [EqualDocumentNumber], 
+      [extPerson_EducationInfo_Current].[HighEducation] AS [HighEducation], 
+      [extPerson_EducationInfo_Current].[HEProfession] AS [HEProfession], 
+      [extPerson_EducationInfo_Current].[HEQualification] AS [HEQualification], 
+      [extPerson_EducationInfo_Current].[HEStudyFormId] AS [HEStudyFormId], 
+      [extPerson_EducationInfo_Current].[HEStudyFormName] AS [HEStudyFormName], 
+      [extPerson_EducationInfo_Current].[HEStudyFormFISName] AS [HEStudyFormFISName], 
+      [extPerson_EducationInfo_Current].[HEEntryYear] AS [HEEntryYear], 
+      [extPerson_EducationInfo_Current].[HEExitYear] AS [HEExitYear], 
+      [extPerson_EducationInfo_Current].[HEWork] AS [HEWork]
+      FROM [ed].[extPerson_EducationInfo_Current] AS [extPerson_EducationInfo_Current]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="extPersonAll" EntityType="Priem2012Model.Store.extPersonAll" store:Type="Views" store:Schema="ed" store:Name="extPersonAll">
             <DefiningQuery>SELECT 
@@ -1475,6 +1535,14 @@
             <End Role="ProtocolType" EntitySet="ProtocolType" />
             <End Role="Protocol" EntitySet="Protocol" />
           </AssociationSet>
+          <AssociationSet Name="FK_Protocol_SP_Faculty" Association="Priem2012Model.Store.FK_Protocol_SP_Faculty">
+            <End Role="SP_Faculty" EntitySet="SP_Faculty" />
+            <End Role="Protocol" EntitySet="Protocol" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Protocol_SP_LicenseProgram" Association="Priem2012Model.Store.FK_Protocol_SP_LicenseProgram">
+            <End Role="SP_LicenseProgram" EntitySet="SP_LicenseProgram" />
+            <End Role="Protocol" EntitySet="Protocol" />
+          </AssociationSet>
           <AssociationSet Name="fk_Protocol_StudyBasis" Association="Priem2012Model.Store.fk_Protocol_StudyBasis">
             <End Role="StudyBasis" EntitySet="StudyBasis" />
             <End Role="Protocol" EntitySet="Protocol" />
@@ -1547,7 +1615,7 @@
           <Property Name="PersonId" Type="uniqueidentifier" Nullable="false" />
           <Property Name="RegNum" Type="nvarchar" MaxLength="50" />
           <Property Name="EntryId" Type="uniqueidentifier" Nullable="false" />
-          <Property Name="CompetitionId" Type="int" />
+          <Property Name="CompetitionId" Type="int" Nullable="false" />
           <Property Name="IsListener" Type="bit" Nullable="false" />
           <Property Name="IsPaid" Type="bit" Nullable="false" />
           <Property Name="BackDoc" Type="bit" Nullable="false" />
@@ -1562,7 +1630,7 @@
           <Property Name="CelCompetitionId" Type="int" />
           <Property Name="CelCompetitionText" Type="nvarchar" MaxLength="50" />
           <Property Name="CompFromOlymp" Type="bit" Nullable="false" />
-          <Property Name="LanguageId" Type="int" />
+          <Property Name="LanguageId" Type="int" Nullable="false" />
           <Property Name="HasOriginals" Type="bit" Nullable="false" />
           <Property Name="StudyNumber" Type="nvarchar" MaxLength="50" />
           <Property Name="SessionAVG" Type="float" />
@@ -1813,7 +1881,7 @@
           <Property Name="Id" Type="int" Nullable="false" />
           <Property Name="Name" Type="nvarchar" MaxLength="500" />
           <Property Name="Acronym" Type="nvarchar" MaxLength="50" />
-          <Property Name="SortNum" Type="int" />
+          <Property Name="SortNum" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="Exam">
           <Key>
@@ -2111,25 +2179,26 @@
           <Property Name="OrderNum" Type="nvarchar" MaxLength="50" />
           <Property Name="OrderNumFor" Type="nvarchar" MaxLength="50" />
           <Property Name="OrderDateFor" Type="datetime" />
-          <Property Name="SignerId" Type="int" />
-          <Property Name="ComissionDate" Type="date" />
-          <Property Name="ComissionNumber" Type="nvarchar" MaxLength="10" />
+          <Property Name="SignerId" Type="int" Nullable="false" />
+          <Property Name="ComissionDate" Type="date" Nullable="false" />
+          <Property Name="ComissionNumber" Type="nvarchar" Nullable="false" MaxLength="10" />
         </EntityType>
         <EntityType Name="PaidData">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="uniqueidentifier" Nullable="false" />
-          <Property Name="DogovorNum" Type="nvarchar" MaxLength="50" />
-          <Property Name="DogovorDate" Type="datetime" />
-          <Property Name="DogovorTypeId" Type="int" />
+          <Property Name="AbiturientId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="DogovorTypeId" Type="int" Nullable="false" />
+          <Property Name="DogovorNum" Type="nvarchar" Nullable="false" MaxLength="50" />
+          <Property Name="DogovorDate" Type="datetime" Nullable="false" />
           <Property Name="ProrektorId" Type="int" />
           <Property Name="Qualification" Type="nvarchar" MaxLength="500" />
-          <Property Name="Srok" Type="nvarchar" MaxLength="50" />
-          <Property Name="DateStart" Type="smalldatetime" />
-          <Property Name="DateFinish" Type="smalldatetime" />
+          <Property Name="Srok" Type="nvarchar" Nullable="false" MaxLength="50" />
+          <Property Name="DateStart" Type="smalldatetime" Nullable="false" />
+          <Property Name="DateFinish" Type="smalldatetime" Nullable="false" />
           <Property Name="SumFirstYear" Type="nvarchar" MaxLength="500" />
-          <Property Name="PayPeriodId" Type="int" />
+          <Property Name="PayPeriodId" Type="int" Nullable="false" />
           <Property Name="SumFirstPeriod" Type="nvarchar" MaxLength="500" />
           <Property Name="AbitFIORod" Type="nvarchar" MaxLength="100" />
           <Property Name="Parent" Type="nvarchar" MaxLength="500" />
@@ -2142,7 +2211,6 @@
           <Property Name="CustomerReason" Type="nvarchar" MaxLength="500" />
           <Property Name="CustomerINN" Type="nvarchar" MaxLength="100" />
           <Property Name="CustomerRS" Type="nvarchar" MaxLength="100" />
-          <Property Name="AbiturientId" Type="uniqueidentifier" />
           <Property Name="IsOpen" Type="bit" Nullable="false" />
           <Property Name="Holder" Type="nvarchar" MaxLength="50" />
           <Property Name="SumTotal" Type="nvarchar" MaxLength="500" />
@@ -2288,14 +2356,14 @@
           </Key>
           <Property Name="Id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
           <Property Name="PersonId" Type="uniqueidentifier" Nullable="false" />
-          <Property Name="SchoolTypeId" Type="int" />
-          <Property Name="CountryEducId" Type="int" />
-          <Property Name="RegionEducId" Type="int" />
-          <Property Name="ForeignCountryEducId" Type="int" />
+          <Property Name="SchoolTypeId" Type="int" Nullable="false" />
+          <Property Name="CountryEducId" Type="int" Nullable="false" />
+          <Property Name="RegionEducId" Type="int" Nullable="false" />
+          <Property Name="ForeignCountryEducId" Type="int" Nullable="false" />
           <Property Name="SchoolCity" Type="nvarchar" MaxLength="100" />
-          <Property Name="SchoolName" Type="nvarchar" MaxLength="500" />
+          <Property Name="SchoolName" Type="nvarchar" Nullable="false" MaxLength="500" />
           <Property Name="SchoolNum" Type="nvarchar" MaxLength="50" />
-          <Property Name="SchoolExitYear" Type="int" />
+          <Property Name="SchoolExitYear" Type="int" Nullable="false" />
           <Property Name="AttestatSeries" Type="nvarchar" MaxLength="10" />
           <Property Name="AttestatNum" Type="nvarchar" MaxLength="20" />
           <Property Name="DiplomSeries" Type="nvarchar" MaxLength="20" />
@@ -2357,21 +2425,21 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="uniqueidentifier" Nullable="false" />
-          <Property Name="StudyLevelGroupId" Type="int" />
+          <Property Name="ProtocolTypeId" Type="int" Nullable="false" />
+          <Property Name="StudyLevelGroupId" Type="int" Nullable="false" />
           <Property Name="FacultyId" Type="int" />
           <Property Name="LicenseProgramId" Type="int" />
-          <Property Name="StudyFormId" Type="int" />
+          <Property Name="StudyFormId" Type="int" Nullable="false" />
           <Property Name="StudyBasisId" Type="int" />
           <Property Name="Number" Type="nvarchar" MaxLength="15" />
-          <Property Name="Date" Type="datetime" />
-          <Property Name="ProtocolTypeId" Type="int" />
+          <Property Name="Date" Type="datetime" Nullable="false" />
           <Property Name="Reason" Type="nvarchar" MaxLength="1000" />
           <Property Name="IsOld" Type="bit" Nullable="false" />
           <Property Name="ParentProtocolId" Type="uniqueidentifier" />
-          <Property Name="IsSecond" Type="bit" />
-          <Property Name="IsParallel" Type="bit" />
-          <Property Name="IsReduced" Type="bit" />
-          <Property Name="IsListener" Type="bit" />
+          <Property Name="IsSecond" Type="bit" Nullable="false" />
+          <Property Name="IsParallel" Type="bit" Nullable="false" />
+          <Property Name="IsReduced" Type="bit" Nullable="false" />
+          <Property Name="IsListener" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="ProtocolNumbers">
           <Key>
@@ -2419,6 +2487,7 @@
           <Property Name="Id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
           <Property Name="Name" Type="nvarchar" Nullable="false" MaxLength="50" />
           <Property Name="FullName" Type="nvarchar" MaxLength="150" />
+          <Property Name="Sort" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="Signer">
           <Key>
@@ -2530,6 +2599,7 @@
           <Property Name="LevelGroupId" Type="int" Nullable="false" />
           <Property Name="LevelGroupPrint" Type="nvarchar" MaxLength="50" />
           <Property Name="FISName" Type="nvarchar" MaxLength="50" />
+          <Property Name="NameRod" Type="nvarchar" MaxLength="100" />
         </EntityType>
         <EntityType Name="StudyLevelGroup">
           <Key>
@@ -2547,6 +2617,7 @@
             <PropertyRef Name="Id" />
             <PropertyRef Name="PersonId" />
             <PropertyRef Name="EntryId" />
+            
             <PropertyRef Name="IsListener" />
             <PropertyRef Name="IsPaid" />
             <PropertyRef Name="BackDoc" />
@@ -2583,7 +2654,7 @@
           <Property Name="PersonId" Type="uniqueidentifier" Nullable="false" />
           <Property Name="RegNum" Type="nvarchar" MaxLength="50" />
           <Property Name="EntryId" Type="uniqueidentifier" Nullable="false" />
-          <Property Name="CompetitionId" Type="int" />
+          <Property Name="CompetitionId" Type="int" Nullable="false" />
           <Property Name="IsListener" Type="bit" Nullable="false" />
           <Property Name="IsPaid" Type="bit" Nullable="false" />
           <Property Name="BackDoc" Type="bit" Nullable="false" />
@@ -2646,9 +2717,9 @@
           <Property Name="CommitNumber" Type="int" />
           <Property Name="IsGosLine" Type="bit" Nullable="false" />
           <Property Name="InnerEntryInEntryId" Type="uniqueidentifier" />
-          <Property Name="ProfileInObrazProgramInEntryName" Type="nvarchar" MaxLength="1000" />
-          <Property Name="ObrazProgramInEntryCrypt" Type="nvarchar" MaxLength="66" />
-          <Property Name="ObrazProgramInEntryName" Type="nvarchar" MaxLength="1000" />
+          <Property Name="InnerEntryInEntryProfileName" Type="nvarchar" MaxLength="1000" />
+          <Property Name="InnerEntryInEntryObrazProgramCrypt" Type="nvarchar" MaxLength="66" />
+          <Property Name="InnerEntryInEntryObrazProgramName" Type="nvarchar" MaxLength="1000" />
           <Property Name="InnerEntryInEntryObrazProgramId" Type="int" />
         </EntityType>
         <!--Errors Found During Generation:
@@ -2675,30 +2746,37 @@
             <PropertyRef Name="Id" />
             <PropertyRef Name="AbiturientId" />
             <PropertyRef Name="Excluded" />
+            
+            
+            
             <PropertyRef Name="IsOld" />
+            
+            
             <PropertyRef Name="ProtocolTypeName" />
+            
+            
           </Key>
           <Property Name="Id" Type="uniqueidentifier" Nullable="false" />
           <Property Name="AbiturientId" Type="uniqueidentifier" Nullable="false" />
           <Property Name="Excluded" Type="bit" Nullable="false" />
           <Property Name="ExcludeProtocolId" Type="uniqueidentifier" />
           <Property Name="EntryHeaderId" Type="int" />
-          <Property Name="StudyLevelGroupId" Type="int" />
+          <Property Name="StudyLevelGroupId" Type="int" Nullable="false" />
           <Property Name="LicenseProgramId" Type="int" />
           <Property Name="FacultyId" Type="int" />
           <Property Name="StudyFormId" Type="int" />
           <Property Name="StudyBasisId" Type="int" />
-          <Property Name="Number" Type="nvarchar" MaxLength="10" />
-          <Property Name="Date" Type="datetime" />
-          <Property Name="ProtocolTypeId" Type="int" />
+          <Property Name="Number" Type="nvarchar" MaxLength="15" />
+          <Property Name="Date" Type="datetime" Nullable="false" />
+          <Property Name="ProtocolTypeId" Type="int" Nullable="false" />
           <Property Name="Reason" Type="nvarchar" MaxLength="1000" />
           <Property Name="IsOld" Type="bit" Nullable="false" />
           <Property Name="ParentProtocolId" Type="uniqueidentifier" />
-          <Property Name="IsSecond" Type="bit" />
-          <Property Name="IsListener" Type="bit" />
+          <Property Name="IsSecond" Type="bit" Nullable="false" />
+          <Property Name="IsListener" Type="bit" Nullable="false" />
           <Property Name="ProtocolTypeName" Type="nvarchar" Nullable="false" MaxLength="50" />
-          <Property Name="IsParallel" Type="bit" />
-          <Property Name="IsReduced" Type="bit" />
+          <Property Name="IsParallel" Type="bit" Nullable="false" />
+          <Property Name="IsReduced" Type="bit" Nullable="false" />
         </EntityType>
         <!--Errors Found During Generation:
       warning 6002: The table/view 'Priem.ed.extEgeMark' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.
@@ -2789,7 +2867,12 @@
             <PropertyRef Name="Id" />
             <PropertyRef Name="AbiturientId" />
             <PropertyRef Name="Excluded" />
+            
+            
+            
             <PropertyRef Name="IsOld" />
+            
+            
             <PropertyRef Name="ProtocolTypeName" />
           </Key>
           <Property Name="Id" Type="uniqueidentifier" Nullable="false" />
@@ -2797,19 +2880,19 @@
           <Property Name="Excluded" Type="bit" Nullable="false" />
           <Property Name="ExcludeProtocolId" Type="uniqueidentifier" />
           <Property Name="EntryHeaderId" Type="int" />
-          <Property Name="StudyLevelGroupId" Type="int" />
+          <Property Name="StudyLevelGroupId" Type="int" Nullable="false" />
           <Property Name="LicenseProgramId" Type="int" />
           <Property Name="FacultyId" Type="int" />
           <Property Name="StudyFormId" Type="int" />
           <Property Name="StudyBasisId" Type="int" />
-          <Property Name="Number" Type="nvarchar" MaxLength="10" />
-          <Property Name="Date" Type="datetime" />
-          <Property Name="ProtocolTypeId" Type="int" />
+          <Property Name="Number" Type="nvarchar" MaxLength="15" />
+          <Property Name="Date" Type="datetime" Nullable="false" />
+          <Property Name="ProtocolTypeId" Type="int" Nullable="false" />
           <Property Name="Reason" Type="nvarchar" MaxLength="1000" />
           <Property Name="IsOld" Type="bit" Nullable="false" />
           <Property Name="ParentProtocolId" Type="uniqueidentifier" />
-          <Property Name="IsSecond" Type="bit" />
-          <Property Name="IsListener" Type="bit" />
+          <Property Name="IsSecond" Type="bit" Nullable="false" />
+          <Property Name="IsListener" Type="bit" Nullable="false" />
           <Property Name="ProtocolTypeName" Type="nvarchar" Nullable="false" MaxLength="50" />
         </EntityType>
         <!--Errors Found During Generation:
@@ -2881,28 +2964,35 @@
             <PropertyRef Name="Id" />
             <PropertyRef Name="AbiturientId" />
             <PropertyRef Name="Excluded" />
+            
+            
+            
             <PropertyRef Name="IsOld" />
+            
+            
+            
+            
           </Key>
           <Property Name="Id" Type="uniqueidentifier" Nullable="false" />
           <Property Name="AbiturientId" Type="uniqueidentifier" Nullable="false" />
           <Property Name="Excluded" Type="bit" Nullable="false" />
           <Property Name="ExcludeProtocolId" Type="uniqueidentifier" />
           <Property Name="EntryHeaderId" Type="int" />
-          <Property Name="StudyLevelGroupId" Type="int" />
+          <Property Name="StudyLevelGroupId" Type="int" Nullable="false" />
           <Property Name="LicenseProgramId" Type="int" />
           <Property Name="FacultyId" Type="int" />
           <Property Name="StudyFormId" Type="int" />
           <Property Name="StudyBasisId" Type="int" />
-          <Property Name="Number" Type="nvarchar" MaxLength="10" />
-          <Property Name="Date" Type="datetime" />
-          <Property Name="ProtocolTypeId" Type="int" />
+          <Property Name="Number" Type="nvarchar" MaxLength="15" />
+          <Property Name="Date" Type="datetime" Nullable="false" />
+          <Property Name="ProtocolTypeId" Type="int" Nullable="false" />
           <Property Name="Reason" Type="nvarchar" MaxLength="1000" />
           <Property Name="IsOld" Type="bit" Nullable="false" />
           <Property Name="ParentProtocolId" Type="uniqueidentifier" />
-          <Property Name="IsSecond" Type="bit" />
-          <Property Name="IsListener" Type="bit" />
-          <Property Name="IsParallel" Type="bit" />
-          <Property Name="IsReduced" Type="bit" />
+          <Property Name="IsSecond" Type="bit" Nullable="false" />
+          <Property Name="IsListener" Type="bit" Nullable="false" />
+          <Property Name="IsParallel" Type="bit" Nullable="false" />
+          <Property Name="IsReduced" Type="bit" Nullable="false" />
         </EntityType>
         <!--Errors Found During Generation:
       warning 6002: The table/view 'Priem.ed.extEntryView' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.
@@ -2912,8 +3002,15 @@
             <PropertyRef Name="Id" />
             <PropertyRef Name="AbiturientId" />
             <PropertyRef Name="Excluded" />
+            
+            
+            
             <PropertyRef Name="IsOld" />
+            
+            
             <PropertyRef Name="ProtocolTypeName" />
+            
+            
             <PropertyRef Name="EntryId" />
             <PropertyRef Name="ProtocolHistoryId" />
             <PropertyRef Name="PersonId" />
@@ -2927,22 +3024,22 @@
           <Property Name="Excluded" Type="bit" Nullable="false" />
           <Property Name="ExcludeProtocolId" Type="uniqueidentifier" />
           <Property Name="EntryHeaderId" Type="int" />
-          <Property Name="StudyLevelGroupId" Type="int" />
+          <Property Name="StudyLevelGroupId" Type="int" Nullable="false" />
           <Property Name="LicenseProgramId" Type="int" />
           <Property Name="FacultyId" Type="int" />
           <Property Name="StudyFormId" Type="int" />
           <Property Name="StudyBasisId" Type="int" />
           <Property Name="Number" Type="nvarchar" MaxLength="15" />
-          <Property Name="Date" Type="datetime" />
-          <Property Name="ProtocolTypeId" Type="int" />
+          <Property Name="Date" Type="datetime" Nullable="false" />
+          <Property Name="ProtocolTypeId" Type="int" Nullable="false" />
           <Property Name="Reason" Type="nvarchar" MaxLength="1000" />
           <Property Name="IsOld" Type="bit" Nullable="false" />
           <Property Name="ParentProtocolId" Type="uniqueidentifier" />
-          <Property Name="IsSecond" Type="bit" />
-          <Property Name="IsListener" Type="bit" />
+          <Property Name="IsSecond" Type="bit" Nullable="false" />
+          <Property Name="IsListener" Type="bit" Nullable="false" />
           <Property Name="ProtocolTypeName" Type="nvarchar" Nullable="false" MaxLength="50" />
-          <Property Name="IsParallel" Type="bit" />
-          <Property Name="IsReduced" Type="bit" />
+          <Property Name="IsParallel" Type="bit" Nullable="false" />
+          <Property Name="IsReduced" Type="bit" Nullable="false" />
           <Property Name="OrderDate" Type="datetime" />
           <Property Name="OrderNum" Type="nvarchar" MaxLength="50" />
           <Property Name="OrderNumFor" Type="nvarchar" MaxLength="50" />
@@ -2965,30 +3062,37 @@
             <PropertyRef Name="Id" />
             <PropertyRef Name="AbiturientId" />
             <PropertyRef Name="Excluded" />
+            
+            
+            
             <PropertyRef Name="IsOld" />
+            
+            
             <PropertyRef Name="ProtocolTypeName" />
+            
+            
           </Key>
           <Property Name="Id" Type="uniqueidentifier" Nullable="false" />
           <Property Name="AbiturientId" Type="uniqueidentifier" Nullable="false" />
           <Property Name="Excluded" Type="bit" Nullable="false" />
           <Property Name="ExcludeProtocolId" Type="uniqueidentifier" />
           <Property Name="EntryHeaderId" Type="int" />
-          <Property Name="StudyLevelGroupId" Type="int" />
+          <Property Name="StudyLevelGroupId" Type="int" Nullable="false" />
           <Property Name="LicenseProgramId" Type="int" />
           <Property Name="FacultyId" Type="int" />
           <Property Name="StudyFormId" Type="int" />
           <Property Name="StudyBasisId" Type="int" />
           <Property Name="Number" Type="nvarchar" MaxLength="15" />
-          <Property Name="Date" Type="datetime" />
-          <Property Name="ProtocolTypeId" Type="int" />
+          <Property Name="Date" Type="datetime" Nullable="false" />
+          <Property Name="ProtocolTypeId" Type="int" Nullable="false" />
           <Property Name="Reason" Type="nvarchar" MaxLength="1000" />
           <Property Name="IsOld" Type="bit" Nullable="false" />
           <Property Name="ParentProtocolId" Type="uniqueidentifier" />
-          <Property Name="IsSecond" Type="bit" />
-          <Property Name="IsListener" Type="bit" />
+          <Property Name="IsSecond" Type="bit" Nullable="false" />
+          <Property Name="IsListener" Type="bit" Nullable="false" />
           <Property Name="ProtocolTypeName" Type="nvarchar" Nullable="false" MaxLength="50" />
-          <Property Name="IsParallel" Type="bit" />
-          <Property Name="IsReduced" Type="bit" />
+          <Property Name="IsParallel" Type="bit" Nullable="false" />
+          <Property Name="IsReduced" Type="bit" Nullable="false" />
           <Property Name="OrderDate" Type="datetime" />
           <Property Name="OrderNum" Type="nvarchar" MaxLength="50" />
           <Property Name="OrderNumFor" Type="nvarchar" MaxLength="50" />
@@ -3175,14 +3279,14 @@
           <Key>
             <PropertyRef Name="Id" />
             <PropertyRef Name="Num" />
-            
-            
-            
-            
-            
+            <PropertyRef Name="Name" />
+            <PropertyRef Name="Surname" />
+            <PropertyRef Name="BirthDate" />
+            <PropertyRef Name="BirthPlace" />
+            <PropertyRef Name="PassportTypeId" />
             <PropertyRef Name="Sex" />
-            
-            
+            <PropertyRef Name="NationalityId" />
+            <PropertyRef Name="FIO" />
           </Key>
           <Property Name="Id" Type="uniqueidentifier" Nullable="false" />
           <Property Name="Barcode" Type="int" />
@@ -3221,27 +3325,7 @@
           <Property Name="HostelFacultyId" Type="int" />
           <Property Name="ExamPassFacultyId" Type="int" />
           <Property Name="HasExamPass" Type="bit" />
-          <Property Name="IsExcellent" Type="bit" />
           <Property Name="LanguageId" Type="int" />
-          <Property Name="SchoolTypeId" Type="int" />
-          <Property Name="SchoolCity" Type="nvarchar" MaxLength="100" />
-          <Property Name="SchoolName" Type="nvarchar" MaxLength="500" />
-          <Property Name="SchoolNum" Type="nvarchar" MaxLength="50" />
-          <Property Name="SchoolExitYear" Type="int" />
-          <Property Name="CountryEducId" Type="int" />
-          <Property Name="IsEqual" Type="bit" />
-          <Property Name="AttestatSeries" Type="nvarchar" MaxLength="10" />
-          <Property Name="AttestatNum" Type="nvarchar" MaxLength="20" />
-          <Property Name="DiplomSeries" Type="nvarchar" MaxLength="20" />
-          <Property Name="DiplomNum" Type="nvarchar" MaxLength="20" />
-          <Property Name="SchoolAVG" Type="float" />
-          <Property Name="HighEducation" Type="nvarchar" MaxLength="1000" />
-          <Property Name="HEProfession" Type="nvarchar" MaxLength="500" />
-          <Property Name="HEQualification" Type="nvarchar" MaxLength="50" />
-          <Property Name="HEStudyFormId" Type="int" />
-          <Property Name="HEEntryYear" Type="int" />
-          <Property Name="HEExitYear" Type="int" />
-          <Property Name="HEWork" Type="nvarchar" MaxLength="500" />
           <Property Name="MSVuz" Type="nvarchar" MaxLength="100" />
           <Property Name="MSStudyFormId" Type="int" />
           <Property Name="MSCourse" Type="nvarchar" MaxLength="50" />
@@ -3256,7 +3340,7 @@
           <Property Name="PersonNum" Type="nvarchar" MaxLength="7" />
           <Property Name="FIO" Type="nvarchar" Nullable="false" MaxLength="152" />
           <Property Name="PassportData" Type="nvarchar" MaxLength="532" />
-          <Property Name="EducDocument" Type="nvarchar" MaxLength="41" />
+          <Property Name="EducDocument" Type="nvarchar" MaxLength="42" />
           <Property Name="HostelFacultyAcr" Type="nvarchar" MaxLength="50" />
           <Property Name="CountryName" Type="nvarchar" MaxLength="100" />
           <Property Name="NationalityName" Type="nvarchar" MaxLength="100" />
@@ -3265,7 +3349,6 @@
           <Property Name="HostelEduc" Type="bit" />
           <Property Name="KladrCode" Type="nvarchar" MaxLength="50" />
           <Property Name="SNILS" Type="nvarchar" MaxLength="50" />
-          <Property Name="RegionEducId" Type="int" />
           <Property Name="RegionNumber" Type="nvarchar" MaxLength="2" />
           <Property Name="ForeignNationality" Type="nvarchar" MaxLength="100" />
           <Property Name="ForeignNationalityId" Type="int" />
@@ -3276,6 +3359,115 @@
           <Property Name="EgeInSPbgu" Type="bit" />
           <Property Name="HasTRKI" Type="bit" />
           <Property Name="TRKICertificateNumber" Type="nvarchar" MaxLength="50" />
+          <Property Name="Expr1" Type="int" />
+        </EntityType>
+        <!--Errors Found During Generation:
+      warning 6002: The table/view 'Priem.ed.extPerson_EducationInfo' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.
+      -->
+        <EntityType Name="extPerson_EducationInfo">
+          <Key>
+            <PropertyRef Name="Id" />
+            <PropertyRef Name="PersonId" />
+            <PropertyRef Name="SchoolTypeId" />
+            <PropertyRef Name="SchoolTypeName" />
+            <PropertyRef Name="CountryEducId" />
+            <PropertyRef Name="RegionEducId" />
+            <PropertyRef Name="ForeignCountryEducId" />
+            <PropertyRef Name="SchoolName" />
+            <PropertyRef Name="SchoolExitYear" />
+            <PropertyRef Name="IsExcellent" />
+            <PropertyRef Name="IsEqual" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="PersonId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="SchoolTypeId" Type="int" Nullable="false" />
+          <Property Name="SchoolTypeName" Type="nvarchar" Nullable="false" MaxLength="50" />
+          <Property Name="SchoolTypeFullName" Type="nvarchar" MaxLength="150" />
+          <Property Name="CountryEducId" Type="int" Nullable="false" />
+          <Property Name="CountryEducName" Type="nvarchar" MaxLength="100" />
+          <Property Name="CountryEducOSKMCode" Type="nvarchar" MaxLength="10" />
+          <Property Name="RegionEducId" Type="int" Nullable="false" />
+          <Property Name="RegionEducName" Type="nvarchar" MaxLength="100" />
+          <Property Name="RegionEducNumber" Type="nvarchar" MaxLength="2" />
+          <Property Name="ForeignCountryEducId" Type="int" Nullable="false" />
+          <Property Name="ForeignCountryEducName" Type="nvarchar" MaxLength="100" />
+          <Property Name="ForeignCountryEducOSKMCode" Type="nvarchar" MaxLength="10" />
+          <Property Name="ForeignCountryEducPriemDictionaryId" Type="int" />
+          <Property Name="SchoolCity" Type="nvarchar" MaxLength="100" />
+          <Property Name="SchoolName" Type="nvarchar" Nullable="false" MaxLength="500" />
+          <Property Name="SchoolNum" Type="nvarchar" MaxLength="50" />
+          <Property Name="SchoolExitYear" Type="int" Nullable="false" />
+          <Property Name="AttestatSeries" Type="nvarchar" MaxLength="10" />
+          <Property Name="AttestatNum" Type="nvarchar" MaxLength="20" />
+          <Property Name="DiplomSeries" Type="nvarchar" MaxLength="20" />
+          <Property Name="DiplomNum" Type="nvarchar" MaxLength="20" />
+          <Property Name="SchoolAVG" Type="float" />
+          <Property Name="IsExcellent" Type="bit" Nullable="false" />
+          <Property Name="IsEqual" Type="bit" Nullable="false" />
+          <Property Name="EqualDocumentNumber" Type="nvarchar" MaxLength="50" />
+          <Property Name="HighEducation" Type="nvarchar" MaxLength="1000" />
+          <Property Name="HEProfession" Type="nvarchar" MaxLength="500" />
+          <Property Name="HEQualification" Type="nvarchar" MaxLength="50" />
+          <Property Name="HEStudyFormId" Type="int" />
+          <Property Name="HEStudyFormName" Type="nvarchar" MaxLength="50" />
+          <Property Name="HEStudyFormFISName" Type="nvarchar" MaxLength="50" />
+          <Property Name="HEEntryYear" Type="int" />
+          <Property Name="HEExitYear" Type="int" />
+          <Property Name="HEWork" Type="nvarchar" MaxLength="500" />
+        </EntityType>
+        <!--Errors Found During Generation:
+      warning 6002: The table/view 'Priem.ed.extPerson_EducationInfo_Current' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.
+      -->
+        <EntityType Name="extPerson_EducationInfo_Current">
+          <Key>
+            <PropertyRef Name="Id" />
+            <PropertyRef Name="PersonId" />
+            <PropertyRef Name="SchoolTypeId" />
+            <PropertyRef Name="SchoolTypeName" />
+            <PropertyRef Name="CountryEducId" />
+            <PropertyRef Name="RegionEducId" />
+            <PropertyRef Name="ForeignCountryEducId" />
+            <PropertyRef Name="SchoolName" />
+            <PropertyRef Name="SchoolExitYear" />
+            <PropertyRef Name="IsExcellent" />
+            <PropertyRef Name="IsEqual" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="PersonId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="SchoolTypeId" Type="int" Nullable="false" />
+          <Property Name="SchoolTypeName" Type="nvarchar" Nullable="false" MaxLength="50" />
+          <Property Name="SchoolTypeFullName" Type="nvarchar" MaxLength="150" />
+          <Property Name="CountryEducId" Type="int" Nullable="false" />
+          <Property Name="CountryEducName" Type="nvarchar" MaxLength="100" />
+          <Property Name="CountryEducOSKMCode" Type="nvarchar" MaxLength="10" />
+          <Property Name="RegionEducId" Type="int" Nullable="false" />
+          <Property Name="RegionEducName" Type="nvarchar" MaxLength="100" />
+          <Property Name="RegionEducNumber" Type="nvarchar" MaxLength="2" />
+          <Property Name="ForeignCountryEducId" Type="int" Nullable="false" />
+          <Property Name="ForeignCountryEducName" Type="nvarchar" MaxLength="100" />
+          <Property Name="ForeignCountryEducOSKMCode" Type="nvarchar" MaxLength="10" />
+          <Property Name="ForeignCountryEducPriemDictionaryId" Type="int" />
+          <Property Name="SchoolCity" Type="nvarchar" MaxLength="100" />
+          <Property Name="SchoolName" Type="nvarchar" Nullable="false" MaxLength="500" />
+          <Property Name="SchoolNum" Type="nvarchar" MaxLength="50" />
+          <Property Name="SchoolExitYear" Type="int" Nullable="false" />
+          <Property Name="AttestatSeries" Type="nvarchar" MaxLength="10" />
+          <Property Name="AttestatNum" Type="nvarchar" MaxLength="20" />
+          <Property Name="DiplomSeries" Type="nvarchar" MaxLength="20" />
+          <Property Name="DiplomNum" Type="nvarchar" MaxLength="20" />
+          <Property Name="SchoolAVG" Type="float" />
+          <Property Name="IsExcellent" Type="bit" Nullable="false" />
+          <Property Name="IsEqual" Type="bit" Nullable="false" />
+          <Property Name="EqualDocumentNumber" Type="nvarchar" MaxLength="50" />
+          <Property Name="HighEducation" Type="nvarchar" MaxLength="1000" />
+          <Property Name="HEProfession" Type="nvarchar" MaxLength="500" />
+          <Property Name="HEQualification" Type="nvarchar" MaxLength="50" />
+          <Property Name="HEStudyFormId" Type="int" />
+          <Property Name="HEStudyFormName" Type="nvarchar" MaxLength="50" />
+          <Property Name="HEStudyFormFISName" Type="nvarchar" MaxLength="50" />
+          <Property Name="HEEntryYear" Type="int" />
+          <Property Name="HEExitYear" Type="int" />
+          <Property Name="HEWork" Type="nvarchar" MaxLength="500" />
         </EntityType>
         <!--Errors Found During Generation:
       warning 6002: The table/view 'Priem.ed.extPersonAll' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.
@@ -3397,8 +3589,15 @@
             <PropertyRef Name="Id" />
             <PropertyRef Name="AbiturientId" />
             <PropertyRef Name="Excluded" />
+            
+            
+            
             <PropertyRef Name="IsOld" />
+            
+            
             <PropertyRef Name="ProtocolTypeName" />
+            
+            
             <PropertyRef Name="StudyBasis" />
             <PropertyRef Name="StudyForm" />
             <PropertyRef Name="ProtocolHistoryId" />
@@ -3408,22 +3607,22 @@
           <Property Name="Excluded" Type="bit" Nullable="false" />
           <Property Name="ExcludeProtocolId" Type="uniqueidentifier" />
           <Property Name="EntryHeaderId" Type="int" />
-          <Property Name="StudyLevelGroupId" Type="int" />
+          <Property Name="StudyLevelGroupId" Type="int" Nullable="false" />
           <Property Name="FacultyId" Type="int" />
           <Property Name="LicenseProgramId" Type="int" />
           <Property Name="StudyFormId" Type="int" />
           <Property Name="StudyBasisId" Type="int" />
           <Property Name="Number" Type="nvarchar" MaxLength="15" />
-          <Property Name="Date" Type="datetime" />
-          <Property Name="ProtocolTypeId" Type="int" />
+          <Property Name="Date" Type="datetime" Nullable="false" />
+          <Property Name="ProtocolTypeId" Type="int" Nullable="false" />
           <Property Name="Reason" Type="nvarchar" MaxLength="1000" />
           <Property Name="IsOld" Type="bit" Nullable="false" />
           <Property Name="ParentProtocolId" Type="uniqueidentifier" />
-          <Property Name="IsSecond" Type="bit" />
-          <Property Name="IsListener" Type="bit" />
+          <Property Name="IsSecond" Type="bit" Nullable="false" />
+          <Property Name="IsListener" Type="bit" Nullable="false" />
           <Property Name="ProtocolTypeName" Type="nvarchar" Nullable="false" MaxLength="50" />
-          <Property Name="IsParallel" Type="bit" />
-          <Property Name="IsReduced" Type="bit" />
+          <Property Name="IsParallel" Type="bit" Nullable="false" />
+          <Property Name="IsReduced" Type="bit" Nullable="false" />
           <Property Name="Faculty" Type="nvarchar" MaxLength="100" />
           <Property Name="StudyBasis" Type="nvarchar" Nullable="false" MaxLength="50" />
           <Property Name="StudyForm" Type="nvarchar" Nullable="false" MaxLength="50" />
@@ -3439,6 +3638,7 @@
       -->
         <EntityType Name="hlpAbiturientActionLog">
           <Key>
+            
             <PropertyRef Name="Id" />
             <PropertyRef Name="FacultyId" />
             <PropertyRef Name="LicenseProgramId" />
@@ -3453,7 +3653,7 @@
             <PropertyRef Name="ActionType" />
           </Key>
           <Property Name="PersonNum" Type="nvarchar" MaxLength="7" />
-          <Property Name="FIO" Type="nvarchar" MaxLength="152" />
+          <Property Name="FIO" Type="nvarchar" Nullable="false" MaxLength="152" />
           <Property Name="Id" Type="uniqueidentifier" Nullable="false" />
           <Property Name="RegNum" Type="nvarchar" MaxLength="50" />
           <Property Name="FacultyId" Type="int" Nullable="false" />
@@ -4039,7 +4239,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Abiturient_Competition">
-          <End Role="Competition" Type="Priem2012Model.Store.Competition" Multiplicity="0..1" />
+          <End Role="Competition" Type="Priem2012Model.Store.Competition" Multiplicity="1" />
           <End Role="Abiturient" Type="Priem2012Model.Store.Abiturient" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Competition">
@@ -4075,7 +4275,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Abiturient_Language">
-          <End Role="Language" Type="Priem2012Model.Store.Language" Multiplicity="0..1" />
+          <End Role="Language" Type="Priem2012Model.Store.Language" Multiplicity="1" />
           <End Role="Abiturient" Type="Priem2012Model.Store.Abiturient" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Language">
@@ -4701,7 +4901,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_OrderNumbers_Signer">
-          <End Role="Signer" Type="Priem2012Model.Store.Signer" Multiplicity="0..1" />
+          <End Role="Signer" Type="Priem2012Model.Store.Signer" Multiplicity="1" />
           <End Role="OrderNumbers" Type="Priem2012Model.Store.OrderNumbers" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Signer">
@@ -4713,7 +4913,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_PaidData_Abiturient">
-          <End Role="Abiturient" Type="Priem2012Model.Store.Abiturient" Multiplicity="0..1">
+          <End Role="Abiturient" Type="Priem2012Model.Store.Abiturient" Multiplicity="1">
             <OnDelete Action="Cascade" />
           </End>
           <End Role="PaidData" Type="Priem2012Model.Store.PaidData" Multiplicity="*" />
@@ -4727,7 +4927,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_PaidData_DogovorType">
-          <End Role="DogovorType" Type="Priem2012Model.Store.DogovorType" Multiplicity="0..1" />
+          <End Role="DogovorType" Type="Priem2012Model.Store.DogovorType" Multiplicity="1" />
           <End Role="PaidData" Type="Priem2012Model.Store.PaidData" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="DogovorType">
@@ -4739,7 +4939,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_PaidData_PayPeriod">
-          <End Role="PayPeriod" Type="Priem2012Model.Store.PayPeriod" Multiplicity="0..1" />
+          <End Role="PayPeriod" Type="Priem2012Model.Store.PayPeriod" Multiplicity="1" />
           <End Role="PaidData" Type="Priem2012Model.Store.PaidData" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="PayPeriod">
@@ -4889,7 +5089,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Person_EducationInfo_Country">
-          <End Role="Country" Type="Priem2012Model.Store.Country" Multiplicity="0..1" />
+          <End Role="Country" Type="Priem2012Model.Store.Country" Multiplicity="1" />
           <End Role="Person_EducationInfo" Type="Priem2012Model.Store.Person_EducationInfo" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Country">
@@ -4901,7 +5101,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Person_EducationInfo_ForeignCountry">
-          <End Role="ForeignCountry" Type="Priem2012Model.Store.ForeignCountry" Multiplicity="0..1" />
+          <End Role="ForeignCountry" Type="Priem2012Model.Store.ForeignCountry" Multiplicity="1" />
           <End Role="Person_EducationInfo" Type="Priem2012Model.Store.Person_EducationInfo" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="ForeignCountry">
@@ -4927,7 +5127,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Person_EducationInfo_SchoolType">
-          <End Role="SchoolType" Type="Priem2012Model.Store.SchoolType" Multiplicity="0..1" />
+          <End Role="SchoolType" Type="Priem2012Model.Store.SchoolType" Multiplicity="1" />
           <End Role="Person_EducationInfo" Type="Priem2012Model.Store.Person_EducationInfo" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="SchoolType">
@@ -4999,7 +5199,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="fk_Protocol_ProtocolType">
-          <End Role="ProtocolType" Type="Priem2012Model.Store.ProtocolType" Multiplicity="0..1" />
+          <End Role="ProtocolType" Type="Priem2012Model.Store.ProtocolType" Multiplicity="1" />
           <End Role="Protocol" Type="Priem2012Model.Store.Protocol" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="ProtocolType">
@@ -5007,6 +5207,30 @@
             </Principal>
             <Dependent Role="Protocol">
               <PropertyRef Name="ProtocolTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Protocol_SP_Faculty">
+          <End Role="SP_Faculty" Type="Priem2012Model.Store.SP_Faculty" Multiplicity="0..1" />
+          <End Role="Protocol" Type="Priem2012Model.Store.Protocol" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SP_Faculty">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Protocol">
+              <PropertyRef Name="FacultyId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Protocol_SP_LicenseProgram">
+          <End Role="SP_LicenseProgram" Type="Priem2012Model.Store.SP_LicenseProgram" Multiplicity="0..1" />
+          <End Role="Protocol" Type="Priem2012Model.Store.Protocol" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SP_LicenseProgram">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Protocol">
+              <PropertyRef Name="LicenseProgramId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -5023,7 +5247,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="fk_Protocol_StudyForm">
-          <End Role="StudyForm" Type="Priem2012Model.Store.StudyForm" Multiplicity="0..1" />
+          <End Role="StudyForm" Type="Priem2012Model.Store.StudyForm" Multiplicity="1" />
           <End Role="Protocol" Type="Priem2012Model.Store.Protocol" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="StudyForm">
@@ -5886,6 +6110,9 @@
           <Parameter Name="DateFinish" Type="smalldatetime" Mode="In" />
           <Parameter Name="Props" Type="nvarchar" Mode="In" />
         </Function>
+        <Function Name="Person_deleteAllInfo" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="ed">
+          <Parameter Name="Id" Type="uniqueidentifier" Mode="In" />
+        </Function>
         <Function Name="Person_EducationInfo_delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="ed">
           <Parameter Name="PersonId" Type="uniqueidentifier" Mode="In" />
           <Parameter Name="id" Type="int" Mode="In" />
@@ -5991,7 +6218,7 @@
           <Parameter Name="ExtraInfo" Type="nvarchar" Mode="In" />
           <Parameter Name="ScienceWork" Type="nvarchar" Mode="In" />
           <Parameter Name="StartEnglish" Type="bit" Mode="In" />
-          <Parameter Name="EnglishMark" Type="int" Mode="In" />
+          <Parameter Name="EnglishMark" Type="float" Mode="In" />
           <Parameter Name="EgeInSpbgu" Type="bit" Mode="In" />
           <Parameter Name="SNILS" Type="nvarchar" Mode="In" />
           <Parameter Name="HasTRKI" Type="bit" Mode="In" />
@@ -6084,7 +6311,7 @@
           <Parameter Name="ExtraInfo" Type="nvarchar" Mode="In" />
           <Parameter Name="ScienceWork" Type="nvarchar" Mode="In" />
           <Parameter Name="StartEnglish" Type="bit" Mode="In" />
-          <Parameter Name="EnglishMark" Type="int" Mode="In" />
+          <Parameter Name="EnglishMark" Type="float" Mode="In" />
           <Parameter Name="EgeInSpbgu" Type="bit" Mode="In" />
           <Parameter Name="id" Type="uniqueidentifier" Mode="In" />
         </Function>
@@ -6362,7 +6589,7 @@
             <Parameter Name="ExtraInfo" Mode="In" Type="String" />
             <Parameter Name="ScienceWork" Mode="In" Type="String" />
             <Parameter Name="StartEnglish" Mode="In" Type="Boolean" />
-            <Parameter Name="EnglishMark" Mode="In" Type="Int32" />
+            <Parameter Name="EnglishMark" Mode="In" Type="Double" />
             <Parameter Name="EgeInSpbgu" Mode="In" Type="Boolean" />
             <Parameter Name="SNILS" Mode="In" Type="String" />
             <Parameter Name="HasTRKI" Mode="In" Type="Boolean" />
@@ -6445,7 +6672,7 @@
             <Parameter Name="ExtraInfo" Mode="In" Type="String" />
             <Parameter Name="ScienceWork" Mode="In" Type="String" />
             <Parameter Name="StartEnglish" Mode="In" Type="Boolean" />
-            <Parameter Name="EnglishMark" Mode="In" Type="Int32" />
+            <Parameter Name="EnglishMark" Mode="In" Type="Double" />
             <Parameter Name="EgeInSpbgu" Mode="In" Type="Boolean" />
             <Parameter Name="id" Mode="In" Type="Guid" />
           </FunctionImport>
@@ -7339,9 +7566,6 @@
             <End Role="Country" EntitySet="Country" />
             <End Role="Person" EntitySet="Person" />
           </AssociationSet>
-          <FunctionImport Name="Person_deleteAllInfo">
-          <Parameter Name="Id" Mode="In" Type="Guid" />
-          </FunctionImport>
           <AssociationSet Name="FK_OlympBook_OlympName" Association="Priem2012Model.FK_OlympBook_OlympName">
             <End Role="OlympName" EntitySet="OlympName" />
             <End Role="OlympBook" EntitySet="OlympBook" />
@@ -7453,7 +7677,6 @@
             <End Role="StudyLevelGroup" EntitySet="StudyLevelGroup" />
             <End Role="StudyLevel" EntitySet="StudyLevel" />
           </AssociationSet>
-          <EntitySet Name="extPerson" EntityType="Priem2012Model.extPerson" />
           <EntitySet Name="SchoolNames" EntityType="Priem2012Model.SchoolNames" />
           <FunctionImport Name="SchoolNames_Delete">
           <Parameter Name="id" Mode="In" Type="Int32" />
@@ -7856,6 +8079,20 @@
             <Parameter Name="IsGosLine" Mode="In" Type="Boolean" />
             <Parameter Name="id" Mode="In" Type="Guid" />
           </FunctionImport>
+          <EntitySet Name="extPerson" EntityType="Priem2012Model.extPerson" />
+          <EntitySet Name="extPerson_EducationInfo" EntityType="Priem2012Model.extPerson_EducationInfo" />
+          <EntitySet Name="extPerson_EducationInfo_Current" EntityType="Priem2012Model.extPerson_EducationInfo_Current" />
+          <FunctionImport Name="Person_deleteAllInfo">
+          <Parameter Name="Id" Mode="In" Type="Guid" />
+          </FunctionImport>
+          <AssociationSet Name="FK_Protocol_SP_Faculty" Association="Priem2012Model.FK_Protocol_SP_Faculty">
+            <End Role="SP_Faculty" EntitySet="SP_Faculty" />
+            <End Role="Protocol" EntitySet="Protocol" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Protocol_SP_LicenseProgram" Association="Priem2012Model.FK_Protocol_SP_LicenseProgram">
+            <End Role="SP_LicenseProgram" EntitySet="SP_LicenseProgram" />
+            <End Role="Protocol" EntitySet="Protocol" />
+          </AssociationSet>
           </EntityContainer>
         <EntityType Name="AttMarks">
           <Key>
@@ -8043,6 +8280,7 @@
           <Property Name="Name" Type="String" Nullable="false" MaxLength="50" Unicode="true" FixedLength="false" />
           <Property Name="FullName" Type="String" MaxLength="150" Unicode="true" FixedLength="false" />
           <NavigationProperty Name="Person_EducationInfo" Relationship="Priem2012Model.FK_Person_EducationInfo_SchoolType" FromRole="SchoolType" ToRole="Person_EducationInfo" />
+          <Property Type="Int32" Name="Sort" Nullable="false" />
         </EntityType>
         <EntityType Name="SP_Faculty">
           <Key>
@@ -8059,6 +8297,7 @@
           <NavigationProperty Name="Person_AdditionalInfo1" Relationship="Priem2012Model.FK_Person_AdditionalInfo_SP_HostelFaculty" FromRole="SP_Faculty" ToRole="Person_AdditionalInfo" />
           <NavigationProperty Name="SP_ObrazProgram" Relationship="Priem2012Model.FK_SP_ObrazProgram_SP_Faculty" FromRole="SP_Faculty" ToRole="SP_ObrazProgram" />
           <NavigationProperty Name="Entry" Relationship="Priem2012Model.FK_Entry_SP_Faculty" FromRole="SP_Faculty" ToRole="Entry" />
+          <NavigationProperty Name="Protocol" Relationship="Priem2012Model.FK_Protocol_SP_Faculty" FromRole="SP_Faculty" ToRole="Protocol" />
         </EntityType>
         <EntityType Name="StudyBasis">
           <Key>
@@ -8220,16 +8459,16 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Type="Guid" Name="Id" Nullable="false" />
-          <Property Type="String" Name="DogovorNum" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Type="DateTime" Name="DogovorDate" Precision="3" />
-          <Property Type="Int32" Name="DogovorTypeId" />
+          <Property Type="String" Name="DogovorNum" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Type="DateTime" Name="DogovorDate" Precision="3" Nullable="false" />
+          <Property Type="Int32" Name="DogovorTypeId" Nullable="false" />
           <Property Type="Int32" Name="ProrektorId" />
           <Property Type="String" Name="Qualification" MaxLength="500" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="Srok" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Type="DateTime" Name="DateStart" Precision="0" />
-          <Property Type="DateTime" Name="DateFinish" Precision="0" />
+          <Property Type="String" Name="Srok" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Type="DateTime" Name="DateStart" Precision="0" Nullable="false" />
+          <Property Type="DateTime" Name="DateFinish" Precision="0" Nullable="false" />
           <Property Type="String" Name="SumFirstYear" MaxLength="500" FixedLength="false" Unicode="true" />
-          <Property Type="Int32" Name="PayPeriodId" />
+          <Property Type="Int32" Name="PayPeriodId" Nullable="false" />
           <Property Type="String" Name="SumFirstPeriod" MaxLength="500" FixedLength="false" Unicode="true" />
           <Property Type="String" Name="AbitFIORod" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Type="String" Name="Parent" MaxLength="500" FixedLength="false" Unicode="true" />
@@ -8242,7 +8481,7 @@
           <Property Type="String" Name="CustomerReason" MaxLength="500" FixedLength="false" Unicode="true" />
           <Property Type="String" Name="CustomerINN" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Type="String" Name="CustomerRS" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Type="Guid" Name="AbiturientId" />
+          <Property Type="Guid" Name="AbiturientId" Nullable="false" />
           <Property Type="Boolean" Name="IsOpen" Nullable="false" />
           <Property Type="String" Name="Holder" MaxLength="50" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="DogovorType" Relationship="Priem2012Model.FK_PaidData_DogovorType" FromRole="PaidData" ToRole="DogovorType" />
@@ -8253,7 +8492,7 @@
           <Property Type="String" Name="SrokIndividual" MaxLength="150" FixedLength="false" Unicode="true" />
         </EntityType>
         <Association Name="FK_PaidData_DogovorType">
-          <End Type="Priem2012Model.DogovorType" Role="DogovorType" Multiplicity="0..1" />
+          <End Type="Priem2012Model.DogovorType" Role="DogovorType" Multiplicity="1" />
           <End Type="Priem2012Model.PaidData" Role="PaidData" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="DogovorType">
@@ -8265,7 +8504,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_PaidData_PayPeriod">
-          <End Type="Priem2012Model.PayPeriod" Role="PayPeriod" Multiplicity="0..1" />
+          <End Type="Priem2012Model.PayPeriod" Role="PayPeriod" Multiplicity="1" />
           <End Type="Priem2012Model.PaidData" Role="PaidData" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="PayPeriod">
@@ -8406,6 +8645,7 @@
           <NavigationProperty Name="StudyLevelGroup" Relationship="Priem2012Model.FK_StudyLevel_StudyLevelGroup" FromRole="StudyLevel" ToRole="StudyLevelGroup" />
           <NavigationProperty Name="SP_LicenseProgram" Relationship="Priem2012Model.FK_SP_LicenseProgram_StudyLevel" FromRole="StudyLevel" ToRole="SP_LicenseProgram" />
           <NavigationProperty Name="Entry" Relationship="Priem2012Model.FK_Entry_StudyLevel" FromRole="StudyLevel" ToRole="Entry" />
+          <Property Type="String" Name="NameRod" MaxLength="100" FixedLength="false" Unicode="true" />
         </EntityType>
         <Association Name="fk_Exam_ExamName">
           <End Type="Priem2012Model.ExamName" Role="ExamName" Multiplicity="1" />
@@ -8778,7 +9018,7 @@
           <Property Type="Guid" Name="PersonId" Nullable="false" />
           <Property Type="String" Name="RegNum" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Type="Guid" Name="EntryId" Nullable="false" />
-          <Property Type="Int32" Name="CompetitionId" />
+          <Property Type="Int32" Name="CompetitionId" Nullable="false" />
           <Property Type="Boolean" Name="IsListener" Nullable="false" />
           <Property Type="Boolean" Name="IsPaid" Nullable="false" />
           <Property Type="Boolean" Name="BackDoc" Nullable="false" />
@@ -8793,7 +9033,7 @@
           <Property Type="Int32" Name="CelCompetitionId" />
           <Property Type="String" Name="CelCompetitionText" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Type="Boolean" Name="CompFromOlymp" Nullable="false" />
-          <Property Type="Int32" Name="LanguageId" />
+          <Property Type="Int32" Name="LanguageId" Nullable="false" />
           <Property Type="Boolean" Name="HasOriginals" Nullable="false" />
           <Property Type="String" Name="StudyNumber" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Type="Double" Name="SessionAVG" />
@@ -8830,24 +9070,26 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Type="Guid" Name="Id" Nullable="false" />
-          <Property Type="Int32" Name="StudyLevelGroupId" />
+          <Property Type="Int32" Name="StudyLevelGroupId" Nullable="false" />
           <Property Type="Int32" Name="FacultyId" />
           <Property Type="Int32" Name="LicenseProgramId" />
-          <Property Type="Int32" Name="StudyFormId" />
+          <Property Type="Int32" Name="StudyFormId" Nullable="false" />
           <Property Type="Int32" Name="StudyBasisId" />
           <Property Type="String" Name="Number" MaxLength="15" FixedLength="false" Unicode="true" />
-          <Property Type="DateTime" Name="Date" Precision="3" />
-          <Property Type="Int32" Name="ProtocolTypeId" />
+          <Property Type="DateTime" Name="Date" Precision="3" Nullable="false" />
+          <Property Type="Int32" Name="ProtocolTypeId" Nullable="false" />
           <Property Type="String" Name="Reason" MaxLength="1000" FixedLength="false" Unicode="true" />
           <Property Type="Boolean" Name="IsOld" Nullable="false" />
           <Property Type="Guid" Name="ParentProtocolId" />
-          <Property Type="Boolean" Name="IsSecond" />
-          <Property Type="Boolean" Name="IsListener" />
+          <Property Type="Boolean" Name="IsSecond" Nullable="false" />
+          <Property Type="Boolean" Name="IsListener" Nullable="false" />
           <NavigationProperty Name="ProtocolType" Relationship="Priem2012Model.fk_Protocol_ProtocolType" FromRole="Protocol" ToRole="ProtocolType" />
           <NavigationProperty Name="StudyBasis" Relationship="Priem2012Model.fk_Protocol_StudyBasis" FromRole="Protocol" ToRole="StudyBasis" />
           <NavigationProperty Name="StudyForm" Relationship="Priem2012Model.fk_Protocol_StudyForm" FromRole="Protocol" ToRole="StudyForm" />
-          <Property Type="Boolean" Name="IsParallel" />
-          <Property Type="Boolean" Name="IsReduced" />
+          <Property Type="Boolean" Name="IsParallel" Nullable="false" />
+          <Property Type="Boolean" Name="IsReduced" Nullable="false" />
+          <NavigationProperty Name="SP_Faculty" Relationship="Priem2012Model.FK_Protocol_SP_Faculty" FromRole="Protocol" ToRole="SP_Faculty" />
+          <NavigationProperty Name="SP_LicenseProgram" Relationship="Priem2012Model.FK_Protocol_SP_LicenseProgram" FromRole="Protocol" ToRole="SP_LicenseProgram" />
         </EntityType>
         <EntityType Name="extExamInEntry">
           <Key>
@@ -9035,7 +9277,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Abiturient_Competition">
-          <End Type="Priem2012Model.Competition" Role="Competition" Multiplicity="0..1" />
+          <End Type="Priem2012Model.Competition" Role="Competition" Multiplicity="1" />
           <End Type="Priem2012Model.Abiturient" Role="Abiturient" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Competition">
@@ -9071,7 +9313,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_PaidData_Abiturient">
-          <End Type="Priem2012Model.Abiturient" Role="Abiturient" Multiplicity="0..1" />
+          <End Type="Priem2012Model.Abiturient" Role="Abiturient" Multiplicity="1" />
           <End Type="Priem2012Model.PaidData" Role="PaidData" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Abiturient">
@@ -9083,7 +9325,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="fk_Protocol_ProtocolType">
-          <End Type="Priem2012Model.ProtocolType" Role="ProtocolType" Multiplicity="0..1" />
+          <End Type="Priem2012Model.ProtocolType" Role="ProtocolType" Multiplicity="1" />
           <End Type="Priem2012Model.Protocol" Role="Protocol" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="ProtocolType">
@@ -9107,7 +9349,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="fk_Protocol_StudyForm">
-          <End Type="Priem2012Model.StudyForm" Role="StudyForm" Multiplicity="0..1" />
+          <End Type="Priem2012Model.StudyForm" Role="StudyForm" Multiplicity="1" />
           <End Type="Priem2012Model.Protocol" Role="Protocol" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="StudyForm">
@@ -9199,7 +9441,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Abiturient_Language">
-          <End Type="Priem2012Model.Language" Role="Language" Multiplicity="0..1" />
+          <End Type="Priem2012Model.Language" Role="Language" Multiplicity="1" />
           <End Type="Priem2012Model.Abiturient" Role="Abiturient" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Language">
@@ -9417,22 +9659,22 @@
           <Property Type="Boolean" Name="Excluded" Nullable="false" />
           <Property Type="Guid" Name="ExcludeProtocolId" />
           <Property Type="Int32" Name="EntryHeaderId" />
-          <Property Type="Int32" Name="StudyLevelGroupId" />
+          <Property Type="Int32" Name="StudyLevelGroupId" Nullable="false" />
           <Property Type="Int32" Name="LicenseProgramId" />
           <Property Type="Int32" Name="FacultyId" />
           <Property Type="Int32" Name="StudyFormId" />
           <Property Type="Int32" Name="StudyBasisId" />
           <Property Type="String" Name="Number" MaxLength="15" FixedLength="false" Unicode="true" />
-          <Property Type="DateTime" Name="Date" Precision="3" />
-          <Property Type="Int32" Name="ProtocolTypeId" />
+          <Property Type="DateTime" Name="Date" Precision="3" Nullable="false" />
+          <Property Type="Int32" Name="ProtocolTypeId" Nullable="false" />
           <Property Type="String" Name="Reason" MaxLength="1000" FixedLength="false" Unicode="true" />
           <Property Type="Boolean" Name="IsOld" Nullable="false" />
           <Property Type="Guid" Name="ParentProtocolId" />
-          <Property Type="Boolean" Name="IsSecond" />
-          <Property Type="Boolean" Name="IsListener" />
+          <Property Type="Boolean" Name="IsSecond" Nullable="false" />
+          <Property Type="Boolean" Name="IsListener" Nullable="false" />
           <Property Type="String" Name="ProtocolTypeName" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Type="Boolean" Name="IsParallel" />
-          <Property Type="Boolean" Name="IsReduced" />
+          <Property Type="Boolean" Name="IsParallel" Nullable="false" />
+          <Property Type="Boolean" Name="IsReduced" Nullable="false" />
           <Property Type="DateTime" Name="OrderDate" Precision="3" />
           <Property Type="String" Name="OrderNum" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Type="String" Name="OrderNumFor" MaxLength="50" FixedLength="false" Unicode="true" />
@@ -9463,22 +9705,22 @@
           <Property Type="Boolean" Name="Excluded" Nullable="false" />
           <Property Type="Guid" Name="ExcludeProtocolId" />
           <Property Type="Int32" Name="EntryHeaderId" />
-          <Property Type="Int32" Name="StudyLevelGroupId" />
+          <Property Type="Int32" Name="StudyLevelGroupId" Nullable="false" />
           <Property Type="Int32" Name="FacultyId" />
           <Property Type="Int32" Name="LicenseProgramId" />
           <Property Type="Int32" Name="StudyFormId" />
           <Property Type="Int32" Name="StudyBasisId" />
           <Property Type="String" Name="Number" MaxLength="15" FixedLength="false" Unicode="true" />
-          <Property Type="DateTime" Name="Date" Precision="3" />
-          <Property Type="Int32" Name="ProtocolTypeId" />
+          <Property Type="DateTime" Name="Date" Precision="3" Nullable="false" />
+          <Property Type="Int32" Name="ProtocolTypeId" Nullable="false" />
           <Property Type="String" Name="Reason" MaxLength="1000" FixedLength="false" Unicode="true" />
           <Property Type="Boolean" Name="IsOld" Nullable="false" />
           <Property Type="Guid" Name="ParentProtocolId" />
-          <Property Type="Boolean" Name="IsSecond" />
-          <Property Type="Boolean" Name="IsListener" />
+          <Property Type="Boolean" Name="IsSecond" Nullable="false" />
+          <Property Type="Boolean" Name="IsListener" Nullable="false" />
           <Property Type="String" Name="ProtocolTypeName" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Type="Boolean" Name="IsParallel" />
-          <Property Type="Boolean" Name="IsReduced" />
+          <Property Type="Boolean" Name="IsParallel" Nullable="false" />
+          <Property Type="Boolean" Name="IsReduced" Nullable="false" />
           <Property Type="String" Name="Faculty" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Type="String" Name="StudyBasis" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Type="String" Name="StudyForm" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
@@ -9502,19 +9744,19 @@
           <Property Type="Boolean" Name="Excluded" Nullable="false" />
           <Property Type="Guid" Name="ExcludeProtocolId" />
           <Property Type="Int32" Name="EntryHeaderId" />
-          <Property Type="Int32" Name="StudyLevelGroupId" />
+          <Property Type="Int32" Name="StudyLevelGroupId" Nullable="false" />
           <Property Type="Int32" Name="LicenseProgramId" />
           <Property Type="Int32" Name="FacultyId" />
           <Property Type="Int32" Name="StudyFormId" />
           <Property Type="Int32" Name="StudyBasisId" />
-          <Property Type="String" Name="Number" MaxLength="10" FixedLength="false" Unicode="true" />
-          <Property Type="DateTime" Name="Date" Precision="3" />
-          <Property Type="Int32" Name="ProtocolTypeId" />
+          <Property Type="String" Name="Number" MaxLength="15" FixedLength="false" Unicode="true" />
+          <Property Type="DateTime" Name="Date" Precision="3" Nullable="false" />
+          <Property Type="Int32" Name="ProtocolTypeId" Nullable="false" />
           <Property Type="String" Name="Reason" MaxLength="1000" FixedLength="false" Unicode="true" />
           <Property Type="Boolean" Name="IsOld" Nullable="false" />
           <Property Type="Guid" Name="ParentProtocolId" />
-          <Property Type="Boolean" Name="IsSecond" />
-          <Property Type="Boolean" Name="IsListener" />
+          <Property Type="Boolean" Name="IsSecond" Nullable="false" />
+          <Property Type="Boolean" Name="IsListener" Nullable="false" />
           <Property Type="String" Name="ProtocolTypeName" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="extDisEntryView">
@@ -9530,22 +9772,22 @@
           <Property Type="Boolean" Name="Excluded" Nullable="false" />
           <Property Type="Guid" Name="ExcludeProtocolId" />
           <Property Type="Int32" Name="EntryHeaderId" />
-          <Property Type="Int32" Name="StudyLevelGroupId" />
+          <Property Type="Int32" Name="StudyLevelGroupId" Nullable="false" />
           <Property Type="Int32" Name="LicenseProgramId" />
           <Property Type="Int32" Name="FacultyId" />
           <Property Type="Int32" Name="StudyFormId" />
           <Property Type="Int32" Name="StudyBasisId" />
-          <Property Type="String" Name="Number" MaxLength="10" FixedLength="false" Unicode="true" />
-          <Property Type="DateTime" Name="Date" Precision="3" />
-          <Property Type="Int32" Name="ProtocolTypeId" />
+          <Property Type="String" Name="Number" MaxLength="15" FixedLength="false" Unicode="true" />
+          <Property Type="DateTime" Name="Date" Precision="3" Nullable="false" />
+          <Property Type="Int32" Name="ProtocolTypeId" Nullable="false" />
           <Property Type="String" Name="Reason" MaxLength="1000" FixedLength="false" Unicode="true" />
           <Property Type="Boolean" Name="IsOld" Nullable="false" />
           <Property Type="Guid" Name="ParentProtocolId" />
-          <Property Type="Boolean" Name="IsSecond" />
-          <Property Type="Boolean" Name="IsListener" />
+          <Property Type="Boolean" Name="IsSecond" Nullable="false" />
+          <Property Type="Boolean" Name="IsListener" Nullable="false" />
           <Property Type="String" Name="ProtocolTypeName" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Type="Boolean" Name="IsParallel" />
-          <Property Type="Boolean" Name="IsReduced" />
+          <Property Type="Boolean" Name="IsParallel" Nullable="false" />
+          <Property Type="Boolean" Name="IsReduced" Nullable="false" />
         </EntityType>
         <EntityType Name="qEntry">
           <Key>
@@ -9621,21 +9863,21 @@
           <Property Type="Boolean" Name="Excluded" Nullable="false" />
           <Property Type="Guid" Name="ExcludeProtocolId" />
           <Property Type="Int32" Name="EntryHeaderId" />
-          <Property Type="Int32" Name="StudyLevelGroupId" />
+          <Property Type="Int32" Name="StudyLevelGroupId" Nullable="false" />
           <Property Type="Int32" Name="LicenseProgramId" />
           <Property Type="Int32" Name="FacultyId" />
           <Property Type="Int32" Name="StudyFormId" />
           <Property Type="Int32" Name="StudyBasisId" />
-          <Property Type="String" Name="Number" MaxLength="10" FixedLength="false" Unicode="true" />
-          <Property Type="DateTime" Name="Date" Precision="3" />
-          <Property Type="Int32" Name="ProtocolTypeId" />
+          <Property Type="String" Name="Number" MaxLength="15" FixedLength="false" Unicode="true" />
+          <Property Type="DateTime" Name="Date" Precision="3" Nullable="false" />
+          <Property Type="Int32" Name="ProtocolTypeId" Nullable="false" />
           <Property Type="String" Name="Reason" MaxLength="1000" FixedLength="false" Unicode="true" />
           <Property Type="Boolean" Name="IsOld" Nullable="false" />
           <Property Type="Guid" Name="ParentProtocolId" />
-          <Property Type="Boolean" Name="IsSecond" />
-          <Property Type="Boolean" Name="IsListener" />
-          <Property Type="Boolean" Name="IsParallel" />
-          <Property Type="Boolean" Name="IsReduced" />
+          <Property Type="Boolean" Name="IsSecond" Nullable="false" />
+          <Property Type="Boolean" Name="IsListener" Nullable="false" />
+          <Property Type="Boolean" Name="IsParallel" Nullable="false" />
+          <Property Type="Boolean" Name="IsReduced" Nullable="false" />
         </EntityType>
         <EntityType Name="CompetitiveGroup">
           <Key>
@@ -9759,11 +10001,11 @@
           <Property Type="Guid" Name="PersonId" Nullable="false" />
           <Property Type="Boolean" Name="IsExcellent" Nullable="false" />
           <Property Type="String" Name="SchoolCity" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Type="Int32" Name="SchoolTypeId" />
-          <Property Type="String" Name="SchoolName" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Type="Int32" Name="SchoolTypeId" Nullable="false" />
+          <Property Type="String" Name="SchoolName" MaxLength="500" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Type="String" Name="SchoolNum" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Type="Int32" Name="SchoolExitYear" />
-          <Property Type="Int32" Name="CountryEducId" />
+          <Property Type="Int32" Name="SchoolExitYear" Nullable="false" />
+          <Property Type="Int32" Name="CountryEducId" Nullable="false" />
           <Property Type="String" Name="AttestatSeries" MaxLength="10" FixedLength="false" Unicode="true" />
           <Property Type="String" Name="AttestatNum" MaxLength="20" FixedLength="false" Unicode="true" />
           <Property Type="String" Name="DiplomSeries" MaxLength="20" FixedLength="false" Unicode="true" />
@@ -9780,10 +10022,10 @@
           <NavigationProperty Name="Person" Relationship="Priem2012Model.FK_Person_EducationInfo_Person" FromRole="Person_EducationInfo" ToRole="Person" />
           <NavigationProperty Name="SchoolType" Relationship="Priem2012Model.FK_Person_EducationInfo_SchoolType" FromRole="Person_EducationInfo" ToRole="SchoolType" />
           <NavigationProperty Name="StudyForm" Relationship="Priem2012Model.FK_Person_EducationInfo_StudyForm_HE_" FromRole="Person_EducationInfo" ToRole="StudyForm" />
-          <Property Type="Int32" Name="ForeignCountryEducId" />
+          <Property Type="Int32" Name="ForeignCountryEducId" Nullable="false" />
           <Property Type="Boolean" Name="IsEqual" Nullable="false" />
           <Property Type="String" Name="EqualDocumentNumber" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Type="Int32" Name="RegionEducId" />
+          <Property Type="Int32" Name="RegionEducId" Nullable="false" />
           <NavigationProperty Name="ForeignCountry" Relationship="Priem2012Model.FK_Person_EducationInfo_ForeignCountry" FromRole="Person_EducationInfo" ToRole="ForeignCountry" />
           <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
         </EntityType>
@@ -9824,7 +10066,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Person_EducationInfo_Country">
-          <End Type="Priem2012Model.Country" Role="Country" Multiplicity="0..1" />
+          <End Type="Priem2012Model.Country" Role="Country" Multiplicity="1" />
           <End Type="Priem2012Model.Person_EducationInfo" Role="Person_EducationInfo" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Country">
@@ -9932,7 +10174,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Person_EducationInfo_SchoolType">
-          <End Type="Priem2012Model.SchoolType" Role="SchoolType" Multiplicity="0..1" />
+          <End Type="Priem2012Model.SchoolType" Role="SchoolType" Multiplicity="1" />
           <End Type="Priem2012Model.Person_EducationInfo" Role="Person_EducationInfo" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="SchoolType">
@@ -10224,9 +10466,9 @@
           <Property Type="String" Name="OrderNum" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Type="String" Name="OrderNumFor" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Type="DateTime" Name="OrderDateFor" Precision="3" />
-          <Property Type="Int32" Name="SignerId" />
-          <Property Type="DateTime" Name="ComissionDate" Precision="0" />
-          <Property Type="String" Name="ComissionNumber" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Type="Int32" Name="SignerId" Nullable="false" />
+          <Property Type="DateTime" Name="ComissionDate" Precision="0" Nullable="false" />
+          <Property Type="String" Name="ComissionNumber" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
           <NavigationProperty Name="Signer" Relationship="Priem2012Model.FK_OrderNumbers_Signer" FromRole="OrderNumbers" ToRole="Signer" />
         </EntityType>
         <EntityType Name="extEntryView_ForDisEntered">
@@ -10242,22 +10484,22 @@
           <Property Type="Boolean" Name="Excluded" Nullable="false" />
           <Property Type="Guid" Name="ExcludeProtocolId" />
           <Property Type="Int32" Name="EntryHeaderId" />
-          <Property Type="Int32" Name="StudyLevelGroupId" />
+          <Property Type="Int32" Name="StudyLevelGroupId" Nullable="false" />
           <Property Type="Int32" Name="LicenseProgramId" />
           <Property Type="Int32" Name="FacultyId" />
           <Property Type="Int32" Name="StudyFormId" />
           <Property Type="Int32" Name="StudyBasisId" />
           <Property Type="String" Name="Number" MaxLength="15" FixedLength="false" Unicode="true" />
-          <Property Type="DateTime" Name="Date" Precision="3" />
-          <Property Type="Int32" Name="ProtocolTypeId" />
+          <Property Type="DateTime" Name="Date" Precision="3" Nullable="false" />
+          <Property Type="Int32" Name="ProtocolTypeId" Nullable="false" />
           <Property Type="String" Name="Reason" MaxLength="1000" FixedLength="false" Unicode="true" />
           <Property Type="Boolean" Name="IsOld" Nullable="false" />
           <Property Type="Guid" Name="ParentProtocolId" />
-          <Property Type="Boolean" Name="IsSecond" />
-          <Property Type="Boolean" Name="IsListener" />
+          <Property Type="Boolean" Name="IsSecond" Nullable="false" />
+          <Property Type="Boolean" Name="IsListener" Nullable="false" />
           <Property Type="String" Name="ProtocolTypeName" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Type="Boolean" Name="IsParallel" />
-          <Property Type="Boolean" Name="IsReduced" />
+          <Property Type="Boolean" Name="IsParallel" Nullable="false" />
+          <Property Type="Boolean" Name="IsReduced" Nullable="false" />
           <Property Type="DateTime" Name="OrderDate" Precision="3" />
           <Property Type="String" Name="OrderNum" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Type="String" Name="OrderNumFor" MaxLength="50" FixedLength="false" Unicode="true" />
@@ -10287,105 +10529,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityType Name="extPerson">
-          <Key>
-            <PropertyRef Name="Id" />
-            <PropertyRef Name="Num" />
-            <PropertyRef Name="Sex" />
-          </Key>
-          <Property Type="Guid" Name="Id" Nullable="false" />
-          <Property Type="Int32" Name="Barcode" />
-          <Property Type="Int32" Name="Num" Nullable="false" />
-          <Property Type="String" Name="Name" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Type="String" Name="SecondName" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="Surname" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Type="DateTime" Name="BirthDate" Precision="0" Nullable="false" />
-          <Property Type="String" Name="BirthPlace" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Type="Int32" Name="PassportTypeId" Nullable="false" />
-          <Property Type="String" Name="PassportSeries" MaxLength="10" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="PassportNumber" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="PassportAuthor" MaxLength="350" FixedLength="false" Unicode="true" />
-          <Property Type="DateTime" Name="PassportDate" Precision="0" />
-          <Property Type="Boolean" Name="Sex" Nullable="false" />
-          <Property Type="Int32" Name="CountryId" />
-          <Property Type="Int32" Name="NationalityId" Nullable="false" />
-          <Property Type="Int32" Name="RegionId" />
-          <Property Type="String" Name="Phone" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="Mobiles" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="Email" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="Code" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="City" MaxLength="1000" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="Street" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="House" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="Flat" MaxLength="10" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="CodeReal" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="Korpus" MaxLength="10" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="CityReal" MaxLength="1000" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="StreetReal" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="HouseReal" MaxLength="10" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="KorpusReal" MaxLength="10" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="FlatReal" MaxLength="10" FixedLength="false" Unicode="true" />
-          <Property Type="Boolean" Name="HostelAbit" />
-          <Property Type="Boolean" Name="HasAssignToHostel" />
-          <Property Type="Int32" Name="HostelFacultyId" />
-          <Property Type="Int32" Name="ExamPassFacultyId" />
-          <Property Type="Boolean" Name="HasExamPass" />
-          <Property Type="Boolean" Name="IsExcellent" />
-          <Property Type="Int32" Name="LanguageId" />
-          <Property Type="Int32" Name="SchoolTypeId" />
-          <Property Type="String" Name="SchoolCity" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="SchoolName" MaxLength="500" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="SchoolNum" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Type="Int32" Name="SchoolExitYear" />
-          <Property Type="Int32" Name="CountryEducId" />
-          <Property Type="String" Name="AttestatSeries" MaxLength="10" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="AttestatNum" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="DiplomSeries" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="DiplomNum" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Type="Double" Name="SchoolAVG" />
-          <Property Type="String" Name="HighEducation" MaxLength="1000" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="HEProfession" MaxLength="500" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="HEQualification" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Type="Int32" Name="HEStudyFormId" />
-          <Property Type="Int32" Name="HEEntryYear" />
-          <Property Type="Int32" Name="HEExitYear" />
-          <Property Type="String" Name="HEWork" MaxLength="500" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="MSVuz" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Type="Int32" Name="MSStudyFormId" />
-          <Property Type="String" Name="MSCourse" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="Stag" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="WorkPlace" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Type="Int32" Name="Privileges" />
-          <Property Type="String" Name="PassportCode" MaxLength="10" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="PersonalCode" MaxLength="10" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="PersonInfo" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="ExtraInfo" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="ScienceWork" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="PersonNum" MaxLength="7" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="FIO" MaxLength="152" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Type="String" Name="PassportData" MaxLength="532" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="EducDocument" MaxLength="41" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="HostelFacultyAcr" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="CountryName" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="NationalityName" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="RegionName" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="HostelFacultyName" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Type="Boolean" Name="StartEnglish" />
-          <Property Type="Int32" Name="EnglishMark" />
-          <Property Type="Boolean" Name="EgeInSPbgu" />
-          <Property Type="Boolean" Name="IsEqual" />
-          <Property Type="Boolean" Name="HostelEduc" />
-          <Property Type="String" Name="KladrCode" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="SNILS" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Type="Int32" Name="RegionEducId" />
-          <Property Type="String" Name="RegionNumber" MaxLength="2" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="ForeignNationality" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Type="Int32" Name="ForeignNationalityId" />
-          <Property Type="String" Name="ForeignCountry" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Type="Int32" Name="ForeignCountryId" />
-          <Property Type="Boolean" Name="HasTRKI" />
-          <Property Type="String" Name="TRKICertificateNumber" MaxLength="50" FixedLength="false" Unicode="true" />
-        </EntityType>
         <EntityType Name="SchoolNames">
           <Key>
             <PropertyRef Name="Id" />
@@ -10427,6 +10570,7 @@
           <Property Type="String" Name="GSGUCode" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Type="Int32" Name="VSHEUGNId" />
           <NavigationProperty Name="SP_AggregateGroup" Relationship="Priem2012Model.FK_SP_LicenseProgram_SP_AggregateGroup" FromRole="SP_LicenseProgram" ToRole="SP_AggregateGroup" />
+          <NavigationProperty Name="Protocol" Relationship="Priem2012Model.FK_Protocol_SP_LicenseProgram" FromRole="SP_LicenseProgram" ToRole="Protocol" />
         </EntityType>
         <EntityType Name="SP_ObrazProgram">
           <Key>
@@ -10948,7 +11092,7 @@
             <PropertyRef Name="StudyLevelGroupId" />
           </Key>
           <Property Type="String" Name="PersonNum" MaxLength="7" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="FIO" MaxLength="152" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="FIO" MaxLength="152" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Type="String" Name="RegNum" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Type="Int32" Name="LicenseProgramId" Nullable="false" />
           <Property Type="String" Name="LicenseProgramCode" MaxLength="10" FixedLength="false" Unicode="true" />
@@ -11008,7 +11152,7 @@
           <Property Type="Int32" Name="Id" Nullable="false" />
           <Property Type="String" Name="Name" MaxLength="500" FixedLength="false" Unicode="true" />
           <Property Type="String" Name="Acronym" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Type="Int32" Name="SortNum" />
+          <Property Type="Int32" Name="SortNum" Nullable="false" />
         </EntityType>
         <EntityType Name="hlpStatistics">
           <Key>
@@ -11111,7 +11255,7 @@
           <NavigationProperty Name="OrderNumbers" Relationship="Priem2012Model.FK_OrderNumbers_Signer" FromRole="Signer" ToRole="OrderNumbers" />
         </EntityType>
         <Association Name="FK_OrderNumbers_Signer">
-          <End Type="Priem2012Model.Signer" Role="Signer" Multiplicity="0..1" />
+          <End Type="Priem2012Model.Signer" Role="Signer" Multiplicity="1" />
           <End Type="Priem2012Model.OrderNumbers" Role="OrderNumbers" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Signer">
@@ -11206,7 +11350,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Person_EducationInfo_ForeignCountry">
-          <End Type="Priem2012Model.ForeignCountry" Role="ForeignCountry" Multiplicity="0..1" />
+          <End Type="Priem2012Model.ForeignCountry" Role="ForeignCountry" Multiplicity="1" />
           <End Type="Priem2012Model.Person_EducationInfo" Role="Person_EducationInfo" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="ForeignCountry">
@@ -11385,7 +11529,7 @@
           <Property Type="Guid" Name="PersonId" Nullable="false" />
           <Property Type="String" Name="RegNum" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Type="Guid" Name="EntryId" Nullable="false" />
-          <Property Type="Int32" Name="CompetitionId" />
+          <Property Type="Int32" Name="CompetitionId" Nullable="false" />
           <Property Type="Boolean" Name="IsListener" Nullable="false" />
           <Property Type="Boolean" Name="IsPaid" Nullable="false" />
           <Property Type="Boolean" Name="BackDoc" Nullable="false" />
@@ -11448,11 +11592,223 @@
           <Property Type="Int32" Name="CommitNumber" />
           <Property Type="Boolean" Name="IsGosLine" Nullable="false" />
           <Property Type="Guid" Name="InnerEntryInEntryId" />
-          <Property Type="String" Name="ProfileInObrazProgramInEntryName" MaxLength="1000" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="ObrazProgramInEntryCrypt" MaxLength="66" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="ObrazProgramInEntryName" MaxLength="1000" FixedLength="false" Unicode="true" />
           <Property Type="Int32" Name="InnerEntryInEntryObrazProgramId" />
+          <Property Type="String" Name="InnerEntryInEntryProfileName" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="InnerEntryInEntryObrazProgramCrypt" MaxLength="66" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="InnerEntryInEntryObrazProgramName" MaxLength="1000" FixedLength="false" Unicode="true" />
         </EntityType>
+        <EntityType Name="extPerson">
+          <Key>
+            <PropertyRef Name="Id" />
+            <PropertyRef Name="Num" />
+            <PropertyRef Name="Name" />
+            <PropertyRef Name="Surname" />
+            <PropertyRef Name="BirthDate" />
+            <PropertyRef Name="BirthPlace" />
+            <PropertyRef Name="PassportTypeId" />
+            <PropertyRef Name="Sex" />
+            <PropertyRef Name="NationalityId" />
+            <PropertyRef Name="FIO" />
+          </Key>
+          <Property Type="Guid" Name="Id" Nullable="false" />
+          <Property Type="Int32" Name="Barcode" />
+          <Property Type="Int32" Name="Num" Nullable="false" />
+          <Property Type="String" Name="Name" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="SecondName" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Surname" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="DateTime" Name="BirthDate" Nullable="false" Precision="0" />
+          <Property Type="String" Name="BirthPlace" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Type="Int32" Name="PassportTypeId" Nullable="false" />
+          <Property Type="String" Name="PassportSeries" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="PassportNumber" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="PassportAuthor" MaxLength="350" FixedLength="false" Unicode="true" />
+          <Property Type="DateTime" Name="PassportDate" Precision="0" />
+          <Property Type="Boolean" Name="Sex" Nullable="false" />
+          <Property Type="Int32" Name="CountryId" />
+          <Property Type="Int32" Name="NationalityId" Nullable="false" />
+          <Property Type="Int32" Name="RegionId" />
+          <Property Type="String" Name="Phone" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Mobiles" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Email" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Code" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="City" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Street" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="House" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Flat" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="CodeReal" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Korpus" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="CityReal" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="StreetReal" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="HouseReal" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="KorpusReal" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="FlatReal" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Type="Boolean" Name="HostelAbit" />
+          <Property Type="Boolean" Name="HasAssignToHostel" />
+          <Property Type="Int32" Name="HostelFacultyId" />
+          <Property Type="Int32" Name="ExamPassFacultyId" />
+          <Property Type="Boolean" Name="HasExamPass" />
+          <Property Type="Int32" Name="LanguageId" />
+          <Property Type="String" Name="MSVuz" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Type="Int32" Name="MSStudyFormId" />
+          <Property Type="String" Name="MSCourse" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Stag" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="WorkPlace" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Type="Int32" Name="Privileges" />
+          <Property Type="String" Name="PassportCode" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="PersonalCode" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="PersonInfo" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="ExtraInfo" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="ScienceWork" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="PersonNum" MaxLength="7" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="FIO" Nullable="false" MaxLength="152" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="PassportData" MaxLength="532" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="EducDocument" MaxLength="42" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="HostelFacultyAcr" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="CountryName" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="NationalityName" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="RegionName" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="HostelFacultyName" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Type="Boolean" Name="HostelEduc" />
+          <Property Type="String" Name="KladrCode" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="SNILS" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="RegionNumber" MaxLength="2" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="ForeignNationality" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Type="Int32" Name="ForeignNationalityId" />
+          <Property Type="String" Name="ForeignCountry" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Type="Int32" Name="ForeignCountryId" />
+          <Property Type="Boolean" Name="StartEnglish" />
+          <Property Type="Double" Name="EnglishMark" />
+          <Property Type="Boolean" Name="EgeInSPbgu" />
+          <Property Type="Boolean" Name="HasTRKI" />
+          <Property Type="String" Name="TRKICertificateNumber" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="Int32" Name="Expr1" />
+        </EntityType>
+        <EntityType Name="extPerson_EducationInfo">
+          <Key>
+            <PropertyRef Name="Id" />
+            <PropertyRef Name="PersonId" />
+            <PropertyRef Name="SchoolTypeId" />
+            <PropertyRef Name="SchoolTypeName" />
+            <PropertyRef Name="CountryEducId" />
+            <PropertyRef Name="RegionEducId" />
+            <PropertyRef Name="ForeignCountryEducId" />
+            <PropertyRef Name="SchoolName" />
+            <PropertyRef Name="SchoolExitYear" />
+            <PropertyRef Name="IsExcellent" />
+            <PropertyRef Name="IsEqual" />
+          </Key>
+          <Property Type="Int32" Name="Id" Nullable="false" />
+          <Property Type="Guid" Name="PersonId" Nullable="false" />
+          <Property Type="Int32" Name="SchoolTypeId" Nullable="false" />
+          <Property Type="String" Name="SchoolTypeName" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="SchoolTypeFullName" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Type="Int32" Name="CountryEducId" Nullable="false" />
+          <Property Type="String" Name="CountryEducName" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="CountryEducOSKMCode" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Type="Int32" Name="RegionEducId" Nullable="false" />
+          <Property Type="String" Name="RegionEducName" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="RegionEducNumber" MaxLength="2" FixedLength="false" Unicode="true" />
+          <Property Type="Int32" Name="ForeignCountryEducId" Nullable="false" />
+          <Property Type="String" Name="ForeignCountryEducName" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="ForeignCountryEducOSKMCode" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Type="Int32" Name="ForeignCountryEducPriemDictionaryId" />
+          <Property Type="String" Name="SchoolCity" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="SchoolName" Nullable="false" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="SchoolNum" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="Int32" Name="SchoolExitYear" Nullable="false" />
+          <Property Type="String" Name="AttestatSeries" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="AttestatNum" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="DiplomSeries" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="DiplomNum" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Type="Double" Name="SchoolAVG" />
+          <Property Type="Boolean" Name="IsExcellent" Nullable="false" />
+          <Property Type="Boolean" Name="IsEqual" Nullable="false" />
+          <Property Type="String" Name="EqualDocumentNumber" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="HighEducation" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="HEProfession" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="HEQualification" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="Int32" Name="HEStudyFormId" />
+          <Property Type="String" Name="HEStudyFormName" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="HEStudyFormFISName" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="Int32" Name="HEEntryYear" />
+          <Property Type="Int32" Name="HEExitYear" />
+          <Property Type="String" Name="HEWork" MaxLength="500" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="extPerson_EducationInfo_Current">
+          <Key>
+            <PropertyRef Name="Id" />
+            <PropertyRef Name="PersonId" />
+            <PropertyRef Name="SchoolTypeId" />
+            <PropertyRef Name="SchoolTypeName" />
+            <PropertyRef Name="CountryEducId" />
+            <PropertyRef Name="RegionEducId" />
+            <PropertyRef Name="ForeignCountryEducId" />
+            <PropertyRef Name="SchoolName" />
+            <PropertyRef Name="SchoolExitYear" />
+            <PropertyRef Name="IsExcellent" />
+            <PropertyRef Name="IsEqual" />
+          </Key>
+          <Property Type="Int32" Name="Id" Nullable="false" />
+          <Property Type="Guid" Name="PersonId" Nullable="false" />
+          <Property Type="Int32" Name="SchoolTypeId" Nullable="false" />
+          <Property Type="String" Name="SchoolTypeName" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="SchoolTypeFullName" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Type="Int32" Name="CountryEducId" Nullable="false" />
+          <Property Type="String" Name="CountryEducName" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="CountryEducOSKMCode" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Type="Int32" Name="RegionEducId" Nullable="false" />
+          <Property Type="String" Name="RegionEducName" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="RegionEducNumber" MaxLength="2" FixedLength="false" Unicode="true" />
+          <Property Type="Int32" Name="ForeignCountryEducId" Nullable="false" />
+          <Property Type="String" Name="ForeignCountryEducName" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="ForeignCountryEducOSKMCode" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Type="Int32" Name="ForeignCountryEducPriemDictionaryId" />
+          <Property Type="String" Name="SchoolCity" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="SchoolName" Nullable="false" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="SchoolNum" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="Int32" Name="SchoolExitYear" Nullable="false" />
+          <Property Type="String" Name="AttestatSeries" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="AttestatNum" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="DiplomSeries" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="DiplomNum" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Type="Double" Name="SchoolAVG" />
+          <Property Type="Boolean" Name="IsExcellent" Nullable="false" />
+          <Property Type="Boolean" Name="IsEqual" Nullable="false" />
+          <Property Type="String" Name="EqualDocumentNumber" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="HighEducation" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="HEProfession" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="HEQualification" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="Int32" Name="HEStudyFormId" />
+          <Property Type="String" Name="HEStudyFormName" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="HEStudyFormFISName" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="Int32" Name="HEEntryYear" />
+          <Property Type="Int32" Name="HEExitYear" />
+          <Property Type="String" Name="HEWork" MaxLength="500" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <Association Name="FK_Protocol_SP_Faculty">
+          <End Type="Priem2012Model.SP_Faculty" Role="SP_Faculty" Multiplicity="0..1" />
+          <End Type="Priem2012Model.Protocol" Role="Protocol" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SP_Faculty">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Protocol">
+              <PropertyRef Name="FacultyId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Protocol_SP_LicenseProgram">
+          <End Type="Priem2012Model.SP_LicenseProgram" Role="SP_LicenseProgram" Multiplicity="0..1" />
+          <End Type="Priem2012Model.Protocol" Role="Protocol" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SP_LicenseProgram">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Protocol">
+              <PropertyRef Name="LicenseProgramId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -11561,7 +11917,8 @@
             <ScalarProperty Name="RodName" ColumnName="RodName" />
           </MappingFragment></EntityTypeMapping></EntitySetMapping>
           <EntitySetMapping Name="SchoolType"><EntityTypeMapping TypeName="Priem2012Model.SchoolType"><MappingFragment StoreEntitySet="SchoolType">
-            <ScalarProperty Name="Id" ColumnName="Id" />
+            <ScalarProperty Name="Sort" ColumnName="Sort" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
             <ScalarProperty Name="Name" ColumnName="Name" />
             <ScalarProperty Name="FullName" ColumnName="FullName" />
           </MappingFragment></EntityTypeMapping></EntitySetMapping>
@@ -11786,6 +12143,7 @@
           <EntitySetMapping Name="StudyLevel">
             <EntityTypeMapping TypeName="Priem2012Model.StudyLevel">
               <MappingFragment StoreEntitySet="StudyLevel">
+                <ScalarProperty Name="NameRod" ColumnName="NameRod" />
                 <ScalarProperty Name="FISName" ColumnName="FISName" />
                 <ScalarProperty Name="LevelGroupPrint" ColumnName="LevelGroupPrint" />
                 <ScalarProperty Name="LevelGroupId" ColumnName="LevelGroupId" />
@@ -13030,104 +13388,6 @@
           <FunctionImportMapping FunctionImportName="CompetitiveGroup_delete" FunctionName="Priem2012Model.Store.CompetitiveGroup_delete" />
           <FunctionImportMapping FunctionImportName="CompetitiveGroup_Insert" FunctionName="Priem2012Model.Store.CompetitiveGroup_Insert" />
           <FunctionImportMapping FunctionImportName="CompetitiveGroup_update" FunctionName="Priem2012Model.Store.CompetitiveGroup_update" />
-          <EntitySetMapping Name="extPerson">
-            <EntityTypeMapping TypeName="Priem2012Model.extPerson">
-              <MappingFragment StoreEntitySet="extPerson">
-                <ScalarProperty Name="TRKICertificateNumber" ColumnName="TRKICertificateNumber" />
-                <ScalarProperty Name="HasTRKI" ColumnName="HasTRKI" />
-                <ScalarProperty Name="ForeignCountryId" ColumnName="ForeignCountryId" />
-                <ScalarProperty Name="ForeignCountry" ColumnName="ForeignCountry" />
-                <ScalarProperty Name="ForeignNationalityId" ColumnName="ForeignNationalityId" />
-                <ScalarProperty Name="ForeignNationality" ColumnName="ForeignNationality" />
-                <ScalarProperty Name="RegionNumber" ColumnName="RegionNumber" />
-                <ScalarProperty Name="RegionEducId" ColumnName="RegionEducId" />
-                <ScalarProperty Name="SNILS" ColumnName="SNILS" />
-                <ScalarProperty Name="KladrCode" ColumnName="KladrCode" />
-                <ScalarProperty Name="HostelEduc" ColumnName="HostelEduc" />
-                <ScalarProperty Name="IsEqual" ColumnName="IsEqual" />
-                <ScalarProperty Name="EgeInSPbgu" ColumnName="EgeInSPbgu" />
-                <ScalarProperty Name="EnglishMark" ColumnName="EnglishMark" />
-                <ScalarProperty Name="StartEnglish" ColumnName="StartEnglish" />
-                <ScalarProperty Name="HostelFacultyName" ColumnName="HostelFacultyName" />
-                <ScalarProperty Name="RegionName" ColumnName="RegionName" />
-                <ScalarProperty Name="NationalityName" ColumnName="NationalityName" />
-                <ScalarProperty Name="CountryName" ColumnName="CountryName" />
-                <ScalarProperty Name="HostelFacultyAcr" ColumnName="HostelFacultyAcr" />
-                <ScalarProperty Name="EducDocument" ColumnName="EducDocument" />
-                <ScalarProperty Name="PassportData" ColumnName="PassportData" />
-                <ScalarProperty Name="FIO" ColumnName="FIO" />
-                <ScalarProperty Name="PersonNum" ColumnName="PersonNum" />
-                <ScalarProperty Name="ScienceWork" ColumnName="ScienceWork" />
-                <ScalarProperty Name="ExtraInfo" ColumnName="ExtraInfo" />
-                <ScalarProperty Name="PersonInfo" ColumnName="PersonInfo" />
-                <ScalarProperty Name="PersonalCode" ColumnName="PersonalCode" />
-                <ScalarProperty Name="PassportCode" ColumnName="PassportCode" />
-                <ScalarProperty Name="Privileges" ColumnName="Privileges" />
-                <ScalarProperty Name="WorkPlace" ColumnName="WorkPlace" />
-                <ScalarProperty Name="Stag" ColumnName="Stag" />
-                <ScalarProperty Name="MSCourse" ColumnName="MSCourse" />
-                <ScalarProperty Name="MSStudyFormId" ColumnName="MSStudyFormId" />
-                <ScalarProperty Name="MSVuz" ColumnName="MSVuz" />
-                <ScalarProperty Name="HEWork" ColumnName="HEWork" />
-                <ScalarProperty Name="HEExitYear" ColumnName="HEExitYear" />
-                <ScalarProperty Name="HEEntryYear" ColumnName="HEEntryYear" />
-                <ScalarProperty Name="HEStudyFormId" ColumnName="HEStudyFormId" />
-                <ScalarProperty Name="HEQualification" ColumnName="HEQualification" />
-                <ScalarProperty Name="HEProfession" ColumnName="HEProfession" />
-                <ScalarProperty Name="HighEducation" ColumnName="HighEducation" />
-                <ScalarProperty Name="SchoolAVG" ColumnName="SchoolAVG" />
-                <ScalarProperty Name="DiplomNum" ColumnName="DiplomNum" />
-                <ScalarProperty Name="DiplomSeries" ColumnName="DiplomSeries" />
-                <ScalarProperty Name="AttestatNum" ColumnName="AttestatNum" />
-                <ScalarProperty Name="AttestatSeries" ColumnName="AttestatSeries" />
-                <ScalarProperty Name="CountryEducId" ColumnName="CountryEducId" />
-                <ScalarProperty Name="SchoolExitYear" ColumnName="SchoolExitYear" />
-                <ScalarProperty Name="SchoolNum" ColumnName="SchoolNum" />
-                <ScalarProperty Name="SchoolName" ColumnName="SchoolName" />
-                <ScalarProperty Name="SchoolCity" ColumnName="SchoolCity" />
-                <ScalarProperty Name="SchoolTypeId" ColumnName="SchoolTypeId" />
-                <ScalarProperty Name="LanguageId" ColumnName="LanguageId" />
-                <ScalarProperty Name="IsExcellent" ColumnName="IsExcellent" />
-                <ScalarProperty Name="HasExamPass" ColumnName="HasExamPass" />
-                <ScalarProperty Name="ExamPassFacultyId" ColumnName="ExamPassFacultyId" />
-                <ScalarProperty Name="HostelFacultyId" ColumnName="HostelFacultyId" />
-                <ScalarProperty Name="HasAssignToHostel" ColumnName="HasAssignToHostel" />
-                <ScalarProperty Name="HostelAbit" ColumnName="HostelAbit" />
-                <ScalarProperty Name="FlatReal" ColumnName="FlatReal" />
-                <ScalarProperty Name="KorpusReal" ColumnName="KorpusReal" />
-                <ScalarProperty Name="HouseReal" ColumnName="HouseReal" />
-                <ScalarProperty Name="StreetReal" ColumnName="StreetReal" />
-                <ScalarProperty Name="CityReal" ColumnName="CityReal" />
-                <ScalarProperty Name="Korpus" ColumnName="Korpus" />
-                <ScalarProperty Name="CodeReal" ColumnName="CodeReal" />
-                <ScalarProperty Name="Flat" ColumnName="Flat" />
-                <ScalarProperty Name="House" ColumnName="House" />
-                <ScalarProperty Name="Street" ColumnName="Street" />
-                <ScalarProperty Name="City" ColumnName="City" />
-                <ScalarProperty Name="Code" ColumnName="Code" />
-                <ScalarProperty Name="Email" ColumnName="Email" />
-                <ScalarProperty Name="Mobiles" ColumnName="Mobiles" />
-                <ScalarProperty Name="Phone" ColumnName="Phone" />
-                <ScalarProperty Name="RegionId" ColumnName="RegionId" />
-                <ScalarProperty Name="NationalityId" ColumnName="NationalityId" />
-                <ScalarProperty Name="CountryId" ColumnName="CountryId" />
-                <ScalarProperty Name="Sex" ColumnName="Sex" />
-                <ScalarProperty Name="PassportDate" ColumnName="PassportDate" />
-                <ScalarProperty Name="PassportAuthor" ColumnName="PassportAuthor" />
-                <ScalarProperty Name="PassportNumber" ColumnName="PassportNumber" />
-                <ScalarProperty Name="PassportSeries" ColumnName="PassportSeries" />
-                <ScalarProperty Name="PassportTypeId" ColumnName="PassportTypeId" />
-                <ScalarProperty Name="BirthPlace" ColumnName="BirthPlace" />
-                <ScalarProperty Name="BirthDate" ColumnName="BirthDate" />
-                <ScalarProperty Name="Surname" ColumnName="Surname" />
-                <ScalarProperty Name="SecondName" ColumnName="SecondName" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="Num" ColumnName="Num" />
-                <ScalarProperty Name="Barcode" ColumnName="Barcode" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="SchoolNames">
             <EntityTypeMapping TypeName="Priem2012Model.SchoolNames">
               <MappingFragment StoreEntitySet="SchoolNames">
@@ -13639,10 +13899,10 @@
           <EntitySetMapping Name="extAbit">
             <EntityTypeMapping TypeName="Priem2012Model.extAbit">
               <MappingFragment StoreEntitySet="extAbit">
+                <ScalarProperty Name="InnerEntryInEntryObrazProgramName" ColumnName="InnerEntryInEntryObrazProgramName" />
+                <ScalarProperty Name="InnerEntryInEntryObrazProgramCrypt" ColumnName="InnerEntryInEntryObrazProgramCrypt" />
+                <ScalarProperty Name="InnerEntryInEntryProfileName" ColumnName="InnerEntryInEntryProfileName" />
                 <ScalarProperty Name="InnerEntryInEntryObrazProgramId" ColumnName="InnerEntryInEntryObrazProgramId" />
-                <ScalarProperty Name="ObrazProgramInEntryName" ColumnName="ObrazProgramInEntryName" />
-                <ScalarProperty Name="ObrazProgramInEntryCrypt" ColumnName="ObrazProgramInEntryCrypt" />
-                <ScalarProperty Name="ProfileInObrazProgramInEntryName" ColumnName="ProfileInObrazProgramInEntryName" />
                 <ScalarProperty Name="InnerEntryInEntryId" ColumnName="InnerEntryInEntryId" />
                 <ScalarProperty Name="IsGosLine" ColumnName="IsGosLine" />
                 <ScalarProperty Name="CommitNumber" ColumnName="CommitNumber" />
@@ -13716,6 +13976,169 @@
           <FunctionImportMapping FunctionImportName="Abiturient_UpdateInnerEntryInEntryId" FunctionName="Priem2012Model.Store.Abiturient_UpdateInnerEntryInEntryId" />
           <FunctionImportMapping FunctionImportName="Abiturient_UpdateInnerEntryInEntryPriority" FunctionName="Priem2012Model.Store.Abiturient_UpdateInnerEntryInEntryPriority" />
           <FunctionImportMapping FunctionImportName="Abiturient_UpdateIsGosLine" FunctionName="Priem2012Model.Store.Abiturient_UpdateIsGosLine" />
+          <EntitySetMapping Name="extPerson">
+            <EntityTypeMapping TypeName="Priem2012Model.extPerson">
+              <MappingFragment StoreEntitySet="extPerson">
+                <ScalarProperty Name="Expr1" ColumnName="Expr1" />
+                <ScalarProperty Name="TRKICertificateNumber" ColumnName="TRKICertificateNumber" />
+                <ScalarProperty Name="HasTRKI" ColumnName="HasTRKI" />
+                <ScalarProperty Name="EgeInSPbgu" ColumnName="EgeInSPbgu" />
+                <ScalarProperty Name="EnglishMark" ColumnName="EnglishMark" />
+                <ScalarProperty Name="StartEnglish" ColumnName="StartEnglish" />
+                <ScalarProperty Name="ForeignCountryId" ColumnName="ForeignCountryId" />
+                <ScalarProperty Name="ForeignCountry" ColumnName="ForeignCountry" />
+                <ScalarProperty Name="ForeignNationalityId" ColumnName="ForeignNationalityId" />
+                <ScalarProperty Name="ForeignNationality" ColumnName="ForeignNationality" />
+                <ScalarProperty Name="RegionNumber" ColumnName="RegionNumber" />
+                <ScalarProperty Name="SNILS" ColumnName="SNILS" />
+                <ScalarProperty Name="KladrCode" ColumnName="KladrCode" />
+                <ScalarProperty Name="HostelEduc" ColumnName="HostelEduc" />
+                <ScalarProperty Name="HostelFacultyName" ColumnName="HostelFacultyName" />
+                <ScalarProperty Name="RegionName" ColumnName="RegionName" />
+                <ScalarProperty Name="NationalityName" ColumnName="NationalityName" />
+                <ScalarProperty Name="CountryName" ColumnName="CountryName" />
+                <ScalarProperty Name="HostelFacultyAcr" ColumnName="HostelFacultyAcr" />
+                <ScalarProperty Name="EducDocument" ColumnName="EducDocument" />
+                <ScalarProperty Name="PassportData" ColumnName="PassportData" />
+                <ScalarProperty Name="FIO" ColumnName="FIO" />
+                <ScalarProperty Name="PersonNum" ColumnName="PersonNum" />
+                <ScalarProperty Name="ScienceWork" ColumnName="ScienceWork" />
+                <ScalarProperty Name="ExtraInfo" ColumnName="ExtraInfo" />
+                <ScalarProperty Name="PersonInfo" ColumnName="PersonInfo" />
+                <ScalarProperty Name="PersonalCode" ColumnName="PersonalCode" />
+                <ScalarProperty Name="PassportCode" ColumnName="PassportCode" />
+                <ScalarProperty Name="Privileges" ColumnName="Privileges" />
+                <ScalarProperty Name="WorkPlace" ColumnName="WorkPlace" />
+                <ScalarProperty Name="Stag" ColumnName="Stag" />
+                <ScalarProperty Name="MSCourse" ColumnName="MSCourse" />
+                <ScalarProperty Name="MSStudyFormId" ColumnName="MSStudyFormId" />
+                <ScalarProperty Name="MSVuz" ColumnName="MSVuz" />
+                <ScalarProperty Name="LanguageId" ColumnName="LanguageId" />
+                <ScalarProperty Name="HasExamPass" ColumnName="HasExamPass" />
+                <ScalarProperty Name="ExamPassFacultyId" ColumnName="ExamPassFacultyId" />
+                <ScalarProperty Name="HostelFacultyId" ColumnName="HostelFacultyId" />
+                <ScalarProperty Name="HasAssignToHostel" ColumnName="HasAssignToHostel" />
+                <ScalarProperty Name="HostelAbit" ColumnName="HostelAbit" />
+                <ScalarProperty Name="FlatReal" ColumnName="FlatReal" />
+                <ScalarProperty Name="KorpusReal" ColumnName="KorpusReal" />
+                <ScalarProperty Name="HouseReal" ColumnName="HouseReal" />
+                <ScalarProperty Name="StreetReal" ColumnName="StreetReal" />
+                <ScalarProperty Name="CityReal" ColumnName="CityReal" />
+                <ScalarProperty Name="Korpus" ColumnName="Korpus" />
+                <ScalarProperty Name="CodeReal" ColumnName="CodeReal" />
+                <ScalarProperty Name="Flat" ColumnName="Flat" />
+                <ScalarProperty Name="House" ColumnName="House" />
+                <ScalarProperty Name="Street" ColumnName="Street" />
+                <ScalarProperty Name="City" ColumnName="City" />
+                <ScalarProperty Name="Code" ColumnName="Code" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Mobiles" ColumnName="Mobiles" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="RegionId" ColumnName="RegionId" />
+                <ScalarProperty Name="NationalityId" ColumnName="NationalityId" />
+                <ScalarProperty Name="CountryId" ColumnName="CountryId" />
+                <ScalarProperty Name="Sex" ColumnName="Sex" />
+                <ScalarProperty Name="PassportDate" ColumnName="PassportDate" />
+                <ScalarProperty Name="PassportAuthor" ColumnName="PassportAuthor" />
+                <ScalarProperty Name="PassportNumber" ColumnName="PassportNumber" />
+                <ScalarProperty Name="PassportSeries" ColumnName="PassportSeries" />
+                <ScalarProperty Name="PassportTypeId" ColumnName="PassportTypeId" />
+                <ScalarProperty Name="BirthPlace" ColumnName="BirthPlace" />
+                <ScalarProperty Name="BirthDate" ColumnName="BirthDate" />
+                <ScalarProperty Name="Surname" ColumnName="Surname" />
+                <ScalarProperty Name="SecondName" ColumnName="SecondName" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Num" ColumnName="Num" />
+                <ScalarProperty Name="Barcode" ColumnName="Barcode" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="extPerson_EducationInfo">
+            <EntityTypeMapping TypeName="Priem2012Model.extPerson_EducationInfo">
+              <MappingFragment StoreEntitySet="extPerson_EducationInfo">
+                <ScalarProperty Name="HEWork" ColumnName="HEWork" />
+                <ScalarProperty Name="HEExitYear" ColumnName="HEExitYear" />
+                <ScalarProperty Name="HEEntryYear" ColumnName="HEEntryYear" />
+                <ScalarProperty Name="HEStudyFormFISName" ColumnName="HEStudyFormFISName" />
+                <ScalarProperty Name="HEStudyFormName" ColumnName="HEStudyFormName" />
+                <ScalarProperty Name="HEStudyFormId" ColumnName="HEStudyFormId" />
+                <ScalarProperty Name="HEQualification" ColumnName="HEQualification" />
+                <ScalarProperty Name="HEProfession" ColumnName="HEProfession" />
+                <ScalarProperty Name="HighEducation" ColumnName="HighEducation" />
+                <ScalarProperty Name="EqualDocumentNumber" ColumnName="EqualDocumentNumber" />
+                <ScalarProperty Name="IsEqual" ColumnName="IsEqual" />
+                <ScalarProperty Name="IsExcellent" ColumnName="IsExcellent" />
+                <ScalarProperty Name="SchoolAVG" ColumnName="SchoolAVG" />
+                <ScalarProperty Name="DiplomNum" ColumnName="DiplomNum" />
+                <ScalarProperty Name="DiplomSeries" ColumnName="DiplomSeries" />
+                <ScalarProperty Name="AttestatNum" ColumnName="AttestatNum" />
+                <ScalarProperty Name="AttestatSeries" ColumnName="AttestatSeries" />
+                <ScalarProperty Name="SchoolExitYear" ColumnName="SchoolExitYear" />
+                <ScalarProperty Name="SchoolNum" ColumnName="SchoolNum" />
+                <ScalarProperty Name="SchoolName" ColumnName="SchoolName" />
+                <ScalarProperty Name="SchoolCity" ColumnName="SchoolCity" />
+                <ScalarProperty Name="ForeignCountryEducPriemDictionaryId" ColumnName="ForeignCountryEducPriemDictionaryId" />
+                <ScalarProperty Name="ForeignCountryEducOSKMCode" ColumnName="ForeignCountryEducOSKMCode" />
+                <ScalarProperty Name="ForeignCountryEducName" ColumnName="ForeignCountryEducName" />
+                <ScalarProperty Name="ForeignCountryEducId" ColumnName="ForeignCountryEducId" />
+                <ScalarProperty Name="RegionEducNumber" ColumnName="RegionEducNumber" />
+                <ScalarProperty Name="RegionEducName" ColumnName="RegionEducName" />
+                <ScalarProperty Name="RegionEducId" ColumnName="RegionEducId" />
+                <ScalarProperty Name="CountryEducOSKMCode" ColumnName="CountryEducOSKMCode" />
+                <ScalarProperty Name="CountryEducName" ColumnName="CountryEducName" />
+                <ScalarProperty Name="CountryEducId" ColumnName="CountryEducId" />
+                <ScalarProperty Name="SchoolTypeFullName" ColumnName="SchoolTypeFullName" />
+                <ScalarProperty Name="SchoolTypeName" ColumnName="SchoolTypeName" />
+                <ScalarProperty Name="SchoolTypeId" ColumnName="SchoolTypeId" />
+                <ScalarProperty Name="PersonId" ColumnName="PersonId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="extPerson_EducationInfo_Current">
+            <EntityTypeMapping TypeName="Priem2012Model.extPerson_EducationInfo_Current">
+              <MappingFragment StoreEntitySet="extPerson_EducationInfo_Current">
+                <ScalarProperty Name="HEWork" ColumnName="HEWork" />
+                <ScalarProperty Name="HEExitYear" ColumnName="HEExitYear" />
+                <ScalarProperty Name="HEEntryYear" ColumnName="HEEntryYear" />
+                <ScalarProperty Name="HEStudyFormFISName" ColumnName="HEStudyFormFISName" />
+                <ScalarProperty Name="HEStudyFormName" ColumnName="HEStudyFormName" />
+                <ScalarProperty Name="HEStudyFormId" ColumnName="HEStudyFormId" />
+                <ScalarProperty Name="HEQualification" ColumnName="HEQualification" />
+                <ScalarProperty Name="HEProfession" ColumnName="HEProfession" />
+                <ScalarProperty Name="HighEducation" ColumnName="HighEducation" />
+                <ScalarProperty Name="EqualDocumentNumber" ColumnName="EqualDocumentNumber" />
+                <ScalarProperty Name="IsEqual" ColumnName="IsEqual" />
+                <ScalarProperty Name="IsExcellent" ColumnName="IsExcellent" />
+                <ScalarProperty Name="SchoolAVG" ColumnName="SchoolAVG" />
+                <ScalarProperty Name="DiplomNum" ColumnName="DiplomNum" />
+                <ScalarProperty Name="DiplomSeries" ColumnName="DiplomSeries" />
+                <ScalarProperty Name="AttestatNum" ColumnName="AttestatNum" />
+                <ScalarProperty Name="AttestatSeries" ColumnName="AttestatSeries" />
+                <ScalarProperty Name="SchoolExitYear" ColumnName="SchoolExitYear" />
+                <ScalarProperty Name="SchoolNum" ColumnName="SchoolNum" />
+                <ScalarProperty Name="SchoolName" ColumnName="SchoolName" />
+                <ScalarProperty Name="SchoolCity" ColumnName="SchoolCity" />
+                <ScalarProperty Name="ForeignCountryEducPriemDictionaryId" ColumnName="ForeignCountryEducPriemDictionaryId" />
+                <ScalarProperty Name="ForeignCountryEducOSKMCode" ColumnName="ForeignCountryEducOSKMCode" />
+                <ScalarProperty Name="ForeignCountryEducName" ColumnName="ForeignCountryEducName" />
+                <ScalarProperty Name="ForeignCountryEducId" ColumnName="ForeignCountryEducId" />
+                <ScalarProperty Name="RegionEducNumber" ColumnName="RegionEducNumber" />
+                <ScalarProperty Name="RegionEducName" ColumnName="RegionEducName" />
+                <ScalarProperty Name="RegionEducId" ColumnName="RegionEducId" />
+                <ScalarProperty Name="CountryEducOSKMCode" ColumnName="CountryEducOSKMCode" />
+                <ScalarProperty Name="CountryEducName" ColumnName="CountryEducName" />
+                <ScalarProperty Name="CountryEducId" ColumnName="CountryEducId" />
+                <ScalarProperty Name="SchoolTypeFullName" ColumnName="SchoolTypeFullName" />
+                <ScalarProperty Name="SchoolTypeName" ColumnName="SchoolTypeName" />
+                <ScalarProperty Name="SchoolTypeId" ColumnName="SchoolTypeId" />
+                <ScalarProperty Name="PersonId" ColumnName="PersonId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="Person_deleteAllInfo" FunctionName="Priem2012Model.Store.Person_deleteAllInfo" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -13736,7 +14159,7 @@
     </Options>
     <!-- Diagram content (shape and connector positions) -->
     <Diagrams>
-      <Diagram Name="PriemModel" ZoomLevel="51">
+      <Diagram Name="PriemModel" ZoomLevel="63">
         <EntityTypeShape EntityType="Priem2012Model.AttMarks" Width="1.5" PointX="9" PointY="41.25" Height="1.9210009765624996" IsExpanded="true" />
         <EntityTypeShape EntityType="Priem2012Model.AttSubject" Width="1.5" PointX="6.75" PointY="47.625" Height="1.4279589843750031" IsExpanded="true" />
         <EntityTypeShape EntityType="Priem2012Model.CelCompetition" Width="1.5" PointX="13.25" PointY="23.375" Height="1.5923063151041674" IsExpanded="true" />
@@ -14477,7 +14900,6 @@
         <EntityTypeShape EntityType="Priem2012Model.extEntryView_ForDisEntered" Width="1.5" PointX="28.75" PointY="27.75" />
         <EntityTypeShape EntityType="Priem2012Model.C_FirstWave" Width="1.5" PointX="12.75" PointY="19.75" />
         <AssociationConnector Association="Priem2012Model.FK_StudyLevel_StudyLevelGroup" />
-        <EntityTypeShape EntityType="Priem2012Model.extPerson" Width="1.5" PointX="29.75" PointY="0.75" />
         <EntityTypeShape EntityType="Priem2012Model.SchoolNames" Width="1.5" PointX="25.75" PointY="21.75" />
         <EntityTypeShape EntityType="Priem2012Model.C_AppSettings" Width="1.5" PointX="30.75" PointY="20.75" />
         <EntityTypeShape EntityType="Priem2012Model.SP_LicenseProgram" Width="1.5" PointX="0.75" PointY="19.75" />
@@ -14620,6 +15042,11 @@
         <AssociationConnector Association="Priem2012Model.FK_ObrazProgramInEntry_SP_ObrazProgram" />
         <AssociationConnector Association="Priem2012Model.FK_InnerEntryInEntry_SP_Profile" />
         <EntityTypeShape EntityType="Priem2012Model.extAbit" Width="1.5" PointX="3.8783058840214766" PointY="14.22568713791002" />
+        <EntityTypeShape EntityType="Priem2012Model.extPerson" Width="1.5" PointX="9.902890573210497" PointY="31.9006768315568" />
+        <EntityTypeShape EntityType="Priem2012Model.extPerson_EducationInfo" Width="1.5" PointX="1.6961002860665788" PointY="31.760311797149626" />
+        <EntityTypeShape EntityType="Priem2012Model.extPerson_EducationInfo_Current" Width="1.5" PointX="7.8674916065612308" PointY="22.507633771052415" />
+        <AssociationConnector Association="Priem2012Model.FK_Protocol_SP_Faculty" />
+        <AssociationConnector Association="Priem2012Model.FK_Protocol_SP_LicenseProgram" />
         </Diagram>
     </Diagrams>
   </Designer>

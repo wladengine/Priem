@@ -99,12 +99,9 @@ namespace Priem
             {
                 using (PriemEntities context = new PriemEntities())
                 {
-                    extPerson person = (from per in context.extPerson
-                                        where per.Id == persId
-                                        select per).FirstOrDefault();
+                    extPerson person = context.extPerson.Where(x => x.Id == persId).FirstOrDefault();
 
                     FileStream fileS = null;
-
                     using (FileStream fs = new FileStream(string.Format(@"{0}\ExamPass.pdf", MainClass.dirTemplates), FileMode.Open, FileAccess.Read))
                     {
                         byte[] bytes = new byte[fs.Length];
@@ -124,7 +121,6 @@ namespace Priem
                             WinFormsServ.Error("Пожалуйста, закройте открытые файлы pdf");
                             return;
                         }
-
 
                         PdfStamper pdfStm = new PdfStamper(pdfRd, fileS);
                         pdfStm.SetEncryption(PdfWriter.STRENGTH128BITS, "", "",
@@ -560,7 +556,6 @@ namespace Priem
                 WinFormsServ.Error(exc.Message);
             }
         }
-
         public static void PrintStikerAll(Guid? personId, Guid? abitId, bool forPrint)
         {
             string dotName;

@@ -714,10 +714,6 @@
     <Compile Include="Migrator.designer.cs">
       <DependentUpon>Migrator.cs</DependentUpon>
     </Compile>
-    <Compile Include="MigratorFISEGE.cs" />
-    <Compile Include="MigratorFISEGE.Designer.cs">
-      <DependentUpon>MigratorFISEGE.cs</DependentUpon>
-    </Compile>
     <Compile Include="PriemModel.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -795,6 +791,7 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Providers\PersonDataProvider.cs" />
+    <Compile Include="Providers\ProtocolDataProvider.cs" />
     <Compile Include="SomeMethodsClass.cs" />
     <Compile Include="Statistics\AbitFacultyIntersection.cs">
       <SubType>Form</SubType>
@@ -1229,9 +1226,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrator.resx">
       <DependentUpon>Migrator.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="MigratorFISEGE.resx">
-      <DependentUpon>MigratorFISEGE.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

@@ -74,7 +74,7 @@ namespace Priem
                 return false;
         }
 
-        public static string GetEgeCertificateNumbers(Guid PersonId, Guid EntryId)
+        public static string GetSignificantEgeCertificateNumbersForEntry(Guid PersonId, Guid EntryId)
         {
             using (PriemEntities context = new PriemEntities())
             {

@@ -114,7 +114,7 @@ namespace Priem
                 pers.SNILS = row["SNILS"].ToString();
                 
                 pers.Sex = QueryServ.ToBoolValue(row["Sex"]);
-                pers.CountryId = (int?)(Util.ToNullObject(row["CountryId"]));
+                pers.CountryId = (int)(row["CountryId"]);
                 pers.NationalityId = (int?)(Util.ToNullObject(row["NationalityId"])) ?? 1;
                 pers.RegionId = (int?)(Util.ToNullObject(row["RegionId"])) ?? 1;
                 pers.Phone = row["Phone"].ToString();
@@ -137,7 +137,7 @@ namespace Priem
                 pers.HostelEduc = QueryServ.ToBoolValue(row["HostelEduc"]);
                 pers.HasAssignToHostel = false;
                 pers.HasExamPass = false;
-                pers.LanguageId = (int?)(Util.ToNullObject(row["LanguageId"]));
+                pers.LanguageId = (int)(row["LanguageId"]);
                 
                 pers.HasTRKI = (bool)row["HasTRKI"];
                 pers.TRKICertificateNumber = row["TRKICertificateNumber"].ToString();
@@ -145,9 +145,9 @@ namespace Priem
                 pers.PersonInfo = row["PersonInfo"].ToString();
                 pers.ExtraInfo = row["ExtraInfo"].ToString();
                 pers.StartEnglish = QueryServ.ToBoolValue(row["StartEnglish"]);
-                int EnglishMark = 0;
-                int.TryParse(row["EnglishMark"].ToString(), out EnglishMark);
-                pers.EnglishMark = EnglishMark == 0 ? null : (int?)EnglishMark;
+                double EnglishMark = 0d;
+                double.TryParse(row["EnglishMark"].ToString(), out EnglishMark);
+                pers.EnglishMark = EnglishMark;
 
                 DataSet dsWork = _bdcInet.GetDataSet(string.Format(@"
                       SELECT  PersonWork.WorkPlace + ', ' + PersonWork.WorkProfession + ', ' + PersonWork.WorkSpecifications + ' стаж: ' + PersonWork.Stage AS Work,

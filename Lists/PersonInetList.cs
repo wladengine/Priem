@@ -60,7 +60,8 @@ namespace Priem
 
         protected override void GetSource()
         {
-            _sQuery = "SELECT DISTINCT extPerson.Id, extPerson.PersonNum, extPerson.FIO, extPerson.PassportData, extPerson.EducDocument FROM ed.extPerson ";
+            _sQuery = @"SELECT DISTINCT extPerson.Id, extPerson.PersonNum, extPerson.FIO, extPerson.PassportData, EducInfo.EducDocument FROM ed.extPerson 
+LEFT JOIN ed.extPerson_EducationInfo_Current AS EducInfo ON EducInfo.PersonId = extPerson.Id";
             string join = "";
 
             if (!chbShowAll.Checked)
@@ -71,7 +72,7 @@ LEFT JOIN ed.StudyLevel ON StudyLevel.Id=Entry.StudyLevelId
 WHERE Abiturient.IsGosLine <> 1 {1} 
 AND (StudyLevel.LevelGroupId <> {0} OR StudyLevel.LevelGroupId IS NULL OR StudyLevel.LevelGroupId = {2}) ",
                     MainClass.dbType == PriemType.Priem ? 2 : 1,
-                    MainClass.dbType == PriemType.Priem ? "" : "AND extPerson.SchoolTypeId=4",
+                    MainClass.dbType == PriemType.Priem ? "" : "AND EducInfo.SchoolTypeId=4",
                     MainClass.dbType == PriemType.Priem ? 1 : 2);
             }
             

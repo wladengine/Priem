@@ -106,7 +106,7 @@ namespace Priem
             }
             catch (Exception de)
             {
-                WinFormsServ.Error("Ошибка обновления данных" + de.Message);
+                WinFormsServ.Error(de, "Ошибка обновления данных");
                 return false;
             }
         }
@@ -172,8 +172,8 @@ namespace Priem
         }
 
         protected virtual void UpdateRec(PriemEntities context, Guid id)
-        {            
-        }       
+        {
+        }
   
         protected override void OnSave()
         {

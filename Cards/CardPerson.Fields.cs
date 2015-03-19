@@ -103,7 +103,10 @@ namespace Priem
                 rbFemale.Checked = !value;
             }
         }
-      
+
+        protected int? ForeignCountryId { get; set; }
+        protected int? ForeignNationalityId { get; set; }
+
         protected int? CountryId
         {
             get { return ComboServ.GetComboIdInt(cbCountry); }
@@ -265,12 +268,11 @@ namespace Priem
         /// </summary>
         public bool? HasExamPass
         {
+            get { return _hasExamPass; }
             set
             {
-                if (value.HasValue)
-                { _hasExamPass = lblHasExamPass.Visible = value.Value; }
+                _hasExamPass = lblHasExamPass.Visible = value.Value;
             }
-            get { return _hasExamPass; }
         }
         public int? ExamPassFacultyId
         { 
@@ -288,13 +290,12 @@ namespace Priem
             }
         }   
 
-        public bool? IsExcellent
+        public bool IsExcellent
         {
             get { return chbIsExcellent.Checked; }
             set
             {
-                if (value.HasValue)
-                { chbIsExcellent.Checked = value.Value; }
+                chbIsExcellent.Checked = value;
             }
         }
         protected int? LanguageId
@@ -303,6 +304,7 @@ namespace Priem
             set { ComboServ.SetComboId(cbLanguage, value); }
         }
 
+        private int CurrEducationId { get; set; }
         public string SchoolCity
         {
             get { return cbSchoolCity.Text.Trim(); }
@@ -323,17 +325,15 @@ namespace Priem
             get { return tbSchoolNum.Text.Trim(); }
             set { tbSchoolNum.Text = value; }
         }
-        public int? SchoolExitYear
+        public int SchoolExitYear
         {
             get
             {
                 int j;
-                if (int.TryParse(tbSchoolExitYear.Text.Trim(), out j))
-                    return j;
-                else
-                    return null;                 
+                int.TryParse(tbSchoolExitYear.Text.Trim(), out j);
+                return j;
             }
-            set { tbSchoolExitYear.Text = Util.ToStr(value); }           
+            set { tbSchoolExitYear.Text = value.ToString(); }           
         }
         protected int? CountryEducId
         {
@@ -349,24 +349,18 @@ namespace Priem
         /// <summary>
         /// Свидетельство об эквивалентности
         /// </summary>
-        public bool? IsEqual
+        public bool IsEqual
         {
             get { return chbEkvivEduc.Checked; }
             set
             {
-                if (value.HasValue)
-                { chbEkvivEduc.Checked = value.Value; }
+                chbEkvivEduc.Checked = value;
             }
         }
         public string EqualDocumentNumber
         {
             get { return tbEqualityDocumentNumber.Text.Trim(); }
             set { tbEqualityDocumentNumber.Text = value; }
-        }
-        public string AttestatRegion
-        {
-            get { return tbAttestatRegion.Text.Trim(); }
-            set { tbAttestatRegion.Text = value; }
         }
         public string AttestatSeries
         {

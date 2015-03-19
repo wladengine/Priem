@@ -18,7 +18,7 @@ namespace Priem
                                      select pEd).ToList();
 
                 if (EducationInfo.Count == 0)
-                    throw new Exception("Записей не найдено");
+                    throw new Exception("Не найдено записей о документах об образовании");
 
                 foreach (var row in EducationInfo)
                 {
@@ -57,6 +57,14 @@ namespace Priem
             }
         }
 
+        public static void DeletePersonEducationDocument(Guid PersonId, int id)
+        {
+            using (PriemEntities context = new PriemEntities())
+            {
+                context.Person_EducationInfo_delete(PersonId, id);
+            }
+        }
+
         public static int CreateNewEducationInfo(Guid PersonId)
         {
             using (PriemEntities context = new PriemEntities())
@@ -86,10 +94,16 @@ namespace Priem
             ObjectParameter idParam = new ObjectParameter("id", typeof(int));
             using (PriemEntities context = new PriemEntities())
             {
-                context.Person_EducationInfo_insert(ED.PersonId, ED.IsExcellent, ED.SchoolCity, ED.SchoolTypeId, ED.SchoolName,
-                    ED.SchoolNum, ED.SchoolExitYear, ED.SchoolAVG, ED.CountryEducId, ED.RegionEducId, ED.IsEqual,
-                    ED.AttestatSeries, ED.AttestatNum, ED.DiplomSeries, ED.DiplomNum, ED.HighEducation,
-                    ED.HEProfession, ED.HEQualification, ED.HEEntryYear, ED.HEExitYear, ED.HEStudyFormId, ED.HEWork, idParam);
+                if (ED.Id == 0)
+                    context.Person_EducationInfo_insert(ED.PersonId, ED.IsExcellent, ED.SchoolCity, ED.SchoolTypeId, ED.SchoolName,
+                        ED.SchoolNum, ED.SchoolExitYear, ED.SchoolAVG, ED.CountryEducId, ED.RegionEducId, ED.IsEqual,
+                        ED.AttestatSeries, ED.AttestatNum, ED.DiplomSeries, ED.DiplomNum, ED.HighEducation,
+                        ED.HEProfession, ED.HEQualification, ED.HEEntryYear, ED.HEExitYear, ED.HEStudyFormId, ED.HEWork, idParam);
+                else
+                    context.Person_EducationInfo_update(ED.PersonId, ED.IsExcellent, ED.SchoolCity, ED.SchoolTypeId, ED.SchoolName,
+                        ED.SchoolNum, ED.SchoolExitYear, ED.SchoolAVG, ED.CountryEducId, ED.RegionEducId, ED.IsEqual,
+                        ED.AttestatSeries, ED.AttestatNum, ED.DiplomSeries, ED.DiplomNum, ED.HighEducation,
+                        ED.HEProfession, ED.HEQualification, ED.HEEntryYear, ED.HEExitYear, ED.HEStudyFormId, ED.HEWork, ED.Id);
             }
         }
         
@@ -137,6 +151,94 @@ namespace Priem
                     return true;
                 else
                     return false;
+            }
+        }
+
+        public static extPerson_EducationInfo GetPersonCurrentInfo(Guid PersonId)
+        {
+            IPersonCurrentInfoDataProvider provider;
+            switch (MainClass.studyLevelGroupId)
+            {
+                case 1: { provider = new PersonCurrentEducationDocument_1K(); break; }
+                case 2: { provider = new PersonCurrentEducationDocument_Mag(); break; }
+                case 3: { provider = new PersonCurrentEducationDocument_SPO(); break; }
+                case 4: { provider = new PersonCurrentEducationDocument_Aspirant(); break; }
+                default: { provider = new PersonCurrentEducationDocument_1K(); break; }
+            }
+
+            return provider.GetPersonCurrentInfo(PersonId);
+        }
+
+        public static extPerson GetExtPerson(Guid PersonId)
+        {
+            using (PriemEntities context = new PriemEntities())
+            {
+                return context.extPerson.Where(x => x.Id == PersonId).FirstOrDefault();
+            }
+        }
+    }
+
+    /// <summary>
+    /// Основной интерфейс поставки данных об текущем образовании
+    /// </summary>
+    public interface IPersonCurrentInfoDataProvider
+    {
+        extPerson_EducationInfo GetPersonCurrentInfo(Guid PersonId);
+    }
+    /// <summary>
+    /// Generiс-интерфейс для точной поставки данных об текущем образовании. Требует точного указания типа приёма
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    public interface IPersonCurrentInfoDataProvider<T> : IPersonCurrentInfoDataProvider where T : Common_Classes.PriemTypeClass
+    {
+    }
+
+    //Производные классы-поставщики. Каждый может описывать свою собственную логику получения данных в зависимости от типа приёма
+    public class PersonCurrentEducationDocument_1K : IPersonCurrentInfoDataProvider<Common_Classes.PriemType1K>
+    {
+        public extPerson_EducationInfo GetPersonCurrentInfo(Guid PersonId)
+        {
+            using (PriemEntities context = new PriemEntities())
+            {
+                return (from EI in context.extPerson_EducationInfo
+                        join Curr in context.hlpPersonMaxEducationInfoId on EI.Id equals Curr.Id
+                        select EI).FirstOrDefault();
+            }
+        }
+    }
+    public class PersonCurrentEducationDocument_Mag : IPersonCurrentInfoDataProvider<Common_Classes.PriemTypeMag>
+    {
+        public extPerson_EducationInfo GetPersonCurrentInfo(Guid PersonId)
+        {
+            using (PriemEntities context = new PriemEntities())
+            {
+                return (from EI in context.extPerson_EducationInfo
+                        join Curr in context.hlpPersonMaxEducationInfoId on EI.Id equals Curr.Id
+                        select EI).FirstOrDefault();
+            }
+        }
+    }
+    public class PersonCurrentEducationDocument_SPO : IPersonCurrentInfoDataProvider<Common_Classes.PriemTypeSPO>
+    {
+        public extPerson_EducationInfo GetPersonCurrentInfo(Guid PersonId)
+        {
+            using (PriemEntities context = new PriemEntities())
+            {
+                return (from EI in context.extPerson_EducationInfo
+                        join Curr in context.hlpPersonMaxEducationInfoId on EI.Id equals Curr.Id
+                        select EI).FirstOrDefault();
+            }
+        }
+    }
+    public class PersonCurrentEducationDocument_Aspirant : IPersonCurrentInfoDataProvider<Common_Classes.PriemTypeAspirant>
+    {
+        public extPerson_EducationInfo GetPersonCurrentInfo(Guid PersonId)
+        {
+            using (PriemEntities context = new PriemEntities())
+            {
+                return (from EI in context.extPerson_EducationInfo
+                        join Curr in context.hlpPersonMaxEducationInfoId on EI.Id equals Curr.Id
+                        select EI).FirstOrDefault();
             }
         }
     }

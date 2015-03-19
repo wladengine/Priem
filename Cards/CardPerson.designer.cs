@@ -132,10 +132,8 @@
             this.tbEqualityDocumentNumber = new System.Windows.Forms.TextBox();
             this.gbAtt = new System.Windows.Forms.GroupBox();
             this.cbAttestatSeries = new System.Windows.Forms.ComboBox();
-            this.tbAttestatRegion = new System.Windows.Forms.TextBox();
             this.label31 = new System.Windows.Forms.Label();
             this.label30 = new System.Windows.Forms.Label();
-            this.label29 = new System.Windows.Forms.Label();
             this.tbAttestatNum = new System.Windows.Forms.TextBox();
             this.btnAttMarks = new System.Windows.Forms.Button();
             this.label45 = new System.Windows.Forms.Label();
@@ -402,6 +400,7 @@
             this.cbCountry.Name = "cbCountry";
             this.cbCountry.Size = new System.Drawing.Size(329, 21);
             this.cbCountry.TabIndex = 114;
+            this.cbCountry.SelectedIndexChanged += new System.EventHandler(this.cbCountry_SelectedIndexChanged);
             // 
             // cbNationality
             // 
@@ -1205,6 +1204,7 @@
             this.btnDeleteEducDoc.TabIndex = 102;
             this.btnDeleteEducDoc.Text = "Удалить";
             this.btnDeleteEducDoc.UseVisualStyleBackColor = true;
+            this.btnDeleteEducDoc.Click += new System.EventHandler(this.btnDeleteEducDoc_Click);
             // 
             // btnAddEducDoc
             // 
@@ -1220,6 +1220,7 @@
             // 
             this.dgvEducationDocuments.AllowUserToAddRows = false;
             this.dgvEducationDocuments.AllowUserToDeleteRows = false;
+            this.dgvEducationDocuments.AllowUserToResizeRows = false;
             this.dgvEducationDocuments.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
@@ -1227,6 +1228,7 @@
             this.dgvEducationDocuments.Location = new System.Drawing.Point(6, 19);
             this.dgvEducationDocuments.Name = "dgvEducationDocuments";
             this.dgvEducationDocuments.ReadOnly = true;
+            this.dgvEducationDocuments.RowHeadersVisible = false;
             this.dgvEducationDocuments.Size = new System.Drawing.Size(500, 107);
             this.dgvEducationDocuments.TabIndex = 100;
             this.dgvEducationDocuments.CurrentCellChanged += new System.EventHandler(this.dgvEducationDocuments_CurrentCellChanged);
@@ -1259,10 +1261,8 @@
             // gbAtt
             // 
             this.gbAtt.Controls.Add(this.cbAttestatSeries);
-            this.gbAtt.Controls.Add(this.tbAttestatRegion);
             this.gbAtt.Controls.Add(this.label31);
             this.gbAtt.Controls.Add(this.label30);
-            this.gbAtt.Controls.Add(this.label29);
             this.gbAtt.Controls.Add(this.tbAttestatNum);
             this.gbAtt.Location = new System.Drawing.Point(7, 18);
             this.gbAtt.Name = "gbAtt";
@@ -1278,19 +1278,11 @@
             this.cbAttestatSeries.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
             this.cbAttestatSeries.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
             this.cbAttestatSeries.FormattingEnabled = true;
-            this.cbAttestatSeries.Location = new System.Drawing.Point(144, 19);
+            this.cbAttestatSeries.Location = new System.Drawing.Point(55, 19);
             this.cbAttestatSeries.MaxLength = 10;
             this.cbAttestatSeries.Name = "cbAttestatSeries";
-            this.cbAttestatSeries.Size = new System.Drawing.Size(73, 21);
+            this.cbAttestatSeries.Size = new System.Drawing.Size(162, 21);
             this.cbAttestatSeries.TabIndex = 114;
-            // 
-            // tbAttestatRegion
-            // 
-            this.tbAttestatRegion.Location = new System.Drawing.Point(55, 18);
-            this.tbAttestatRegion.MaxLength = 2;
-            this.tbAttestatRegion.Name = "tbAttestatRegion";
-            this.tbAttestatRegion.Size = new System.Drawing.Size(43, 20);
-            this.tbAttestatRegion.TabIndex = 0;
             // 
             // label31
             // 
@@ -1304,20 +1296,11 @@
             // label30
             // 
             this.label30.AutoSize = true;
-            this.label30.Location = new System.Drawing.Point(104, 22);
+            this.label30.Location = new System.Drawing.Point(11, 23);
             this.label30.Name = "label30";
             this.label30.Size = new System.Drawing.Size(38, 13);
             this.label30.TabIndex = 31;
             this.label30.Text = "Серия";
-            // 
-            // label29
-            // 
-            this.label29.AutoSize = true;
-            this.label29.Location = new System.Drawing.Point(6, 22);
-            this.label29.Name = "label29";
-            this.label29.Size = new System.Drawing.Size(43, 13);
-            this.label29.TabIndex = 30;
-            this.label29.Text = "Регион";
             // 
             // tbAttestatNum
             // 
@@ -1469,7 +1452,7 @@
             this.cbRegionEduc.FormattingEnabled = true;
             this.cbRegionEduc.Location = new System.Drawing.Point(76, 102);
             this.cbRegionEduc.Name = "cbRegionEduc";
-            this.cbRegionEduc.Size = new System.Drawing.Size(414, 21);
+            this.cbRegionEduc.Size = new System.Drawing.Size(467, 21);
             this.cbRegionEduc.TabIndex = 116;
             // 
             // cbCountryEduc
@@ -1482,8 +1465,9 @@
             this.cbCountryEduc.FormattingEnabled = true;
             this.cbCountryEduc.Location = new System.Drawing.Point(76, 72);
             this.cbCountryEduc.Name = "cbCountryEduc";
-            this.cbCountryEduc.Size = new System.Drawing.Size(414, 21);
+            this.cbCountryEduc.Size = new System.Drawing.Size(467, 21);
             this.cbCountryEduc.TabIndex = 114;
+            this.cbCountryEduc.SelectedIndexChanged += new System.EventHandler(this.cbCountryEduc_SelectedIndexChanged);
             // 
             // cbSchoolCity
             // 
@@ -1916,6 +1900,7 @@
             // 
             this.dgvExams.AllowUserToAddRows = false;
             this.dgvExams.AllowUserToDeleteRows = false;
+            this.dgvExams.AllowUserToResizeRows = false;
             this.dgvExams.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
             this.dgvExams.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
             this.dgvExams.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
@@ -2053,6 +2038,7 @@
             // 
             this.dgvBenefitDocument.AllowUserToAddRows = false;
             this.dgvBenefitDocument.AllowUserToDeleteRows = false;
+            this.dgvBenefitDocument.AllowUserToResizeRows = false;
             this.dgvBenefitDocument.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvBenefitDocument.Location = new System.Drawing.Point(6, 19);
             this.dgvBenefitDocument.Name = "dgvBenefitDocument";
@@ -2891,10 +2877,8 @@
         private System.Windows.Forms.TabPage tabPage3;
         private System.Windows.Forms.Button btnAttMarks;
         private System.Windows.Forms.GroupBox gbAtt;
-        private System.Windows.Forms.TextBox tbAttestatRegion;
         private System.Windows.Forms.Label label31;
         private System.Windows.Forms.Label label30;
-        private System.Windows.Forms.Label label29;
         private System.Windows.Forms.TextBox tbAttestatNum;
         private System.Windows.Forms.CheckBox chbEkvivEduc;
         private System.Windows.Forms.Label label39;

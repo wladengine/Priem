@@ -15,7 +15,7 @@ using EducServLib;
 
 namespace Priem
 {
-    public class Print
+    public partial class Print
     {
         public static void PrintHostelDirection(Guid? persId, bool forPrint, string savePath)
         {
@@ -146,7 +146,6 @@ namespace Priem
 
                         acrFlds.SetField("chbMale", person.Sex ? "0" : "1");
                         acrFlds.SetField("chbFemale", person.Sex ? "1" : "0");
-
 
                         pdfStm.FormFlattening = true;
                         pdfStm.Close();
@@ -491,7 +490,7 @@ namespace Priem
                     wd.Shapes["Comp6"].Visible = false;
 
                     wd.Shapes["Comp" + abit.CompetitionId.ToString()].Visible = true;
-                    wd.Shapes["HasAssignToHostel"].Visible = person.HasAssignToHostel ?? false;
+                    wd.Shapes["HasAssignToHostel"].Visible = person.HasAssignToHostel;
 
                     if (abit.CompetitionId == 6 && abit.OtherCompetitionId.HasValue)
                         wd.Shapes["Comp" + abit.CompetitionId.ToString()].Visible = true;
@@ -589,7 +588,7 @@ namespace Priem
                     wd.Shapes["Comp5"].Visible = false;
                     wd.Shapes["Comp6"].Visible = false;
 
-                    wd.Shapes["HasAssignToHostel"].Visible = person.HasAssignToHostel.Value;
+                    wd.Shapes["HasAssignToHostel"].Visible = person.HasAssignToHostel;
 
                     if (MainClass.dbType != PriemType.PriemMag)
                     {
@@ -670,577 +669,6 @@ namespace Priem
             System.Diagnostics.Process.Start(savePath);
         }
 
-        //1курс-магистратура ОСНОВНОЙ (AbitTypeId = 1)
-        public static byte[] GetApplicationPDF(string dirPath, bool isMag, Guid PersonId)
-        {
-            using (PriemEntities context = new PriemEntities())
-            {
-                var abitList = (from x in context.Abiturient
-                                join Entry in context.Entry on x.EntryId equals Entry.Id
-                                where Entry.StudyLevel.StudyLevelGroup.Id == MainClass.studyLevelGroupId
-                                && x.IsGosLine == false
-                                && x.PersonId == PersonId
-                                && x.BackDoc == false
-                                select new
-                                {
-                                    x.Id,
-                                    x.PersonId,
-                                    x.Barcode,
-                                    Faculty = Entry.SP_Faculty.Name,
-                                    Profession = Entry.SP_LicenseProgram.Name,
-                                    ProfessionCode = Entry.SP_LicenseProgram.Code,
-                                    ObrazProgram = Entry.StudyLevel.Acronym + "." + Entry.SP_ObrazProgram.Number + "." + MainClass.sPriemYear + " " + Entry.SP_ObrazProgram.Name,
-                                    Specialization = Entry.SP_Profile.Name,
-                                    Entry.StudyFormId,
-                                    Entry.StudyForm.Name,
-                                    Entry.StudyBasisId,
-                                    EntryType = (Entry.StudyLevelId == 17 ? 2 : 1),
-                                    Entry.StudyLevelId,
-                                    x.Priority,
-                                    x.IsGosLine,
-                                    Entry.CommissionId,
-                                    ComissionAddress = Entry.CommissionId
-                                }).OrderBy(x => x.Priority).ToList();
-
-                var abitProfileList = (from x in context.Abiturient
-                                       join Ad in context.ApplicationDetails on x.Id equals Ad.ApplicationId
-                                       join Entry in context.Entry on x.EntryId equals Entry.Id
-                                       where Entry.StudyLevel.StudyLevelGroup.Id == MainClass.studyLevelGroupId
-                                       && x.IsGosLine == false
-                                       && x.PersonId == PersonId
-                                       && x.BackDoc == false
-                                       select new ShortAppcationDetails()
-                                       {
-                                           ApplicationId = x.Id,
-                                           Priority = Ad.InnerEntryInEntryPriority,
-                                           ObrazProgramName = ((Ad.InnerEntryInEntry.SP_ObrazProgram.SP_LicenseProgram.StudyLevel.Acronym + "." + Ad.InnerEntryInEntry.SP_ObrazProgram.Number + " ") ?? "") + Ad.InnerEntryInEntry.SP_ObrazProgram.Name,
-                                           ProfileName = Ad.InnerEntryInEntry.SP_Profile.Name
-                                       }).Distinct().ToList();
-
-                var person = (from x in context.Person
-                              where x.Id == PersonId
-                              select new
-                              {
-                                  x.Surname,
-                                  x.Name,
-                                  x.SecondName,
-                                  x.Barcode,
-                                  x.Person_AdditionalInfo.HostelAbit,
-                                  x.BirthDate,
-                                  BirthPlace = x.BirthPlace ?? "",
-                                  Sex = x.Sex,
-                                  Nationality = x.Nationality.Name,
-                                  Country = x.Person_Contacts.Country.Name,
-                                  PassportType = x.PassportType.Name,
-                                  x.PassportSeries,
-                                  x.PassportNumber,
-                                  x.PassportAuthor,
-                                  x.PassportDate,
-                                  x.Person_Contacts.City,
-                                  Region = x.Person_Contacts.Region.Name,
-                                  AddInfo = x.Person_AdditionalInfo.ExtraInfo,
-                                  Parents = x.Person_AdditionalInfo.PersonInfo,
-                                  x.Person_Contacts.Code,
-                                  x.Person_Contacts.Street,
-                                  x.Person_Contacts.House,
-                                  x.Person_Contacts.Korpus,
-                                  x.Person_Contacts.Flat,
-                                  x.Person_Contacts.Phone,
-                                  x.Person_Contacts.Email,
-                                  x.Person_Contacts.Mobiles,
-                                  x.Person_AdditionalInfo.StartEnglish,
-                                  x.Person_AdditionalInfo.EnglishMark,
-                                  Language = x.Person_AdditionalInfo.Language.Name,
-
-                                  x.Person_EducationInfo.First().CountryEducId,
-                                  CountryEduc = x.Person_EducationInfo.First().CountryEducId != null ? x.Person_EducationInfo.First().Country.Name : "",
-                                  Qualification = x.Person_EducationInfo.First().HEQualification,
-                                  x.Person_EducationInfo.First().SchoolTypeId,
-                                  x.Person_EducationInfo.First().SchoolName,
-                                  x.Person_EducationInfo.First().SchoolExitYear,
-                                  x.Person_EducationInfo.First().IsEqual,
-                                  x.Person_EducationInfo.First().EqualDocumentNumber,
-                                  x.Person_EducationInfo.First().AttestatSeries,
-                                  x.Person_EducationInfo.First().AttestatNum,
-                                  EducationDocumentSeries = x.Person_EducationInfo.First().DiplomSeries,
-                                  EducationDocumentNumber = x.Person_EducationInfo.First().DiplomNum,
-                                  ProgramName = x.Person_EducationInfo.First().HEProfession,
-
-                                  HasPrivileges = (x.Person_AdditionalInfo.Privileges ?? 0) > 0,
-                                  x.Person_AdditionalInfo.HasTRKI,
-                                  x.Person_AdditionalInfo.TRKICertificateNumber,
-                                  x.Person_AdditionalInfo.HostelEduc,
-                                  IsRussia = (x.Person_Contacts.CountryId == 1),
-                                  x.HasRussianNationality,
-                                  x.Person_AdditionalInfo.Stag,
-                                  x.Person_AdditionalInfo.WorkPlace,
-                                  x.Num
-                              }).FirstOrDefault();
-
-                MemoryStream ms = new MemoryStream();
-                string dotName;
-
-                if (isMag)//mag
-                    dotName = "ApplicationMag_page3.pdf";
-                else
-                    dotName = "Application_page3.pdf";
-
-                byte[] templateBytes;
-
-                List<byte[]> lstFiles = new List<byte[]>();
-                List<byte[]> lstAppendixes = new List<byte[]>();
-                using (FileStream fs = new FileStream(dirPath + "\\" + dotName, FileMode.Open, FileAccess.Read))
-                {
-                    templateBytes = new byte[fs.Length];
-                    fs.Read(templateBytes, 0, templateBytes.Length);
-                }
-
-                PdfReader pdfRd = new PdfReader(templateBytes);
-                PdfStamper pdfStm = new PdfStamper(pdfRd, ms);
-                //pdfStm.SetEncryption(PdfWriter.STRENGTH128BITS, "", "", PdfWriter.ALLOW_SCREENREADERS | PdfWriter.ALLOW_PRINTING | PdfWriter.AllowPrinting);
-                AcroFields acrFlds = pdfStm.AcroFields;
-
-                string FIO = ((person.Surname ?? "") + " " + (person.Name ?? "") + " " + (person.SecondName ?? "")).Trim();
-
-                List<ShortAppcation> lstApps = abitList
-                    .Select(x => new ShortAppcation()
-                    {
-                        ApplicationId = x.Id,
-                        LicenseProgramName = x.ProfessionCode + " " + x.Profession,
-                        ObrazProgramName = x.ObrazProgram,
-                        ProfileName = x.Specialization,
-                        Priority = x.Priority ?? 1,
-                        StudyBasisId = x.StudyBasisId,
-                        StudyFormId = x.StudyFormId,
-                        HasInnerPriorities = abitProfileList.Where(y => y.ApplicationId == x.Id).Count() > 0,
-                    }).ToList();
-                int incrmtr = 1;
-                for (int u = 0; u < lstApps.Count; u++)
-                {
-                    if (lstApps[u].HasInnerPriorities) //если есть профили
-                    {
-                        lstApps[u].InnerPrioritiesNum = incrmtr; //то пишем об этом
-                        //и сразу же создаём приложение с описанием - потом приложим
-
-                        if (isMag) //для магов всё просто
-                        {
-                            lstAppendixes.Add(GetApplicationPDF_ProfileAppendix_Mag(abitProfileList.Where(x => x.ApplicationId == lstApps[u].ApplicationId).ToList(), lstApps[u].LicenseProgramName, FIO, dirPath, incrmtr));
-                            incrmtr++;
-                        }
-                        else //для перваков всё запутаннее
-                        {   //сначала надо проверить, нет ли внутреннего разбиения по программам
-                            //если есть, то для каждой программы сделать своё приложение, а затем уже для тех программ, где есть внутри профили доложить приложений с профилями
-                            var profs = abitProfileList.Where(x => x.ApplicationId == lstApps[u].ApplicationId).Select(x => new ShortAppcationDetails() 
-                            { 
-                                ApplicationId = x.ApplicationId,  
-                                ObrazProgramName = x.ObrazProgramName,
-                                Priority = x.Priority,
-                                ProfileName = x.ProfileName,
-                            }).Distinct().ToList();
-                            var OP = profs.Select(x => x.ObrazProgramName).Distinct().ToList();
-                            if (OP.Count > 1)
-                            {
-                                lstAppendixes.Add(GetApplicationPDF_OPAppendix_1kurs(profs, lstApps[u].LicenseProgramName, FIO, dirPath, incrmtr));
-                                incrmtr++;
-                            }
-                            foreach (var OP_name in OP)
-                            {
-                                var lstProfs = abitProfileList.Where(x => x.ApplicationId == lstApps[u].ApplicationId && x.ObrazProgramName == OP_name).Distinct().ToList();
-                                if (lstProfs.Select(x => x.ProfileName).Distinct().Count() > 1)
-                                {
-                                    lstAppendixes.Add(GetApplicationPDF_ProfileAppendix_1kurs(lstProfs, lstApps[u].LicenseProgramName, FIO, dirPath, incrmtr));
-                                    incrmtr++;
-                                }
-                            }
-                        }
-                    }
-                }
-
-                List<ShortAppcation> lstAppsFirst = new List<ShortAppcation>();
-                for (int u = 0; u < 3; u++)
-                {
-                    if (lstApps.Count > u)
-                        lstAppsFirst.Add(lstApps[u]);
-                }
-
-                string code =  (MainClass.iPriemYear % 100).ToString() + person.Num.ToString("D5");
-                //добавляем первый файл
-                lstFiles.Add(GetApplicationPDF_FirstPage(lstAppsFirst, lstApps, dirPath, isMag ? "ApplicationMag_page1.pdf" : "Application_page1.pdf", FIO, code, isMag));
-
-                //остальные - по 4 на новую страницу
-                int appcount = 3;
-                while (appcount < lstApps.Count)
-                {
-                    lstAppsFirst = new List<ShortAppcation>();
-                    for (int u = 0; u < 4; u++)
-                    {
-                        if (lstApps.Count > appcount)
-                            lstAppsFirst.Add(lstApps[appcount]);
-                        else
-                            break;
-                        appcount++;
-                    }
-
-                    lstFiles.Add(GetApplicationPDF_NextPage(lstAppsFirst, lstApps, dirPath, "ApplicationMag_page2.pdf", FIO));
-                }
-
-
-                if (person.HostelEduc)
-                    acrFlds.SetField("HostelEducYes", "1");
-                else
-                    acrFlds.SetField("HostelEducNo", "1");
-
-                if (abitList.Where(x => x.IsGosLine).Count() > 0)
-                    acrFlds.SetField("IsGosLine", "1");
-
-                acrFlds.SetField("HostelAbitYes", person.HostelAbit ? "1" : "0");
-                acrFlds.SetField("HostelAbitNo", person.HostelAbit  ? "0" : "1");
-
-                acrFlds.SetField("BirthDateYear", person.BirthDate.Year.ToString("D2"));
-                acrFlds.SetField("BirthDateMonth", person.BirthDate.Month.ToString("D2"));
-                acrFlds.SetField("BirthDateDay", person.BirthDate.Day.ToString());
-
-                acrFlds.SetField("BirthPlace", person.BirthPlace);
-                acrFlds.SetField("Male", person.Sex ? "1" : "0");
-                acrFlds.SetField("Female", person.Sex ? "0" : "1");
-                acrFlds.SetField("Nationality", person.Nationality);
-                acrFlds.SetField("PassportSeries", person.PassportSeries);
-                acrFlds.SetField("PassportNumber", person.PassportNumber);
-
-                //dd.MM.yyyy :12.05.2000
-                string[] splitStr = GetSplittedStrings(person.PassportAuthor + " " + person.PassportDate.Value.ToString("dd.MM.yyyy"), 60, 70, 2);
-                for (int i = 1; i <= 2; i++)
-                    acrFlds.SetField("PassportAuthor" + i, splitStr[i - 1]);
-                if (person.HasRussianNationality)
-                    acrFlds.SetField("HasRussianNationalityYes", "1");
-                else
-                    acrFlds.SetField("HasRussianNationalityNo", "1");
-
-                string Address = string.Format("{0} {1}{2},", (person.Code) ?? "", (person.IsRussia ? (person.Region + ", ") ?? "" : person.Country + ", "), (person.City + ", ") ?? "") +
-                    string.Format("{0} {1} {2} {3}", person.Street ?? "", person.House == string.Empty ? "" : "дом " + person.House,
-                    person.Korpus == string.Empty ? "" : "корп. " + person.Korpus,
-                    person.Flat == string.Empty ? "" : "кв. " + person.Flat);
-
-                splitStr = GetSplittedStrings(Address, 50, 70, 3);
-                for (int i = 1; i <= 3; i++)
-                    acrFlds.SetField("Address" + i, splitStr[i - 1]);
-
-                acrFlds.SetField("EnglishMark", person.EnglishMark.ToString());
-                if (person.StartEnglish)
-                    acrFlds.SetField("chbEnglishYes", "1");
-                else
-                    acrFlds.SetField("chbEnglishNo", "1");
-
-                acrFlds.SetField("Phone", person.Phone);
-                acrFlds.SetField("Email", person.Email);
-                acrFlds.SetField("Mobiles", person.Mobiles);
-
-                acrFlds.SetField("ExitYear", person.SchoolExitYear.ToString());
-                splitStr = GetSplittedStrings(person.SchoolName ?? "", 50, 70, 2);
-                for (int i = 1; i <= 2; i++)
-                    acrFlds.SetField("School" + i, splitStr[i - 1]);
-
-                //только у магистров
-                acrFlds.SetField("HEProfession", person.ProgramName ?? "");
-                acrFlds.SetField("Qualification", person.Qualification ?? "");
-
-                acrFlds.SetField("Original", "0");
-                acrFlds.SetField("Copy", "0");
-                acrFlds.SetField("CountryEduc", person.CountryEduc ?? "");
-                acrFlds.SetField("Language", person.Language ?? "");
-
-                string extraPerson = person.Parents ?? "";
-                splitStr = GetSplittedStrings(extraPerson, 70, 70, 3);
-                for (int i = 1; i <= 3; i++)
-                {
-                    acrFlds.SetField("Parents" + i.ToString(), splitStr[i - 1]);
-                    acrFlds.SetField("ExtraParents" + i.ToString(), splitStr[i - 1]);
-                }
-
-                string Attestat = person.SchoolTypeId == 1 ? ("аттестат серия " + (person.AttestatSeries ?? "") + " №" + (person.AttestatNum ?? "")) :
-                        ("диплом серия " + (person.EducationDocumentSeries ?? "") + " №" + (person.EducationDocumentNumber ?? ""));
-                acrFlds.SetField("Attestat", Attestat);
-                acrFlds.SetField("Extra", person.AddInfo ?? "");
-
-                if (person.IsEqual && person.CountryEducId != 193)
-                {
-                    acrFlds.SetField("IsEqual", "1");
-                    acrFlds.SetField("EqualSertificateNumber", person.EqualDocumentNumber);
-                }
-                else
-                {
-                    acrFlds.SetField("NoEqual", "1");
-                }
-
-                if (person.HasPrivileges)
-                    acrFlds.SetField("HasPrivileges", "1");
-
-                if ((person.SchoolTypeId == 1) || (isMag && person.SchoolTypeId == 4 && (person.Qualification).ToLower().IndexOf("магист") < 0))
-                    acrFlds.SetField("NoEduc", "1");
-                else
-                {
-                    acrFlds.SetField("HasEduc", "1");
-                    acrFlds.SetField("HighEducation", person.SchoolName);
-                }
-
-                if (!isMag)
-                {
-                    //EGE
-                    var exams = context.extEgeMark.Where(x => x.PersonId == PersonId).Select(x => new
-                        {
-                            ExamName = x.EgeExamName,
-                            MarkValue = x.Value,
-                            x.Number
-                        }).ToList();
-                    int egeCnt = 1;
-                    foreach (var ex in exams)
-                    {
-                        acrFlds.SetField("TableName" + egeCnt, ex.ExamName);
-                        acrFlds.SetField("TableValue" + egeCnt, ex.MarkValue.ToString());
-                        acrFlds.SetField("TableNumber" + egeCnt, ex.Number);
-
-                        if (egeCnt == 4)
-                            break;
-                        egeCnt++;
-                    }
-
-
-                    //VSEROS
-                    var OlympVseros = context.Olympiads.Where(x => x.Abiturient.PersonId == PersonId && x.OlympTypeId == 2)
-                        .Select(x => new { x.OlympSubject.Name, x.DocumentDate, x.DocumentSeries, x.DocumentNumber }).Distinct().ToList();
-                    egeCnt = 1;
-                    foreach (var ex in OlympVseros)
-                    {
-                        acrFlds.SetField("OlympVserosName" + egeCnt, ex.Name);
-                        acrFlds.SetField("OlympVserosYear" + egeCnt, ex.DocumentDate.HasValue ? ex.DocumentDate.Value.Year.ToString() : "");
-                        acrFlds.SetField("OlympVserosDiplom" + egeCnt, (ex.DocumentSeries + " " ?? "") + (ex.DocumentNumber ?? ""));
-
-                        if (egeCnt == 2)
-                            break;
-                        egeCnt++;
-                    }
-
-                    //OTHEROLYMPS
-                    var OlympNoVseros = context.Olympiads.Where(x => x.Abiturient.PersonId == PersonId && x.OlympTypeId != 2)
-                        .Select(x => new { x.OlympName.Name, OlympSubject = x.OlympSubject.Name, x.DocumentDate, x.DocumentSeries, x.DocumentNumber }).ToList();
-                    egeCnt = 1;
-                    foreach (var ex in OlympNoVseros)
-                    {
-                        acrFlds.SetField("OlympName" + egeCnt, ex.Name + " (" + ex.OlympSubject + ")");
-                        acrFlds.SetField("OlympYear" + egeCnt, ex.DocumentDate.HasValue ? ex.DocumentDate.Value.Year.ToString() : "");
-                        acrFlds.SetField("OlympDiplom" + egeCnt, (ex.DocumentSeries + " " ?? "") + (ex.DocumentNumber ?? ""));
-
-                        if (egeCnt == 2)
-                            break;
-                        egeCnt++;
-                    }
-
-                    if (!string.IsNullOrEmpty(person.SchoolName))
-                        acrFlds.SetField("chbSchoolFinished", "1");
-                }
-                
-                if (!string.IsNullOrEmpty(person.Stag))
-                {
-                    acrFlds.SetField("HasStag", "1");
-                    acrFlds.SetField("WorkPlace", person.WorkPlace);
-                    acrFlds.SetField("Stag", person.Stag);
-                }
-                else
-                    acrFlds.SetField("NoStag", "1");
-
-                int comInd = 1;
-                foreach (var comission in abitList.Select(x => x.ComissionAddress).Distinct().ToList())
-                {
-                    acrFlds.SetField("Comission" + comInd++, comission.ToString());
-                }
-
-                context.SaveChanges();
-
-                pdfStm.FormFlattening = true;
-                pdfStm.Close();
-                pdfRd.Close();
-
-                lstFiles.Add(ms.ToArray());
-
-                return MergePdfFiles(lstFiles.Union(lstAppendixes).ToList());
-            }
-        }
-
-        public static byte[] GetApplicationPDF_ProfileAppendix_Mag(List<ShortAppcationDetails> lst, string LicenseProgramName, string FIO, string dirPath, int Num)
-        {
-            MemoryStream ms = new MemoryStream();
-            string dotName = "PriorityProfiles_Mag2014.pdf";
-
-            byte[] templateBytes;
-            using (FileStream fs = new FileStream(dirPath + "\\" + dotName, FileMode.Open, FileAccess.Read))
-            {
-                templateBytes = new byte[fs.Length];
-                fs.Read(templateBytes, 0, templateBytes.Length);
-            }
-
-            PdfReader pdfRd = new PdfReader(templateBytes);
-            PdfStamper pdfStm = new PdfStamper(pdfRd, ms);
-            //pdfStm.SetEncryption(PdfWriter.STRENGTH128BITS, "", "", PdfWriter.ALLOW_SCREENREADERS | PdfWriter.ALLOW_PRINTING | PdfWriter.AllowPrinting);
-            AcroFields acrFlds = pdfStm.AcroFields;
-            acrFlds.SetField("Num", Num.ToString());
-            acrFlds.SetField("FIO", FIO);
-
-            acrFlds.SetField("ObrazProgramHead", lst.First().ObrazProgramName);
-            acrFlds.SetField("LicenseProgram", LicenseProgramName);
-            acrFlds.SetField("ObrazProgram", lst.First().ObrazProgramName);
-            int rwind = 1;
-            foreach (var p in lst.Select(x => new { x.ProfileName, x.Priority }).Distinct().OrderBy(x => x.Priority))
-                acrFlds.SetField("Profile" + rwind++, p.ProfileName);
-
-            pdfStm.FormFlattening = true;
-            pdfStm.Close();
-            pdfRd.Close();
-
-            return ms.ToArray();
-        }
-        public static byte[] GetApplicationPDF_OPAppendix_1kurs(List<ShortAppcationDetails> lst, string LicenseProgramName, string FIO, string dirPath, int Num)
-        {
-            MemoryStream ms = new MemoryStream();
-            string dotName = "PriorityOP2014.pdf";
-
-            byte[] templateBytes;
-            using (FileStream fs = new FileStream(dirPath + "\\" + dotName, FileMode.Open, FileAccess.Read))
-            {
-                templateBytes = new byte[fs.Length];
-                fs.Read(templateBytes, 0, templateBytes.Length);
-            }
-
-            PdfReader pdfRd = new PdfReader(templateBytes);
-            PdfStamper pdfStm = new PdfStamper(pdfRd, ms);
-            //pdfStm.SetEncryption(PdfWriter.STRENGTH128BITS, "", "", PdfWriter.ALLOW_SCREENREADERS | PdfWriter.ALLOW_PRINTING | PdfWriter.AllowPrinting);
-            AcroFields acrFlds = pdfStm.AcroFields;
-            acrFlds.SetField("Num", Num.ToString());
-            acrFlds.SetField("FIO", FIO);
-
-            acrFlds.SetField("LicenseProgram", LicenseProgramName);
-            int rwind = 1;
-            foreach (var p in lst.Select(x => new { x.ObrazProgramName, x.Priority }).Distinct().OrderBy(x => x.Priority))
-                acrFlds.SetField("ObrazProgram" + rwind++, p.ObrazProgramName);
-            
-            pdfStm.FormFlattening = true;
-            pdfStm.Close();
-            pdfRd.Close();
-
-            return ms.ToArray();
-        }
-        public static byte[] GetApplicationPDF_ProfileAppendix_1kurs(List<ShortAppcationDetails> lst, string LicenseProgramName, string FIO, string dirPath, int Num)
-        {
-            MemoryStream ms = new MemoryStream();
-            string dotName = "PriorityProfiles2014.pdf";
-
-            byte[] templateBytes;
-            using (FileStream fs = new FileStream(dirPath + "\\" + dotName, FileMode.Open, FileAccess.Read))
-            {
-                templateBytes = new byte[fs.Length];
-                fs.Read(templateBytes, 0, templateBytes.Length);
-            }
-
-            PdfReader pdfRd = new PdfReader(templateBytes);
-            PdfStamper pdfStm = new PdfStamper(pdfRd, ms);
-            AcroFields acrFlds = pdfStm.AcroFields;
-            acrFlds.SetField("Num", Num.ToString());
-            acrFlds.SetField("FIO", FIO);
-
-            acrFlds.SetField("ObrazProgramHead", lst.First().ObrazProgramName);
-            acrFlds.SetField("LicenseProgram", LicenseProgramName);
-            acrFlds.SetField("ObrazProgram", lst.First().ObrazProgramName);
-            int rwind = 1;
-            foreach (var p in lst.Select(x => new { x.ProfileName, x.Priority }).Distinct().OrderBy(x => x.Priority))
-                acrFlds.SetField("Profile" + rwind++, p.ProfileName);
-
-            pdfStm.FormFlattening = true;
-            pdfStm.Close();
-            pdfRd.Close();
-
-            return ms.ToArray();
-        }
-
-        public static byte[] GetApplicationPDF_FirstPage(List<ShortAppcation> lst, List<ShortAppcation> lstFullSource, string dirPath, string dotName, string FIO, string regNum, bool isMag)
-        {
-            MemoryStream ms = new MemoryStream();
-
-            byte[] templateBytes;
-            using (FileStream fs = new FileStream(dirPath + "\\" + dotName, FileMode.Open, FileAccess.Read))
-            {
-                templateBytes = new byte[fs.Length];
-                fs.Read(templateBytes, 0, templateBytes.Length);
-            }
-
-            PdfReader pdfRd = new PdfReader(templateBytes);
-            PdfStamper pdfStm = new PdfStamper(pdfRd, ms);
-            //pdfStm.SetEncryption(PdfWriter.STRENGTH128BITS, "", "", PdfWriter.ALLOW_SCREENREADERS | PdfWriter.ALLOW_PRINTING | PdfWriter.AllowPrinting);
-
-            AcroFields acrFlds = pdfStm.AcroFields;
-            acrFlds.SetField("FIO", FIO);
-            
-            //добавляем штрихкод
-            acrFlds.SetField("RegNum", regNum);
-
-            int rwind = 1;
-            foreach (var p in lst.OrderBy(x => x.Priority))
-            {
-                acrFlds.SetField("Priority" + rwind, p.Priority.ToString());
-                acrFlds.SetField("Profession" + rwind, p.LicenseProgramName);
-                acrFlds.SetField("ObrazProgram" + rwind, p.ObrazProgramName);
-                acrFlds.SetField("Specialization" + rwind, p.HasInnerPriorities ? "Приложение к заявлению № " + p.InnerPrioritiesNum : p.ProfileName);
-                acrFlds.SetField("StudyForm" + p.StudyFormId.ToString() + rwind.ToString(), "1");
-                acrFlds.SetField("StudyBasis" + p.StudyBasisId.ToString() + rwind.ToString(), "1");
-
-                if (lstFullSource.Where(x => x.LicenseProgramName == p.LicenseProgramName && x.ObrazProgramName == p.ObrazProgramName && x.ProfileName == p.ProfileName && x.StudyFormId == p.StudyFormId).Count() > 1)
-                    acrFlds.SetField("IsPriority" + rwind, "1");
-
-                rwind++;
-            }
-
-            pdfStm.FormFlattening = true;
-            pdfStm.Close();
-            pdfRd.Close();
-
-            return ms.ToArray();
-        }
-        public static byte[] GetApplicationPDF_NextPage(List<ShortAppcation> lst, List<ShortAppcation> lstFullSource, string dirPath, string dotName, string FIO)
-        {
-            MemoryStream ms = new MemoryStream();
-
-            byte[] templateBytes;
-            using (FileStream fs = new FileStream(dirPath + "\\" + dotName, FileMode.Open, FileAccess.Read))
-            {
-                templateBytes = new byte[fs.Length];
-                fs.Read(templateBytes, 0, templateBytes.Length);
-            }
-
-            PdfReader pdfRd = new PdfReader(templateBytes);
-            PdfStamper pdfStm = new PdfStamper(pdfRd, ms);
-            //pdfStm.SetEncryption(PdfWriter.STRENGTH128BITS, "", "", PdfWriter.ALLOW_SCREENREADERS | PdfWriter.ALLOW_PRINTING | PdfWriter.AllowPrinting);
-            AcroFields acrFlds = pdfStm.AcroFields;
-            int rwind = 1;
-            foreach (var p in lst.OrderBy(x => x.Priority))
-            {
-                acrFlds.SetField("Priority" + rwind, p.Priority.ToString());
-                acrFlds.SetField("Profession" + rwind, p.LicenseProgramName);
-                acrFlds.SetField("ObrazProgram" + rwind, p.ObrazProgramName);
-                acrFlds.SetField("Specialization" + rwind, p.HasInnerPriorities ? "Приложение к заявлению № " + p.InnerPrioritiesNum : p.ProfileName);
-                acrFlds.SetField("StudyForm" + p.StudyFormId.ToString() + rwind.ToString(), "1");
-                acrFlds.SetField("StudyBasis" + p.StudyBasisId.ToString() + rwind.ToString(), "1");
-
-                if (lstFullSource.Where(x => x.LicenseProgramName == p.LicenseProgramName && x.ObrazProgramName == p.ObrazProgramName && x.ProfileName == p.ProfileName && x.StudyFormId == p.StudyFormId).Count() > 1)
-                    acrFlds.SetField("IsPriority" + rwind, "1");
-
-                rwind++;
-            }
-
-            pdfStm.FormFlattening = true;
-            pdfStm.Close();
-            pdfRd.Close();
-
-            return ms.ToArray();
-        }
-
         public static void PrintEnableProtocol(string protocolId, bool forPrint, string savePath)
         {
             FileStream fileS = null;
@@ -1248,101 +676,85 @@ namespace Priem
             {
                 Guid gProtocolId = Guid.Parse(protocolId);
 
-                using (PriemEntities context = new PriemEntities())
+                var info = ProtocolDataProvider.GetProtocolInfo(gProtocolId, 1);
+
+                string basis = string.Empty;
+                switch (info.StudyBasisId)
                 {
-                    var info = ProtocolDataProvider.GetProtocolInfo(gProtocolId, 1);
+                    case 1:
+                        basis = "Бюджетные места";
+                        break;
+                    case 2:
+                        basis = "Места по договорам с оплатой стоимости обучения";
+                        break;
+                }
 
-                    string basis = string.Empty;
-                    switch (info.StudyBasisId)
-                    {
-                        case 1:
-                            basis = "Бюджетные места";
-                            break;
-                        case 2:
-                            basis = "Места по договорам с оплатой стоимости обучения";
-                            break;
-                    }
+                Document document = new Document(PageSize.A4.Rotate(), 50, 50, 50, 50);
+                using (fileS = new FileStream(savePath, FileMode.Create))
+                {
+                    BaseFont bfTimes = BaseFont.CreateFont(string.Format(@"{0}\times.ttf", MainClass.dirTemplates), BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
+                    Font font = new Font(bfTimes, 10);
 
-                    Document document = new Document(PageSize.A4.Rotate(), 50, 50, 50, 50);
+                    PdfWriter.GetInstance(document, fileS);
+                    document.Open();
 
-                    using (fileS = new FileStream(savePath, FileMode.Create))
-                    {
-
-                        BaseFont bfTimes = BaseFont.CreateFont(string.Format(@"{0}\times.ttf", MainClass.dirTemplates), BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
-                        Font font = new Font(bfTimes, 10);
-
-                        PdfWriter.GetInstance(document, fileS);
-                        document.Open();
-
-                        //HEADER
-                        string header = string.Format(@"Форма обучения: {0}
+                    //HEADER
+                    string header = string.Format(@"Форма обучения: {0}
     Условия обучения: {1}", info.StudyFormName, basis);
 
-                        Paragraph p = new Paragraph(header, font);
-                        document.Add(p);
+                    Paragraph p = new Paragraph(header, font);
+                    document.Add(p);
 
-                        float midStr = 13f;
-                        p = new Paragraph(20f);
-                        p.Add(new Phrase("ПРОТОКОЛ № ", new Font(bfTimes, 14, Font.BOLD)));
-                        p.Add(new Phrase(info.Number, new Font(bfTimes, 18, Font.BOLD)));
-                        p.Alignment = Element.ALIGN_CENTER;
-                        document.Add(p);
+                    float midStr = 13f;
+                    p = new Paragraph(20f);
+                    p.Add(new Phrase("ПРОТОКОЛ № ", new Font(bfTimes, 14, Font.BOLD)));
+                    p.Add(new Phrase(info.Number, new Font(bfTimes, 18, Font.BOLD)));
+                    p.Alignment = Element.ALIGN_CENTER;
+                    document.Add(p);
 
-                        p = new Paragraph(midStr);
-                        p.Add(new Phrase(@"заседания Приемной комиссии Санкт-Петербургского Государственного Университета
+                    p = new Paragraph(midStr);
+                    p.Add(new Phrase(@"заседания Приемной комиссии Санкт-Петербургского Государственного Университета
     о допуске к участию в конкурсе на основные образовательные программы ", new Font(bfTimes, 10, Font.BOLD)));
 
-                        p.Alignment = Element.ALIGN_CENTER;
-                        document.Add(p);
+                    p.Alignment = Element.ALIGN_CENTER;
+                    document.Add(p);
 
-                        //date
-                        p = new Paragraph(midStr);
-                        p.Add(new Paragraph(string.Format("от {0}", Util.GetDateString(info.Date, true, true)), new Font(bfTimes, 10, Font.BOLD)));
-                        p.Alignment = Element.ALIGN_CENTER;
-                        document.Add(p);
+                    //date
+                    p = new Paragraph(midStr);
+                    p.Add(new Paragraph(string.Format("от {0}", Util.GetDateString(info.Date, true, true)), new Font(bfTimes, 10, Font.BOLD)));
+                    p.Alignment = Element.ALIGN_CENTER;
+                    document.Add(p);
 
-                        string spec = "", currSpec = "";
-                        PdfPTable curT = null;
-                        int cnt = 0;
+                    string spec = "", currSpec = "";
+                    PdfPTable curT = null;
+                    int cnt = 0;
 
-                        var lst = ProtocolDataProvider.GetProtocolData(gProtocolId);
-                        foreach (var v in lst)
+                    var lst = ProtocolDataProvider.GetProtocolData(gProtocolId);
+                    foreach (var v in lst)
+                    {
+                        cnt++;
+
+                        currSpec = v.Direction;
+                        if (spec != currSpec)
                         {
-                            cnt++;
+                            spec = currSpec;
+                            cnt = 1;
 
-                            currSpec = v.Direction;
-                            if (spec != currSpec)
-                            {
-                                spec = currSpec;
-                                cnt = 1;
+                            if (curT != null)
+                                document.Add(curT);
 
-                                if (curT != null)
-                                    document.Add(curT);
+                            float[] headerwidths = { 5, 10, 30, 15, 20, 10, 10 };
+                            PdfPTable t = AddTablePDF(ref document, 7, headerwidths);
+                            t.HeaderRows = 2;
 
-                                //Table
-                                Table table = new Table(7);
-                                table.Padding = 3;
-                                table.Spacing = 0;
-                                float[] headerwidths = { 5, 10, 30, 15, 20, 10, 10 };
-                                table.Widths = headerwidths;
-                                table.Width = 100;
+                            Phrase pra = new Phrase(string.Format("По направлению {0} ", currSpec), new Font(bfTimes, 10));
 
-                                PdfPTable t = new PdfPTable(7);
-                                t.SetWidthPercentage(headerwidths, document.PageSize);
-                                t.WidthPercentage = 100f;
-                                t.SpacingBefore = 10f;
-                                t.SpacingAfter = 10f;
+                            PdfPCell pcell = new PdfPCell(pra);
+                            pcell.BorderWidth = 0;
+                            pcell.Colspan = 7;
+                            t.AddCell(pcell);
 
-                                t.HeaderRows = 2;
-
-                                Phrase pra = new Phrase(string.Format("По направлению {0} ", currSpec), new Font(bfTimes, 10));
-
-                                PdfPCell pcell = new PdfPCell(pra);
-                                pcell.BorderWidth = 0;
-                                pcell.Colspan = 7;
-                                t.AddCell(pcell);
-
-                                string[] headers = new string[]
+                            string[] headers = new string[]
                                     {
                                         "№ п/п",
                                         "Рег.номер",
@@ -1353,73 +765,34 @@ namespace Priem
                                         "Примечания"
                                     };
 
-                                foreach (string h in headers)
-                                {
-                                    PdfPCell cell = new PdfPCell();
-                                    cell.HorizontalAlignment = Element.ALIGN_CENTER;
-                                    cell.VerticalAlignment = Element.ALIGN_MIDDLE;
-                                    cell.AddElement(new Phrase(h, new Font(bfTimes, 10, Font.BOLD)));
+                            foreach (string h in headers)
+                                AddCellInTablePDF(ref t, h, 10);
 
-                                    t.AddCell(cell);
-                                }
-
-                                curT = t;
-                            }
-
-                            string egecert = (from egeCertificate in context.EgeCertificate
-                                              join egeMark in context.EgeMark on egeCertificate.Id equals egeMark.EgeCertificateId
-                                              join egeToExam in context.EgeToExam on egeMark.EgeExamNameId equals egeToExam.EgeExamNameId
-                                              where egeCertificate.PersonId == v.PersonId
-                                              && egeToExam.ExamId == (from examInEntry in context.ExamInEntry
-                                                                      where examInEntry.EntryId == v.EntryId && examInEntry.IsProfil
-                                                                      select examInEntry.ExamId).FirstOrDefault()
-                                              select egeCertificate.Number).FirstOrDefault();
-
-                            curT.AddCell(new Phrase(cnt.ToString(), new Font(bfTimes, 10)));
-                            curT.AddCell(new Phrase(v.RegNum, new Font(bfTimes, 10)));
-                            curT.AddCell(new Phrase(v.FIO, new Font(bfTimes, 10)));
-                            curT.AddCell(new Phrase(v.EducationDocument, new Font(bfTimes, 10)));
-                            curT.AddCell(new Phrase(egecert, new Font(bfTimes, 10)));
-                            curT.AddCell(new Phrase(v.CompetitionName, new Font(bfTimes, 10)));
-                            curT.AddCell(new Phrase(v.Comment, new Font(bfTimes, 10)));
+                            curT = t;
                         }
 
-                        if (curT != null)
-                            document.Add(curT);
+                        string egecert = EgeDataProvider.GetSignificantEgeCertificateNumbersForEntry(v.PersonId, v.EntryId);
 
-                        //FOOTER
-                        p = new Paragraph(30f);
-                        p.KeepTogether = true;
-                        p.Add(new Phrase("Ответственный секретарь Приемной комиссии СПбГУ____________________________________________________________", new Font(bfTimes, 10)));
-                        document.Add(p);
-
-                        p = new Paragraph();
-                        p.Add(new Phrase("Заместитель начальника Управления по организации приема – советник проректора по направлениям___________________", new Font(bfTimes, 10)));
-                        document.Add(p);
-
-                        p = new Paragraph();
-                        p.Add(new Phrase("Ответственный секретарь комиссии по приему документов_______________________________________________________", new Font(bfTimes, 10)));
-                        document.Add(p);
-
-                        document.Close();
-
-                        Process pr = new Process();
-                        if (forPrint)
-                        {
-                            pr.StartInfo.Verb = "Print";
-                            pr.StartInfo.FileName = string.Format(savePath);
-                            pr.Start();
-                        }
-                        else
-                        {
-                            pr.StartInfo.Verb = "Open";
-                            pr.StartInfo.FileName = string.Format(savePath);
-                            pr.Start();
-                        }
+                        curT.AddCell(new Phrase(cnt.ToString(), new Font(bfTimes, 10)));
+                        curT.AddCell(new Phrase(v.RegNum, new Font(bfTimes, 10)));
+                        curT.AddCell(new Phrase(v.FIO, new Font(bfTimes, 10)));
+                        curT.AddCell(new Phrase(v.EducationDocument, new Font(bfTimes, 10)));
+                        curT.AddCell(new Phrase(egecert, new Font(bfTimes, 10)));
+                        curT.AddCell(new Phrase(v.CompetitionName, new Font(bfTimes, 10)));
+                        curT.AddCell(new Phrase(v.Comment, new Font(bfTimes, 10)));
                     }
+
+                    if (curT != null)
+                        document.Add(curT);
+
+                    //FOOTER
+                    AddStandartFooter(ref document);
+
+                    document.Close();
+
+                    OpenFile(savePath, forPrint);
                 }
             }
-
             catch (Exception exc)
             {
                 WinFormsServ.Error(exc.Message);
@@ -1430,11 +803,69 @@ namespace Priem
                     fileS.Dispose();
             }
         }
+
+        private static PdfPTable AddTablePDF(ref iTextSharp.text.Document document, int cols, float[] headerwidths)
+        {
+            //Table
+            PdfPTable t = new PdfPTable(cols);
+            t.SetWidthPercentage(headerwidths, document.PageSize);
+            t.WidthPercentage = 100f;
+            t.SpacingBefore = 10f;
+            t.SpacingAfter = 10f;
+
+            return t;
+        }
+        private static void AddCellInTablePDF(ref PdfPTable t, string text, float size)
+        {
+            BaseFont bfTimes = BaseFont.CreateFont(string.Format(@"{0}\times.ttf", MainClass.dirTemplates), BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
+            PdfPCell cell = new PdfPCell();
+            cell.HorizontalAlignment = Element.ALIGN_CENTER;
+            cell.VerticalAlignment = Element.ALIGN_MIDDLE;
+            cell.AddElement(new Phrase(text, new Font(bfTimes, size, Font.BOLD)));
+
+            t.AddCell(cell);
+        }
+        private static void OpenFile(string savePath, bool forPrint)
+        {
+            Process pr = new Process();
+            if (forPrint)
+            {
+                pr.StartInfo.Verb = "Print";
+                pr.StartInfo.FileName = string.Format(savePath);
+                pr.Start();
+            }
+            else
+            {
+                pr.StartInfo.Verb = "Open";
+                pr.StartInfo.FileName = string.Format(savePath);
+                pr.Start();
+            }
+        }
+        private static void AddStandartFooter(ref iTextSharp.text.Document document)
+        {
+            BaseFont bfTimes = BaseFont.CreateFont(string.Format(@"{0}\times.ttf", MainClass.dirTemplates), BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
+            Paragraph p = new Paragraph(30f);
+            p.KeepTogether = true;
+            p.Add(new Phrase("Ответственный секретарь Приемной комиссии СПбГУ____________________________________________________________", new Font(bfTimes, 10)));
+            document.Add(p);
+
+            p = new Paragraph();
+            p.Add(new Phrase("Заместитель начальника Управления по организации приема – советник проректора по направлениям___________________", new Font(bfTimes, 10)));
+            document.Add(p);
+
+            p = new Paragraph();
+            p.Add(new Phrase("Ответственный секретарь комиссии по приему документов_______________________________________________________", new Font(bfTimes, 10)));
+            document.Add(p);
+        }
+
         public static void PrintDisEnableProtocol(string protocolId, bool forPrint, string savePath)
         {
             FileStream fileS = null;
+            NewWatch wc = new NewWatch();
+            wc.Show();
             try
             {
+                wc.SetText("Получение данных протокола...");
                 Guid gProtocolId = Guid.Parse(protocolId);
                 var protocolInfo = ProtocolDataProvider.GetProtocolInfo(gProtocolId, 2); //DisEnableProtocol
 
@@ -1490,10 +921,12 @@ namespace Priem
                     int cnt = 0;
 
                     var lst = ProtocolDataProvider.GetProtocolData(gProtocolId);
+                    wc.SetText("Обработка данных...");
+                    wc.SetMax(lst.Count);
                     foreach (var v in lst)
                     {
                         cnt++;
-
+                        wc.PerformStep();
                         currSpec = v.Direction;
                         if (spec != currSpec)
                         {
@@ -1504,19 +937,8 @@ namespace Priem
                                 document.Add(curT);
 
                             //Table
-                            Table table = new Table(7);
-                            table.Padding = 3;
-                            table.Spacing = 0;
                             float[] headerwidths = { 5, 10, 30, 15, 20, 10, 10 };
-                            table.Widths = headerwidths;
-                            table.Width = 100;
-
-                            PdfPTable t = new PdfPTable(7);
-                            t.SetWidthPercentage(headerwidths, document.PageSize);
-                            t.WidthPercentage = 100f;
-                            t.SpacingBefore = 10f;
-                            t.SpacingAfter = 10f;
-
+                            PdfPTable t = AddTablePDF(ref document, 7, headerwidths);
                             t.HeaderRows = 2;
 
                             Phrase pra = new Phrase(string.Format("По направлению {0} ", currSpec), new Font(bfTimes, 10));
@@ -1536,22 +958,14 @@ namespace Priem
                                 "Вид конкурса",
                                 "Примечания"
                             };
-
                             foreach (string h in headers)
-                            {
-                                PdfPCell cell = new PdfPCell();
-                                cell.HorizontalAlignment = Element.ALIGN_CENTER;
-                                cell.VerticalAlignment = Element.ALIGN_MIDDLE;
-                                cell.AddElement(new Phrase(h, new Font(bfTimes, 10, Font.BOLD)));
-
-                                t.AddCell(cell);
-                            }
+                                AddCellInTablePDF(ref t, h, 10);
 
                             curT = t;
                         }
 
-                        string egecert = EgeDataProvider.GetEgeCertificateNumbers(v.PersonId, v.EntryId);
-
+                        string egecert = EgeDataProvider.GetSignificantEgeCertificateNumbersForEntry(v.PersonId, v.EntryId);
+                        
                         curT.AddCell(new Phrase(cnt.ToString(), new Font(bfTimes, 10)));
                         curT.AddCell(new Phrase(v.RegNum, new Font(bfTimes, 10)));
                         curT.AddCell(new Phrase(v.FIO, new Font(bfTimes, 10)));
@@ -1560,7 +974,6 @@ namespace Priem
                         curT.AddCell(new Phrase(v.CompetitionName, new Font(bfTimes, 10)));
                         curT.AddCell(new Phrase(v.Comment, new Font(bfTimes, 10)));
                     }
-
 
                     if (curT != null)
                         document.Add(curT);
@@ -1582,19 +995,7 @@ namespace Priem
 
                     document.Close();
 
-                    Process pr = new Process();
-                    if (forPrint)
-                    {
-                        pr.StartInfo.Verb = "Print";
-                        pr.StartInfo.FileName = string.Format(savePath);
-                        pr.Start();
-                    }
-                    else
-                    {
-                        pr.StartInfo.Verb = "Open";
-                        pr.StartInfo.FileName = string.Format(savePath);
-                        pr.Start();
-                    }
+                    OpenFile(savePath, forPrint);
                 }
             }
             catch (Exception exc)
@@ -1605,13 +1006,18 @@ namespace Priem
             {
                 if (fileS != null)
                     fileS.Dispose();
+
+                wc.Close();
             }
         }
         public static void PrintChangeCompCelProtocol(string protocolId, bool forPrint, string savePath)
         {
             FileStream fileS = null;
+            NewWatch wc = new NewWatch();
+            wc.Show();
             try
             {
+                wc.SetText("Получение данных протокола...");
                 Guid gProtocolId = Guid.Parse(protocolId);
                 var info = ProtocolDataProvider.GetProtocolInfo(gProtocolId, 3);
 
@@ -1629,7 +1035,6 @@ namespace Priem
                 Document document = new Document(PageSize.A4.Rotate(), 50, 50, 50, 50);
                 using (fileS = new FileStream(savePath, FileMode.Create))
                 {
-
                     BaseFont bfTimes = BaseFont.CreateFont(string.Format(@"{0}\times.ttf", MainClass.dirTemplates), BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
                     Font font = new Font(bfTimes, 10);
 
@@ -1669,9 +1074,12 @@ namespace Priem
                     string currSpec = null;
 
                     var lst = ProtocolDataProvider.GetProtocolData(gProtocolId);
+                    wc.SetText("Обработка данных...");
+                    wc.SetMax(lst.Count);
                     foreach (var v in lst)
                     {
                         cnt++;
+                        wc.PerformStep();
 
                         currSpec = v.Direction;
                         if (spec != currSpec)
@@ -1683,19 +1091,8 @@ namespace Priem
                                 document.Add(curT);
 
                             //Table
-                            Table table = new Table(6);
-                            table.Padding = 3;
-                            table.Spacing = 0;
                             float[] headerwidths = { 5, 10, 30, 15, 10, 10 };
-                            table.Widths = headerwidths;
-                            table.Width = 100;
-
-                            PdfPTable t = new PdfPTable(6);
-                            t.SetWidthPercentage(headerwidths, document.PageSize);
-                            t.WidthPercentage = 100f;
-                            t.SpacingBefore = 10f;
-                            t.SpacingAfter = 10f;
-
+                            PdfPTable t = AddTablePDF(ref document, 6, headerwidths);
                             t.HeaderRows = 2;
 
                             Phrase pra = new Phrase(string.Format("По направлению {0} ", currSpec), new Font(bfTimes, 10));
@@ -1715,14 +1112,7 @@ namespace Priem
                                     "Примечания"
                                 };
                             foreach (string h in headers)
-                            {
-                                PdfPCell cell = new PdfPCell();
-                                cell.HorizontalAlignment = Element.ALIGN_CENTER;
-                                cell.VerticalAlignment = Element.ALIGN_MIDDLE;
-                                cell.AddElement(new Phrase(h, new Font(bfTimes, 10, Font.BOLD)));
-
-                                t.AddCell(cell);
-                            }
+                                AddCellInTablePDF(ref t, h, 10);
 
                             curT = t;
                         }
@@ -1735,41 +1125,16 @@ namespace Priem
                         curT.AddCell(new Phrase(v.Comment, new Font(bfTimes, 10)));
                     }
 
-
                     if (curT != null)
                         document.Add(curT);
 
                     //FOOTER
-                    p = new Paragraph(30f);
-                    p.KeepTogether = true;
-                    p.Add(new Phrase("Ответственный секретарь Приемной комиссии СПбГУ____________________________________________________________", new Font(bfTimes, 10)));
-                    document.Add(p);
-
-                    p = new Paragraph();
-                    p.Add(new Phrase("Заместитель начальника Управления по организации приема – советник проректора по направлениям___________________", new Font(bfTimes, 10)));
-                    document.Add(p);
-
-                    p = new Paragraph();
-                    p.Add(new Phrase("Ответственный секретарь комиссии по приему документов_______________________________________________________", new Font(bfTimes, 10)));
-                    document.Add(p);
+                    AddStandartFooter(ref document);
 
                     document.Close();
 
-                    Process pr = new Process();
-                    if (forPrint)
-                    {
-                        pr.StartInfo.Verb = "Print";
-                        pr.StartInfo.FileName = string.Format(savePath);
-                        pr.Start();
-                    }
-                    else
-                    {
-                        pr.StartInfo.Verb = "Open";
-                        pr.StartInfo.FileName = string.Format(savePath);
-                        pr.Start();
-                    }
+                    OpenFile(savePath, forPrint);
                 }
-
             }
             catch (Exception exc)
             {
@@ -1779,13 +1144,18 @@ namespace Priem
             {
                 if (fileS != null)
                     fileS.Dispose();
+
+                wc.Close();
             }
         }
         public static void PrintChangeCompBEProtocol(string protocolId, bool forPrint, string savePath)
         {
             FileStream fileS = null;
+            NewWatch wc = new NewWatch();
+            wc.Show();
             try
             {
+                wc.SetText("Получение данных протокола...");
                 Guid gProtocolId = Guid.Parse(protocolId);
                 var info = ProtocolDataProvider.GetProtocolInfo(gProtocolId, 6);
 
@@ -1842,9 +1212,12 @@ namespace Priem
                     string currSpec = null;
 
                     var lst = ProtocolDataProvider.GetProtocolData(gProtocolId);
+                    wc.SetText("Обработка данных...");
+                    wc.SetMax(lst.Count);
                     foreach (var v in lst)
                     {
                         cnt++;
+                        wc.PerformStep();
 
                         currSpec = v.Direction;
                         if (spec != currSpec)
@@ -1856,19 +1229,8 @@ namespace Priem
                                 document.Add(curT);
 
                             //Table
-                            Table table = new Table(6);
-                            table.Padding = 3;
-                            table.Spacing = 0;
                             float[] headerwidths = { 5, 10, 30, 15, 10, 10 };
-                            table.Widths = headerwidths;
-                            table.Width = 100;
-
-                            PdfPTable t = new PdfPTable(6);
-                            t.SetWidthPercentage(headerwidths, document.PageSize);
-                            t.WidthPercentage = 100f;
-                            t.SpacingBefore = 10f;
-                            t.SpacingAfter = 10f;
-
+                            PdfPTable t = AddTablePDF(ref document, 6, headerwidths);
                             t.HeaderRows = 2;
 
                             Phrase pra = new Phrase(string.Format("По направлению {0} ", currSpec), new Font(bfTimes, 10));
@@ -1888,14 +1250,7 @@ namespace Priem
                                 };
 
                             foreach (string h in headers)
-                            {
-                                PdfPCell cell = new PdfPCell();
-                                cell.HorizontalAlignment = Element.ALIGN_CENTER;
-                                cell.VerticalAlignment = Element.ALIGN_MIDDLE;
-                                cell.AddElement(new Phrase(h, new Font(bfTimes, 10, Font.BOLD)));
-
-                                t.AddCell(cell);
-                            }
+                                AddCellInTablePDF(ref t, h, 10);
 
                             curT = t;
                         }
@@ -1913,34 +1268,11 @@ namespace Priem
                         document.Add(curT);
 
                     //FOOTER
-                    p = new Paragraph(30f);
-                    p.KeepTogether = true;
-                    p.Add(new Phrase("Ответственный секретарь Приемной комиссии СПбГУ____________________________________________________________", new Font(bfTimes, 10)));
-                    document.Add(p);
-
-                    p = new Paragraph();
-                    p.Add(new Phrase("Заместитель начальника Управления по организации приема – советник проректора по направлениям___________________", new Font(bfTimes, 10)));
-                    document.Add(p);
-
-                    p = new Paragraph();
-                    p.Add(new Phrase("Ответственный секретарь комиссии по приему документов_______________________________________________________", new Font(bfTimes, 10)));
-                    document.Add(p);
+                    AddStandartFooter(ref document);
 
                     document.Close();
 
-                    Process pr = new Process();
-                    if (forPrint)
-                    {
-                        pr.StartInfo.Verb = "Print";
-                        pr.StartInfo.FileName = string.Format(savePath);
-                        pr.Start();
-                    }
-                    else
-                    {
-                        pr.StartInfo.Verb = "Open";
-                        pr.StartInfo.FileName = string.Format(savePath);
-                        pr.Start();
-                    }
+                    OpenFile(savePath, forPrint);
                 }
             }
             catch (Exception exc)
@@ -1951,21 +1283,26 @@ namespace Priem
             {
                 if (fileS != null)
                     fileS.Dispose();
+
+                wc.Close();
             }
         }
         public static void PrintEntryView(string sProtocolId, string savePath)
         {
             FileStream fileS = null;
+            NewWatch wc = new NewWatch();
+            wc.Show();
             try
             {
+                wc.SetText("Получение данных протокола...");
+                Guid gProtocolId = new Guid(sProtocolId);
+                var ProtocolInfo = ProtocolDataProvider.GetProtocolInfo(gProtocolId, 4);
+
+                string docNum = ProtocolInfo.Number.ToString();
+                DateTime docDate = ProtocolInfo.Date.Date;
+
                 using (PriemEntities context = new PriemEntities())
                 {
-                    Guid gProtocolId = new Guid(sProtocolId);
-                    var ProtocolInfo = ProtocolDataProvider.GetProtocolInfo(gProtocolId, 4);
-
-                    string docNum = ProtocolInfo.Number.ToString();
-                    DateTime docDate = ProtocolInfo.Date.Date;
-
                     var SF = context.StudyForm.Where(x => x.Id == ProtocolInfo.StudyFormId).FirstOrDefault();
                     string form = SF.Acronym;
                     string form2 = SF.RodName;
@@ -2035,24 +1372,12 @@ namespace Priem
                         p = new Paragraph(10f);
                         p.Add(new Paragraph("по " + facDat, font));
 
-                        string naprspecRod = "",
-                            profspec = "",
-                            naprobProgRod = "",
-                            educDoc = ""; ;
-
-                        naprobProgRod = "образовательной программе";
-                        naprspecRod = "направлению";
+                        string educDoc = ""; ;
 
                         if (MainClass.dbType == PriemType.PriemMag)
-                        {
-                            profspec = "профилю";
                             educDoc = "о высшем профессиональном образовании";
-                        }
                         else
-                        {
-                            profspec = "профилю";
                             educDoc = "об образовании";
-                        }
 
                         p.Add(new Paragraph(string.Format("по основной{4} образовательной программе подготовки {0} на направление {1} «{2}» ", ProtocolInfo.StudyLevelNameRod, ProtocolInfo.LicenseProgramCode, ProtocolInfo.LicenseProgramName, sec), font));
                         p.Add(new Paragraph((form + " форма обучения,").ToLower(), font));
@@ -2085,26 +1410,28 @@ namespace Priem
                         int counter = 0;
 
                         var lst = ProtocolDataProvider.GetEntryViewData(gProtocolId, false);
+                        wc.SetText("Обработка данных...");
+                        wc.SetMax(lst.Count);
                         foreach (var v in lst)
                         {
                             ++counter;
-                            string obProg = v.ObrazProgram;
-                            string obProgCrypt = v.ObrazProgramCrypt;
-                            string obProgId = v.ObrazProgramId.ToString();
+                            wc.PerformStep();
 
+                            string obProg = v.ObrazProgram;
+                            string obProgId = v.ObrazProgramId.ToString();
                             if (obProgId != curObProg)
                             {
                                 p = new Paragraph();
-                                p.Add(new Paragraph(string.Format("{3}по {0} {1} \"{2}\"", naprspecRod, v.LicenseProgramCode, v.LicenseProgramName, curObProg == "-" ? "" : "\r\n"), font));
+                                p.Add(new Paragraph(string.Format("{2}по направлению {0} \"{1}\"", v.LicenseProgramCode, v.LicenseProgramName, curObProg == "-" ? "" : "\r\n"), font));
 
                                 if (!string.IsNullOrEmpty(obProg))
-                                    p.Add(new Paragraph(string.Format("по {0} {1} \"{2}\"", naprobProgRod, obProgCrypt, obProg), font));
+                                    p.Add(new Paragraph(string.Format("по образовательной программе {0} \"{1}\"", v.ObrazProgramCrypt, obProg), font));
 
                                 string spez = v.ProfileName;
                                 if (spez != curSpez)
                                 {
                                     if (!string.IsNullOrEmpty(spez) && spez != "нет")
-                                        p.Add(new Paragraph(string.Format("по {0} \"{1}\"", profspec, spez), font));
+                                        p.Add(new Paragraph(string.Format("по профилю \"{0}\"", spez), font));
 
                                     curSpez = spez;
                                 }
@@ -2120,13 +1447,13 @@ namespace Priem
                                 if (spez != curSpez && spez != "нет")
                                 {
                                     p = new Paragraph();
-                                    p.Add(new Paragraph(string.Format("{3}по {0} {1} \"{2}\"", naprspecRod, v.LicenseProgramCode, v.LicenseProgramName, curObProg == "-" ? "" : "\r\n"), font));
+                                    p.Add(new Paragraph(string.Format("{2}по направлению {0} \"{1}\"", v.LicenseProgramCode, v.LicenseProgramName, curObProg == "-" ? "" : "\r\n"), font));
 
                                     if (!string.IsNullOrEmpty(obProg))
-                                        p.Add(new Paragraph(string.Format("по {0} \"{1}\"", naprobProgRod, obProg), font));
+                                        p.Add(new Paragraph(string.Format("по образовательной программе \"{0}\"", obProg), font));
 
                                     if (!string.IsNullOrEmpty(spez))
-                                        p.Add(new Paragraph(string.Format("по {0} \"{1}\"", profspec, spez), font));
+                                        p.Add(new Paragraph(string.Format("по профилю \"{0}\"", spez), font));
 
                                     p.IndentationLeft = 40;
                                     document.Add(p);
@@ -2176,11 +1503,7 @@ namespace Priem
 
                         document.Close();
 
-                        Process pr = new Process();
-
-                        pr.StartInfo.Verb = "Open";
-                        pr.StartInfo.FileName = string.Format(savePath);
-                        pr.Start();
+                        OpenFile(savePath, false);
                     }
                 }
             }
@@ -2192,6 +1515,7 @@ namespace Priem
             {
                 if (fileS != null)
                     fileS.Dispose();
+                wc.Close();
             }
         }
 

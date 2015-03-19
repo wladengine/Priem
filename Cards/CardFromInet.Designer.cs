@@ -205,6 +205,7 @@
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.gbFile = new System.Windows.Forms.GroupBox();
+            this.btnDocCardOpen = new System.Windows.Forms.Button();
             this.dgvFiles = new System.Windows.Forms.DataGridView();
             this.btnOpenFile = new System.Windows.Forms.Button();
             this.tpApplication = new System.Windows.Forms.TabPage();
@@ -216,7 +217,6 @@
             this.lblHasMotivationLetter = new System.Windows.Forms.Label();
             this.lblHasEssay = new System.Windows.Forms.Label();
             this.lblBarcode = new System.Windows.Forms.Label();
-            this.btnDocCardOpen = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.epError)).BeginInit();
             this.tabCard.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -1664,11 +1664,12 @@
             // 
             // chbHasTRKI
             // 
-            this.chbHasTRKI.Location = new System.Drawing.Point(453, 93);
+            this.chbHasTRKI.Location = new System.Drawing.Point(453, 91);
             this.chbHasTRKI.Name = "chbHasTRKI";
-            this.chbHasTRKI.Size = new System.Drawing.Size(125, 16);
+            this.chbHasTRKI.Size = new System.Drawing.Size(121, 18);
             this.chbHasTRKI.TabIndex = 123;
-            this.chbHasTRKI.Text = "ТРКИ";
+            this.chbHasTRKI.Text = "Сертификат ТРКИ";
+            this.chbHasTRKI.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.chbHasTRKI.UseVisualStyleBackColor = true;
             // 
             // cbLanguage
@@ -1842,9 +1843,9 @@
             // gbMotivateText
             // 
             this.gbMotivateText.Controls.Add(this.tbScienceWork);
-            this.gbMotivateText.Location = new System.Drawing.Point(8, 399);
+            this.gbMotivateText.Location = new System.Drawing.Point(8, 423);
             this.gbMotivateText.Name = "gbMotivateText";
-            this.gbMotivateText.Size = new System.Drawing.Size(543, 93);
+            this.gbMotivateText.Size = new System.Drawing.Size(628, 129);
             this.gbMotivateText.TabIndex = 114;
             this.gbMotivateText.TabStop = false;
             this.gbMotivateText.Text = "Участие в научно-исследовательской работе  (max 2000 знаков)";
@@ -1856,7 +1857,7 @@
             this.tbScienceWork.Location = new System.Drawing.Point(10, 19);
             this.tbScienceWork.Multiline = true;
             this.tbScienceWork.Name = "tbScienceWork";
-            this.tbScienceWork.Size = new System.Drawing.Size(527, 68);
+            this.tbScienceWork.Size = new System.Drawing.Size(612, 104);
             this.tbScienceWork.TabIndex = 111;
             // 
             // gbPersonInfo
@@ -1867,7 +1868,7 @@
             this.gbPersonInfo.Controls.Add(this.tbExtraInfo);
             this.gbPersonInfo.Location = new System.Drawing.Point(8, 261);
             this.gbPersonInfo.Name = "gbPersonInfo";
-            this.gbPersonInfo.Size = new System.Drawing.Size(543, 132);
+            this.gbPersonInfo.Size = new System.Drawing.Size(628, 156);
             this.gbPersonInfo.TabIndex = 94;
             this.gbPersonInfo.TabStop = false;
             this.gbPersonInfo.Text = "Дополнительная информация";
@@ -1898,7 +1899,7 @@
             this.tbPersonInfo.MaxLength = 1000;
             this.tbPersonInfo.Multiline = true;
             this.tbPersonInfo.Name = "tbPersonInfo";
-            this.tbPersonInfo.Size = new System.Drawing.Size(527, 35);
+            this.tbPersonInfo.Size = new System.Drawing.Size(612, 35);
             this.tbPersonInfo.TabIndex = 2;
             // 
             // tbExtraInfo
@@ -1910,7 +1911,7 @@
             this.tbExtraInfo.Multiline = true;
             this.tbExtraInfo.Name = "tbExtraInfo";
             this.tbExtraInfo.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.tbExtraInfo.Size = new System.Drawing.Size(527, 39);
+            this.tbExtraInfo.Size = new System.Drawing.Size(612, 64);
             this.tbExtraInfo.TabIndex = 1;
             // 
             // gbStag
@@ -1921,7 +1922,7 @@
             this.gbStag.Controls.Add(this.tbStag);
             this.gbStag.Location = new System.Drawing.Point(8, 155);
             this.gbStag.Name = "gbStag";
-            this.gbStag.Size = new System.Drawing.Size(543, 100);
+            this.gbStag.Size = new System.Drawing.Size(628, 100);
             this.gbStag.TabIndex = 93;
             this.gbStag.TabStop = false;
             this.gbStag.Text = "Трудовой стаж";
@@ -1941,7 +1942,7 @@
             this.tbWorkPlace.MaxLength = 1000;
             this.tbWorkPlace.Multiline = true;
             this.tbWorkPlace.Name = "tbWorkPlace";
-            this.tbWorkPlace.Size = new System.Drawing.Size(527, 35);
+            this.tbWorkPlace.Size = new System.Drawing.Size(612, 35);
             this.tbWorkPlace.TabIndex = 1;
             // 
             // label42
@@ -2082,6 +2083,17 @@
             this.gbFile.TabIndex = 12;
             this.gbFile.TabStop = false;
             // 
+            // btnDocCardOpen
+            // 
+            this.btnDocCardOpen.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.btnDocCardOpen.Location = new System.Drawing.Point(404, 285);
+            this.btnDocCardOpen.Name = "btnDocCardOpen";
+            this.btnDocCardOpen.Size = new System.Drawing.Size(216, 23);
+            this.btnDocCardOpen.TabIndex = 12;
+            this.btnDocCardOpen.Text = "Открыть список файлов в новом окне";
+            this.btnDocCardOpen.UseVisualStyleBackColor = true;
+            this.btnDocCardOpen.Click += new System.EventHandler(this.btnDocCardOpen_Click);
+            // 
             // dgvFiles
             // 
             this.dgvFiles.AllowUserToAddRows = false;
@@ -2209,17 +2221,6 @@
             this.lblBarcode.Name = "lblBarcode";
             this.lblBarcode.Size = new System.Drawing.Size(0, 13);
             this.lblBarcode.TabIndex = 41;
-            // 
-            // btnDocCardOpen
-            // 
-            this.btnDocCardOpen.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnDocCardOpen.Location = new System.Drawing.Point(404, 285);
-            this.btnDocCardOpen.Name = "btnDocCardOpen";
-            this.btnDocCardOpen.Size = new System.Drawing.Size(216, 23);
-            this.btnDocCardOpen.TabIndex = 12;
-            this.btnDocCardOpen.Text = "Открыть список файлов в новом окне";
-            this.btnDocCardOpen.UseVisualStyleBackColor = true;
-            this.btnDocCardOpen.Click += new System.EventHandler(this.btnDocCardOpen_Click);
             // 
             // CardFromInet
             // 

@@ -431,6 +431,7 @@
     </Compile>
     <Compile Include="Cards\ShortCompetitionClass.cs" />
     <Compile Include="ChangeAbitClass.cs" />
+    <Compile Include="Common Classes\PriemTypes.cs" />
     <Compile Include="Crypto\AddMark.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -688,7 +689,10 @@
     <Compile Include="Lists\VedExamLists.designer.cs">
       <DependentUpon>VedExamLists.cs</DependentUpon>
     </Compile>
+    <Compile Include="Print.ApplicationPDF.cs" />
     <Compile Include="Providers\ApplicationCommitProvider.cs" />
+    <Compile Include="Providers\ApplicationDataProvider.cs" />
+    <Compile Include="Providers\CommonDataProvider.cs" />
     <Compile Include="Providers\EgeDataProvider.cs" />
     <Compile Include="Providers\LoadFromInet.cs" />
     <Compile Include="MainClass.Cards.cs">

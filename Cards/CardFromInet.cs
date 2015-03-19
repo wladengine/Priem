@@ -352,8 +352,8 @@ namespace Priem
                 KorpusReal = person.KorpusReal;
                 FlatReal = person.FlatReal;
                 KladrCode = person.KladrCode;
-                HostelAbit = person.HostelAbit ?? false;
-                HostelEduc = person.HostelEduc ?? false;
+                HostelAbit = person.HostelAbit;
+                HostelEduc = person.HostelEduc;
                 LanguageId = person.LanguageId;
                 Stag = person.Stag;
                 WorkPlace = person.WorkPlace;
@@ -364,7 +364,7 @@ namespace Priem
                 ExtraInfo = person.ExtraInfo;
                 PersonInfo = person.PersonInfo;
                 ScienceWork = person.ScienceWork;
-                StartEnglish = person.StartEnglish ?? false;
+                StartEnglish = person.StartEnglish;
                 EnglishMark = person.EnglishMark;
 
                 FillEducationData(load.GetPersonEducationDocumentsByBarcode(_personBarc.Value));

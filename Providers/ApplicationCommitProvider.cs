@@ -32,6 +32,7 @@ namespace Priem
                                 + entry.StudyLevel.Acronym + "." + entry.SP_ObrazProgram.Number + " " + entry.SP_ObrazProgram.Name +
                                 ";\nПрофиль:" + entry.SP_Profile.Name + ";" + entry.StudyForm.Acronym + ";" + entry.StudyBasis.Acronym;
                         }
+                        
                         dr = MessageBox.Show(str, "Внимание!", MessageBoxButtons.YesNo);
                         if (dr == System.Windows.Forms.DialogResult.Yes)
                         {
@@ -39,16 +40,13 @@ namespace Priem
                             {
                                 var applst = context.Abiturient.Where(x => x.EntryId == app_entry && x.PersonId == personId && !x.BackDoc && x.Entry.StudyLevel.LevelGroupId == MainClass.studyLevelGroupId).Select(x => x.Id).ToList();
                                 foreach (var app in applst)
-                                {
                                     context.Abiturient_UpdateBackDoc(true, DateTime.Now, app);
-                                }
                             }
                         }
                     }
                 }
             }
         }
-
         public static void SaveApplicationCommitInWorkBase(Guid PersonId, List<ShortCompetition> LstCompetitions, int? LanguageId, int? _abitBarc)
         {
             using (PriemEntities context = new PriemEntities())

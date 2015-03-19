@@ -398,7 +398,7 @@ namespace Priem
                         Abit.Privileges.ToString(), QueryServ.QueryForBool(Abit.IsExcellent.ToString()), Abit.ListenerTypeId.ToString(), QueryServ.QueryForBool(Abit.IsListener.ToString()),
                         QueryServ.QueryForBool(Abit.HostelEduc.ToString()), Abit.FacultyId.ToString(), profId, specId,
                         Abit.StudyBasisId, Abit.StudyFormId, Abit.CompetitionId,
-                        Abit.DocDate.ToString(), regionId, IsFor ? regionId : (Abit.RegionId.HasValue ? Abit.RegionId.ToString() : "1"),
+                        Abit.DocDate.ToString(), regionId, IsFor ? regionId : Abit.RegionId.ToString(),
                         Abit.LanguageId.ToString(),
                         educSeries, "", educNum, QueryServ.QueryForBool(Abit.HasOriginals.ToString()),
                         AbitSchoolName ?? "", Abit.SchoolCity ?? "", Abit.SchoolNum ?? "", Abit.SchoolTypeId.ToString(),

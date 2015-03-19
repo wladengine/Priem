@@ -94,8 +94,9 @@ namespace Priem
                     ComboServ.FillCombo(cbPassportType, HelpClass.GetComboListByTable("ed.PassportType", " ORDER BY Id "), false, false);
                     ComboServ.FillCombo(cbCountry, HelpClass.GetComboListByTable("ed.Country", "ORDER BY Distance, Name"), false, false);
                     ComboServ.FillCombo(cbNationality, HelpClass.GetComboListByTable("ed.Country", "ORDER BY Distance, Name"), false, false);
-                    ComboServ.FillCombo(cbRegion, HelpClass.GetComboListByTable("ed.Region", "ORDER BY Distance, Name"), true, false);
-                    ComboServ.FillCombo(cbRegionEduc, HelpClass.GetComboListByTable("ed.Region", "ORDER BY Distance, Name"), true, false);
+                    UpdateAfterCountry();
+                    //ComboServ.FillCombo(cbRegion, HelpClass.GetComboListByTable("ed.Region", "ORDER BY Distance, Name"), false, false);
+                    //ComboServ.FillCombo(cbRegionEduc, HelpClass.GetComboListByTable("ed.Region", "ORDER BY Distance, Name"), false, false);
                     ComboServ.FillCombo(cbLanguage, HelpClass.GetComboListByTable("ed.Language"), false, false);
                     ComboServ.FillCombo(cbCountryEduc, HelpClass.GetComboListByTable("ed.Country", "ORDER BY Distance, Name"), false, false);
                     ComboServ.FillCombo(cbMSStudyForm, HelpClass.GetComboListByTable("ed.StudyForm"), true, false);
@@ -166,30 +167,20 @@ namespace Priem
             {
                 gbAtt.Visible = true;
                 gbDipl.Visible = false;
-                //tbSchoolName.Width = 217;
                 gbFinishStudy.Visible = false;
                 tbSchoolNum.Visible = true;
                 lblSchoolNum.Visible = true;
                 chbIsExcellent.Text = "Медалист (отличник)";
-                tbEqualityDocumentNumber.Visible = false;
-                chbEkvivEduc.Visible = false;
                 btnAttMarks.Visible = true;
             }               
             else
             {
-                /*if (SchoolTypeId == 4)
-                    tbSchoolName.Width = 281;
-                else
-                    tbSchoolName.Width = 217;
-                */
                 gbAtt.Visible = false;
                 gbDipl.Visible = true;
                 gbFinishStudy.Visible = true;
                 tbSchoolNum.Visible = false;
                 lblSchoolNum.Visible = false;
                 chbIsExcellent.Text = "Диплом с отличием";
-                tbEqualityDocumentNumber.Visible = true;
-                chbEkvivEduc.Visible = true;
                 btnAttMarks.Visible = false;
             }
         }
@@ -248,7 +239,9 @@ namespace Priem
 
             Sex = person.Sex;
             CountryId = person.CountryId;
+            ForeignCountryId = person.ForeignCountryId;
             NationalityId = person.NationalityId;
+            ForeignNationalityId = person.ForeignNationalityId;
             RegionId = person.RegionId;
             Phone = person.Phone;
             Mobiles = person.Mobiles;
@@ -286,7 +279,14 @@ namespace Priem
             EnglishMark = person.EnglishMark;
             EgeInSpbgu = person.EgeInSPbgu;
 
-            FillEducationData(PersonDataProvider.GetPersonEducationDocumentsById(GuidId.Value));
+            try
+            {
+                UpdateEducationData();
+            }
+            catch (Exception ex)
+            {
+                WinFormsServ.Error(ex);
+            }
 
             personBarc = person.Barcode;
         }
@@ -580,6 +580,10 @@ namespace Priem
 
             if (MainClass.IsPasha())            
                 btnSetStatusPasha.Enabled = tbCommentFBSPasha.Enabled = true;
+
+            WinFormsServ.SetSubControlsEnabled(gbEducationDocuments, true);
+            btnAddEducDoc.Enabled = false;
+            btnDeleteEducDoc.Enabled = false;
         }
         //убрать режим read-only
         protected override void SetAllFieldsEnabled()
@@ -644,12 +648,8 @@ namespace Priem
                 tbPassportSeries.Enabled = false;
                 dtPassportDate.Enabled = false;
 
-                tbAttestatRegion.Enabled = false;
                 tbAttestatNum.Enabled = false;
                 cbAttestatSeries.Enabled = false;
-
-                //tbDiplomNum.Enabled = false;
-                //tbDiplomSeries.Enabled = false;
 
                 gbPrivileges.Enabled = false;
 
@@ -693,12 +693,8 @@ namespace Priem
                 tbPassportSeries.Enabled = false;
                 dtPassportDate.Enabled = false;
 
-                tbAttestatRegion.Enabled = false;
                 tbAttestatNum.Enabled = false;
                 cbAttestatSeries.Enabled = false;
-
-                //tbDiplomNum.Enabled = false;
-                //tbDiplomSeries.Enabled = false;
 
                 gbPrivileges.Enabled = false;
                
@@ -714,7 +710,6 @@ namespace Priem
 
                 dtPassportDate.Enabled = true;
 
-                tbAttestatRegion.Enabled = true;
                 tbAttestatNum.Enabled = true;
                 cbAttestatSeries.Enabled = true;
 
@@ -769,7 +764,6 @@ namespace Priem
         protected override bool CheckFields()
         { 
             // проверка на уникальность номера
-            
             if (Surname.Length <= 0)
             {
                 epErrorInput.SetError(tbSurname, "Отсутствует фамилия абитуриента");
@@ -956,6 +950,37 @@ namespace Priem
             else
                 epErrorInput.Clear();
 
+            if (!CheckEducationInfoFields())
+                return false;
+            
+            if (!CheckIdent())
+            {
+                WinFormsServ.Error("В базе уже существует абитуриент с такими же либо ФИО, либо данными паспорта, либо данными аттестата!");
+                return false;
+            }
+
+            return true;
+        }
+        private bool CheckEducationInfoFields()
+        {
+            if (!SchoolTypeId.HasValue)
+            {
+                epErrorInput.SetError(cbSchoolType, "Не указан тип образовательного учреждения!");
+                tabCard.SelectedIndex = 2;
+                return false;
+            }
+            else
+                epErrorInput.Clear();
+
+            if (string.IsNullOrEmpty(tbSchoolExitYear.Text.Trim()))
+            {
+                epErrorInput.SetError(tbSchoolExitYear, "Не указан год");
+                tabCard.SelectedIndex = 2;
+                return false;
+            }
+            else
+                epErrorInput.Clear();
+
             if (!Regex.IsMatch(SchoolExitYear.ToString(), @"^\d{0,4}$"))
             {
                 epErrorInput.SetError(tbSchoolExitYear, "Неправильно указан год");
@@ -964,29 +989,6 @@ namespace Priem
             }
             else
                 epErrorInput.Clear();
-
-            // проверка региона аттестата - нужна ли?
-            if (CountryEducId == 1)
-            {
-                //if (gbAtt.Visible && !Regex.IsMatch(tbAttestatRegion.Text.Trim(), @"^\w{2}$"))
-                //{
-                //    epErrorInput.SetError(tbAttestatRegion, "Неправильно указан регион аттестата");
-                //    tabCard.SelectedIndex = 2;
-                //    return false;
-                //}
-                //else
-                //    epErrorInput.Clear();
-               
-
-                //if (gbAtt.Visible && AttestatSeries.Length <= 0)
-                //{
-                //    epErrorInput.SetError(cbAttestatSeries, "Отсутствует серия аттестата абитуриента");
-                //    tabCard.SelectedIndex = 2;
-                //    return false;
-                //}
-                //else
-                //    epErrorInput.Clear();
-            }
 
             if (gbAtt.Visible && AttestatNum.Length <= 0)
             {
@@ -1008,25 +1010,6 @@ namespace Priem
                 }
                 else
                     epErrorInput.Clear();
-
-            }
-
-            if (MainClass.dbType == PriemType.Priem)
-            {
-                //if (gbDipl.Visible && tbDiplomNum.Text.Trim().Length <= 0)
-                //{
-                //    epErrorInput.SetError(tbDiplomNum, "Отсутствует номер диплома абитуриента");
-                //    tabCard.SelectedIndex = 2;
-                //    return false;
-                //}
-                //else
-                //    epErrorInput.Clear();
-            }
-            
-            if (!CheckIdent())
-            {
-                WinFormsServ.Error("В базе уже существует абитуриент с такими же либо ФИО, либо данными паспорта, либо данными аттестата!");
-                return false;
             }
 
             return true;
@@ -1042,17 +1025,17 @@ namespace Priem
         }
         protected override void UpdateRec(PriemEntities context, Guid id)
         {
-            context.Person_UpdateWithoutMain(BirthPlace, Sex, CountryId, NationalityId, RegionId, Phone, Mobiles, Email,
+            context.Person_UpdateWithoutMain(BirthPlace, Sex, CountryId, ForeignCountryId, NationalityId, ForeignNationalityId, RegionId, Phone, Mobiles, Email,
                 Code, City, Street, House, Korpus, Flat, CodeReal, CityReal, StreetReal, HouseReal, KorpusReal, FlatReal, KladrCode, HostelAbit, HostelEduc, HasAssignToHostel,
-                HostelFacultyId, HasExamPass, ExamPassFacultyId, IsExcellent, LanguageId, SchoolCity, SchoolTypeId, SchoolName, SchoolNum, SchoolExitYear,
-                SchoolAVG, CountryEducId, RegionEducId, IsEqual, DiplomSeries, DiplomNum, HighEducation, HEProfession,
-                HEQualification, HEEntryYear, HEExitYear, HEStudyFormId, HEWork, Stag, WorkPlace, MSVuz, MSCourse, MSStudyFormId, PassportCode,
+                HostelFacultyId, HasExamPass, ExamPassFacultyId, LanguageId, Stag, WorkPlace, MSVuz, MSCourse, MSStudyFormId, PassportCode,
                 PersonalCode, PersonInfo, ExtraInfo, ScienceWork, StartEnglish, EnglishMark, EgeInSpbgu, id);
 
             if (MainClass.RightsSov_SovMain_FacMain() || MainClass.IsPasha())
                 context.Person_UpdateMain(PersonName, SecondName, Surname, BirthDate, PassportTypeId, PassportSeries, PassportNumber,
-                PassportAuthor, PassportDate, AttestatRegion, AttestatSeries, AttestatNum, Privileges, SNILS, id);
-        }                    
+                PassportAuthor, PassportDate, Privileges, SNILS, id);
+
+            SaveCurrentEducationInfo();
+        }
                  
         protected override void OnSave()
         {
@@ -1061,7 +1044,6 @@ namespace Priem
            
             MainClass.DataRefresh();
         }
-
         protected override void OnSaveNew()
         {
             using (PriemEntities context = new PriemEntities())
@@ -1072,15 +1054,6 @@ namespace Priem
 
                 tbNum.Text = num;
             }
-        }
-
-        public bool IsMatchEgeNumber(string number)
-        {
-            string num = number.Trim();           
-            if (Regex.IsMatch(num, @"^\d{2}-\d{9}-(09|10|11|12)$") || string.IsNullOrEmpty(num))
-                return true;
-            else
-                return false;
         }
 
         #endregion 
@@ -1539,8 +1512,14 @@ namespace Priem
                 if (dgvEducationDocuments.CurrentRow.Index != _currentEducRow)
                 {
                     _currentEducRow = dgvEducationDocuments.CurrentRow.Index;
+                    SaveCurrentEducationInfo();
                     ViewEducationInfo(lstEducationInfo[_currentEducRow].Id);
                 }
+        }
+
+        private void UpdateEducationData()
+        {
+            FillEducationData(PersonDataProvider.GetPersonEducationDocumentsById(GuidId.Value));
         }
 
         private void FillEducationData(List<Person_EducationInfo> lstVals)
@@ -1574,10 +1553,11 @@ namespace Priem
             int ind = lstEducationInfo.FindIndex(x => x.Id == id);
 
             CountryEducId = lstEducationInfo[ind].CountryEducId;
-            RegionEducId = lstEducationInfo[ind].RegionEducId;
+            UpdateAfterCountryEduc();
 
-            tbEqualityDocumentNumber.Visible = CountryEducId != MainClass.countryRussiaId;
-            chbEkvivEduc.Visible = CountryEducId != MainClass.countryRussiaId;
+            RegionEducId = lstEducationInfo[ind].RegionEducId;
+            CurrEducationId = lstEducationInfo[ind].Id;
+            
             IsEqual = lstEducationInfo[ind].IsEqual;
             EqualDocumentNumber = lstEducationInfo[ind].EqualDocumentNumber;
 
@@ -1631,9 +1611,119 @@ namespace Priem
             {
                 var EducInfo = new Person_EducationInfo();
                 EducInfo.PersonId = GuidId.Value;
-                EducInfo.Id = PersonDataProvider.CreateNewEducationInfo(GuidId.Value);
+                EducInfo.CountryEducId = CountryId.Value;
+                EducInfo.RegionEducId = RegionId.Value;
+
+                if (lstEducationInfo == null)
+                    lstEducationInfo = new List<Person_EducationInfo>();
 
                 lstEducationInfo.Add(EducInfo);
+
+                FillEducationData(lstEducationInfo);
+            }
+        }
+
+        private void SaveCurrentEducationInfo()
+        {
+            if (_isModified && CheckEducationInfoFields())
+            {
+                int ind = lstEducationInfo.FindIndex(x => x.Id == CurrEducationId);
+                if (ind >= 0)
+                {
+                    lstEducationInfo[ind].SchoolTypeId = SchoolTypeId.Value;
+                    lstEducationInfo[ind].SchoolCity = SchoolCity;
+                    lstEducationInfo[ind].SchoolName = SchoolName;
+                    lstEducationInfo[ind].SchoolNum = SchoolNum;
+                    lstEducationInfo[ind].SchoolAVG = SchoolAVG;
+                    lstEducationInfo[ind].SchoolExitYear = SchoolExitYear;
+                    lstEducationInfo[ind].CountryEducId = CountryEducId.Value;
+                    lstEducationInfo[ind].RegionEducId = RegionEducId.Value;
+                    lstEducationInfo[ind].AttestatSeries = AttestatSeries;
+                    lstEducationInfo[ind].AttestatNum = AttestatNum;
+                    lstEducationInfo[ind].DiplomSeries = DiplomSeries;
+                    lstEducationInfo[ind].DiplomNum = DiplomNum;
+                    lstEducationInfo[ind].HEEntryYear = HEEntryYear;
+                    lstEducationInfo[ind].HEExitYear = HEExitYear;
+                    lstEducationInfo[ind].HEProfession = HEProfession;
+                    lstEducationInfo[ind].HEQualification = HEQualification;
+                    lstEducationInfo[ind].HEStudyFormId = HEStudyFormId;
+                    lstEducationInfo[ind].HEWork = HEWork;
+                    lstEducationInfo[ind].HighEducation = HighEducation;
+                    lstEducationInfo[ind].IsEqual = IsEqual;
+                    lstEducationInfo[ind].IsExcellent = IsExcellent;
+                    lstEducationInfo[ind].EqualDocumentNumber = EqualDocumentNumber;
+                    PersonDataProvider.SaveEducationDocument(lstEducationInfo[ind]);
+
+                    dgvEducationDocuments["School", ind].Value = SchoolName;
+                    dgvEducationDocuments["Series", ind].Value = SchoolTypeId.Value == 1 ? AttestatSeries : DiplomSeries;
+                    dgvEducationDocuments["Num", ind].Value = SchoolTypeId.Value == 1 ? AttestatNum : DiplomNum;
+                }
+            }
+        }
+
+        private void btnDeleteEducDoc_Click(object sender, EventArgs e)
+        {
+            if (dgvEducationDocuments.CurrentRow != null)
+            {
+                int _currentEducRow = dgvEducationDocuments.CurrentRow.Index;
+
+                string message = "Вы хотите удалить выбранный документ об образовании?";
+
+                if (MessageBox.Show(message, "", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == System.Windows.Forms.DialogResult.Yes)
+                {
+                    PersonDataProvider.DeletePersonEducationDocument(GuidId.Value, lstEducationInfo[_currentEducRow].Id);
+                    UpdateEducationData();
+                }
+            }
+        }
+
+        private void cbCountryEduc_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            UpdateAfterCountryEduc();
+        }
+
+        private void UpdateAfterCountryEduc()
+        {
+            tbEqualityDocumentNumber.Visible = CountryEducId != MainClass.countryRussiaId;
+            chbEkvivEduc.Visible = CountryEducId != MainClass.countryRussiaId;
+            cbRegion.Enabled = CountryEducId != MainClass.countryRussiaId;
+
+            if (CountryEducId.HasValue)
+                ComboServ.FillCombo(cbRegionEduc, CommonDataProvider.GetRegionListForCountryId(CountryEducId.Value), false, false);
+
+            if (CountryEducId != MainClass.countryRussiaId)
+            {
+                try
+                {
+                    //Region fix
+                    int iRegionEducId = CommonDataProvider.GetRegionIdForCountryId(CountryEducId.Value);
+                    if (iRegionEducId != 0)
+                        RegionEducId = iRegionEducId;
+                }
+                catch { }
+            }
+        }
+
+        private void cbCountry_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            UpdateAfterCountry();
+        }
+
+        private void UpdateAfterCountry()
+        {
+            if (CountryId.HasValue)
+                ComboServ.FillCombo(cbRegion, CommonDataProvider.GetRegionListForCountryId(CountryId.Value), false, false);
+
+            if (CountryId != MainClass.countryRussiaId)
+            {
+                try
+                {
+                    //Region fix
+                    int iRegionId = CommonDataProvider.GetRegionIdForCountryId(CountryId.Value);
+                    if (iRegionId != 0)
+                        RegionId = iRegionId;
+                }
+                catch { }
             }
         }
     }

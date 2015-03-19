@@ -249,39 +249,12 @@ namespace Priem
         //обновление грида
         protected override void GetSource()
         {
-            _orderBy = " ORDER BY [Приложены файлы], [Дата обновления файлов] DESC, ФИО";
-            _sQuery = @"SELECT DISTINCT qAbiturient.CommitId AS Id, extPerson.Surname + ' ' + extPerson.Name + ' ' + extPerson.SecondName as ФИО, 
-                       extPerson.BirthDate AS Дата_рождения, qAbiturient.CommitNumber AS Barcode, 
-                       (Case When EXISTS(SELECT extAbitFileNames.Id FROM extAbitFileNames WHERE extAbitFileNames.PersonId = extPerson.Id) then 'Да' else 'Нет' end) AS [Приложены файлы],
-                       (SELECT Max(extAbitFileNames.LoadDate) FROM extAbitFileNames WHERE extAbitFileNames.PersonId = extPerson.Id AND (extAbitFileNames.CommitId = qAbiturient.CommitId OR extAbitFileNames.CommitId IS NULL)) AS [Дата обновления файлов],
-                       (CASE WHEN EXISTS(SELECT * FROM qAbitFiles_OnlyEssayMotivLetter q WHERE q.PersonId=qAbiturient.PersonId AND FileTypeId=2) THEN 'Да' ELSE 'Нет' END) AS [Мотивац письмо],
-                       (CASE WHEN EXISTS(SELECT * FROM qAbitFiles_OnlyEssayMotivLetter q WHERE q.PersonId=qAbiturient.PersonId AND FileTypeId=3) THEN 'Да' ELSE 'Нет' END) AS [Эссе]
-                       FROM qAbiturient INNER JOIN extPerson ON qAbiturient.PersonId = extPerson.Id
-                       WHERE qAbiturient.IsImported = 0 AND Enabled = 1 AND qAbiturient.Id NOT IN (SELECT Id FROM qForeignApplicationOnly)";
-            
-//            HelpClass.FillDataGrid(dgvAbiturients, _bdcInet, _sQuery + GetFilterString(), _orderBy);
-//            DataGridViewButtonColumn col = new DataGridViewButtonColumn();
-            
-//            dgvAbiturients.Columns["ФИО"].AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCellsExceptHeader;
-//            btnLoad.Enabled = !(dgvAbiturients.RowCount == 0);
             if (bw.IsBusy)
                 return;
 
-            bw.RunWorkerAsync(new { dgv = this.dgvAbiturients, _bdc = _bdcInet, query = _sQuery, filters = GetFilterString(), orderby = _orderBy });
+            bw.RunWorkerAsync(new { dgv = this.dgvAbiturients, _bdc = _bdcInet, filters = GetFilterString() });
 
-            cbFaculty.Enabled = false;
-            cbLicenseProgram.Enabled = false;
-            cbObrazProgram.Enabled = false;
-            cbProfile.Enabled = false;
-            cbStudyBasis.Enabled = false;
-            tbAbitBarcode.Enabled = false;
-            tbSearch.Enabled = false;
-
-            btnCard.Enabled = false;
-            btnClose.Enabled = false;
-            btnRemove.Enabled = false;
-            btnUpdate.Enabled = false;
-            gbWait.Visible = true;
+            SetControlsEnableStatus(false);
         }
 
         void bw_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
@@ -296,25 +269,29 @@ namespace Priem
                 btnCard.Enabled = (dgvAbiturients.RowCount != 0);
             }
 
-            cbFaculty.Enabled = true;
-            btnCard.Enabled = true;
-            btnClose.Enabled = true;
-            btnRemove.Enabled = true;
-            btnUpdate.Enabled = true;
-            gbWait.Visible = false;
-
-            cbFaculty.Enabled = true;
-            cbLicenseProgram.Enabled = true;
-            cbObrazProgram.Enabled = true;
-            cbProfile.Enabled = true;
-            cbStudyBasis.Enabled = true;
-            tbAbitBarcode.Enabled = true;
-            tbSearch.Enabled = true;
+            SetControlsEnableStatus(true);
 
             DataGridViewButtonColumn col = new DataGridViewButtonColumn();
 
             dgvAbiturients.Columns["ФИО"].AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCellsExceptHeader;
             btnLoad.Enabled = !(dgvAbiturients.RowCount == 0);
+        }
+
+        private void SetControlsEnableStatus(bool status)
+        {
+            cbFaculty.Enabled = false;
+            cbLicenseProgram.Enabled = false;
+            cbObrazProgram.Enabled = false;
+            cbProfile.Enabled = false;
+            cbStudyBasis.Enabled = false;
+            tbAbitBarcode.Enabled = false;
+            tbSearch.Enabled = false;
+
+            btnCard.Enabled = false;
+            btnClose.Enabled = false;
+            btnRemove.Enabled = false;
+            btnUpdate.Enabled = false;
+            gbWait.Visible = !status;
         }
 
         void bw_DoWork(object sender, DoWorkEventArgs e)
@@ -331,7 +308,7 @@ namespace Priem
                        FROM qAbiturient INNER JOIN extPerson ON qAbiturient.PersonId = extPerson.Id
                        WHERE qAbiturient.IsImported = 0 AND Enabled = 1 AND qAbiturient.Id NOT IN (SELECT Id FROM qForeignApplicationOnly)";
 
-            e.Result = HelpClass.GetDataView(((dynamic)e.Argument).dgv, ((dynamic)e.Argument)._bdc, ((dynamic)e.Argument).query, ((dynamic)e.Argument).filters, ((dynamic)e.Argument).orderby);
+            e.Result = HelpClass.GetDataView(((dynamic)e.Argument).dgv, ((dynamic)e.Argument)._bdc, _sQuery, ((dynamic)e.Argument).filters, _orderBy);
             if (_bw.CancellationPending)
                 e.Cancel = true;
         }

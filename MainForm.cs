@@ -10,6 +10,7 @@ using System.Configuration;
 using System.Diagnostics;
 
 using EducServLib;
+using System.Threading;
 
 namespace Priem
 {
@@ -33,9 +34,19 @@ namespace Priem
                 MainClass.Init(this);               
 
                 _bdc = MainClass.Bdc;
-                OpenHelp(string.Format("{0}; Пользователь: {1}", _titleString, MainClass.GetUserName()));
+                string sPath = string.Format("{0}; Пользователь: {1}", _titleString, MainClass.GetUserName());
+                
+                OpenHelp(sPath);
 
-                //UpdateIsViewed();
+                //Технические запросы к базе делаются асинхронно для ускорения запуска стартового окна
+                Thread t1 = new Thread(MainClass.DeleteAllOpenByHolder);
+                t1.Start();
+                Thread t2 = new Thread(MainClass.InitQueryBuilder);
+                t2.Start();
+                Thread t3 = new Thread(ShowProtocolWarning);
+                t3.Start();
+
+                OpenStartForm();
             }
             catch (Exception exc)
             {
@@ -44,60 +55,48 @@ namespace Priem
             }
         }
 
-//        private void UpdateIsViewed()
-//        {
-//            using (PriemEntities context = new PriemEntities())
-//            {
-//                string query = @"SELECT Id
-//FROM [Application]
-//WHERE IsApprovedByComission = 1";
-//                DataTable tbl = MainClass.BdcOnlineReadWrite.GetDataSet(query).Tables[0];
-//                foreach (DataRow rw in tbl.Rows)
-//                {
-//                    context.Abiturient_UpdateIsViewed(rw.Field<Guid>("Id"));
-//                }
-//            }
-//        }
-
+        /// <summary>
+        /// Устанавливает тип приложения и строку подключения к базе
+        /// </summary>
         private void SetDB()
         {
             string dbName = ConfigurationManager.AppSettings["Priem"];
             MainClass.connString = DBConstants.CS_PRIEM;
             MainClass.connStringOnline = DBConstants.CS_PriemONLINE;
 
-            switch (dbName)
+            switch (dbName.ToLowerInvariant())
             {
-                case "Priem":
+                case "priem":
                     _titleString = " на первый курс";
                     MainClass.dbType = PriemType.Priem;
                     MainClass.IsTestDB = false;
                     break;
                 
-                case "PriemMAG":
+                case "priemmag":
                     _titleString = " в магистратуру";
                     MainClass.dbType = PriemType.PriemMag;
                     MainClass.IsTestDB = false;
                     break;
 
-                case "Priem_FAC":
+                case "priem_fac":
                     _titleString = " рабочая 1 курс superman";
                     MainClass.connString = DBConstants.CS_PRIEM_FAC;
                     MainClass.dbType = PriemType.Priem;
                     MainClass.IsTestDB = false;
                     break;
-                case "PriemMAG_FAC":
+                case "priemmag_fac":
                     _titleString = " рабочая магистратура superman";
                     MainClass.connString = DBConstants.CS_PRIEM_FAC;
                     MainClass.dbType = PriemType.PriemMag;
                     MainClass.IsTestDB = false;
                     break;
-                case "Priem_Test":
+                case "priem_test":
                     _titleString = " ТЕСТОВАЯ 1 курс";
                     MainClass.connString = DBConstants.CS_PRIEM_FAC;
                     MainClass.dbType = PriemType.Priem;
                     MainClass.IsTestDB = true;
                     break;
-                case "PriemMAG_Test":
+                case "priemmag_test":
                     _titleString = " ТЕСТОВАЯ магистратура";
                     MainClass.connString = DBConstants.CS_PRIEM_FAC;
                     MainClass.dbType = PriemType.PriemMag;
@@ -109,19 +108,8 @@ namespace Priem
                     return;
             }
 
-            //if (MainClass.connString.ToLower().Contains("test;integrated"))
-            //    _titleString += " ТЕСТОВАЯ";
-            //if (MainClass.connString.Contains("Educ;Integrated"))
-            //    _titleString += " ДЛЯ ОБУЧЕНИЯ";
-
             this.Text = "ПРИЕМ " + MainClass.sPriemYear + _titleString;
-
-            if (MainClass.IsTestDB)
-            {
-                MessageBox.Show("Внимание! Вы пользуетесь тестовой версией приложения, предназначенной для обучения и тестирования. Данные не сохраняются в рабочую базу");
-            }
         }
-
         /// <summary>
         /// extra information for open - what smi are enabled
         /// </summary>
@@ -130,18 +118,11 @@ namespace Priem
         {
             try
             {
-                // убирает все IsOpen для данного пользователя                
-                MainClass.DeleteAllOpenByHolder();
-
-                tsslMain.Text = string.Format("Открыта база: Прием в СПбГУ {0} {1}; ", MainClass.sPriemYear, path);
                 MainClass.dirTemplates = string.Format(@"{0}\Templates", Application.StartupPath);
+                tsslMain.Text = string.Format("Открыта база: Прием в СПбГУ {0} {1}; ", MainClass.sPriemYear, path);
 
-                MainClass.InitQueryBuilder();
-
-                ShowProtocolWarning();
-
-                //предупреждение об рабочем режиме базы
-                //MessageBox.Show("Уважаемые пользователи!\nСистема находится в рабочем режиме.\nВведение тестовых записей не допускается.", "Внимание");
+                Thread t = new Thread(ShowMessageIfTestDB);
+                t.Start();
 
                 if (MainClass.IsOwner())
                     return;
@@ -170,10 +151,8 @@ namespace Priem
                 smiExport.Visible = false;
                 smiImport.Visible = false;
                 smiExamsVedRoomList.Visible = false;
-                //smiProblemSolver.Visible = false;
                 smiEntryView.Visible = false;
                 smiDisEntryView.Visible = false;
-
 
                 smiEGEStatistics.Visible = false;
                 smiDynamics.Visible = false;
@@ -287,43 +266,47 @@ namespace Priem
 
                 //временно                
                 smiImport.Visible = false;
-
-                Form frm;
-                if (MainClass._config.ValuesList.Keys.Contains("lstAbitDef"))
-                {
-                    bool lstAbitDef = bool.Parse(MainClass._config.ValuesList["lstAbitDef"]);
-
-                    if (lstAbitDef)
-                    {
-                        frm = new ListAbit(this);
-                        smiListAbit.Checked = true;
-                        smiListPerson.Checked = false;
-                    }
-                    else
-                    {
-                        if (MainClass.dbType == PriemType.PriemMag)
-                            frm = new ApplicationInetList();
-                        else
-                            frm = new PersonInetList();
-
-                        smiListPerson.Checked = true;
-                        smiListAbit.Checked = false;
-                    }
-                }
-                else
-                    frm = new PersonInetList();
-
-                ShowProtocolWarning();
-                
-                frm.Show();
             }
-
             catch (Exception exc)
             {
                 WinFormsServ.Error(exc);
             }
         }
+        /// <summary>
+        /// Запускает стартовый лист
+        /// </summary>
+        private void OpenStartForm()
+        {
+            Form frm;
+            if (MainClass._config.ValuesList.Keys.Contains("lstAbitDef"))
+            {
+                bool lstAbitDef = bool.Parse(MainClass._config.ValuesList["lstAbitDef"]);
 
+                if (lstAbitDef)
+                {
+                    frm = new ListAbit(this);
+                    smiListAbit.Checked = true;
+                    smiListPerson.Checked = false;
+                }
+                else
+                {
+                    if (MainClass.dbType == PriemType.PriemMag)
+                        frm = new ApplicationInetList();
+                    else
+                        frm = new PersonInetList();
+
+                    smiListPerson.Checked = true;
+                    smiListAbit.Checked = false;
+                }
+            }
+            else
+                frm = new PersonInetList();
+
+            frm.Show();
+        }
+        /// <summary>
+        /// Выводит предупреждение в случае отсутствия свежего протокола о допуске
+        /// </summary>
         private void ShowProtocolWarning()
         {
             if (MainClass.dbType == PriemType.Priem && !MainClass.b1kCheckProtocolsEnabled)
@@ -345,6 +328,16 @@ namespace Priem
             }
         }
 
+        private void ShowMessageIfTestDB()
+        {
+            //предупреждение об тестовом режиме базы
+            if (MainClass.IsTestDB)
+                MessageBox.Show("Внимание! Вы пользуетесь тестовой версией приложения, предназначенной для обучения и тестирования. Данные не сохраняются в рабочую базу", "Внимание", MessageBoxButtons.OK, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
+
+            ////предупреждение об рабочем режиме базы
+            //MessageBox.Show("Уважаемые пользователи!\nСистема находится в рабочем режиме.\nВведение тестовых записей не допускается.", "Внимание", MessageBoxButtons.OK, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
+        }
+
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             //сохраняем параметры
@@ -360,6 +353,7 @@ namespace Priem
             {
                 WinFormsServ.Error("Ошибка при чтении параметров из файла: " + ex.Message);
             }
+
             try
             {
                 MainClass.DeleteAllOpenByHolder();
@@ -388,7 +382,6 @@ namespace Priem
         {
             new EntryList().Show();
         }
-
         private void smiLoad_Click(object sender, EventArgs e)
         {
             if (MainClass.dbType == PriemType.PriemMag)
@@ -396,7 +389,6 @@ namespace Priem
             else
                 new PersonInetList().Show();
         }
-
         private void smiAbits_Click(object sender, EventArgs e)
         {
             new ListAbit(this).Show();
@@ -406,17 +398,14 @@ namespace Priem
         {
             new ListPersonFilter(this).Show();
         }
-
         private void smiAllAbitList_Click(object sender, EventArgs e)
         {
             new AllAbitList().Show();
         }
-
         private void smiListHostel_Click(object sender, EventArgs e)
         {
             new ListHostel().Show();
         }
-
         private void smiVedExamList_Click(object sender, EventArgs e)
         {
             new VedExamLists().Show();
@@ -431,47 +420,38 @@ namespace Priem
         {
             new EnableProtocolList().Show();
         }
-
         private void smiDisEnableProtocol_Click(object sender, EventArgs e)
         {
             new DisEnableProtocolList().Show();
         }
-
         private void smiPersonsSPBGU_Click(object sender, EventArgs e)
         {
             new PersonInetList().Show();
         }
-
         private void smiOnlineChanges_Click(object sender, EventArgs e)
         {
             new OnlineChangesList().Show();
         }
-
         private void smiOlympAbitList_Click(object sender, EventArgs e)
         {
             new OlympAbitList().Show();
         }
-
         private void smiExamName_Click(object sender, EventArgs e)
         {
             new ExamNameList().Show();
         }
-
         private void smiEGE_Click(object sender, EventArgs e)
         {
             new EgeExamList().Show();
         }
-
         private void smiExam_Click(object sender, EventArgs e)
         {
             new ExamList().Show();
         }
-
         private void smiChanges_Click(object sender, EventArgs e)
         {
             new PersonChangesList().Show();
         }
-
         private void smiCPK1_Click(object sender, EventArgs e)
         {
             new CPK1().Show();
@@ -516,17 +496,14 @@ namespace Priem
         {
             new ChangeCompCelProtocolList().Show();
         }
-
         private void smiExams_Click(object sender, EventArgs e)
         {
             new ExamResults().Show();
         }
-
         private void smiOlymp2Mark_Click(object sender, EventArgs e)
         {
             new Olymp2Mark().Show();
         }
-
         private void smiOlymp2Competition_Click(object sender, EventArgs e)
         {
             new Olymp2Competition().Show();
@@ -536,7 +513,6 @@ namespace Priem
         {
             new ExamsVedList().Show();
         }
-
         private void smiExamsVedRoomList_Click(object sender, EventArgs e)
         {
             new ExamsVedRoomList().Show();
@@ -546,7 +522,6 @@ namespace Priem
         {
             new MinEgeList().Show();
         }
-
         private void smiHelp_Click(object sender, EventArgs e)
         {
             Process.Start(string.Format(@"{0}\Templates\Help.doc", Application.StartupPath));
@@ -556,12 +531,10 @@ namespace Priem
         {
             new ChangeCompBEProtocolList().Show();
         }
-
         private void smiFormA_Click(object sender, EventArgs e)
         {
             new FormA().Show();
         }
-
         private void smiDynamics_Click(object sender, EventArgs e)
         {
             new CountAbitStatistics().Show();
@@ -571,13 +544,11 @@ namespace Priem
         {
             FBSClass.MakeFBS(2);
         }
-
         private void smiLoadFBS_Click(object sender, EventArgs e)
         {
             if (MainClass.IsPasha())
                 new LoadFBS().Show();
         }
-
         private void smiGetByBalls_Click(object sender, EventArgs e)
         {
             FBSClass.MakeFBS(1);
@@ -588,12 +559,10 @@ namespace Priem
             //EGE Stat
             new EgeStatistics().Show();
         }
-
         private void smiEnterMarks_Click(object sender, EventArgs e)
         {
             new SelectVed().Show();
         }
-
         private void smiLoadMarks_Click(object sender, EventArgs e)
         {
             new SelectVedForLoad(false).Show();
@@ -603,7 +572,6 @@ namespace Priem
         {
             new SelectExamManual().Show();
         }
-
         private void smiForm2_Click(object sender, EventArgs e)
         {
             new Form2().Show();
@@ -613,42 +581,34 @@ namespace Priem
         {
             new SelectVedForLoad(true).Show();
         }
-
         private void smiDecryptor_Click(object sender, EventArgs e)
         {
             new Decriptor().Show();
         }
-
         private void smiEgeLoad_Click(object sender, EventArgs e)
         {
             new LoadEgeMarks().Show();
         }
-
         private void smiRatingList_Click(object sender, EventArgs e)
         {
             new RatingList(false).Show();
         }                          
-
         private void smiAbitFacultyIntesection_Click(object sender, EventArgs e)
         {
             new AbitFacultyIntersection().Show();
         }
-
         private void smiRegionAbitsStat_Click(object sender, EventArgs e)
         {
             new RegionAbitStatistics().Show();
         }
-
         private void smiRegionStatMarks_Click(object sender, EventArgs e)
         {
             new AbitEgeMarksStatistics().Show();
         }
-
         private void smiRatingListPasha_Click(object sender, EventArgs e)
         {
             new RatingList(true).Show();
         }
-
         private void smiGetByFIOPasp2_Click(object sender, EventArgs e)
         {
             FBSClass.MakeFBS(3);

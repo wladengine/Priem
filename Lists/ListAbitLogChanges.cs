@@ -230,7 +230,7 @@ namespace Priem
                         x.ActionAuthor
                     }).ToArray();
 
-                return Util.ConvertToDataTable(_data);
+                return Converter.ConvertToDataTable(_data);
             }
         }
 

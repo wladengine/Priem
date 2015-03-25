@@ -683,7 +683,7 @@ AND ed.FixierenView.IsSecond = {7} AND ed.FixierenView.IsReduced = {8} AND ed.Fi
             }
             catch (Exception ex)
             {
-                WinFormsServ.Error(ex, "Ошибка при обновлении списка.");
+                WinFormsServ.Error("Ошибка при обновлении списка.", ex);
             }
         }
       
@@ -826,9 +826,9 @@ AND ed.FixierenView.IsSecond = {7} AND ed.FixierenView.IsReduced = {8} AND ed.Fi
                     }
                     catch (Exception ex)
                     {
-                        WinFormsServ.Error(ex, "Ошибка при сохранении списка");
+                        WinFormsServ.Error("Ошибка при сохранении списка", ex);
                         return;
-                    }                   
+                    }
                 }
 
                 //ПЕЧАТЬ!
@@ -966,7 +966,7 @@ AND ed.FixierenView.IsSecond = {7} AND ed.FixierenView.IsReduced = {8} AND ed.Fi
             }
             catch (Exception ex)
             {
-                WinFormsServ.Error(ex, "Ошибка при локе/анлоке");
+                WinFormsServ.Error("Ошибка при локе/анлоке", ex);
             }
             return;            
         }
@@ -1045,7 +1045,7 @@ AND ed.FixierenView.IsSecond = {7} AND ed.FixierenView.IsReduced = {8} AND ed.Fi
             }
             catch (Exception ex)
             {
-                WinFormsServ.Error(ex, "Ошибка при WEB FIXIEREN !");
+                WinFormsServ.Error("Ошибка при WEB FIXIEREN !", ex);
             }
             MessageBox.Show("DONE!");
         }        
@@ -1076,7 +1076,7 @@ AND ed.FixierenView.IsSecond = {7} AND ed.FixierenView.IsReduced = {8} AND ed.Fi
             }
             catch (Exception ex)
             {
-                WinFormsServ.Error(ex, "Ошибка при WEB FIXIEREN!");
+                WinFormsServ.Error("Ошибка при WEB FIXIEREN!", ex);
             }
 
             MessageBox.Show("DONE!");

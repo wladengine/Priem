@@ -11,7 +11,8 @@
     <RootNamespace>Priem</RootNamespace>
     <AssemblyName>Priem_1kurs</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
     <SccProjectName>
     </SccProjectName>
@@ -1393,13 +1394,13 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\EDUCATION\EducServLib\EducServLib\EducServLib.csproj">
+      <Project>{96257583-5ff8-4f63-aed3-96c36df6477d}</Project>
+      <Name>EducServLib</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\BaseFormsLib\BaseFormsLib\BaseFormsLib.csproj">
       <Project>{264ef71d-fe21-4be1-b7eb-ccf3b5fd219f}</Project>
       <Name>BaseFormsLib</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\EducServLib\EducServLib\EducServLib.csproj">
-      <Project>{96257583-5ff8-4f63-aed3-96c36df6477d}</Project>
-      <Name>EducServLib</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

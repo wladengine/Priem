@@ -1481,7 +1481,7 @@ namespace Priem
                      select new { Id = PBD.Id, PBD.BenefitDocumentType.Name, PBD.Series, PBD.Number, PBD.HasOriginals }).ToList().
                      Select(x => new { x.Id, Name = x.Name, x.Series, x.Number, HasOriginals = x.HasOriginals ? "да" : "нет" });
 
-                dgvBenefitDocument.DataSource = Util.ConvertToDataTable(src.ToArray());
+                dgvBenefitDocument.DataSource = Converter.ConvertToDataTable(src.ToArray());
             }
             dgvBenefitDocument.Columns["Id"].Visible = false;
             dgvBenefitDocument.Columns["Name"].HeaderText = "Тип док-та";

@@ -70,7 +70,7 @@ namespace Priem
             {
                 var data = context.SP_ObrazProgram.Where(x => (FacultyId.HasValue ? x.FacultyId == FacultyId.Value : true) && (StudyLevelId.HasValue ? x.SP_LicenseProgram.StudyLevelId == StudyLevelId : true))
                     .Select(x => new { x.Id, Number = x.SP_LicenseProgram.StudyLevel.Acronym + "." + x.Number + "." + MainClass.sPriemYear, x.Name }).OrderBy(x => x.Name).ToArray();
-                dgv.DataSource = Util.ConvertToDataTable(data);
+                dgv.DataSource = Converter.ConvertToDataTable(data);
             }
             lblCount.Text = "Всего: " + dgv.Rows.Count.ToString();
             SetVisibleColumnsAndNameColumns();

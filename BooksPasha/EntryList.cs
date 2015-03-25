@@ -172,7 +172,7 @@ namespace Priem
                         query = context.qEntry.OrderBy(_orderBy);                    
 
                     GetFilters(ref query);
-                    Dgv.DataSource = Util.ConvertToDataTable(query.ToArray());
+                    Dgv.DataSource = Converter.ConvertToDataTable(query.ToArray());
 
                     SetVisibleColumnsAndNameColumns();
                 }

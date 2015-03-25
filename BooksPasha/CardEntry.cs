@@ -694,7 +694,7 @@ WHERE Id=@Id";
             {
                 var src = context.InnerEntryInEntry.Where(x => x.EntryId == GuidId)
                     .Select(x => new { x.Id, x.SP_ObrazProgram.Name, Profile = x.SP_Profile.Name, x.KCP }).ToArray();
-                dgvInnerEntryInEntry.DataSource = Util.ConvertToDataTable(src);
+                dgvInnerEntryInEntry.DataSource = Converter.ConvertToDataTable(src);
                 dgvInnerEntryInEntry.Columns["Id"].Visible = false;
                 dgvInnerEntryInEntry.Columns["Name"].HeaderText = "Образовательная программа";
                 dgvInnerEntryInEntry.Columns["Profile"].HeaderText = "Профиль";

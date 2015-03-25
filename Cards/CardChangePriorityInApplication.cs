@@ -49,7 +49,7 @@ namespace Priem
                             StudyForm = x.Entry.StudyForm.Name,
                         }).OrderBy(x => x.Priority).ToArray();
 
-                    tblPrior = Util.ConvertToDataTable(data);
+                    tblPrior = Converter.ConvertToDataTable(data);
 
                     for (int i = 0; i < tblPrior.Rows.Count; i++)
                     {

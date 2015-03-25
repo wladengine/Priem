@@ -51,7 +51,7 @@ namespace Priem
             using (PriemEntities context = new PriemEntities())
             {
                 var data = context.SP_LicenseProgram.Where(x => StudyLevelId.HasValue ? x.StudyLevelId == StudyLevelId.Value : true).Select(x => new { x.Id, x.Code, x.Name }).OrderBy(x => x.Code).ToArray();
-                dgv.DataSource = Util.ConvertToDataTable(data);
+                dgv.DataSource = Converter.ConvertToDataTable(data);
             }
 
             Dgv.SelectionMode = DataGridViewSelectionMode.FullRowSelect;

@@ -66,7 +66,7 @@ namespace Priem
                                x.DocumentDate
                            }).OrderBy(x => x.FIO).ThenBy(x => x.OlympType).ThenBy(x => x.OlympSubject).ThenBy(x => x.OlympValue);
 
-                dgv.DataSource = Util.ConvertToDataTable(src.ToArray());
+                dgv.DataSource = Converter.ConvertToDataTable(src.ToArray());
 
                 if (!dgv.Columns.Contains("Check"))
                 {

@@ -103,7 +103,9 @@ namespace Priem
                     olympSpbguId = 3;
 
 
-                    var dicSettings = context.C_AppSettings.Select(x => new { x.ParamKey, x.ParamValue }).ToList().ToDictionary(x => x.ParamKey, y => y.ParamValue);
+                    Dictionary<string, string> dicSettings = context.C_AppSettings
+                        .Select(x => new { x.ParamKey, x.ParamValue }).ToList().ToDictionary(x => x.ParamKey, y => y.ParamValue);
+
                     sPriemYear = dicSettings.ContainsKey("PriemYear") ? dicSettings["PriemYear"] : DateTime.Now.Year.ToString();
                     iPriemYear = int.Parse(sPriemYear);
 
@@ -125,7 +127,7 @@ namespace Priem
                %APPDATA%/Priem
               */
                 directory = string.Format(@"{0}\Priem", Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData));               
-                saveTempFolder = string.Format(@"{0}\DocTempFiles\",Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments));
+                saveTempFolder = string.Format(@"{0}\DocTempFiles\", Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments));
                 try
                 {
                     // уточнить у Дениса, кто создавал эту папку!!!!! может будет ошибка

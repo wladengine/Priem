@@ -265,7 +265,7 @@ namespace Priem
             {
                 HelpClass.FillDataGrid(this.Dgv, (DataView)e.Result);
 
-                lblCount.Text = dgvAbiturients.RowCount.ToString();
+                lblCount.Text = "Всего: " + dgvAbiturients.RowCount.ToString();
                 btnCard.Enabled = (dgvAbiturients.RowCount != 0);
             }
 
@@ -279,18 +279,18 @@ namespace Priem
 
         private void SetControlsEnableStatus(bool status)
         {
-            cbFaculty.Enabled = false;
-            cbLicenseProgram.Enabled = false;
-            cbObrazProgram.Enabled = false;
-            cbProfile.Enabled = false;
-            cbStudyBasis.Enabled = false;
-            tbAbitBarcode.Enabled = false;
-            tbSearch.Enabled = false;
+            cbFaculty.Enabled = status;
+            cbLicenseProgram.Enabled = status;
+            cbObrazProgram.Enabled = status;
+            cbProfile.Enabled = status;
+            cbStudyBasis.Enabled = status;
+            tbAbitBarcode.Enabled = status;
+            tbSearch.Enabled = status;
 
-            btnCard.Enabled = false;
-            btnClose.Enabled = false;
-            btnRemove.Enabled = false;
-            btnUpdate.Enabled = false;
+            btnCard.Enabled = status;
+            btnClose.Enabled = status;
+            btnRemove.Enabled = status;
+            btnUpdate.Enabled = status;
             gbWait.Visible = !status;
         }
 

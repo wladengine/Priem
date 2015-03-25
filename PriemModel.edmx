@@ -6494,6 +6494,7 @@
           <Parameter Name="NameEng" Type="nvarchar" Mode="In" />
           <Parameter Name="Code" Type="nvarchar" Mode="In" />
           <Parameter Name="StudyLevelId" Type="int" Mode="In" />
+          <Parameter Name="AggregateGroupId" Type="int" Mode="In" />
           <Parameter Name="GSGUCode" Type="nvarchar" Mode="In" />
           <Parameter Name="id" Type="int" Mode="InOut" />
         </Function>
@@ -6502,6 +6503,7 @@
           <Parameter Name="NameEng" Type="nvarchar" Mode="In" />
           <Parameter Name="Code" Type="nvarchar" Mode="In" />
           <Parameter Name="StudyLevelId" Type="int" Mode="In" />
+          <Parameter Name="AggregateGroupId" Type="int" Mode="In" />
           <Parameter Name="GSGUCode" Type="nvarchar" Mode="In" />
           <Parameter Name="id" Type="int" Mode="In" />
         </Function>
@@ -7785,6 +7787,7 @@
             <Parameter Name="NameEng" Mode="In" Type="String" />
             <Parameter Name="Code" Mode="In" Type="String" />
             <Parameter Name="StudyLevelId" Mode="In" Type="Int32" />
+            <Parameter Name="AggregateGroupId" Mode="In" Type="Int32" />
             <Parameter Name="GSGUCode" Mode="In" Type="String" />
             <Parameter Name="id" Mode="InOut" Type="Int32" />
           </FunctionImport>
@@ -7793,6 +7796,7 @@
             <Parameter Name="NameEng" Mode="In" Type="String" />
             <Parameter Name="Code" Mode="In" Type="String" />
             <Parameter Name="StudyLevelId" Mode="In" Type="Int32" />
+            <Parameter Name="AggregateGroupId" Mode="In" Type="Int32" />
             <Parameter Name="GSGUCode" Mode="In" Type="String" />
             <Parameter Name="id" Mode="In" Type="Int32" />
           </FunctionImport>

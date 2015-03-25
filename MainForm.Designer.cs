@@ -1098,6 +1098,7 @@
             this.IsMdiContainer = true;
             this.Name = "MainForm";
             this.Text = "Прием в СПбГУ";
+            this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
             this.msMainMenu.ResumeLayout(false);
             this.msMainMenu.PerformLayout();

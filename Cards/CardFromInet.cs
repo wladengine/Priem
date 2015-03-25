@@ -156,7 +156,7 @@ namespace Priem
             if (MainClass.dbType == PriemType.PriemMag)
             {
                 btnSaveChange.Text = "Одобрить";
-                btnSaveChange.Enabled = MainClass.bMagImportApplicationsEnabled;
+                btnSaveChange.Enabled = (MainClass.bMagImportApplicationsEnabled || MainClass.IsTestDB);
             }
         }
 
@@ -1126,7 +1126,7 @@ namespace Priem
                             }
                             catch (Exception exc)
                             {
-                                WinFormsServ.Error(exc, "Ошибка при сохранении:");
+                                WinFormsServ.Error("Ошибка при сохранении:", exc);
                             }
                         }
                         if (!SaveApplication(personId.Value))

@@ -11237,9 +11237,10 @@ namespace Priem
         /// <param name="nameEng">No Metadata Documentation available.</param>
         /// <param name="code">No Metadata Documentation available.</param>
         /// <param name="studyLevelId">No Metadata Documentation available.</param>
+        /// <param name="aggregateGroupId">No Metadata Documentation available.</param>
         /// <param name="gSGUCode">No Metadata Documentation available.</param>
         /// <param name="id">No Metadata Documentation available.</param>
-        public int SP_LicenseProgram_Insert(global::System.String name, global::System.String nameEng, global::System.String code, Nullable<global::System.Int32> studyLevelId, global::System.String gSGUCode, ObjectParameter id)
+        public int SP_LicenseProgram_Insert(global::System.String name, global::System.String nameEng, global::System.String code, Nullable<global::System.Int32> studyLevelId, Nullable<global::System.Int32> aggregateGroupId, global::System.String gSGUCode, ObjectParameter id)
         {
             ObjectParameter nameParameter;
             if (name != null)
@@ -11279,6 +11280,16 @@ namespace Priem
             else
             {
                 studyLevelIdParameter = new ObjectParameter("StudyLevelId", typeof(global::System.Int32));
+            }
+    
+            ObjectParameter aggregateGroupIdParameter;
+            if (aggregateGroupId.HasValue)
+            {
+                aggregateGroupIdParameter = new ObjectParameter("AggregateGroupId", aggregateGroupId);
+            }
+            else
+            {
+                aggregateGroupIdParameter = new ObjectParameter("AggregateGroupId", typeof(global::System.Int32));
             }
     
             ObjectParameter gSGUCodeParameter;
@@ -11291,7 +11302,7 @@ namespace Priem
                 gSGUCodeParameter = new ObjectParameter("GSGUCode", typeof(global::System.String));
             }
     
-            return base.ExecuteFunction("SP_LicenseProgram_Insert", nameParameter, nameEngParameter, codeParameter, studyLevelIdParameter, gSGUCodeParameter, id);
+            return base.ExecuteFunction("SP_LicenseProgram_Insert", nameParameter, nameEngParameter, codeParameter, studyLevelIdParameter, aggregateGroupIdParameter, gSGUCodeParameter, id);
         }
     
         /// <summary>
@@ -11301,9 +11312,10 @@ namespace Priem
         /// <param name="nameEng">No Metadata Documentation available.</param>
         /// <param name="code">No Metadata Documentation available.</param>
         /// <param name="studyLevelId">No Metadata Documentation available.</param>
+        /// <param name="aggregateGroupId">No Metadata Documentation available.</param>
         /// <param name="gSGUCode">No Metadata Documentation available.</param>
         /// <param name="id">No Metadata Documentation available.</param>
-        public int SP_LicenseProgram_Update(global::System.String name, global::System.String nameEng, global::System.String code, Nullable<global::System.Int32> studyLevelId, global::System.String gSGUCode, Nullable<global::System.Int32> id)
+        public int SP_LicenseProgram_Update(global::System.String name, global::System.String nameEng, global::System.String code, Nullable<global::System.Int32> studyLevelId, Nullable<global::System.Int32> aggregateGroupId, global::System.String gSGUCode, Nullable<global::System.Int32> id)
         {
             ObjectParameter nameParameter;
             if (name != null)
@@ -11343,6 +11355,16 @@ namespace Priem
             else
             {
                 studyLevelIdParameter = new ObjectParameter("StudyLevelId", typeof(global::System.Int32));
+            }
+    
+            ObjectParameter aggregateGroupIdParameter;
+            if (aggregateGroupId.HasValue)
+            {
+                aggregateGroupIdParameter = new ObjectParameter("AggregateGroupId", aggregateGroupId);
+            }
+            else
+            {
+                aggregateGroupIdParameter = new ObjectParameter("AggregateGroupId", typeof(global::System.Int32));
             }
     
             ObjectParameter gSGUCodeParameter;
@@ -11365,7 +11387,7 @@ namespace Priem
                 idParameter = new ObjectParameter("id", typeof(global::System.Int32));
             }
     
-            return base.ExecuteFunction("SP_LicenseProgram_Update", nameParameter, nameEngParameter, codeParameter, studyLevelIdParameter, gSGUCodeParameter, idParameter);
+            return base.ExecuteFunction("SP_LicenseProgram_Update", nameParameter, nameEngParameter, codeParameter, studyLevelIdParameter, aggregateGroupIdParameter, gSGUCodeParameter, idParameter);
         }
     
         /// <summary>

@@ -106,7 +106,7 @@ namespace Priem
             }
             catch (Exception de)
             {
-                WinFormsServ.Error(de, "Ошибка обновления данных");
+                WinFormsServ.Error("Ошибка обновления данных", de);
                 return false;
             }
         }

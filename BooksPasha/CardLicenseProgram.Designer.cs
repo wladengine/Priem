@@ -38,20 +38,22 @@
             this.label4 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.tbGSGUCode = new System.Windows.Forms.TextBox();
+            this.label6 = new System.Windows.Forms.Label();
+            this.cbAggregateGroup = new System.Windows.Forms.ComboBox();
             ((System.ComponentModel.ISupportInitialize)(this.epError)).BeginInit();
             this.SuspendLayout();
             // 
             // btnClose
             // 
-            this.btnClose.Location = new System.Drawing.Point(357, 133);
+            this.btnClose.Location = new System.Drawing.Point(357, 158);
             // 
             // btnSaveChange
             // 
-            this.btnSaveChange.Location = new System.Drawing.Point(12, 132);
+            this.btnSaveChange.Location = new System.Drawing.Point(12, 157);
             // 
             // btnSaveAsNew
             // 
-            this.btnSaveAsNew.Location = new System.Drawing.Point(220, 132);
+            this.btnSaveAsNew.Location = new System.Drawing.Point(220, 157);
             // 
             // label1
             // 
@@ -66,14 +68,14 @@
             // 
             this.tbName.Location = new System.Drawing.Point(113, 12);
             this.tbName.Name = "tbName";
-            this.tbName.Size = new System.Drawing.Size(310, 20);
+            this.tbName.Size = new System.Drawing.Size(325, 20);
             this.tbName.TabIndex = 26;
             // 
             // tbNameEng
             // 
             this.tbNameEng.Location = new System.Drawing.Point(113, 38);
             this.tbNameEng.Name = "tbNameEng";
-            this.tbNameEng.Size = new System.Drawing.Size(310, 20);
+            this.tbNameEng.Size = new System.Drawing.Size(325, 20);
             this.tbNameEng.TabIndex = 27;
             // 
             // tbCode
@@ -109,7 +111,7 @@
             this.cbStudyLevel.FormattingEnabled = true;
             this.cbStudyLevel.Location = new System.Drawing.Point(113, 90);
             this.cbStudyLevel.Name = "cbStudyLevel";
-            this.cbStudyLevel.Size = new System.Drawing.Size(310, 21);
+            this.cbStudyLevel.Size = new System.Drawing.Size(325, 21);
             this.cbStudyLevel.TabIndex = 31;
             // 
             // label4
@@ -134,14 +136,36 @@
             // 
             this.tbGSGUCode.Location = new System.Drawing.Point(345, 64);
             this.tbGSGUCode.Name = "tbGSGUCode";
-            this.tbGSGUCode.Size = new System.Drawing.Size(78, 20);
+            this.tbGSGUCode.Size = new System.Drawing.Size(93, 20);
             this.tbGSGUCode.TabIndex = 33;
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(38, 120);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(69, 13);
+            this.label6.TabIndex = 36;
+            this.label6.Text = "Группа напр";
+            // 
+            // cbAggregateGroup
+            // 
+            this.cbAggregateGroup.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.cbAggregateGroup.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbAggregateGroup.FormattingEnabled = true;
+            this.cbAggregateGroup.Location = new System.Drawing.Point(113, 117);
+            this.cbAggregateGroup.Name = "cbAggregateGroup";
+            this.cbAggregateGroup.Size = new System.Drawing.Size(325, 21);
+            this.cbAggregateGroup.TabIndex = 35;
             // 
             // CardLicenseProgram
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(450, 167);
+            this.ClientSize = new System.Drawing.Size(450, 192);
+            this.Controls.Add(this.label6);
+            this.Controls.Add(this.cbAggregateGroup);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.tbGSGUCode);
             this.Controls.Add(this.label4);
@@ -167,6 +191,8 @@
             this.Controls.SetChildIndex(this.label4, 0);
             this.Controls.SetChildIndex(this.tbGSGUCode, 0);
             this.Controls.SetChildIndex(this.label5, 0);
+            this.Controls.SetChildIndex(this.cbAggregateGroup, 0);
+            this.Controls.SetChildIndex(this.label6, 0);
             ((System.ComponentModel.ISupportInitialize)(this.epError)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -185,5 +211,7 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.TextBox tbGSGUCode;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.ComboBox cbAggregateGroup;
     }
 }

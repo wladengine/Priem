@@ -8,6 +8,7 @@ using System.Text;
 using System.Windows.Forms;
 
 using System.IO;
+using PriemLib;
 
 namespace Priem
 {
@@ -112,8 +113,6 @@ namespace Priem
                     }
 
                     splitted = tmpSplitted;
-
-                    
 
                     PayDataEntry pd = new PayDataEntry();
                     string LP = splitted[0].Replace("\r\n", "").Trim().Trim('"');

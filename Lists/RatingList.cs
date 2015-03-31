@@ -15,6 +15,7 @@ using BDClassLib;
 using WordOut;
 
 using RtfWriter;
+using PriemLib;
 
 namespace Priem
 {

@@ -8,6 +8,7 @@ using System.Windows.Forms;
 
 using EducServLib;
 using BDClassLib;
+using PriemLib;
 
 namespace Priem
 {

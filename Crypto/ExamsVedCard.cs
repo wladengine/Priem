@@ -13,6 +13,7 @@ using System.Transactions;
 using EducServLib;
 using BDClassLib;
 using BaseFormsLib;
+using PriemLib;
 
 namespace Priem
 {

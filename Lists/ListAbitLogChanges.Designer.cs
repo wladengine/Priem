@@ -161,8 +161,9 @@
             // 
             // gbWait
             // 
+            this.gbWait.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.gbWait.Controls.Add(this.lblWait);
-            this.gbWait.Location = new System.Drawing.Point(271, 261);
+            this.gbWait.Location = new System.Drawing.Point(398, 268);
             this.gbWait.Name = "gbWait";
             this.gbWait.Size = new System.Drawing.Size(200, 36);
             this.gbWait.TabIndex = 12;

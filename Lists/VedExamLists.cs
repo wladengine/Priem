@@ -11,6 +11,7 @@ using EducServLib;
 using BDClassLib;
 using WordOut;
 using BaseFormsLib;
+using PriemLib;
 
 namespace Priem
 {

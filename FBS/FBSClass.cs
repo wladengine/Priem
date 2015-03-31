@@ -12,6 +12,7 @@ using System.IO;
 using System.Data.SqlClient;
 
 using EducServLib;
+using PriemLib;
 
 namespace Priem
 {

@@ -11,6 +11,7 @@ using System.Diagnostics;
 
 using EducServLib;
 using System.Threading;
+using PriemLib;
 
 namespace Priem
 {

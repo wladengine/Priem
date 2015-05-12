@@ -146,6 +146,9 @@
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.lblDBPath = new System.Windows.Forms.ToolStripStatusLabel();
             this.tsslMain = new System.Windows.Forms.ToolStripStatusLabel();
+            this.baseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.smiRegions = new System.Windows.Forms.ToolStripMenuItem();
+            this.smiCountries = new System.Windows.Forms.ToolStripMenuItem();
             this.msMainMenu.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -716,6 +719,7 @@
             // smiBooks
             // 
             this.smiBooks.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.baseToolStripMenuItem,
             this.конкурсыToolStripMenuItem,
             this.smiEntry,
             this.smiCompetitiveGroup,
@@ -932,7 +936,7 @@
             // vuzNamesToolStripMenuItem
             // 
             this.vuzNamesToolStripMenuItem.Name = "vuzNamesToolStripMenuItem";
-            this.vuzNamesToolStripMenuItem.Size = new System.Drawing.Size(130, 22);
+            this.vuzNamesToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.vuzNamesToolStripMenuItem.Text = "VuzNames";
             this.vuzNamesToolStripMenuItem.Click += new System.EventHandler(this.vuzNamesToolStripMenuItem_Click);
             // 
@@ -1087,6 +1091,29 @@
             this.tsslMain.Name = "tsslMain";
             this.tsslMain.Size = new System.Drawing.Size(0, 17);
             // 
+            // baseToolStripMenuItem
+            // 
+            this.baseToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.smiRegions,
+            this.smiCountries});
+            this.baseToolStripMenuItem.Name = "baseToolStripMenuItem";
+            this.baseToolStripMenuItem.Size = new System.Drawing.Size(453, 22);
+            this.baseToolStripMenuItem.Text = "Базовые справочники";
+            // 
+            // smiRegions
+            // 
+            this.smiRegions.Name = "smiRegions";
+            this.smiRegions.Size = new System.Drawing.Size(152, 22);
+            this.smiRegions.Text = "Регионы";
+            this.smiRegions.Click += new System.EventHandler(this.smiRegions_Click);
+            // 
+            // smiCountries
+            // 
+            this.smiCountries.Name = "smiCountries";
+            this.smiCountries.Size = new System.Drawing.Size(152, 22);
+            this.smiCountries.Text = "Страны";
+            this.smiCountries.Click += new System.EventHandler(this.smiCountries_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1228,6 +1255,9 @@
         private System.Windows.Forms.ToolStripMenuItem smiStatGSGU;
         private System.Windows.Forms.ToolStripMenuItem smiStatGSGUForm1A;
         private System.Windows.Forms.ToolStripMenuItem smiStatGSGUForm2;
+        private System.Windows.Forms.ToolStripMenuItem baseToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem smiRegions;
+        private System.Windows.Forms.ToolStripMenuItem smiCountries;
 
     }
 }

@@ -822,5 +822,15 @@ namespace Priem
         {
             new StatFormGSGUForm1A().Show();
         }
+
+        private void smiRegions_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void smiCountries_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

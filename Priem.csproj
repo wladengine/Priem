@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Priem</RootNamespace>
     <AssemblyName>Priem_1kurs</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <TargetFrameworkProfile>
     </TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
@@ -32,6 +32,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <PlatformTarget>x86</PlatformTarget>
@@ -41,6 +42,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationIcon>Shwz-Disney-Timon.ico</ApplicationIcon>
@@ -52,6 +54,12 @@
     <Reference Include="BDClassLib, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>bin\Release\BDClassLib.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
     <Reference Include="itextsharp, Version=4.1.2.0, Culture=neutral, PublicKeyToken=8354ae6d2174ddca">
       <SpecificVersion>False</SpecificVersion>
@@ -65,9 +73,9 @@
       <HintPath>bin\Debug\RtfWriter.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Data.Entity" />
     <Reference Include="System.DirectoryServices.AccountManagement" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Security" />
@@ -100,90 +108,6 @@
     </Compile>
     <Compile Include="Cards\FormExamResultExportCSV.Designer.cs">
       <DependentUpon>FormExamResultExportCSV.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Crypto\AddMark.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Crypto\AddMark.Designer.cs">
-      <DependentUpon>AddMark.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Crypto\AppealMarks.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Crypto\AppealMarks.Designer.cs">
-      <DependentUpon>AppealMarks.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Crypto\Decriptor.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Crypto\Decriptor.Designer.cs">
-      <DependentUpon>Decriptor.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Crypto\EnterMarks.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Crypto\EnterMarks.designer.cs">
-      <DependentUpon>EnterMarks.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Crypto\ExaminerInExamsVed.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Crypto\ExaminerInExamsVed.Designer.cs">
-      <DependentUpon>ExaminerInExamsVed.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Crypto\ExamsVedCard.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Crypto\ExamsVedCard.designer.cs">
-      <DependentUpon>ExamsVedCard.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Crypto\ExamsVedList.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Crypto\ExamsVedList.designer.cs">
-      <DependentUpon>ExamsVedList.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Crypto\ExamsVedRoomCard.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Crypto\ExamsVedRoomCard.designer.cs">
-      <DependentUpon>ExamsVedRoomCard.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Crypto\ExamsVedRoomList.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Crypto\ExamsVedRoomList.designer.cs">
-      <DependentUpon>ExamsVedRoomList.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Crypto\LoadMarks.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Crypto\LoadMarks.Designer.cs">
-      <DependentUpon>LoadMarks.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Crypto\SelectExamCrypto.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Crypto\SelectExamCrypto.designer.cs">
-      <DependentUpon>SelectExamCrypto.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Crypto\SelectVed.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Crypto\SelectVed.Designer.cs">
-      <DependentUpon>SelectVed.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Crypto\SelectVedForLoad.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Crypto\SelectVedForLoad.Designer.cs">
-      <DependentUpon>SelectVedForLoad.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Crypto\SetNewMark.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Crypto\SetNewMark.Designer.cs">
-      <DependentUpon>SetNewMark.cs</DependentUpon>
     </Compile>
     <Compile Include="FBS\EgeClass.cs" />
     <Compile Include="FBS\FBSClass.cs" />
@@ -305,48 +229,6 @@
     <EmbeddedResource Include="Cards\FormExamResultExportCSV.resx">
       <DependentUpon>FormExamResultExportCSV.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Crypto\AddMark.resx">
-      <DependentUpon>AddMark.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Crypto\AppealMarks.resx">
-      <DependentUpon>AppealMarks.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Crypto\Decriptor.resx">
-      <DependentUpon>Decriptor.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Crypto\EnterMarks.resx">
-      <DependentUpon>EnterMarks.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Crypto\ExaminerInExamsVed.resx">
-      <DependentUpon>ExaminerInExamsVed.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Crypto\ExamsVedCard.resx">
-      <DependentUpon>ExamsVedCard.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Crypto\ExamsVedList.resx">
-      <DependentUpon>ExamsVedList.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Crypto\ExamsVedRoomCard.resx">
-      <DependentUpon>ExamsVedRoomCard.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Crypto\ExamsVedRoomList.resx">
-      <DependentUpon>ExamsVedRoomList.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Crypto\LoadMarks.resx">
-      <DependentUpon>LoadMarks.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Crypto\SelectExamCrypto.resx">
-      <DependentUpon>SelectExamCrypto.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Crypto\SelectVed.resx">
-      <DependentUpon>SelectVed.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Crypto\SelectVedForLoad.resx">
-      <DependentUpon>SelectVedForLoad.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Crypto\SetNewMark.resx">
-      <DependentUpon>SetNewMark.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="FBS\LoadEgeMarks.resx">
       <DependentUpon>LoadEgeMarks.cs</DependentUpon>
     </EmbeddedResource>
@@ -411,6 +293,7 @@
     <None Include="App.config">
       <SubType>Designer</SubType>
     </None>
+    <None Include="packages.config" />
     <None Include="Properties\DataSources\PriemEntities.datasource" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -443,6 +326,9 @@
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Crypto\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

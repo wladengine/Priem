@@ -123,6 +123,13 @@ namespace Priem
 
                 using (PriemEntities context = new PriemEntities())
                 {
+                    var src = MainClass.GetEntry(context).Select(x => new { x.StudyLevelGroupId, x.StudyLevelGroupName })
+                        .ToList()
+                        .Select(x => new KeyValuePair<string, string>(x.StudyLevelGroupId.ToString(), x.StudyLevelGroupName))
+                        .ToList();
+
+                    ComboServ.FillCombo(cbStudyLevelGroup, src, false, false);
+
                     ComboServ.FillCombo(cbFaculty, HelpClass.GetComboListByTable("ed.qFaculty", "ORDER BY Acronym"), false, false);
                     ComboServ.FillCombo(cbStudyBasis, HelpClass.GetComboListByTable("ed.StudyBasis", "ORDER BY Name"), false, true);
                     
@@ -132,6 +139,7 @@ namespace Priem
                     cbFaculty.SelectedIndexChanged += new EventHandler(cbFaculty_SelectedIndexChanged);
                     cbStudyBasis.SelectedIndexChanged += new EventHandler(cbStudyBasis_SelectedIndexChanged);
                     cbExamVed.SelectedIndexChanged += new EventHandler(cbExamVed_SelectedIndexChanged);
+                    cbStudyLevelGroup.SelectedIndexChanged += cbStudyLevelGroup_SelectedIndexChanged;
                 }
             }
             catch (Exception ex)
@@ -140,6 +148,10 @@ namespace Priem
             }
         }
 
+        void cbStudyLevelGroup_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            UpdateVedList();
+        }
         void cbFaculty_SelectedIndexChanged(object sender, EventArgs e)
         {
             UpdateVedList();
@@ -158,6 +170,11 @@ namespace Priem
                 btnSetExaminerAccount.Visible = false;
         }
 
+        public int? StudyLevelGroupId
+        {
+            get { return ComboServ.GetComboIdInt(cbStudyLevelGroup); }
+            set { ComboServ.SetComboId(cbStudyLevelGroup, value); }
+        }
         public int? FacultyId
         {
             get { return ComboServ.GetComboIdInt(cbFaculty); }
@@ -195,22 +212,25 @@ namespace Priem
                 btnSetExaminerAccount.Visible = false;
                 using (PriemEntities context = new PriemEntities())
                 {
-                    List<KeyValuePair<string, string>> lst = ((from ent in context.extExamsVed
-                                                               where ent.StudyLevelGroupId == MainClass.studyLevelGroupId
-                                                               && ent.FacultyId == FacultyId
-                                                               && (StudyBasisId != null ? ent.StudyBasisId == StudyBasisId : true == true)
-                                                               
-                                                               select new
-                                                               {
-                                                                   ent.Id,
-                                                                   ent.ExamName,
-                                                                   ent.Date,
-                                                                   StBasis = ent.StudyBasisId == null ? "" : ent.StudyBasisAcr,
-                                                                   AddVed = ent.IsAddVed ? " дополнительная" : "",
-                                                                   ent.AddCount
-                                                               }).Distinct()).ToList().Select(u => new KeyValuePair<string, string>(u.Id.ToString(), 
-                                                                   u.ExamName + ' ' + u.Date.ToShortDateString() + ' ' + u.StBasis + u.AddVed +
-                                                                   (u.AddCount > 1 ? "(" + Convert.ToString(u.AddCount) + ")" : ""))).ToList();
+                    List<KeyValuePair<string, string>> lst =
+                        ((from ent in context.extExamsVed
+                          where MainClass.lstStudyLevelGroupId.Contains(ent.StudyLevelGroupId)
+                          && ent.FacultyId == FacultyId
+                          && (StudyBasisId != null ? ent.StudyBasisId == StudyBasisId : true == true)
+
+                          select new
+                          {
+                              ent.Id,
+                              ent.ExamName,
+                              ent.Date,
+                              StBasis = ent.StudyBasisId == null ? "" : ent.StudyBasisAcr,
+                              AddVed = ent.IsAddVed ? " дополнительная" : "",
+                              ent.AddCount
+                          }).Distinct()).ToList()
+                          .Select(u => new KeyValuePair<string, string>(
+                              u.Id.ToString(),
+                              u.ExamName + ' ' + u.Date.ToShortDateString() + ' ' + u.StBasis + u.AddVed +
+                                (u.AddCount > 1 ? "(" + Convert.ToString(u.AddCount) + ")" : ""))).ToList();
 
                     ComboServ.FillCombo(cbExamVed, lst, true, false);                    
                 }            
@@ -500,7 +520,7 @@ namespace Priem
                     DateTime passDate = ved.Date;
                     int examId = ved.ExamId;
 
-                    SelectExamCrypto frm = new SelectExamCrypto(this, FacultyId, stBas, passDate, examId);
+                    SelectExamCrypto frm = new SelectExamCrypto(this, StudyLevelGroupId.Value, FacultyId, stBas, passDate, examId);
                     frm.Show();
                 }
             } 

@@ -13,12 +13,12 @@ namespace Priem
 {
     public partial class Groups : Form
     {
-        private FormFilter _owner;
+        private PriemLib.FormFilter _owner;
         //private List<ListItem> _columnList;
 
         private bool flag;
 
-        public Groups(FormFilter la)
+        public Groups(PriemLib.FormFilter la)
         {
             InitializeComponent();
 

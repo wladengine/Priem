@@ -483,7 +483,7 @@ namespace Priem
         {
             string s = " WHERE 1=1 ";
 
-            s += " AND ed.qEntry.StudyLevelGroupId = " + MainClass.studyLevelGroupId;
+            s += " AND ed.qEntry.StudyLevelGroupId IN (" + Util.BuildStringWithCollection(MainClass.lstStudyLevelGroupId) + ")";
 
             //обработали форму обучения  
             if (StudyFormId != null)

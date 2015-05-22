@@ -150,7 +150,7 @@ namespace Priem
                 using (PriemEntities context = new PriemEntities())
                 {
                     List<KeyValuePair<string, string>> lst = ((from ent in context.extExamsVed
-                                                               where ent.StudyLevelGroupId == MainClass.studyLevelGroupId
+                                                               where MainClass.lstStudyLevelGroupId.Contains(ent.StudyLevelGroupId)
                                                                && ent.FacultyId == FacultyId
                                                                && (StudyBasisId != null ? ent.StudyBasisId == StudyBasisId : true == true)
 

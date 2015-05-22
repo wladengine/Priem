@@ -24,7 +24,8 @@ namespace Priem
                
         private Guid? _Id;
         private bool isAdditional;
-        private int? examId;   
+        private int? examId;
+        private int? iStudyLevelGroupId;
         private int? facultyId;
         private int? studyBasisId;
         private DateTime passDate;
@@ -52,8 +53,9 @@ namespace Priem
                 extExamsVed ved = (from vd in context.extExamsVed
                                    where vd.Id == _Id
                                    select vd).FirstOrDefault();
-                
-                this.facultyId = ved.FacultyId;            
+
+                this.iStudyLevelGroupId = ved.StudyLevelGroupId;
+                this.facultyId = ved.FacultyId;
                 this.passDate = ved.Date;
                 this.isAdditional = ved.IsAdditional;
                 this.examId = ved.ExamId;
@@ -65,14 +67,15 @@ namespace Priem
             InitControls();       
         }
 
-        public ExamsVedCard(ExamsVedList owner, int? facId, int? examId, DateTime date, int? basisId, bool isAdd)
+        public ExamsVedCard(ExamsVedList owner, int StudyLevelGroupId, int? facId, int? examId, DateTime date, int? basisId, bool isAdd)
         {
             InitializeComponent();
 
             _Id = null;            
             this.owner = owner;
             bdc = MainClass.Bdc;
-            
+
+            this.iStudyLevelGroupId = StudyLevelGroupId;
             this.facultyId = facId;            
             this.passDate = date;
             this.examId = examId;
@@ -85,7 +88,7 @@ namespace Priem
                 {
                     addCount = (from vd in context.extExamsVed
                                 where vd.ExamId == examId && vd.Date == passDate.Date
-                                && vd.FacultyId == facultyId && vd.StudyLevelGroupId == MainClass.studyLevelGroupId
+                                && vd.FacultyId == facultyId && vd.StudyLevelGroupId == iStudyLevelGroupId
                                 && (studyBasisId != null ? vd.StudyBasisId == studyBasisId : true == true)
                                 select vd.AddCount).Max();
                     
@@ -110,19 +113,16 @@ namespace Priem
             get { return ComboServ.GetComboIdInt(cbStudyBasis); }
             set { ComboServ.SetComboId(cbStudyBasis, value); }
         }
-
         public int? cbStudyFormId
         {
             get { return ComboServ.GetComboIdInt(cbStudyForm); }
             set { ComboServ.SetComboId(cbStudyForm, value); }
         }
-
         public int? cbObrazProgramId
         {
             get { return ComboServ.GetComboIdInt(cbObrazProgram); }
             set { ComboServ.SetComboId(cbObrazProgram, value); }
         }
-
 
         //дополнительная инициализация
         protected virtual void InitControls()
@@ -162,7 +162,7 @@ namespace Priem
                 else
                     ComboServ.FillCombo(cbStudyBasis, HelpClass.GetComboListByQuery(string.Format("SELECT CONVERT(varchar(100), Id) AS Id, Name FROM ed.StudyBasis WHERE Id = {0} ORDER BY Name", studyBasisId)), false, false);
 
-                ComboServ.FillCombo(cbStudyForm, HelpClass.GetComboListByQuery(string.Format("SELECT DISTINCT CONVERT(varchar(100), StudyFormId) AS Id, StudyFormName AS Name FROM ed.qEntry WHERE StudyLevelGroupId = {0} AND FacultyId = {1} ORDER BY Name", MainClass.studyLevelGroupId, facultyId)), false, true);
+                ComboServ.FillCombo(cbStudyForm, HelpClass.GetComboListByQuery(string.Format("SELECT DISTINCT CONVERT(varchar(100), StudyFormId) AS Id, StudyFormName AS Name FROM ed.qEntry WHERE StudyLevelGroupId = {0} AND FacultyId = {1} ORDER BY Name", iStudyLevelGroupId, facultyId)), false, true);
                 FillObrazProgram();
 
                 //заполнение гридов            
@@ -179,13 +179,11 @@ namespace Priem
         {
             UpdateRightGrid();
         }
-
         void cbStudyForm_SelectedIndexChanged(object sender, EventArgs e)
         {
             FillObrazProgram();
             UpdateRightGrid();
         }       
-
         void cbObrazProgram_SelectedIndexChanged(object sender, EventArgs e)
         {
             UpdateRightGrid();
@@ -195,16 +193,17 @@ namespace Priem
         {
             using (PriemEntities context = new PriemEntities())
             {
-                List<KeyValuePair<string, string>> lst = ((from ent in MainClass.GetEntry(context)
-                                                           where ent.FacultyId == facultyId
-                                                           && (cbStudyBasisId != null ? ent.StudyBasisId == cbStudyBasisId : true == true)
-                                                           && (cbStudyFormId != null ? ent.StudyBasisId == cbStudyFormId : true == true)                                                           
-                                                           select new
-                                                           {
-                                                               Id = ent.ObrazProgramId,
-                                                               Name = ent.ObrazProgramName,
-                                                               Crypt = ent.ObrazProgramCrypt
-                                                           }).Distinct()).ToList().Select(u => new KeyValuePair<string, string>(u.Id.ToString(), u.Name + ' ' + u.Crypt)).ToList();
+                List<KeyValuePair<string, string>> lst =
+                    ((from ent in MainClass.GetEntry(context)
+                      where ent.FacultyId == facultyId
+                      && (cbStudyBasisId != null ? ent.StudyBasisId == cbStudyBasisId : true == true)
+                      && (cbStudyFormId != null ? ent.StudyBasisId == cbStudyFormId : true == true)
+                      select new
+                      {
+                          Id = ent.ObrazProgramId,
+                          Name = ent.ObrazProgramName,
+                          Crypt = ent.ObrazProgramCrypt
+                      }).Distinct()).ToList().Select(u => new KeyValuePair<string, string>(u.Id.ToString(), u.Name + ' ' + u.Crypt)).ToList();
 
                 ComboServ.FillCombo(cbObrazProgram, lst, false, true);
             }
@@ -255,7 +254,7 @@ namespace Priem
             flt_protocol = " AND ProtocolTypeId = 1 AND IsOld = 0 AND Excluded = 0";
             flt_hasExam = string.Format(" AND ed.qAbiturient.EntryId IN (SELECT ed.extExamInEntry.EntryId FROM ed.extExamInEntry WHERE ed.extExamInEntry.ExamId = {0})", examId);
 
-            flt_where = string.Format(" WHERE ed.qAbiturient.FacultyId = {0} AND ed.qAbiturient.StudyLevelGroupId = {1} ", facultyId, MainClass.studyLevelGroupId) + flt_prof;
+            flt_where = string.Format(" WHERE ed.qAbiturient.FacultyId = {0} AND ed.qAbiturient.StudyLevelGroupId = {1} ", facultyId, iStudyLevelGroupId) + flt_prof;
 
             if (studyBasisId != 2)
             {
@@ -275,7 +274,7 @@ namespace Priem
 
         private void FillGridLeft()
         {
-            string flt_where = string.Format(" WHERE ed.qAbiturient.FacultyId = {0} AND ed.qAbiturient.StudyLevelGroupId = {1} ", facultyId, MainClass.studyLevelGroupId);
+            string flt_where = string.Format(" WHERE ed.qAbiturient.FacultyId = {0} AND ed.qAbiturient.StudyLevelGroupId = {1} ", facultyId, iStudyLevelGroupId);
             
             //заполнили левый
             if (_Id != null)
@@ -356,7 +355,7 @@ namespace Priem
                         if (_Id == null)
                         {
                             ObjectParameter vedParId = new ObjectParameter("id", typeof(Guid));
-                            context.ExamsVed_Insert(MainClass.studyLevelGroupId, facultyId, studyBasisId, passDate.Date, examId, false, false, isAddVed, (isAddVed ? addCount : null), vedParId);
+                            context.ExamsVed_Insert(iStudyLevelGroupId, facultyId, studyBasisId, passDate.Date, examId, false, false, isAddVed, (isAddVed ? addCount : null), vedParId);
                             _Id = (Guid)vedParId.Value;
                         }
                         else

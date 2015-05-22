@@ -530,7 +530,7 @@ namespace Priem
         private string GetAbitFilterString()
         {
             string s = " WHERE 1=1 ";
-            s += " AND ed.extEntry.StudyLevelGroupId = " + MainClass.studyLevelGroupId;
+            s += " AND ed.extEntry.StudyLevelGroupId IN (" + Util.BuildStringWithCollection(MainClass.lstStudyLevelGroupId) + ")";
 
             //обработали форму обучения  
             if (StudyFormId != null)

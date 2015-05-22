@@ -51,6 +51,8 @@
             this.cbExamVed = new System.Windows.Forms.ComboBox();
             this.cbStudyBasis = new System.Windows.Forms.ComboBox();
             this.btnSetExaminerAccount = new System.Windows.Forms.Button();
+            this.cbStudyLevelGroup = new System.Windows.Forms.ComboBox();
+            this.label2 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dgvList)).BeginInit();
             this.SuspendLayout();
             // 
@@ -291,11 +293,33 @@
             this.btnSetExaminerAccount.UseVisualStyleBackColor = true;
             this.btnSetExaminerAccount.Click += new System.EventHandler(this.btnSetExaminerAccount_Click);
             // 
+            // cbStudyLevelGroup
+            // 
+            this.cbStudyLevelGroup.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
+            this.cbStudyLevelGroup.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
+            this.cbStudyLevelGroup.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbStudyLevelGroup.FormattingEnabled = true;
+            this.cbStudyLevelGroup.Location = new System.Drawing.Point(496, 20);
+            this.cbStudyLevelGroup.Name = "cbStudyLevelGroup";
+            this.cbStudyLevelGroup.Size = new System.Drawing.Size(226, 21);
+            this.cbStudyLevelGroup.TabIndex = 147;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(496, 7);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(51, 13);
+            this.label2.TabIndex = 146;
+            this.label2.Text = "Уровень";
+            // 
             // ExamsVedList
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1106, 498);
+            this.Controls.Add(this.cbStudyLevelGroup);
+            this.Controls.Add(this.label2);
             this.Controls.Add(this.btnSetExaminerAccount);
             this.Controls.Add(this.cbStudyBasis);
             this.Controls.Add(this.cbFaculty);
@@ -350,5 +374,7 @@
         private System.Windows.Forms.ComboBox cbExamVed;
         private System.Windows.Forms.ComboBox cbStudyBasis;
         protected System.Windows.Forms.Button btnSetExaminerAccount;
+        private System.Windows.Forms.ComboBox cbStudyLevelGroup;
+        protected System.Windows.Forms.Label label2;
     }
 }

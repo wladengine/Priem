@@ -109,7 +109,7 @@ namespace Priem
                 else
                     ComboServ.FillCombo(cbStudyBasis, HelpClass.GetComboListByQuery(string.Format("SELECT CONVERT(varchar(100), Id) AS Id, Name FROM ed.StudyBasis WHERE Id = {0} ORDER BY Name", studyBasisId)), false, false);
 
-                ComboServ.FillCombo(cbStudyForm, HelpClass.GetComboListByQuery(string.Format("SELECT DISTINCT CONVERT(varchar(100), StudyFormId) AS Id, StudyFormName AS Name FROM ed.qEntry WHERE StudyLevelGroupId = {0} AND FacultyId = {1} ORDER BY Name", MainClass.studyLevelGroupId, facultyId)), false, true);
+                ComboServ.FillCombo(cbStudyForm, HelpClass.GetComboListByQuery(string.Format("SELECT DISTINCT CONVERT(varchar(100), StudyFormId) AS Id, StudyFormName AS Name FROM ed.qEntry WHERE StudyLevelGroupId IN ({0}) AND FacultyId = {1} ORDER BY Name", Util.BuildStringWithCollection(MainClass.lstStudyLevelGroupId), facultyId)), false, true);
                                 
                 FillObrazProgram();
 
@@ -206,7 +206,7 @@ namespace Priem
 
         private void FillGridRight(string flt_prof)
         {
-            string flt_where = string.Format(" WHERE ed.qAbiturient.FacultyId = {0} AND ed.qAbiturient.StudyLevelGroupId = {1} ", facultyId, MainClass.studyLevelGroupId) + flt_prof;
+            string flt_where = string.Format(" WHERE ed.qAbiturient.FacultyId = {0} AND ed.qAbiturient.StudyLevelGroupId IN {1} ", facultyId, Util.BuildStringWithCollection(MainClass.lstStudyLevelGroupId)) + flt_prof;
 
             flt_where += string.Format(@" AND ed.extPerson.Id IN (SELECT PersonId FROM ed.ExamsVedHistory WHERE ExamsVedId = '{0}') 
             AND ed.extPerson.Id NOT IN (SELECT PersonId FROM ed.ExamsVedRoomHistory INNER JOIN ed.ExamsVedRoom 
@@ -217,7 +217,7 @@ namespace Priem
 
         private void FillGridLeft()
         {
-            string flt_where = string.Format(" WHERE ed.qAbiturient.FacultyId = {0} AND ed.qAbiturient.StudyLevelGroupId = {1} ", facultyId, MainClass.studyLevelGroupId);
+            string flt_where = string.Format(" WHERE ed.qAbiturient.FacultyId = {0} AND ed.qAbiturient.StudyLevelGroupId IN ({1}) ", facultyId, Util.BuildStringWithCollection(MainClass.lstStudyLevelGroupId));
             
             //заполнили левый
             if (vedRoomId != null)

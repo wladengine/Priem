@@ -14,13 +14,13 @@ namespace Priem
 {
     public partial class Columns : Form
     {
-        private FormFilter own;
+        private PriemLib.FormFilter own;
         private DBPriem _bdc;
         private string _fac;
         private SortedList<string,string> _columnList;
 
         //конструктор
-        public Columns(FormFilter owner, string facId)
+        public Columns(PriemLib.FormFilter owner, string facId)
         {
             InitializeComponent();
             this.CenterToParent();

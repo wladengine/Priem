@@ -88,7 +88,7 @@ namespace Priem
         {
             using (PriemEntities context = new PriemEntities())
             {
-                List<KeyValuePair<string, string>> lst = context.qEntry.Where(x => x.StudyLevelGroupId == MainClass.studyLevelGroupId).Select(x => new { x.FacultyId, x.FacultyName }).Distinct().ToList().
+                List<KeyValuePair<string, string>> lst = context.qEntry.Where(x => MainClass.lstStudyLevelGroupId.Contains(x.StudyLevelGroupId)).Select(x => new { x.FacultyId, x.FacultyName }).Distinct().ToList().
                     Select(x => new KeyValuePair<string, string>(x.FacultyId.ToString(), x.FacultyName)).ToList();
 
                 ComboServ.FillCombo(cbFaculty, lst, false, true);
@@ -98,7 +98,7 @@ namespace Priem
         {
             using (PriemEntities context = new PriemEntities())
             {
-                List<KeyValuePair<string, string>> lst = context.qEntry.Where(x => (FacultyId.HasValue ? x.FacultyId == FacultyId : true) && (x.StudyLevelGroupId == MainClass.studyLevelGroupId))
+                List<KeyValuePair<string, string>> lst = context.qEntry.Where(x => (FacultyId.HasValue ? x.FacultyId == FacultyId : true) && (MainClass.lstStudyLevelGroupId.Contains(x.StudyLevelGroupId)))
                     .Select(x => new { x.LicenseProgramId, x.LicenseProgramCode, x.LicenseProgramName }).Distinct().ToList().
                     Select(x => new KeyValuePair<string, string>(x.LicenseProgramId.ToString(), x.LicenseProgramCode + " " + x.LicenseProgramName)).ToList();
 
@@ -110,7 +110,7 @@ namespace Priem
             using (PriemEntities context = new PriemEntities())
             {
                 List<KeyValuePair<string, string>> lst = context.qEntry.Where(x => (FacultyId.HasValue ? x.FacultyId == FacultyId : true)
-                    && (LicenseProgramId.HasValue ? x.LicenseProgramId == LicenseProgramId : true) && (x.StudyLevelGroupId == MainClass.studyLevelGroupId))
+                    && (LicenseProgramId.HasValue ? x.LicenseProgramId == LicenseProgramId : true) && (MainClass.lstStudyLevelGroupId.Contains(x.StudyLevelGroupId)))
                     .Select(x => new { x.ObrazProgramId, x.ObrazProgramCrypt, x.ObrazProgramName }).Distinct().ToList().
                     Select(x => new KeyValuePair<string, string>(x.ObrazProgramId.ToString(), x.ObrazProgramCrypt + " " + x.ObrazProgramName)).ToList();
 
@@ -203,7 +203,7 @@ namespace Priem
             using (PriemEntities context = new PriemEntities())
             {
                 var FacultyIds = context.qFaculty.Select(x => x.Id);
-                var data = context.hlpAbiturientActionLog.Where(x => x.StudyLevelGroupId == MainClass.studyLevelGroupId && FacultyIds.Contains(x.FacultyId));
+                var data = context.hlpAbiturientActionLog.Where(x => MainClass.lstStudyLevelGroupId.Contains(x.StudyLevelGroupId) && FacultyIds.Contains(x.FacultyId));
                 if (iFacultyId.HasValue)
                     data = data.Where(x => x.FacultyId == iFacultyId);
                 if (iLicenseProgramId.HasValue)

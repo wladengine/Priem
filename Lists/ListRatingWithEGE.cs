@@ -156,7 +156,7 @@ namespace Priem
                     return;
                 }
 
-                var ent = MainClass.GetEntry(context).Where(c => c.FacultyId == FacultyId).Where(c => c.ProfileId != null);
+                var ent = MainClass.GetEntry(context).Where(c => c.FacultyId == FacultyId);
 
                 ent = ent.Where(c => c.IsSecond == IsSecond && c.IsReduced == IsReduced && c.IsParallel == IsParallel);
 
@@ -240,7 +240,7 @@ namespace Priem
                              where ent.IsSecond == IsSecond && ent.IsParallel == IsParallel && ent.IsReduced == IsReduced
                              && ent.LicenseProgramId == LicenseProgramId
                              && ent.ObrazProgramId == ObrazProgramId
-                             && (ProfileId == null ? ent.ProfileId == null : ent.ProfileId == ProfileId)
+                             && (ProfileId == null ? ent.ProfileId == 0 : ent.ProfileId == ProfileId)
                              && ent.StudyFormId == StudyFormId
                              && ent.StudyBasisId == StudyBasisId
                              select ent.Id).ToList();

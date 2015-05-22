@@ -341,7 +341,7 @@ namespace Priem
                     flt += " AND ed.qAbiturient.BackDoc = 0 ";
                     flt += " AND ed.qAbiturient.NotEnabled = 0 ";
                     flt += " AND ed.qAbiturient.Id IN (SELECT AbiturientId FROM ed.extProtocol WHERE ProtocolTypeId = 1 AND IsOld = 0 AND Excluded = 0) ";
-                    flt += " AND ed.qAbiturient.StudyLevelGroupId = " + MainClass.studyLevelGroupId;
+                    flt += " AND ed.qAbiturient.StudyLevelGroupId IN (" + Util.BuildStringWithCollection(MainClass.lstStudyLevelGroupId) + ")";
                     flt += string.Format(" AND ed.qAbiturient.EntryId IN (SELECT EntryId FROM ed.extExamInEntry WHERE ExamId = {0})", _examId);
 
                     string flt_fac = "";

@@ -33,7 +33,7 @@ namespace Priem
             
             using (PriemEntities context = new PriemEntities())
             {
-                var entryList = context.qEntry.Where(x => x.StudyBasisId == 2 && x.StudyLevelGroupId == MainClass.studyLevelGroupId && x.IsSecond == isSecond)
+                var entryList = context.qEntry.Where(x => x.StudyBasisId == 2 && x.StudyLevelGroupId == MainClass.lstStudyLevelGroupId.First() && x.IsSecond == isSecond)
                     .Select(x => new
                     {
                         x.Id,

@@ -8,7 +8,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.Linq;
 using System.IO;
-using System.Data.Objects;
+using System.Data.Entity.Core.Objects;
 using System.Transactions;
 
 using EducServLib;

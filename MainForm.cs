@@ -19,6 +19,7 @@ namespace Priem
     {
         private DBPriem _bdc;
         private string _titleString;
+        private bool bSuccessAuth;
 
         public MainForm()
         {
@@ -32,7 +33,13 @@ namespace Priem
                 if (string.IsNullOrEmpty(MainClass.connString))
                     return;
 
-                MainClass.Init(this);               
+                bSuccessAuth = MainClass.Init(this);
+
+                if (!bSuccessAuth)
+                {
+                    WinFormsServ.Error("Не удалось подключиться под вашей учетной записью");
+                    return;
+                }
 
                 _bdc = MainClass.Bdc;
                 string sPath = string.Format("{0}; Пользователь: {1}", _titleString, MainClass.GetUserName());
@@ -355,17 +362,19 @@ namespace Priem
                 WinFormsServ.Error("Ошибка при чтении параметров из файла: " + ex.Message);
             }
 
+            if (!bSuccessAuth)
+                return;
+
             try
             {
+                MainClass.DeleteTempFiles();
                 MainClass.DeleteAllOpenByHolder();
+                MainClass.SaveParameters();
             }
             catch (Exception ex)
             {
                 WinFormsServ.Error("Ошибка записи в базу: " + ex.Message);
             }
-
-            MainClass.DeleteTempFiles();
-            MainClass.SaveParameters();
         }
 
         //реакция на смену mdi-окна

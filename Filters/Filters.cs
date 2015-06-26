@@ -127,6 +127,8 @@ namespace Priem
             AddItem(new FilterItem("Только бюджет на ваш факультет", FilterType.Bool, " ( NOT EXISTS (SELECT * FROM ed.qAbiturient ab WHERE ab.PersonId = ed.qAbiturient.PersonId and  ab.StudyBasisId <> 1)) ", "ed.qAbiturient"));
             AddItem(new FilterItem("Только платно на ваш факультет", FilterType.Bool, " ( NOT EXISTS (SELECT * FROM ed.qAbiturient ab WHERE ab.PersonId = ed.qAbiturient.PersonId and  ab.StudyBasisId <> 2)) ", "ed.qAbiturient"));
 
+            
+
             AddItem(new FilterItem("Направление", FilterType.Multi, "ed.qAbiturient.LicenseProgramId", "ed.qAbiturient", " SELECT DISTINCT ed.qLicenseProgram.Id, ed.qLicenseProgram.Code + ' ' + ed.qLicenseProgram.Name AS Name FROM ed.qLicenseProgram "));
             AddItem(new FilterItem("Образовательная программа", FilterType.Multi, "ed.qAbiturient.ObrazProgramId", "ed.qAbiturient", " SELECT DISTINCT ed.qEntry.ObrazProgramId AS Id, ed.qEntry.ObrazProgramName + ' (' + ed.qEntry.ObrazProgramCrypt + ')' AS Name FROM ed.qEntry WHERE StudyLevelGroupId IN (" 
                 + Util.BuildStringWithCollection(MainClass.lstStudyLevelGroupId) + ")"));

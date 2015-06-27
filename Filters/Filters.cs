@@ -141,17 +141,17 @@ namespace Priem
 
                 AddItem(new FilterItem("Медалист", FilterType.Bool, "ed.extPerson.IsExcellent", "ed.extPerson"));
 
-                AddItem(new FilterItem("Номер аттестата", FilterType.FromTo, "ed.extPerson.AttestatNum", "ed.extPerson"));
-                AddItem(new FilterItem("Серия аттестата", FilterType.FromTo, "ed.extPerson.AttestatSeries", "ed.extPerson"));
-                AddItem(new FilterItem("Регион аттестата", FilterType.FromTo, "ed.extPerson.AttestatRegion", "ed.extPerson"));
-                AddItem(new FilterItem("Средний балл аттестата", FilterType.FromTo, "ed.extPerson.SchoolAVG", "ed.extPerson"));
-                AddItem(new FilterItem("Введен средний балл аттестата", FilterType.Bool, "(NOT ed.extPerson.SchoolAVG IS NULL AND Len(ed.extPerson.SchoolAVG) > 0)", "ed.extPerson"));
+                AddItem(new FilterItem("Номер аттестата", FilterType.FromTo, "ed.extPerson_EducationInfo_Current.AttestatNum", "ed.extPerson_EducationInfo_Current"));
+                AddItem(new FilterItem("Серия аттестата", FilterType.FromTo, "ed.extPerson_EducationInfo_Current.AttestatSeries", "ed.extPerson_EducationInfo_Current"));
+                AddItem(new FilterItem("Регион аттестата", FilterType.FromTo, "ed.extPerson_EducationInfo_Current.AttestatRegion", "ed.extPerson_EducationInfo_Current"));
+                AddItem(new FilterItem("Средний балл аттестата", FilterType.FromTo, "ed.extPerson_EducationInfo_Current.SchoolAVG", "ed.extPerson_EducationInfo_Current"));
+                AddItem(new FilterItem("Введен средний балл аттестата", FilterType.Bool, "(NOT ed.extPerson_EducationInfo_Current.SchoolAVG IS NULL AND Len(ed.extPerson_EducationInfo_Current.SchoolAVG) > 0)", "ed.extPerson_EducationInfo_Current"));
 
-                AddItem(new FilterItem("Город учебного заведения", FilterType.Text, "ed.extPerson.SchoolCity", "ed.extPerson"));
-                AddItem(new FilterItem("Тип учебного заведения", FilterType.Multi, "ed.extPerson.SchoolTypeId", "ed.extPerson", "SELECT Id, Name FROM SchoolType ORDER BY Name"));
-                AddItem(new FilterItem("Название учебного заведения", FilterType.Text, "ed.extPerson.SchoolName", "ed.extPerson"));
-                AddItem(new FilterItem("Номер учебного заведения", FilterType.FromTo, "ed.extPerson.SchoolNum", "ed.extPerson"));
-                AddItem(new FilterItem("Год окончания учебного заведения", FilterType.FromTo, "ed.extPerson.SchoolExitYear", "ed.extPerson"));
+                AddItem(new FilterItem("Город учебного заведения", FilterType.Text, "ed.extPerson_EducationInfo_Current.SchoolCity", "ed.extPerson_EducationInfo_Current"));
+                AddItem(new FilterItem("Тип учебного заведения", FilterType.Multi, "ed.extPerson_EducationInfo_Current.SchoolTypeId", "ed.v", "SELECT Id, Name FROM SchoolType ORDER BY Name"));
+                AddItem(new FilterItem("Название учебного заведения", FilterType.Text, "ed.extPerson_EducationInfo_Current.SchoolName", "ed.extPerson_EducationInfo_Current"));
+                AddItem(new FilterItem("Номер учебного заведения", FilterType.FromTo, "ed.extPerson_EducationInfo_Current.SchoolNum", "ed.extPerson_EducationInfo_Current"));
+                AddItem(new FilterItem("Год окончания учебного заведения", FilterType.FromTo, "ed.extPerson_EducationInfo_Current.SchoolExitYear", "ed.extPerson_EducationInfo_Current"));
 
                 AddItem(new FilterItem("Профиль", FilterType.Multi, "ed.qAbiturient.ProfileId", "ed.qAbiturient", " SELECT DISTINCT ed.qProfile.Id, ed.qProfile.Name AS Name FROM ed.qProfile "));
 

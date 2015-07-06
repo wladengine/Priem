@@ -37,7 +37,14 @@ namespace Priem
             ComboServ.FillCombo(cbFaculty, HelpClass.GetComboListByTable("ed.qFaculty"), false, false);             
             FillExams();
 
-            cbFaculty.SelectedIndexChanged += new EventHandler(cbFaculty_SelectedIndexChanged);                 
+            cbFaculty.SelectedIndexChanged += new EventHandler(cbFaculty_SelectedIndexChanged);
+
+            string quer = @"SELECT DISTINCT [Faculty], Date, COUNT(*) AS [Абитуриентов в протоколе]
+  FROM [Priem].[ed].[extProtocol]
+  WHERE [ProtocolTypeId] = 1 AND [StudyLevelGroupId] = 1 AND IsOld = 0
+  AND [Date] > @Date
+  GROUP BY Date, [Faculty]";
+            dgvProtocols.DataSource = MainClass.Bdc.GetDataSet(quer, new SortedList<string, object>() { { "@Date", MainClass._1k_LastEgeMarkLoadTime.AddMinutes(-10) } }).Tables[0];
         }
 
         void cbFaculty_SelectedIndexChanged(object sender, EventArgs e)
@@ -45,7 +52,6 @@ namespace Priem
             FillExams();
         }
 
-        
         private void FillExams()
         {
             using (PriemEntities context = new PriemEntities())
@@ -72,11 +78,11 @@ namespace Priem
         //строим запрос фильтров для абитуриентов
         private string GetAbitFilterString()
         {
-            string s = " AND ed.qAbiturient.StudyLevelGroupId = 1";
+            string s = " AND E.StudyLevelGroupId = 1";
  
             //обработали факультет            
             if (FacultyId != null)
-                s += " AND ed.qAbiturient.FacultyId = " + FacultyId.ToString(); 
+                s += " AND E.FacultyId = " + FacultyId.ToString(); 
 
             return s;
         }
@@ -111,7 +117,8 @@ namespace Priem
                 }
                 else
                     SetMarksForExam(ExamId);
-                
+
+                MainClass._1k_LastEgeMarkLoadTime = DateTime.Now;
             }
             catch (Exception ex)
             {
@@ -129,97 +136,124 @@ namespace Priem
             try
             {
                 using (PriemEntities context = new PriemEntities())
-                {                    
-                    int examInostr = 65;                       
+                {
+                    int examInostr = 380;
                     int filFacId = 18;
 
-                    string flt_backDoc = " AND ed.qAbiturient.BackDoc = 0  ";
-                    string flt_enable = " AND ed.qAbiturient.NotEnabled = 0 ";
+                    string flt_backDoc = " AND qAbiturient.BackDoc = 0  ";
+                    string flt_enable = " AND qAbiturient.NotEnabled = 0 ";
                     string flt_protocol = " AND ProtocolTypeId = 1 AND IsOld = 0 AND Excluded = 0 ";
                     string flt_status = " /*AND ed.extFBSStatus.FBSStatusId IN (1,4) */";
                     string flt_mark = string.Format(@" AND 
 (
-NOT EXISTS
+    NOT EXISTS /*оценка по НЕ-ДОПу ещё не проставлена*/
     (
-        SELECT ed.Mark.Value 
+        SELECT Mark.Value 
         FROM ed.Mark 
-        INNER JOIN ed.extExamInEntry ON ed.Mark.ExamInEntryId = ed.extExamInEntry.Id 
-        WHERE ed.Mark.AbiturientId = ed.qAbiturient.Id 
-        AND ed.extExamInEntry.ExamId = {0} 
-        AND ed.extExamInEntry.IsAdditional=0
+        INNER JOIN ed.extExamInEntry ON Mark.ExamInEntryId = extExamInEntry.Id 
+        WHERE Mark.AbiturientId = qAbiturient.Id 
+        AND extExamInEntry.ExamId = {0}
+        AND extExamInEntry.IsAdditional=0
     ) 
-OR 
-qAbiturient.Id IN 
+    OR
+    qAbiturient.Id IN /*или у абитуриента зачёлся балл ниже, чем есть среди его ЕГЭ*/
     (
-        select  qMark.AbiturientId
-        FROM ed.qMark
-        INNER JOIN ed.EgeToExam ON EgeToExam.ExamId = qMark.ExamId
-        INNER JOIN ed.extEgeMarkMaxAbit ON extEgeMarkMaxAbit.AbiturientId = qMark.AbiturientId AND qMark.ExamId = EgeToExam.ExamId AND extEgeMarkMaxAbit.EgeExamNameId = EgeToExam.EgeExamNameId
+        SELECT qMark.AbiturientId
+        FROM ed.Mark AS qMark
+        INNER JOIN ed.ExamInEntry ON ExamInEntry.Id = qMark.ExamInEntryId
+        INNER JOIN ed.EgeToExam ON EgeToExam.ExamId = ExamInEntry.ExamId /*qMark.ExamId*/
+        INNER JOIN ed.extEgeMarkMaxAbit ON extEgeMarkMaxAbit.AbiturientId = qMark.AbiturientId AND /*qMark.ExamId */ ExamInEntry.ExamId = EgeToExam.ExamId AND extEgeMarkMaxAbit.EgeExamNameId = EgeToExam.EgeExamNameId
         INNER JOIN ed.EgeCertificate ON EgeCertificate.Id = extEgeMarkMaxAbit.EgeCertificateId
         WHERE qMark.Value < extEgeMarkMaxAbit.Value AND EgeCertificate.FBSStatusId IN (1, 4)
         AND qMark.IsFromEge = 1
     )
 )", examId);
-                    string flt_hasEge = string.Format(" AND ed.Person.Id IN (SELECT PersonId FROM  ed.extEgeMark LEFT JOIN ed.EgeToExam ON ed.extEgeMark.EgeExamNameId = ed.EgeToExam.EgeExamNameId WHERE ed.EgeToExam.ExamId = {0})", examId);
-                    string flt_hasExam = string.Format(" AND ed.qAbiturient.EntryId IN (SELECT ed.extExamInEntry.EntryId FROM ed.extExamInEntry WHERE ed.extExamInEntry.ExamId = {0})", examId);
+                    string flt_hasEge = string.Format(" AND Person.Id IN (SELECT PersonId FROM ed.extEgeMark LEFT JOIN ed.EgeToExam ON extEgeMark.EgeExamNameId = EgeToExam.EgeExamNameId WHERE EgeToExam.ExamId = {0})", examId);
+                    string flt_hasExam = string.Format(" AND qAbiturient.EntryId IN (SELECT ed.extExamInEntry.EntryId FROM ed.extExamInEntry WHERE extExamInEntry.ExamId = {0})", examId);
 
-                    string queryAbits = @"SELECT ed.qAbiturient.Id, ed.qAbiturient.FacultyId, ed.qAbiturient.EntryId FROM ed.qAbiturient 
-                            LEFT JOIN ed.Person ON ed.qAbiturient.PersonId = ed.Person.Id LEFT JOIN ed.extFBSStatus ON ed.extFBSStatus.PersonId = Person.Id 
+                    string queryAbits = @"SELECT qAbiturient.Id, E.FacultyId, qAbiturient.EntryId FROM ed.Abiturient AS qAbiturient 
+                            INNER JOIN ed.extEntry E ON E.Id = qAbiturient.EntryId
+                            LEFT JOIN ed.Person ON qAbiturient.PersonId = Person.Id /*LEFT JOIN ed.extFBSStatus ON ed.extFBSStatus.PersonId = Person.Id */
                             LEFT JOIN ed.extProtocol ON extProtocol.AbiturientId = qAbiturient.Id WHERE 1 = 1 ";
 
                     DataSet ds = bdc.GetDataSet(queryAbits + GetAbitFilterString() + flt_backDoc + flt_enable + flt_protocol + flt_status + flt_mark + flt_hasExam + flt_hasEge);
 
                     wtc.pBar.Maximum += ds.Tables[0].Rows.Count;
 
-                    //using (TransactionScope transaction = new TransactionScope(TransactionScopeOption.RequiresNew))
-                    //{
-                        try
+                    try
+                    {
+                        foreach (DataRow dsRow in ds.Tables[0].Rows)
                         {
-                            foreach (DataRow dsRow in ds.Tables[0].Rows)
+                            wtc.PerformStep();
+
+                            int? balls = null;
+                            Guid abId = new Guid(dsRow["Id"].ToString());
+                            Guid entryId = new Guid(dsRow["EntryId"].ToString());
+
+                            int? exInEntryId = (from eie in context.extExamInEntry
+                                                where eie.EntryId == entryId && eie.ExamId == examId
+                                                select eie.Id).FirstOrDefault();
+
+                            if (exInEntryId == null)
+                                continue;
+
+                            Guid egeCertificateId = Guid.Empty;
+
+                            if (examId != examInostr)
                             {
-                                int? balls = null;
-                                Guid abId = new Guid(dsRow["Id"].ToString());
-                                Guid entryId = new Guid(dsRow["EntryId"].ToString());
-                                
-                                int? exInEntryId = (from eie in context.extExamInEntry
-                                                    where eie.EntryId == entryId && eie.ExamId == examId
-                                                    select eie.Id).FirstOrDefault();
-
-                                if (exInEntryId == null)
+                                var lBalls =
+                                    (from emm in context.extEgeMarkMaxAbit
+                                     join ete in context.EgeToExam on emm.EgeExamNameId equals ete.EgeExamNameId
+                                     join ec in context.EgeCertificate on emm.EgeCertificateId equals ec.Id
+                                     where emm.AbiturientId == abId && ete.ExamId == examId
+                                     && (ec.FBSStatusId == 1 || ec.FBSStatusId == 4)
+                                     select new
+                                     {
+                                         emm.Value,
+                                         emm.EgeCertificateId
+                                     }).ToList();
+                                if (lBalls.Count() == 0)
                                     continue;
+                                balls = lBalls.OrderByDescending(x => x.Value).FirstOrDefault().Value;
+                                egeCertificateId = lBalls.OrderByDescending(x => x.Value).FirstOrDefault().EgeCertificateId;
+                            }
+                            else
+                            {
+                                List<int> lstInostr = (from ete in context.EgeToExam
+                                                       where ete.ExamId == examInostr
+                                                       select ete.EgeExamNameId).ToList<int>();
 
-                                Guid egeCertificateId = Guid.Empty;
-
-                                if (examId != examInostr)
+                                if (dsRow["FacultyId"].ToString() == filFacId.ToString())
                                 {
-                                    var lBalls =
-                                        (from emm in context.extEgeMarkMaxAbit
-                                         join ete in context.EgeToExam on emm.EgeExamNameId equals ete.EgeExamNameId
-                                         join ec in context.EgeCertificate on emm.EgeCertificateId equals ec.Id
-                                         where emm.AbiturientId == abId && ete.ExamId == examId
-                                         && (ec.FBSStatusId == 1 || ec.FBSStatusId == 4)
-                                         select new
-                                         {
-                                             emm.Value,
-                                             emm.EgeCertificateId
-                                         }).ToList();
-                                    if (lBalls.Count() == 0)
-                                        continue;
-                                    balls = lBalls.OrderByDescending(x => x.Value).FirstOrDefault().Value;
-                                    egeCertificateId = lBalls.OrderByDescending(x => x.Value).FirstOrDefault().EgeCertificateId;
-                                    //egeCertificateId = (from emm in context.extEgeMarkMaxAbit
-                                    //         join ete in context.EgeToExam
-                                    //         on emm.EgeExamNameId equals ete.EgeExamNameId
-                                    //         where emm.AbiturientId == abId && ete.ExamId == examId && emm.Value == balls
-                                    //         select emm.EgeCertificateId).FirstOrDefault();
+                                    int? egeExamNameId = (from etl in context.EgeToLanguage
+                                                          join ab in context.qAbiturient
+                                                          on etl.LanguageId equals ab.LanguageId
+                                                          where etl.ExamId == examInostr && ab.Id == abId
+                                                          select etl.EgeExamNameId).FirstOrDefault();
+
+                                    if (egeExamNameId != null)
+                                    {
+                                        var lBalls =
+                                            (from emm in context.extEgeMarkMaxAbit
+                                             where emm.AbiturientId == abId && emm.EgeExamNameId == egeExamNameId
+                                             select new
+                                             {
+                                                 emm.Value,
+                                                 emm.EgeCertificateId
+                                             }).ToList();
+                                        if (lBalls.Count() == 0)
+                                            continue;
+                                        balls = lBalls.OrderByDescending(x => x.Value).FirstOrDefault().Value;
+                                        egeCertificateId = lBalls.OrderByDescending(x => x.Value).FirstOrDefault().EgeCertificateId;
+                                    }
                                 }
                                 else
                                 {
-                                    List<int> lstInostr = (from ete in context.EgeToExam
-                                                           where ete.ExamId == examInostr
-                                                           select ete.EgeExamNameId).ToList<int>();
+                                    int cntEM = (from emm in context.extEgeMarkMaxAbit
+                                                 where lstInostr.Contains(emm.EgeExamNameId) && emm.AbiturientId == abId
+                                                 select emm.EgeMarkId).Count();
 
-                                    if (dsRow["FacultyId"].ToString() == filFacId.ToString())
+                                    if (cntEM > 1)
                                     {
                                         int? egeExamNameId = (from etl in context.EgeToLanguage
                                                               join ab in context.qAbiturient
@@ -245,75 +279,41 @@ qAbiturient.Id IN
                                     }
                                     else
                                     {
-                                        int cntEM = (from emm in context.extEgeMarkMaxAbit
-                                                     where lstInostr.Contains(emm.EgeExamNameId) && emm.AbiturientId == abId
-                                                     select emm.EgeMarkId).Count();
-
-                                        if (cntEM > 1)
-                                        {
-                                            int? egeExamNameId = (from etl in context.EgeToLanguage
-                                                                  join ab in context.qAbiturient
-                                                                  on etl.LanguageId equals ab.LanguageId
-                                                                  where etl.ExamId == examInostr && ab.Id == abId
-                                                                  select etl.EgeExamNameId).FirstOrDefault();
-
-                                            if (egeExamNameId != null)
-                                            {
-                                                var lBalls =
-                                                    (from emm in context.extEgeMarkMaxAbit
-                                                     where emm.AbiturientId == abId && emm.EgeExamNameId == egeExamNameId
-                                                     select new
-                                                     {
-                                                         emm.Value,
-                                                         emm.EgeCertificateId
-                                                     }).ToList();
-                                                if (lBalls.Count() == 0)
-                                                    continue;
-                                                balls = lBalls.OrderByDescending(x => x.Value).FirstOrDefault().Value;
-                                                egeCertificateId = lBalls.OrderByDescending(x => x.Value).FirstOrDefault().EgeCertificateId;
-                                            }
-                                        }
-                                        else
-                                        {
-                                            var lBalls =
-                                                (from emm in context.extEgeMarkMaxAbit
-                                                 join ete in context.EgeToExam
-                                                 on emm.EgeExamNameId equals ete.EgeExamNameId
-                                                 where emm.AbiturientId == abId && ete.ExamId == examId
-                                                 select new
-                                                 {
-                                                     emm.Value,
-                                                     emm.EgeCertificateId
-                                                 }).ToList();
-                                            if (lBalls.Count() == 0)
-                                                continue;
-                                            balls = lBalls.OrderByDescending(x => x.Value).FirstOrDefault().Value;
-                                            egeCertificateId = lBalls.OrderByDescending(x => x.Value).FirstOrDefault().EgeCertificateId;
-                                        }
+                                        var lBalls =
+                                            (from emm in context.extEgeMarkMaxAbit
+                                             join ete in context.EgeToExam
+                                             on emm.EgeExamNameId equals ete.EgeExamNameId
+                                             where emm.AbiturientId == abId && ete.ExamId == examId
+                                             select new
+                                             {
+                                                 emm.Value,
+                                                 emm.EgeCertificateId
+                                             }).ToList();
+                                        if (lBalls.Count() == 0)
+                                            continue;
+                                        balls = lBalls.OrderByDescending(x => x.Value).FirstOrDefault().Value;
+                                        egeCertificateId = lBalls.OrderByDescending(x => x.Value).FirstOrDefault().EgeCertificateId;
                                     }
                                 }
-
-                                if (balls != null)
-                                    context.Mark_Insert(abId, exInEntryId, balls, dtDateExam.Value.Date, true, false, false, null, null, egeCertificateId);
-                                else
-                                    continue;
-
-                                wtc.PerformStep();
-                                marksCount++;
                             }
 
-                            //transaction.Complete();
+                            if (balls != null)
+                                context.Mark_Insert(abId, exInEntryId, balls, dtDateExam.Value.Date, true, false, false, null, null, egeCertificateId);
+                            else
+                                continue;
+
+                            marksCount++;
                         }
-                        catch (Exception exc)
-                        {
-                            throw new Exception("Ошибка загрузки оценок1: " + exc.Message);
-                        }
-                   // }
+                    }
+                    catch (Exception exc)
+                    {
+                        throw new Exception("Ошибка загрузки оценок: " + exc.Message);
+                    }
                 }
             }
             catch (Exception ex)
             {
-                WinFormsServ.Error("Ошибка загрузки оценок " + ex.Message);                
+                WinFormsServ.Error("Ошибка загрузки оценок " + ex.Message);
                 wtc.Close();
             }            
         }

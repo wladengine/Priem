@@ -46,7 +46,7 @@
             // 
             this.btnOk.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnOk.Location = new System.Drawing.Point(114, 417);
+            this.btnOk.Location = new System.Drawing.Point(114, 494);
             this.btnOk.Name = "btnOk";
             this.btnOk.Size = new System.Drawing.Size(160, 23);
             this.btnOk.TabIndex = 52;
@@ -59,7 +59,7 @@
             this.label6.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(48, 394);
+            this.label6.Location = new System.Drawing.Point(48, 471);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(33, 13);
             this.label6.TabIndex = 51;
@@ -69,7 +69,7 @@
             // 
             this.dtDateExam.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.dtDateExam.Location = new System.Drawing.Point(87, 391);
+            this.dtDateExam.Location = new System.Drawing.Point(87, 468);
             this.dtDateExam.Name = "dtDateExam";
             this.dtDateExam.Size = new System.Drawing.Size(237, 20);
             this.dtDateExam.TabIndex = 50;
@@ -122,11 +122,11 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.dgvProtocols.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvProtocols.Location = new System.Drawing.Point(6, 18);
+            this.dgvProtocols.Location = new System.Drawing.Point(6, 19);
             this.dgvProtocols.Name = "dgvProtocols";
             this.dgvProtocols.ReadOnly = true;
             this.dgvProtocols.RowHeadersVisible = false;
-            this.dgvProtocols.Size = new System.Drawing.Size(364, 269);
+            this.dgvProtocols.Size = new System.Drawing.Size(364, 345);
             this.dgvProtocols.TabIndex = 62;
             // 
             // groupBox1
@@ -137,16 +137,16 @@
             this.groupBox1.Controls.Add(this.dgvProtocols);
             this.groupBox1.Location = new System.Drawing.Point(12, 92);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(376, 293);
+            this.groupBox1.Size = new System.Drawing.Size(376, 370);
             this.groupBox1.TabIndex = 63;
             this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Список протоколов о допуске с последней загрузки оценок (-10 мин)";
+            this.groupBox1.Text = "Список абитуриентов без оценок, попавших в протокол о допуске";
             // 
             // LoadEgeMarks
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(400, 452);
+            this.ClientSize = new System.Drawing.Size(400, 529);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.cbExam);
             this.Controls.Add(this.cbFaculty);

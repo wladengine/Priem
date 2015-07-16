@@ -154,7 +154,6 @@ namespace Priem
         {
             cbFaculty.SelectedIndexChanged += new EventHandler(cbFaculty_SelectedIndexChanged);
             cbLicenseProgram.SelectedIndexChanged += new EventHandler(cbLicenseProgram_SelectedIndexChanged);
-            cbObrazProgram.SelectedIndexChanged += new EventHandler(cbObrazProgram_SelectedIndexChanged);
             cbStudyForm.SelectedIndexChanged += new EventHandler(cbStudyForm_SelectedIndexChanged);
             cbStudyBasis.SelectedIndexChanged += new EventHandler(cbStudyBasis_SelectedIndexChanged);
         }
@@ -169,10 +168,6 @@ namespace Priem
         void cbLicenseProgram_SelectedIndexChanged(object sender, EventArgs e)
         {
             FillObrazProgram();
-        }
-        void cbObrazProgram_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            //UpdateDataGrid();
         }
         void cbStudyBasis_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -228,6 +223,7 @@ namespace Priem
                                     (FacultyId.HasValue ? entry.FacultyId == FacultyId : true)
                                   && (MainClass.lstStudyLevelGroupId.Contains(entry.StudyLevelGroupId))
                                   && (LicenseProgramId.HasValue ? entry.LicenseProgramId == LicenseProgramId : true)
+                                  && (ObrazProgramId.HasValue ? entry.ObrazProgramId == ObrazProgramId : true)
                                   && (StudyBasisId.HasValue ? entry.StudyBasisId == StudyBasisId : true)
                                   && (StudyFormId.HasValue ? entry.StudyFormId == StudyFormId : true)
                                   && entry.IsForeign == rbIsForeign.Checked
@@ -344,6 +340,7 @@ namespace Priem
                                     (FacultyId.HasValue ? entry.FacultyId == FacultyId : true)
                                   && (MainClass.lstStudyLevelGroupId.Contains(entry.StudyLevelGroupId))
                                   && (LicenseProgramId.HasValue ? entry.LicenseProgramId == LicenseProgramId : true)
+                                  && (ObrazProgramId.HasValue ? entry.ObrazProgramId == ObrazProgramId : true)
                                   && (StudyBasisId.HasValue ? entry.StudyBasisId == StudyBasisId : true)
                                   && (StudyFormId.HasValue ? entry.StudyFormId == StudyFormId : true)
                                   && entry.IsForeign == rbIsForeign.Checked

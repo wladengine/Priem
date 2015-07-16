@@ -39,11 +39,36 @@ namespace Priem
 
             cbFaculty.SelectedIndexChanged += new EventHandler(cbFaculty_SelectedIndexChanged);
 
-            string quer = @"SELECT DISTINCT [Faculty], Date, COUNT(*) AS [Абитуриентов в протоколе]
-  FROM [Priem].[ed].[extProtocol]
-  WHERE [ProtocolTypeId] = 1 AND [StudyLevelGroupId] = 1 AND IsOld = 0
-  AND [Date] > @Date
-  GROUP BY Date, [Faculty]";
+            UpdateGridAbits();
+        }
+
+        private void UpdateGridAbits()
+        {
+            string quer = @"SELECT DISTINCT extEntry.FacultyName AS [Факультет], COUNT(DISTINCT t.AbiturientId) AS [Абитуриентов], 
+(
+	SELECT CONVERT(nvarchar, MAX(extEnableProtocol.Date), 104) 
+	+ ' ' + CONVERT(nvarchar, MAX(extEnableProtocol.Date), 108)
+	FROM ed.extEnableProtocol WHERE extEnableProtocol.StudyLevelGroupId = 1 
+	AND extEnableProtocol.FacultyId = extEntry.FacultyId
+)  AS [Дата последнего протокола о допуске]
+FROM
+(
+SELECT Abiturient.Id AS AbiturientId, ExamInEntry.Id AS ExamInEntryId, Abiturient.EntryId
+FROM ed.Abiturient
+INNER JOIN ed.ExamInEntry ON ExamInEntry.EntryId = Abiturient.EntryId
+INNER JOIN ed.EgeToExam ON EgeToExam.ExamId = ExamInEntry.ExamId
+INNER JOIN ed.extEnableProtocol ON extEnableProtocol.AbiturientId = Abiturient.Id
+WHERE extEnableProtocol.IsOld = 0 AND extEnableProtocol.Excluded = 0
+EXCEPT
+SELECT AbiturientId, ExamInEntryId, ExamInEntry.EntryId
+FROM ed.Mark
+INNER JOIN ed.ExamInEntry ON ExamInEntry.Id = Mark.ExamInEntryId
+INNER JOIN ed.EgeToExam ON EgeToExam.ExamId = ExamInEntry.ExamId
+) t
+INNER JOIN ed.extEntry ON extEntry.Id = t.EntryId
+WHERE extEntry.StudyLevelGroupId = 1
+GROUP BY extEntry.FacultyName, extEntry.FacultyId
+ORDER BY 1";
             dgvProtocols.DataSource = MainClass.Bdc.GetDataSet(quer, new SortedList<string, object>() { { "@Date", MainClass._1k_LastEgeMarkLoadTime.AddMinutes(-10) } }).Tables[0];
         }
 
@@ -129,6 +154,8 @@ namespace Priem
                 wtc.Close();
                 MessageBox.Show(string.Format("Зачтено {0} оценок", marksCount));
             }
+
+            UpdateGridAbits();
         }
 
         private void SetMarksForExam(int? examId)

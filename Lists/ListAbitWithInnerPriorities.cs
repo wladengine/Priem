@@ -19,8 +19,7 @@ namespace Priem
     public partial class ListAbitWithInnerPriorities : BookList
     {
         List<string> HideColumnsList;
-        Brush BrushText, BrushBackGroundLP, BrushBackGroundOP;
-        Color BrushBackGroundOPP, BrushBackGroundProf;
+        int LastSystemRowIndex;
 
         Brush DefaultBrushNoColorText = Brushes.Black;
         Brush DefaultBrushNoColorBackGround = Brushes.White;
@@ -43,7 +42,6 @@ namespace Priem
         protected override void ExtraInit()
         {
             base.ExtraInit();
-            this.Width = 840;
             lblCount.Text = "";
             btnRemove.Visible = btnAdd.Visible = false;
             HideColumnsList = new List<string>();
@@ -59,7 +57,6 @@ namespace Priem
                     FillStudyForm();
                     FillLicenseProgram();
                     FillObrazProgram();
-                    rbColor_CheckedChanged(this.rbNoColor, null);
                     //MessageBox.Show("Для отображения результатов, выберите необходимые значения полей и нажмите кнопку 'Обновить данные'", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
             }
@@ -191,331 +188,229 @@ namespace Priem
             btnCard.Enabled = !(Dgv.RowCount == 0);
              */
         }
-        private void FillGrid(string abitFilters)
+        private void FillGrid()
         {
-            DataTable examTable = new DataTable();
-
-            DataRow row_LicProg = examTable.NewRow();
-            DataRow row_ObrazProg = examTable.NewRow();
-            DataRow row_Profile = examTable.NewRow();
-
-            DataColumn clm;
-
-            clm = new DataColumn();
-            clm.ColumnName = "Id";
-            examTable.Columns.Add(clm);
-
-            clm = new DataColumn();
-            clm.ColumnName = "PersonNum";
-            examTable.Columns.Add(clm);
-
-            clm = new DataColumn();
-            clm.ColumnName = "ФИО";
-            examTable.Columns.Add(clm);
-
-            /*
-            clm = new DataColumn();
-            clm.ColumnName = "Рег_номер";
-            examTable.Columns.Add(clm);
-             */
-
-            NewWatch wc = new NewWatch();
-            wc.Show();
-            wc.SetText("Получение данных по учебным планам...");
-///////////////////////////////
-            ///// Поиск по Направлениям в QEntry
-            string query = @"Select distinct qEntry.LicenseProgramId, qEntry.LicenseProgramName
-                                from ed.qEntry " + abitFilters;
-            DataTable tbl = _bdc.GetDataSet(query).Tables[0];
-            string index = "";
-            
-            foreach (DataRow rwEntry in tbl.Rows)
+            using (PriemEntities context = new PriemEntities())
             {
-                ///////////////////////////////
-                ///// Напечатано ли название направления
-                bool LicenseNamePrint = false;
-                ///////////////////////////////
-                ///// Поиск ОБРАЗОВАТЕЛЬНЫХ ПРОГРАММ 
-                query = @"Select distinct qEntry.ObrazProgramId, qEntry.ObrazProgramName
-                                from ed.qEntry " + abitFilters + " and LicenseProgramId=" + rwEntry.Field<int>("LicenseProgramId").ToString();
-                DataTable tbl_LicProg = _bdc.GetDataSet(query).Tables[0];
+                DataTable examTable = new DataTable();
 
-                bool ObrazProgramNameIsPrinted = false;
-                foreach (DataRow rw_licProg in tbl_LicProg.Rows)
+                DataRow row_LicProg = examTable.NewRow();
+                DataRow row_ObrazProg = examTable.NewRow();
+                DataRow row_Profile = examTable.NewRow();
+
+                DataColumn clm;
+
+                clm = new DataColumn();
+                clm.ColumnName = "Id";
+                examTable.Columns.Add(clm);
+
+                clm = new DataColumn();
+                clm.ColumnName = "Number";
+                examTable.Columns.Add(clm);
+
+                clm = new DataColumn();
+                clm.ColumnName = "PersonNum";
+                examTable.Columns.Add(clm);
+
+                clm = new DataColumn();
+                clm.ColumnName = "ФИО";
+                examTable.Columns.Add(clm);
+
+                NewWatch wc = new NewWatch();
+                wc.Show();
+                wc.SetText("Получение данных по учебным планам...");
+                ///////////////////////////////
+
+                var Entry_List = (from entry in context.qEntry
+                                  join in_en in context.InnerEntryInEntry on entry.Id equals in_en.EntryId into gj
+                                  from inner_entry in gj.DefaultIfEmpty()
+                                  where
+                                    (FacultyId.HasValue ? entry.FacultyId == FacultyId : true)
+                                  && (MainClass.lstStudyLevelGroupId.Contains(entry.StudyLevelGroupId))
+                                  && (LicenseProgramId.HasValue ? entry.LicenseProgramId == LicenseProgramId : true)
+                                  && (StudyBasisId.HasValue ? entry.StudyBasisId == StudyBasisId : true)
+                                  && (StudyFormId.HasValue ? entry.StudyFormId == StudyFormId : true)
+                                  && entry.IsForeign == rbIsForeign.Checked
+                                  && entry.IsCrimea == rbIsCrimea.Checked
+                                  select new
+                                  {
+                                      entry.Id,
+                                      entry.StudyLevelGroupId,
+                                      entry.StudyBasisId,
+                                      entry.StudyFormId,
+                                      entry.LicenseProgramId,
+                                      entry.LicenseProgramName,
+                                      entry.ObrazProgramId,
+                                      entry.ObrazProgramName,
+                                      entry.ProfileId,
+                                      entry.ProfileName,
+                                      HasInnerEntryInEntry = (inner_entry != null),
+                                      InnerEntryInEntryId = (inner_entry == null ? Guid.Empty : inner_entry.Id),
+                                      InnerObrazProgramId = (inner_entry == null ? -1 : inner_entry.ObrazProgramId),
+                                      InnerProfileId = (inner_entry == null ? -1 : inner_entry.ProfileId),
+                                  }).OrderBy(x=>x.LicenseProgramName).ToList();
+
+                List<int> StudyFormList = Entry_List.Select(x => x.StudyFormId).Distinct().ToList();
+                foreach (int StudyForm_id in StudyFormList)
                 {
-                    ///////////////////////////////
-                    ///// ДЛЯ КАЖДОЙ ОБРАЗОВАТЕЛЬНОЙ ПРОГРАММЫ ПОИСК ПРОФИЛЕЙ:
-                    query = @"select distinct ProfileId, ProfileName from ed.qEntry" + abitFilters + " and LicenseProgramId=" + rwEntry.Field<int>("LicenseProgramId").ToString() +
-                            " and ObrazProgramId=" + rw_licProg.Field<int>("ObrazProgramId").ToString() + " and ProfileId is not null";
-                    DataTable tbl_ObrProgramProfile = _bdc.GetDataSet(query).Tables[0];
-                    ///////////////////////////////
-                    /////  ЕСЛИ ЕСТЬ НЕНУЛЕВЫЕ ПРОФИЛИ (ПРОБЛЕМА С ИД СТОЛБЦА)
-                    ///// НЕ ДОЛЖНО БЫТЬ ЗАГОЛОВКА СЛОБЦА, СТОЛБЕЦ = (НАПР/ОБРПРОГ/ПРОФ)
-                    if (tbl_ObrProgramProfile.Rows.Count > 0)
+                    List<int> StudyBasisList = Entry_List.Where(x => x.StudyFormId == StudyForm_id).Select(x => x.StudyBasisId).Distinct().ToList();
+                    foreach (int StudyBasis_id in StudyBasisList)
                     {
-                        foreach (DataRow row_profile in tbl_ObrProgramProfile.Rows)
+                        List<int> LicenseProgramList = Entry_List.Where(x => x.StudyFormId == StudyForm_id && x.StudyBasisId == StudyBasis_id).Select(e => e.LicenseProgramId).Distinct().ToList();
+                        foreach (int LP_id in LicenseProgramList)
                         {
-                            clm = new DataColumn();
-                            index = rwEntry.Field<int>("LicenseProgramId").ToString() + "_" + rw_licProg.Field<int>("ObrazProgramId").ToString() + "_" + row_profile.Field<Guid>("ProfileId").ToString();
-                            clm.ColumnName = index;
-                            examTable.Columns.Add(clm);
-
-                            if (LicenseNamePrint)
+                            var Tbl_lp = Entry_List.Where(x => x.StudyFormId == StudyForm_id && x.StudyBasisId == StudyBasis_id && x.LicenseProgramId == LP_id).Select(x => x).ToList();
+                            string LicProgram_Name = Tbl_lp.Select(x => x.LicenseProgramName).First();
+                            List<int> ObrazProgramList = Tbl_lp.Select(x => x.ObrazProgramId).Distinct().ToList();
+                            foreach (int ObProgram_id in ObrazProgramList)
                             {
-                                row_LicProg[index] = "";
-                            }
-                            else
-                            {
-                                row_LicProg[index] = rwEntry.Field<string>("LicenseProgramName"); LicenseNamePrint = true;
-                            }
-                            if (ObrazProgramNameIsPrinted)
-                                row_ObrazProg[index] = "";
-                            else
-                                row_ObrazProg[index] = rw_licProg.Field<String>("ObrazProgramName");
-                            row_Profile[index] = row_profile.Field<string>("ProfileName");
-                        }   
-                    }
-                    ///////////////////////////////
-                    /////  НЕНУЛЕВЫХ ПРОФИЛЕЙ НЕТ (ВОЗМОЖНО ЕСТЬ OBRAZ_PROGRAM_IN_ENTRY) 
-                    else {
-                        ////////////
-                        //// нужно получить EntryId 
-                        query = @"select distinct qEntry.Id from ed.qEntry" + abitFilters + " and LicenseProgramId=" + rwEntry.Field<int>("LicenseProgramId").ToString() +
-                            " and ObrazProgramId=" + rw_licProg.Field<int>("ObrazProgramId").ToString(); 
-                        Guid EntryId = (Guid) _bdc.GetDataSet(query).Tables[0].Rows[0].Field<Guid>("Id");
-                        ///////////
-                        /// поиск по EntryId В ОБРАЗОВАТЕЛЬНЫХ ПРОГРАММАХ
-                        query = @"SELECT distinct ObrazProgramInEntry.[Id] as Id, SP_ObrazProgram.Name as Name, SP_ObrazProgram.Id as ObrazProgramId
-                              FROM [ed].[ObrazProgramInEntry] 
-                             inner join ed.SP_ObrazProgram on ObrazProgramInEntry.ObrazProgramId = SP_ObrazProgram.Id where EntryId ='" + EntryId + @"'
-                               order by ObrazProgramId";
-                        DataTable tbl_ObrProgram = _bdc.GetDataSet(query).Tables[0];
-                        ///////////////////////////////
-                        ///// приоритетов образ.программ нет
-                        if (tbl_ObrProgram.Rows.Count == 0)
-                        {
-                            index = rwEntry.Field<int>("LicenseProgramId").ToString() + "_" + rw_licProg.Field<int>("ObrazProgramId").ToString() + "_0";
-                            clm = new DataColumn();
-                            clm.ColumnName = index;
-                            examTable.Columns.Add(clm);
-                            
-                            if (LicenseNamePrint)
-                            {
-                                row_LicProg[index] = "";
-                            }
-                            else
-                            {
-                                row_LicProg[index] = rwEntry.Field<string>("LicenseProgramName"); LicenseNamePrint = true;
-                            }
-
-                            row_ObrazProg[index] = rw_licProg.Field<String>("ObrazProgramName");
-
-                            row_Profile[index] = "(приоритет программы)";
-                        }
-                        else
-                        {
-                            ///////////////////////////////
-                            ///// ПРИОРИТЕТЫ ОБРАЗ.ПРОГРАММ есть
-                            foreach (DataRow rw_ObProg in tbl_ObrProgram.Rows)
-                            {
-                                clm = new DataColumn();
-                                index = rwEntry.Field<int>("LicenseProgramId").ToString() + "_" + rw_ObProg.Field<int>("ObrazProgramId").ToString() + "_0";
-                                clm.ColumnName = index;
-                                examTable.Columns.Add(clm);
-                                row_ObrazProg[index] = rw_ObProg.Field<String>("Name");
-                                if (LicenseNamePrint)
+                                List<int> ProfileList = Tbl_lp.Where(x => x.ObrazProgramId == ObProgram_id).Select(x => x.ProfileId).Distinct().ToList();
+                                string ObrazProgramName = Tbl_lp.Where(x => x.ObrazProgramId == ObProgram_id).Select(x => x.ObrazProgramName).First().ToString();
+                                if (ProfileList.Count == 1 && ProfileList[0] == 0)
                                 {
-                                    row_LicProg[index] = "";
-                                }
-                                else
-                                {
-                                    row_LicProg[index] = rwEntry.Field<string>("LicenseProgramName"); LicenseNamePrint = true;
-                                }
-                                row_Profile[index] = "(приоритет программы)";
-
-                                ///////////////////////////////
-                                ///// ЕСТЬ ЛИ ПРИОРИТЕТНОСТЬ ПРОФИЛЕЙ?
-                                query = @"select distinct ProfileInObrazProgramInEntry.Id as Id, SP_Profile.Name as Name, SP_Profile.Id as ProfileId
-                                from ed.ProfileInObrazProgramInEntry 
-                                inner join ed.SP_Profile on SP_Profile.Id = ProfileInObrazProgramInEntry.ProfileId 
-                                where 
-                                ObrazProgramInEntryId ='" + rw_ObProg.Field<Guid>("Id") + @"' 
-                                order by ProfileId";
-                                DataTable tbl_Prof = _bdc.GetDataSet(query).Tables[0];
-                                if (tbl_Prof.Rows.Count > 1)
-                                {
-                                    foreach (DataRow rw_Profile in tbl_Prof.Rows)
+                                    Guid EntryId = Tbl_lp.Where(x => x.ObrazProgramId == ObProgram_id && x.ProfileId == ProfileList[0]).Select(x => x.Id).First();
+                                    List<int> InnerObrazProgramList = Tbl_lp.Where(x => x.Id == EntryId && x.HasInnerEntryInEntry).Select(x => x.InnerObrazProgramId).Distinct().ToList();
+                                    if (InnerObrazProgramList.Count == 0)
                                     {
                                         clm = new DataColumn();
-                                        index = rwEntry.Field<int>("LicenseProgramId").ToString() + "_" + rw_ObProg.Field<int>("ObrazProgramId").ToString() + "_" + rw_Profile.Field<int>("ProfileId").ToString();
-                                        clm.ColumnName = index;
+                                        clm.ColumnName = EntryId.ToString() + "_" + Guid.Empty.ToString();
                                         examTable.Columns.Add(clm);
-                                        row_LicProg[index] = "";
-                                        row_ObrazProg[index] = "";
-                                        row_Profile[index] = rw_Profile.Field<String>("Name");
+                                        row_LicProg[clm] = LicProgram_Name;
+                                        row_ObrazProg[clm] = ObrazProgramName;
+                                        row_Profile[clm] = Tbl_lp.Where(x => x.ObrazProgramId == ObProgram_id && x.ProfileId == ProfileList[0]).Select(x => x.ProfileName).First().ToString();
+                                    }
+                                    else
+                                    {
+                                        clm = new DataColumn();
+                                        clm.ColumnName = EntryId.ToString() + "_" + Guid.Empty.ToString();
+                                        examTable.Columns.Add(clm);
+                                        row_LicProg[clm] = LicProgram_Name;
+                                        row_ObrazProg[clm] = ObrazProgramName;
+                                        row_Profile[clm] = "Приоритет заявления";
+
+                                        foreach (int InnerObrazProgram_id in InnerObrazProgramList)
+                                        {
+                                            List<int> InnerProfileList = Tbl_lp.Where(x => x.Id == EntryId && x.HasInnerEntryInEntry && x.InnerObrazProgramId == InnerObrazProgram_id).Select(x => x.InnerProfileId).Distinct().ToList();
+                                            string InnerObrazProgramName = context.SP_ObrazProgram.Where(x => x.Id == InnerObrazProgram_id).Select(x => x.Name).First();
+                                            foreach (int InnerProfile_id in InnerProfileList)
+                                            {
+                                                Guid InnerEntryId = Tbl_lp.Where(x => x.InnerObrazProgramId == InnerObrazProgram_id && x.InnerProfileId == InnerProfile_id).Select(x => x.InnerEntryInEntryId).First();
+                                                string InnerProfileName = context.SP_Profile.Where(x => x.Id == InnerProfile_id).Select(x => x.Name).First();
+                                                clm = new DataColumn();
+                                                clm.ColumnName = EntryId.ToString() + "_" + InnerEntryId.ToString();
+                                                examTable.Columns.Add(clm);
+                                                row_LicProg[clm] = LicProgram_Name;
+                                                row_ObrazProg[clm] = InnerObrazProgramName;
+                                                row_Profile[clm] = InnerProfileName;
+                                            }
+                                        }
                                     }
                                 }
                                 else
-                                    if (tbl_Prof.Rows.Count == 1)
+                                {
+                                    foreach (int Profile_id in ProfileList)
                                     {
-                                        DataRow rw_Profile = tbl_Prof.Rows[0];
-                                        row_Profile[index] = rw_Profile.Field<string>("Name");
-                                        index = rwEntry.Field<int>("LicenseProgramId").ToString() + "_" + rw_ObProg.Field<int>("ObrazProgramId").ToString() + "_" + rw_Profile.Field<int>("ProfileId").ToString();
-                                        HideColumnsList.Add(index);
+                                        Guid EntryId = Tbl_lp.Where(x => x.ObrazProgramId == ObrazProgramId && x.ProfileId == Profile_id).Select(x => x.Id).First();
+                                        clm = new DataColumn();
+                                        clm.ColumnName = EntryId.ToString() + "_" + Guid.Empty.ToString();
+                                        examTable.Columns.Add(clm);
+                                        row_LicProg[clm] = LicProgram_Name;
+                                        row_ObrazProg[clm] = ObrazProgramName;
+                                        row_Profile[clm] = Tbl_lp.Where(x => x.ObrazProgramId == ObrazProgramId && x.ProfileId == ProfileList[0]).Select(x => x.ProfileName).First().ToString();
                                     }
+                                }
                             }
                         }
                     }
                 }
-                // ЗАКОНЧИЛСЯ ПОИСК ВНУТРИ ОБРАЗОВАТЕЛЬНОЙ ПРОГРАММЫ
+                examTable.Rows.Add(row_LicProg);
+                examTable.Rows.Add(row_ObrazProg);
+                examTable.Rows.Add(row_Profile);
+                LastSystemRowIndex = examTable.Rows.Count;
+                wc.SetText("Получение данных по абитуриентам...");
+
+                var Abits = (from abit in context.extAbit
+                             join entry in context.qEntry on abit.EntryId equals entry.Id
+                             join pers in context.Person on abit.PersonId equals pers.Id
+
+                             join in_en in context.InnerEntryInEntry on abit.EntryId equals in_en.EntryId into gjj
+                             from inner_entry in gjj.DefaultIfEmpty()
+
+                             join app_in_en in context.ApplicationDetails on 
+                                 new { AppId = abit.Id, InnerEntryId =  inner_entry.Id} 
+                                 equals new { AppId = app_in_en.ApplicationId, InnerEntryId = app_in_en.InnerEntryInEntryId } into gj
+                             from app_inner_entry_prior in gj.DefaultIfEmpty()
+                             where
+                                    (FacultyId.HasValue ? entry.FacultyId == FacultyId : true)
+                                  && (MainClass.lstStudyLevelGroupId.Contains(entry.StudyLevelGroupId))
+                                  && (LicenseProgramId.HasValue ? entry.LicenseProgramId == LicenseProgramId : true)
+                                  && (StudyBasisId.HasValue ? entry.StudyBasisId == StudyBasisId : true)
+                                  && (StudyFormId.HasValue ? entry.StudyFormId == StudyFormId : true)
+                                  && entry.IsForeign == rbIsForeign.Checked
+                                  && entry.IsCrimea == rbIsCrimea.Checked
+                             select new
+                             {
+                                 abit.PersonId, 
+                                 abit.FIO,
+                                 abit.EntryId,
+                                 abit.Priority,
+                                 pers.Barcode,
+                                 InnerEntryInEntryId = (inner_entry == null ? Guid.Empty : inner_entry.Id),
+                                 InnerPrior = (app_inner_entry_prior == null ? -1 : app_inner_entry_prior.InnerEntryInEntryPriority),
+                             }).ToList();
+                int i = 1;
+                List<int?> AbitList = Abits.Select(x => x.Barcode).Distinct().ToList();
+                wc.SetText("Получение данных по абитуриентам...0/"+AbitList.Count.ToString());
+                wc.SetMax(AbitList.Count);
+                foreach (var barcode in AbitList)
+                {
+                    DataRow rw = examTable.NewRow();
+                    rw["Id"] = Abits.Where(x => x.Barcode == barcode).Select(x => x.PersonId).First();
+                    rw["Number"] = i.ToString(); 
+                    rw["ФИО"] = Abits.Where(x => x.Barcode == barcode).Select(x => x.FIO).First().ToString();
+                    rw["PersonNum"] = barcode.ToString();
+                    var Apps = Abits.Where(x => x.Barcode == barcode).Select(x => x).ToList();
+                    foreach (var app in Apps)
+                    {
+                        string colname = app.EntryId.ToString() + "_" + app.InnerEntryInEntryId.ToString();
+                        if (examTable.Columns.Contains(colname))
+                            rw[colname] = (app.InnerEntryInEntryId == Guid.Empty) ? app.Priority.ToString() : (app.InnerPrior > 0 ? app.InnerPrior.ToString() : "нет приоритета");
+                        if (app.InnerEntryInEntryId != Guid.Empty)
+                        {
+                            rw[app.EntryId.ToString() + "_" + Guid.Empty.ToString()] = app.Priority.ToString();
+                        }
+
+                    }
+                    examTable.Rows.Add(rw);
+                    wc.PerformStep();
+                    wc.SetText("Получение данных по абитуриентам..."+i.ToString()+"/" + AbitList.Count.ToString());
+                    i++;
+                }
+                DataView dv = new DataView(examTable);
+                dgvAbitList.DataSource = dv;
+                dgvAbitList.Columns["Id"].Visible = false;
+                wc.Close();
+                dgvAbitList.Update();
+
+                dgvAbitList.ColumnHeadersVisible = false;
+                if (dgvAbitList.Rows.Count > LastSystemRowIndex)
+                {
+                    dgvAbitList.Rows[0].MinimumHeight = 40;
+                    dgvAbitList.Rows[1].MinimumHeight = 40;
+                    dgvAbitList.Rows[2].MinimumHeight = 40;
+                }
+                dgvAbitList.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
+                dgvAbitList.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+
+                int indexColumnId = dgvAbitList.Columns["ФИО"].Index;
+                if (indexColumnId >= 0)
+                {
+                    dgvAbitList.Columns[indexColumnId].DefaultCellStyle.WrapMode = DataGridViewTriState.False;
+                    dgvAbitList.Columns[indexColumnId].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft;
+                    dgvAbitList.Columns[indexColumnId].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+                }
             }
-            examTable.Rows.Add(row_LicProg);
-            examTable.Rows.Add(row_ObrazProg);
-            examTable.Rows.Add(row_Profile);
-
-            wc.SetText("Получение данных по абитуриентам...(0)");
-
-            int itopList=0;
-            if (!String.IsNullOrEmpty(tbAbitsTop.Text))
-                if (!int.TryParse(tbAbitsTop.Text, out itopList))
-                {
-                    itopList = 0;
-                }
-            string toplist = (rbAbitsAll.Checked)? "": ((itopList == 0)?"":" top "+itopList.ToString());
-            query = @"SELECT distinct" + toplist + @"
-                        Abiturient.PersonId,
-                        extPerson.PersonNum,
-                        --Person.Surname +' '+ Person.Name + (case when (Person.SecondName is not null) then ' '+Person.SecondName else '' end) as FIO
-                        extPerson.FIO as FIO
-                        FROM [ed].Abiturient
-                        inner join ed.extPerson on extPerson.Id = Abiturient.PersonId
-                        inner join ed.qEntry on qEntry.Id = Abiturient.EntryId 
-                        " + abitFilters + " AND Abiturient.Id NOT IN (SELECT Id FROM ed.qAbiturientForeignApplicationsOnly) AND Abiturient.BackDoc = 0"+
-                        @" order by FIO";
-            tbl = _bdc.GetDataSet(query).Tables[0];
-            int personcount = 0;
-            int personcountAll = tbl.Rows.Count;
-            wc.SetMax(personcountAll);
-            foreach (DataRow rw in tbl.Rows)
-            {
-                wc.PerformStep();
-                wc.SetText("Получение данных по абитуриентам...("+personcount+"/"+personcountAll+")");
-                personcount++;
-                query = @"select 
-                                Abiturient.Id, 
-                                qEntry.LicenseProgramId, 
-                                qEntry.ObrazProgramId as qEntryObrazProgramId ,
-                                qEntry.ProfileId as qEntryProfileId,
-                                Abiturient.Priority,
-
-                                ObrazProgramInEntry.ObrazProgramId as ObrazProgramId, 
-                                ApplicationDetails.ObrazProgramInEntryPriority as ObrazProgramPriority, 
-                                ProfileInObrazProgramInEntry.ProfileId as ProfileId,
-                                ApplicationDetails.ProfileInObrazProgramInEntryPriority as ProfilePriority
-
-                                from ed.Abiturient
-
-                                inner join ed.qEntry on Abiturient.EntryId = qEntry.Id
-                                left join ed.ObrazProgramInEntry on ObrazProgramInEntry.EntryId = qEntry.Id
-                                left join ed.ProfileInObrazProgramInEntry on ProfileInObrazProgramInEntry.ObrazProgramInEntryId = ObrazProgramInEntry.Id
-                                left join ed.ApplicationDetails on (ApplicationDetails.ApplicationId = Abiturient.Id and (ObrazProgramInEntry.Id = ApplicationDetails.ObrazProgramInEntryId or ObrazProgramInEntry.ObrazProgramId is null) and (ProfileInObrazProgramInEntry.Id = ApplicationDetails.ProfileInObrazProgramInEntryId or ProfileInObrazProgramInEntry.ProfileId is null ))
-                                " + abitFilters + " AND Abiturient.BackDoc = 0 and Abiturient.PersonId='" + rw.Field<Guid>("PersonId") + "' " +
-                                @"";
-                DataRow newRow;
-                newRow = examTable.NewRow();
-                newRow["Id"] = rw.Field<Guid>("PersonId");
-                newRow["PersonNum"] = rw.Field<string>("PersonNum");
-                newRow["ФИО"] = rw.Field<string>("FIO");
-
-                DataTable tbl_abit = _bdc.GetDataSet(query).Tables[0];
-                foreach (DataRow rw_abit in tbl_abit.Rows)
-                {
-                    int LicProgId = rw_abit.Field<int>("LicenseProgramId");
-                    int EntryObrazProgId = rw_abit.Field<int>("qEntryObrazProgramId");
-                    int ObrazProgramId = rw_abit.Field<int?>("ObrazProgramId")??0;
-                    string qEntryProfileId = rw_abit.Field<Guid?>("qEntryProfileId").ToString() ?? "";
-
-                    int ProfileId = rw_abit.Field<int?>("ProfileId")??0;
-
-                    int AbitPrior = rw_abit.Field<int?>("Priority") ?? 0;
-                    int ObrProgPrior = rw_abit.Field<int?>("ObrazProgramPriority")??0;
-                    int ProfPrior = rw_abit.Field<int?>("ProfilePriority") ?? 0;
-
-                    string rowname = "";
-                    int Priority = 0;
-                    if (ObrazProgramId == 0)
-                    {
-                        Priority = AbitPrior;
-                        if (String.IsNullOrEmpty(qEntryProfileId))
-                        {
-                            rowname = LicProgId.ToString() + '_' + EntryObrazProgId.ToString() + "_0";
-                        }
-                        else
-                        {
-                            rowname = LicProgId.ToString() + '_' + EntryObrazProgId.ToString() + "_" + qEntryProfileId;
-                        }
-                        newRow[rowname] = Priority == 0 ? "нет" : Priority.ToString();
-                    }
-                    else
-                    {
-                        Priority = ObrProgPrior;
-                        rowname = LicProgId.ToString() + '_' + ObrazProgramId.ToString() + "_0";
-                        newRow[rowname] = Priority == 0 ? "нет" : Priority.ToString();
-                        if (!(ProfileId == 0))
-                        {
-                            Priority = ProfPrior;
-                            rowname = LicProgId.ToString() + '_' + ObrazProgramId.ToString() + "_" + ProfileId.ToString();
-                            if (!HideColumnsList.Contains(rowname))
-                                newRow[rowname] = Priority == 0 ? "нет" : Priority.ToString();
-                        }
-                    }
-                }
-                examTable.Rows.Add(newRow);
-            } 
-
-            DataView dv = new DataView(examTable);
-            dgvAbitList.DataSource = dv;
-            dgvAbitList.Columns["Id"].Visible = false;
-            wc.Close();
-            dgvAbitList.Update();
         }
-        private string GetAbitFilterString()
-        {
-            string s = " WHERE 1=1 ";
-
-            s += " AND ed.qEntry.StudyLevelGroupId IN (" + Util.BuildStringWithCollection(MainClass.lstStudyLevelGroupId) + ")";
-
-            //обработали форму обучения  
-            if (StudyFormId != null)
-                s += " AND ed.qEntry.StudyFormId = " + StudyFormId;
-
-            //обработали основу обучения  
-            if (StudyBasisId != null)
-                s += " AND ed.qEntry.StudyBasisId = " + StudyBasisId;
-
-            //обработали факультет
-            if (FacultyId != null)
-                s += " AND ed.qEntry.FacultyId = " + FacultyId;
-
-            //обработали тип конкурса          
-            /*if (CompetitionId != null)
-                s += " AND ed.extAbit.CompetitionId = " + CompetitionId;
-            */
-            //обработали Направление
-            if (LicenseProgramId != null)
-                s += " AND ed.qEntry.LicenseProgramId = " + LicenseProgramId;
-
-            //обработали Образ программу
-            if (ObrazProgramId != null)
-                s += " AND ed.qEntry.ObrazProgramId = " + ObrazProgramId;
-
-            //обработали специализацию 
-            /*if (ProfileId != null)
-                s += string.Format(" AND ed.extAbit.ProfileId = '{0}'", ProfileId);
-            */
-            return s;
-        }
-
         protected override void OpenCard(string itemId, BaseFormEx formOwner, int? index)
         {
             MainClass.OpenCardPerson(itemId, this, dgvAbitList.CurrentRow.Index);
@@ -529,28 +424,17 @@ namespace Priem
         private void dgvAbitList_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
         {
             dgvAbitList.ColumnHeadersVisible = false;
-            if (dgvAbitList.Rows.Count > 3)
+            if (dgvAbitList.Rows.Count > LastSystemRowIndex)
             {
                 dgvAbitList.Rows[0].MinimumHeight = 40;
                 dgvAbitList.Rows[1].MinimumHeight = 40;
                 dgvAbitList.Rows[2].MinimumHeight = 40;
-                //foreach (DataGridViewCell cell in dgvAbitList.Rows[2].Cells)
-                //{
-                //    if (cell.Value.ToString().Contains("приоритет программы"))
-                //    {
-                //        cell.Style.BackColor = BrushBackGroundOPP;
-                //    }
-                //    else
-                //        if (!String.IsNullOrEmpty(cell.Value.ToString()))
-                //        {
-                //            cell.Style.BackColor = BrushBackGroundProf;
-                //        }
-                //}
-                if (cbNoPriority.Checked)
+                
+                if (cbNoPriority.Checked && e.RowIndex>LastSystemRowIndex)
                 {
                     if (e.ColumnIndex < 2 || dgvAbitList.Rows[e.RowIndex].DefaultCellStyle.BackColor == Color.Red)
                         return;
-                    if (dgvAbitList[e.ColumnIndex, e.RowIndex].Value.ToString().Equals("нет"))
+                    if (dgvAbitList[e.ColumnIndex, e.RowIndex].Value.ToString().Contains("нет"))
                     {
                         dgvAbitList.Rows[e.RowIndex].DefaultCellStyle.BackColor = Color.Red;
                     }
@@ -571,10 +455,18 @@ namespace Priem
 
         private void dgvAbitList_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
+            /*
+            if (dgvAbitList.CurrentCell == null)
+                return;
+            if (dgvAbitList.CurrentCell.RowIndex<0)
+                return;
+
+            Guid PersonId = Guid.Parse(dgvAbitList.CurrentRow.Cells["Id"].Value.ToString());
+            */
         }
 
         private void PaintRectangle(PaintEventArgs e, List<Rectangle> RectangleList, Brush BrushBackground, Brush brushTEXT, string text)
-        {
+        {/*
             Rectangle rect0 = RectangleList[0];
             for (int k = 1; k < RectangleList.Count; k++)
             {
@@ -586,11 +478,12 @@ namespace Priem
             StringFormat stringFormat = new StringFormat();
             stringFormat.Alignment = StringAlignment.Center;
             stringFormat.LineAlignment = StringAlignment.Center;
-            e.Graphics.DrawString(text, this.dgvAbitList.Font, brushTEXT, rect0, stringFormat);
+            e.Graphics.DrawString(text, this.dgvAbitList.Font, brushTEXT, rect0, stringFormat);*/
         }
 
         private void dgvAbitList_Paint(object sender, PaintEventArgs e)
         {
+            /*
             int firstcolumn = 1;
             if (dgvAbitList.Columns.Count > 3)
             for (int i = 0; i < 2; i++)
@@ -628,7 +521,7 @@ namespace Priem
                 else if (i == 1)
                     PaintRectangle(e, RectangleList, BrushBackGroundOP, BrushText, text);
 
-            } 
+            } */
         }
 
         private void btnToExcel_Click(object sender, EventArgs e)
@@ -639,7 +532,7 @@ namespace Priem
 
         private void btnRePaint_Click(object sender, EventArgs e)
         {
-            FillGrid(GetAbitFilterString());
+            FillGrid();
 
             lblCount.Text = "Всего: " + (Dgv.Rows.Count-3).ToString();
             btnCard.Enabled = !(Dgv.RowCount == 0);
@@ -647,8 +540,9 @@ namespace Priem
 
         private void PrintToExcel(DataTable tbl, string sheetName)
         {
-            if (tbl.Rows.Count <= 3)
+            if (tbl.Rows.Count <= LastSystemRowIndex)
                 return;
+
             if (tbl.Columns.Contains("Id"))
             {
                 tbl.Columns.Remove("Id");
@@ -682,7 +576,7 @@ namespace Priem
                     prog.Show();
                     
                     // печать из грида
-                    for (int rowindex = 0; rowindex < 2; rowindex++)
+                    for (int rowindex = 0; rowindex < LastSystemRowIndex; rowindex++)
                     {
                         DataRow dr = tbl.Rows[rowindex];
                         int j_begin_merge = 1;
@@ -727,35 +621,36 @@ namespace Priem
                         }
                         i++;
                         prog.PerformStep();
-                    } 
+                    }
 
-                    Excel.Range Range3 = ws.Range[ws.Cells[3, 1], ws.Cells[3, tbl.Columns.Count]];
+                    Excel.Range Range3 = ws.Range[ws.Cells[LastSystemRowIndex, 1], ws.Cells[LastSystemRowIndex, tbl.Columns.Count]];
                     Range3.WrapText = true;
                     Range3.RowHeight = rowHeight;
                     Range3.ColumnWidth = colWidth;
 
-                    Range3 = ws.Range[ws.Cells[3, 1], ws.Cells[3, 1]];
-                    Range3.ColumnWidth = colNum; 
+                    Range3 = ws.Range[ws.Cells[LastSystemRowIndex, 1], ws.Cells[LastSystemRowIndex, 1]];
+                    Range3.ColumnWidth = colNum;
 
+                    Range3 = ws.Range[ws.Cells[LastSystemRowIndex, 2], ws.Cells[LastSystemRowIndex, 2]];
+                    Range3.ColumnWidth = colNum;
 
-                    Range3 = ws.Range[ws.Cells[3, 2], ws.Cells[3, 2]];
+                    Range3 = ws.Range[ws.Cells[LastSystemRowIndex, 3], ws.Cells[LastSystemRowIndex, 3]];
                     Range3.ColumnWidth = colFIOWidth;
 
-                    Range3 = ws.Range[ws.Cells[1, 1], ws.Cells[tbl.Rows.Count, 2]];
+                    Range3 = ws.Range[ws.Cells[1, 1], ws.Cells[tbl.Rows.Count, 3]];
                     Range3.HorizontalAlignment = Excel.XlHAlign.xlHAlignLeft;
 
                     Range3 = ws.Range[ws.Cells[1, 3], ws.Cells[tbl.Rows.Count, tbl.Columns.Count]];
                     Range3.HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter;
-                    Range3.NumberFormat = "General"; 
+                    Range3.NumberFormat = "General";
 
 
-                    for (int rowindex = 2; rowindex < tbl.Rows.Count; rowindex++ )
+                    for (int rowindex = LastSystemRowIndex; rowindex < tbl.Rows.Count; rowindex++)
                     //foreach (DataRow dr in tbl.Rows)
                     {
                         DataRow dr = tbl.Rows[rowindex];
                         j = 1;
                         for (int colindex = 0; colindex<tbl.Columns.Count; colindex++)
-                        //foreach (DataColumn dc in tbl.Columns)
                         {
                             DataColumn dc = tbl.Columns[colindex];
                             ws.Cells[i, j] = dr[dc.ColumnName] == null ? "" : dr[dc.ColumnName].ToString();
@@ -790,33 +685,6 @@ namespace Priem
             sfd.Dispose();
         }
 
-        private void rbColor_CheckedChanged(object sender, EventArgs e)
-        {
-            RadioButton rb = sender as RadioButton; 
-            if (rb == null)
-            {
-                MessageBox.Show("Sender is not a RadioButton");
-                return;
-            }
-            if (rb == this.rbNoColor)
-            {
-                BrushText = DefaultBrushNoColorText;
-                BrushBackGroundLP = DefaultBrushNoColorBackGround;
-                BrushBackGroundOP = DefaultBrushNoColorBackGround;
-                BrushBackGroundOPP = DefaultColorNoColorBackGround;
-                BrushBackGroundProf = DefaultColorNoColorBackGround;
-            }
-            else
-                if (rb == this.rbWithColor)
-                {
-                    BrushText = DefaultBrushWithColorText;
-                    BrushBackGroundLP = DefaultBrushWithColorBackGroundLicenseProgram;
-                    BrushBackGroundOP = DefaultBrushWithColorBackGroundObrazProgram;
-                    BrushBackGroundOPP = DefaultBrushWithColorBackGroundObrazProgramPrior;
-                    BrushBackGroundProf = DefaultBrushWithColorBackGroundProfile;
-                }
-        }
-
         private void rbWithColor_Click(object sender, EventArgs e)
         {
         }
@@ -825,21 +693,21 @@ namespace Priem
         {
         }
 
-        private void cbNoPriority_CheckStateChanged(object sender, EventArgs e)
+        private void cbNoPriority_CheckedChanged(object sender, EventArgs e)
         {
-            if (dgvAbitList.Rows.Count > 3)
+            if (dgvAbitList.Rows.Count > LastSystemRowIndex)
             {
                 if (cbNoPriority.Checked)
                 {
                     foreach (DataGridViewRow rw in dgvAbitList.Rows)
                     {
-                        if (dgvAbitList.Rows.IndexOf(rw) < 3)
+                        if (dgvAbitList.Rows.IndexOf(rw) < LastSystemRowIndex)
                             continue;
                         foreach (DataGridViewCell cell in rw.Cells)
                         {
                             if (cell.ColumnIndex < 2)
                                 continue;
-                            if (cell.Value.ToString().Equals("нет"))
+                            if (cell.Value.ToString().Contains("нет"))
                             {
                                 rw.DefaultCellStyle.BackColor = Color.Red;
                                 break;
@@ -851,7 +719,7 @@ namespace Priem
                 {
                     foreach (DataGridViewRow rw in dgvAbitList.Rows)
                     {
-                        if (dgvAbitList.Rows.IndexOf(rw) < 3)
+                        if (dgvAbitList.Rows.IndexOf(rw) < LastSystemRowIndex)
                             continue;
                         rw.DefaultCellStyle.BackColor = Color.White;
                     }

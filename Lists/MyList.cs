@@ -438,7 +438,7 @@ namespace Priem
             inner join ed.extEntry on Abiturient.EntryId = extEntry.Id
             " + ((cbZeroWave.Checked) ? "inner join ed.extEntryView on extEntryView.AbiturientId = Abiturient.Id" : "") + 
             @"
-            where Abiturient.EntryId=@EntryId and Abiturient.BackDoc = 0  and Abiturient.IsGosLine=0 
+            where Abiturient.EntryId=@EntryId and Abiturient.BackDoc = 0  and Abiturient.IsForeign=0 
             and Abiturient.CompetitionId NOT IN (12,11)
             --order by extAbitMarksSum.TotalSum desc
              order by  " + Wave + @".SortNum 

@@ -46,20 +46,21 @@
             this.tbFIO = new System.Windows.Forms.TextBox();
             this.btnToExcel = new System.Windows.Forms.Button();
             this.btnRePaint = new System.Windows.Forms.Button();
-            this.rbNoColor = new System.Windows.Forms.RadioButton();
-            this.rbWithColor = new System.Windows.Forms.RadioButton();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.tbAbitsTop = new System.Windows.Forms.TextBox();
             this.rbAbitsTop = new System.Windows.Forms.RadioButton();
             this.rbAbitsAll = new System.Windows.Forms.RadioButton();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.cbNoPriority = new System.Windows.Forms.CheckBox();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.rbIsCrimea = new System.Windows.Forms.RadioButton();
+            this.rbIsForeign = new System.Windows.Forms.RadioButton();
+            this.rbIsCommon = new System.Windows.Forms.RadioButton();
             ((System.ComponentModel.ISupportInitialize)(this.dgvAbitList)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
-            this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
+            this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // lblCount
@@ -81,7 +82,7 @@
             // 
             // btnClose
             // 
-            this.btnClose.Location = new System.Drawing.Point(801, 577);
+            this.btnClose.Location = new System.Drawing.Point(848, 577);
             // 
             // cbFaculty
             // 
@@ -181,7 +182,7 @@
             this.dgvAbitList.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvAbitList.Location = new System.Drawing.Point(12, 168);
             this.dgvAbitList.Name = "dgvAbitList";
-            this.dgvAbitList.Size = new System.Drawing.Size(864, 403);
+            this.dgvAbitList.Size = new System.Drawing.Size(911, 403);
             this.dgvAbitList.TabIndex = 10;
             this.dgvAbitList.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvAbitList_CellDoubleClick);
             this.dgvAbitList.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.dgvAbitList_CellFormatting);
@@ -228,7 +229,7 @@
             // btnToExcel
             // 
             this.btnToExcel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnToExcel.Location = new System.Drawing.Point(720, 577);
+            this.btnToExcel.Location = new System.Drawing.Point(767, 577);
             this.btnToExcel.Name = "btnToExcel";
             this.btnToExcel.Size = new System.Drawing.Size(75, 23);
             this.btnToExcel.TabIndex = 61;
@@ -245,43 +246,6 @@
             this.btnRePaint.Text = "Обновить данные";
             this.btnRePaint.UseVisualStyleBackColor = true;
             this.btnRePaint.Click += new System.EventHandler(this.btnRePaint_Click);
-            // 
-            // rbNoColor
-            // 
-            this.rbNoColor.AutoSize = true;
-            this.rbNoColor.Checked = true;
-            this.rbNoColor.Location = new System.Drawing.Point(6, 13);
-            this.rbNoColor.Name = "rbNoColor";
-            this.rbNoColor.Size = new System.Drawing.Size(119, 17);
-            this.rbNoColor.TabIndex = 63;
-            this.rbNoColor.TabStop = true;
-            this.rbNoColor.Text = "Бесцветная схема";
-            this.rbNoColor.UseVisualStyleBackColor = true;
-            this.rbNoColor.CheckedChanged += new System.EventHandler(this.rbColor_CheckedChanged);
-            // 
-            // rbWithColor
-            // 
-            this.rbWithColor.AutoSize = true;
-            this.rbWithColor.Location = new System.Drawing.Point(6, 31);
-            this.rbWithColor.Name = "rbWithColor";
-            this.rbWithColor.Size = new System.Drawing.Size(169, 17);
-            this.rbWithColor.TabIndex = 64;
-            this.rbWithColor.Text = "Установить цветовую схему";
-            this.rbWithColor.UseVisualStyleBackColor = true;
-            this.rbWithColor.CheckedChanged += new System.EventHandler(this.rbColor_CheckedChanged);
-            this.rbWithColor.Click += new System.EventHandler(this.rbWithColor_Click);
-            // 
-            // groupBox1
-            // 
-            this.groupBox1.Controls.Add(this.rbWithColor);
-            this.groupBox1.Controls.Add(this.rbNoColor);
-            this.groupBox1.Location = new System.Drawing.Point(605, 546);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(177, 54);
-            this.groupBox1.TabIndex = 65;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Цветовая схема";
-            this.groupBox1.Visible = false;
             // 
             // groupBox2
             // 
@@ -343,16 +307,60 @@
             this.cbNoPriority.TabIndex = 0;
             this.cbNoPriority.Text = "Выделять";
             this.cbNoPriority.UseVisualStyleBackColor = true;
-            this.cbNoPriority.CheckStateChanged += new System.EventHandler(this.cbNoPriority_CheckStateChanged);
+            this.cbNoPriority.CheckedChanged += new System.EventHandler(this.cbNoPriority_CheckedChanged);
+            // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.rbIsCrimea);
+            this.groupBox1.Controls.Add(this.rbIsForeign);
+            this.groupBox1.Controls.Add(this.rbIsCommon);
+            this.groupBox1.Location = new System.Drawing.Point(805, 12);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(118, 142);
+            this.groupBox1.TabIndex = 68;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Конкурс";
+            // 
+            // rbIsCrimea
+            // 
+            this.rbIsCrimea.AutoSize = true;
+            this.rbIsCrimea.Location = new System.Drawing.Point(6, 63);
+            this.rbIsCrimea.Name = "rbIsCrimea";
+            this.rbIsCrimea.Size = new System.Drawing.Size(54, 17);
+            this.rbIsCrimea.TabIndex = 2;
+            this.rbIsCrimea.Text = "Крым";
+            this.rbIsCrimea.UseVisualStyleBackColor = true;
+            // 
+            // rbIsForeign
+            // 
+            this.rbIsForeign.AutoSize = true;
+            this.rbIsForeign.Location = new System.Drawing.Point(6, 40);
+            this.rbIsForeign.Name = "rbIsForeign";
+            this.rbIsForeign.Size = new System.Drawing.Size(65, 17);
+            this.rbIsForeign.TabIndex = 1;
+            this.rbIsForeign.Text = "Иностр.";
+            this.rbIsForeign.UseVisualStyleBackColor = true;
+            // 
+            // rbIsCommon
+            // 
+            this.rbIsCommon.AutoSize = true;
+            this.rbIsCommon.Checked = true;
+            this.rbIsCommon.Location = new System.Drawing.Point(6, 17);
+            this.rbIsCommon.Name = "rbIsCommon";
+            this.rbIsCommon.Size = new System.Drawing.Size(60, 17);
+            this.rbIsCommon.TabIndex = 0;
+            this.rbIsCommon.TabStop = true;
+            this.rbIsCommon.Text = "Общий";
+            this.rbIsCommon.UseVisualStyleBackColor = true;
             // 
             // ListAbitWithInnerPriorities
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(888, 603);
+            this.ClientSize = new System.Drawing.Size(935, 603);
+            this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox2);
-            this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.btnRePaint);
             this.Controls.Add(this.btnToExcel);
             this.Controls.Add(this.pictureBox1);
@@ -394,17 +402,17 @@
             this.Controls.SetChildIndex(this.btnRemove, 0);
             this.Controls.SetChildIndex(this.btnToExcel, 0);
             this.Controls.SetChildIndex(this.btnRePaint, 0);
-            this.Controls.SetChildIndex(this.groupBox1, 0);
             this.Controls.SetChildIndex(this.groupBox2, 0);
             this.Controls.SetChildIndex(this.groupBox3, 0);
+            this.Controls.SetChildIndex(this.groupBox1, 0);
             ((System.ComponentModel.ISupportInitialize)(this.dgvAbitList)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
-            this.groupBox1.ResumeLayout(false);
-            this.groupBox1.PerformLayout();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -429,14 +437,15 @@
         private System.Windows.Forms.TextBox tbFIO;
         private System.Windows.Forms.Button btnToExcel;
         private System.Windows.Forms.Button btnRePaint;
-        private System.Windows.Forms.RadioButton rbNoColor;
-        private System.Windows.Forms.RadioButton rbWithColor;
-        private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.RadioButton rbAbitsTop;
         private System.Windows.Forms.RadioButton rbAbitsAll;
         private System.Windows.Forms.TextBox tbAbitsTop;
         private System.Windows.Forms.GroupBox groupBox3;
         private System.Windows.Forms.CheckBox cbNoPriority;
+        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.RadioButton rbIsCrimea;
+        private System.Windows.Forms.RadioButton rbIsForeign;
+        private System.Windows.Forms.RadioButton rbIsCommon;
     }
 }

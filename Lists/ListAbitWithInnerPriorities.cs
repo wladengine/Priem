@@ -327,7 +327,7 @@ namespace Priem
 
                 var Abits = (from abit in context.extAbit
                              join entry in context.qEntry on abit.EntryId equals entry.Id
-                             join pers in context.Person on abit.PersonId equals pers.Id
+                             join pers in context.extPerson on abit.PersonId equals pers.Id
 
                              join in_en in context.InnerEntryInEntry on abit.EntryId equals in_en.EntryId into gjj
                              from inner_entry in gjj.DefaultIfEmpty()
@@ -352,12 +352,13 @@ namespace Priem
                                  abit.EntryId,
                                  abit.Priority,
                                  pers.Barcode,
+                                 pers.PersonNum,
                                  InnerEntryInEntryId = (inner_entry == null ? Guid.Empty : inner_entry.Id),
                                  InnerPrior = (app_inner_entry_prior == null ? -1 : app_inner_entry_prior.InnerEntryInEntryPriority),
                              }).ToList();
                 int i = 1;
                 List<int?> AbitList = Abits.Select(x => x.Barcode).Distinct().ToList();
-                wc.SetText("Получение данных по абитуриентам...0/"+AbitList.Count.ToString());
+                wc.SetText("Получение данных по абитуриентам...0/" + AbitList.Count.ToString());
                 wc.SetMax(AbitList.Count);
                 foreach (var barcode in AbitList)
                 {
@@ -365,7 +366,7 @@ namespace Priem
                     rw["Id"] = Abits.Where(x => x.Barcode == barcode).Select(x => x.PersonId).First();
                     rw["Number"] = i.ToString(); 
                     rw["ФИО"] = Abits.Where(x => x.Barcode == barcode).Select(x => x.FIO).First().ToString();
-                    rw["PersonNum"] = barcode.ToString();
+                    rw["PersonNum"] = Abits.Where(x => x.Barcode == barcode).Select(x => x.PersonNum).First().ToString();
                     var Apps = Abits.Where(x => x.Barcode == barcode).Select(x => x).ToList();
                     foreach (var app in Apps)
                     {

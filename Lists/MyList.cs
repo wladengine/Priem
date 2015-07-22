@@ -438,7 +438,7 @@ namespace Priem
             inner join ed.extEntry on Abiturient.EntryId = extEntry.Id
             " + ((cbZeroWave.Checked) ? "inner join ed.extEntryView on extEntryView.AbiturientId = Abiturient.Id" : "") + 
             @"
-            where Abiturient.EntryId=@EntryId and Abiturient.BackDoc = 0  and Abiturient.IsForeign=0 
+            where Abiturient.EntryId=@EntryId and Abiturient.BackDoc = 0
             and Abiturient.CompetitionId NOT IN (12,11)
             --order by extAbitMarksSum.TotalSum desc
              order by  " + Wave + @".SortNum 
@@ -470,11 +470,11 @@ namespace Priem
                               where ApplicationDetails.ApplicationId='" + _AbitId.ToString() + "' and InnerEntryInEntryId='" + _innerentryId + "'";
                         DataSet dsobrprog = MainClass.Bdc.GetDataSet(query_obrazProgram);
                         if (dsobrprog.Tables[0].Rows.Count > 0)
-                            _innerprior = dsobrprog.Tables[0].Rows[0].Field<int?>("ObrazProgramInEntryPriority") ?? 0;
+                            _innerprior = dsobrprog.Tables[0].Rows[0].Field<int?>("InnerEntryInEntryPriority") ?? 0;
 
                     }
                     String Temp_String = _Priority.ToString() + "_" + _innerprior.ToString() + "_" + _PersonId.ToString();
-                    Temp_String += "_" + rw.Field<int?>("TotalSum").ToString();
+                    Temp_String += "_" + rw.Field<decimal?>("TotalSum").ToString();
                     if (j < RowList.Count)
                     {
                         DataRow rowTable = RowList[j];
@@ -540,17 +540,12 @@ namespace Priem
             if (StudyBasisId != null)
                 s += " AND ed.extEntry.StudyBasisId = " + StudyBasisId;
 
-            //обработали факультет
-            /*
-            if (FacultyId != null)
-                s += " AND ed.extEntry.FacultyId = " + FacultyId;
-            */
-
-            //обработали Направление
-            /*
-            if (LicenseProgramId != null)
-                s += " AND ed.extEntry.LicenseProgramId = " + LicenseProgramId;
-            */
+            if (rbCommon.Checked)
+                s += " and ed.extentry.IsForeign = 0 and extentry.isCrimea= 0 ";
+            else if (rbForeign.Checked)
+                s += " and ed.extentry.IsForeign = 1 and extentry.isCrimea= 0 ";
+            else if (rbCrimea.Checked)
+                s += " and ed.extentry.IsForeign = 0 and extentry.isCrimea= 1 ";
             return s;
         }
         private void btnFillGrid_Click(object sender, EventArgs e)

@@ -56,6 +56,7 @@
             this.rbIsCrimea = new System.Windows.Forms.RadioButton();
             this.rbIsForeign = new System.Windows.Forms.RadioButton();
             this.rbIsCommon = new System.Windows.Forms.RadioButton();
+            this.chbWithOriginals = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.dgvAbitList)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.groupBox2.SuspendLayout();
@@ -311,12 +312,13 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.chbWithOriginals);
             this.groupBox1.Controls.Add(this.rbIsCrimea);
             this.groupBox1.Controls.Add(this.rbIsForeign);
             this.groupBox1.Controls.Add(this.rbIsCommon);
             this.groupBox1.Location = new System.Drawing.Point(805, 12);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(118, 142);
+            this.groupBox1.Size = new System.Drawing.Size(118, 144);
             this.groupBox1.TabIndex = 68;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Конкурс";
@@ -352,6 +354,16 @@
             this.rbIsCommon.TabStop = true;
             this.rbIsCommon.Text = "Общий";
             this.rbIsCommon.UseVisualStyleBackColor = true;
+            // 
+            // chbWithOriginals
+            // 
+            this.chbWithOriginals.Location = new System.Drawing.Point(6, 93);
+            this.chbWithOriginals.Name = "chbWithOriginals";
+            this.chbWithOriginals.Size = new System.Drawing.Size(104, 45);
+            this.chbWithOriginals.TabIndex = 3;
+            this.chbWithOriginals.Text = "Только абитуруенты с оригиналами";
+            this.chbWithOriginals.UseVisualStyleBackColor = true;
+            this.chbWithOriginals.CheckedChanged += new System.EventHandler(this.chbWithOriginals_CheckedChanged);
             // 
             // ListAbitWithInnerPriorities
             // 
@@ -447,5 +459,6 @@
         private System.Windows.Forms.RadioButton rbIsCrimea;
         private System.Windows.Forms.RadioButton rbIsForeign;
         private System.Windows.Forms.RadioButton rbIsCommon;
+        private System.Windows.Forms.CheckBox chbWithOriginals;
     }
 }

@@ -211,6 +211,10 @@ namespace Priem
                 clm.ColumnName = "ФИО";
                 examTable.Columns.Add(clm);
 
+                clm = new DataColumn();
+                clm.ColumnName = "Оригиналы";
+                examTable.Columns.Add(clm);
+
                 NewWatch wc = new NewWatch();
                 wc.Show();
                 wc.SetText("Получение данных по учебным планам...");
@@ -319,6 +323,10 @@ namespace Priem
                         }
                     }
                 }
+                row_Profile["Number"] = "№";
+                row_Profile["PersonNum"] = "ИД";
+                row_Profile["ФИО"] = "ФИО";
+                row_Profile["Оригиналы"] = "Оригиналы";
                 examTable.Rows.Add(row_LicProg);
                 examTable.Rows.Add(row_ObrazProg);
                 examTable.Rows.Add(row_Profile);
@@ -353,6 +361,7 @@ namespace Priem
                                  abit.Priority,
                                  pers.Barcode,
                                  pers.PersonNum,
+                                 pers.HasOriginals,
                                  InnerEntryInEntryId = (inner_entry == null ? Guid.Empty : inner_entry.Id),
                                  InnerPrior = (app_inner_entry_prior == null ? -1 : app_inner_entry_prior.InnerEntryInEntryPriority),
                              }).ToList();
@@ -367,6 +376,7 @@ namespace Priem
                     rw["Number"] = i.ToString(); 
                     rw["ФИО"] = Abits.Where(x => x.Barcode == barcode).Select(x => x.FIO).First().ToString();
                     rw["PersonNum"] = Abits.Where(x => x.Barcode == barcode).Select(x => x.PersonNum).First().ToString();
+                    rw["Оригиналы"] = Abits.Where(x => x.Barcode == barcode).Select(x => x.HasOriginals).First().Value ? "да" : "нет";
                     var Apps = Abits.Where(x => x.Barcode == barcode).Select(x => x).ToList();
                     foreach (var app in Apps)
                     {
@@ -388,6 +398,8 @@ namespace Priem
                 dgvAbitList.DataSource = dv;
                 dgvAbitList.Columns["Id"].Visible = false;
                 wc.Close();
+                if (chbWithOriginals.Checked)
+                    SetVisibleRows();
                 dgvAbitList.Update();
 
                 dgvAbitList.ColumnHeadersVisible = false;
@@ -400,13 +412,18 @@ namespace Priem
                 dgvAbitList.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
                 dgvAbitList.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
 
-                int indexColumnId = dgvAbitList.Columns["ФИО"].Index;
-                if (indexColumnId >= 0)
+                string[] ColumnsName = { "ФИО", "Number", "PersonNum" ,"Оригиналы"};
+                foreach (string s in ColumnsName)
                 {
-                    dgvAbitList.Columns[indexColumnId].DefaultCellStyle.WrapMode = DataGridViewTriState.False;
-                    dgvAbitList.Columns[indexColumnId].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft;
-                    dgvAbitList.Columns[indexColumnId].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+                    int indexColumnId = dgvAbitList.Columns[s].Index;
+                    if (indexColumnId >= 0)
+                    {
+                        dgvAbitList.Columns[indexColumnId].DefaultCellStyle.WrapMode = DataGridViewTriState.False;
+                        dgvAbitList.Columns[indexColumnId].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft;
+                        dgvAbitList.Columns[indexColumnId].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+                    }
                 }
+                
             }
         }
         protected override void OpenCard(string itemId, BaseFormEx formOwner, int? index)
@@ -531,9 +548,8 @@ namespace Priem
         private void btnRePaint_Click(object sender, EventArgs e)
         {
             FillGrid();
-
-            lblCount.Text = "Всего: " + (Dgv.Rows.Count-3).ToString();
-            btnCard.Enabled = !(Dgv.RowCount == 0);
+            lblCount.Text = "Всего: " + (from DataGridViewRow rw in dgvAbitList.Rows where rw.Index >= LastSystemRowIndex && rw.Visible select rw).Count().ToString();
+            btnCard.Enabled = (Dgv.RowCount > LastSystemRowIndex);
         }
 
         private void PrintToExcel(DataTable tbl, string sheetName)
@@ -723,6 +739,25 @@ namespace Priem
                     }
                 }
             }
+        }
+
+        private void chbWithOriginals_CheckedChanged(object sender, EventArgs e)
+        {
+            SetVisibleRows();
+        }
+        private void SetVisibleRows()
+        {
+            int Num = 1;
+            for (int i = LastSystemRowIndex; i < dgvAbitList.Rows.Count; i++)
+            {
+                bool isVis = !chbWithOriginals.Checked || (dgvAbitList.Rows[i].Cells["Оригиналы"].Value.ToString() == "да");
+                dgvAbitList.Rows[i].Visible = isVis;
+                if (isVis)
+                    dgvAbitList.Rows[i].Cells["Number"].Value = (Num++).ToString();
+            }
+            lblCount.Text = "Всего: " + (from DataGridViewRow rw in dgvAbitList.Rows where rw.Index >= LastSystemRowIndex && rw.Visible select rw).Count().ToString();
+            btnCard.Enabled = (Num > 1);
+
         }
 
     }

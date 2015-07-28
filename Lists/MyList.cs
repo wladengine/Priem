@@ -236,131 +236,7 @@ namespace Priem
 
                 row_Ege[index] = (!String.IsNullOrEmpty(rw.Field<int?>("EgeExamNameId").ToString())) ? rw.Field<int?>("EgeExamNameId") + "_" + rw.Field<string>("EgeName") + "(" + rw.Field<int?>("EgeMin") + ")" : "";
             }
-
-
-            /*
-            ///// Поиск по Направлениям в extEntry
-            string query = @"Select distinct extEntry.LicenseProgramId, extEntry.FacultyId, extEntry.LicenseProgramName, extEntry.StudyBasisId, extEntry.StudyFormId
-                                from ed.extEntry " + abitFilters + " order by StudyFormId, StudyBasisId, LicenseProgramName ";
-            DataTable tbl = MainClass.Bdc.GetDataSet(query).Tables[0];
-            string index = "";
-            int cnt = 1;
-            foreach (DataRow rwEntry in tbl.Rows)
-            {
-                wc.SetText("Получение данных по учебным планам... (Обработано конкурсов: " + (cnt++).ToString() + "/" + tbl.Rows.Count + ")");
-                ///// Поиск ОБРАЗОВАТЕЛЬНЫХ ПРОГРАММ 
-                query = @"Select distinct extEntry.ObrazProgramId, extEntry.ObrazProgramName
-                                from ed.extEntry " + abitFilters + 
-                               " and LicenseProgramId=" + rwEntry.Field<int>("LicenseProgramId").ToString() + 
-                               " and StudyBasisId=" + rwEntry.Field<int>("StudyBasisId").ToString() +
-                               " and StudyFormId=" + rwEntry.Field<int>("StudyFormId").ToString() + 
-                               " and IsSecond = 0";
-                DataTable tbl_LicProg = MainClass.Bdc.GetDataSet(query).Tables[0];
-
-                foreach (DataRow rw_licProg in tbl_LicProg.Rows)
-                {
-                    
-                    ///// ДЛЯ КАЖДОЙ ОБРАЗОВАТЕЛЬНОЙ ПРОГРАММЫ ПОИСК ПРОФИЛЕЙ:
-                    query = @"select distinct extEntry.Id, FacultyId, KCP, ProfileId, ProfileName 
-                              from ed.extEntry" + abitFilters + 
-                            " and LicenseProgramId=" + rwEntry.Field<int>("LicenseProgramId").ToString() +
-                            " and ObrazProgramId=" + rw_licProg.Field<int>("ObrazProgramId").ToString() + 
-                            " and ProfileId is not null and StudyBasisId=" + rwEntry.Field<int>("StudyBasisId").ToString() +
-                            " and StudyFormId=" + rwEntry.Field<int>("StudyFormId").ToString() + 
-                            " and IsSecond = 0";
-                    DataTable tbl_ObrProgramProfile = MainClass.Bdc.GetDataSet(query).Tables[0];
-                    /////  ЕСЛИ ЕСТЬ НЕНУЛЕВЫЕ ПРОФИЛИ (ПРОБЛЕМА С ИД СТОЛБЦА)
-                    /////  НЕ ДОЛЖНО БЫТЬ ЗАГОЛОВКА СЛОБЦА, СТОЛБЕЦ = (НАПР/ОБРПРОГ/ПРОФ)
-                    if (tbl_ObrProgramProfile.Rows.Count > 0)
-                    {
-                        foreach (DataRow row_profile in tbl_ObrProgramProfile.Rows)
-                        {
-                            clm = new DataColumn();
-                            index = Guid.NewGuid().ToString();//rwEntry.Field<int>("StudyFormId").ToString() + "_" + rwEntry.Field<int>("StudyBasisId").ToString() + "_" + rwEntry.Field<int>("LicenseProgramId").ToString() + "_" + rw_licProg.Field<int>("ObrazProgramId").ToString() + "_" + row_profile.Field<int>("ProfileId").ToString();
-                            clm.ColumnName = index;
-                            examTable.Columns.Add(clm);
-                            row_FacultyId[index] = rwEntry.Field<int>("FacultyId");
-                            row_LicProg[index] = rwEntry.Field<string>("LicenseProgramName");
-                            row_ObrazProg[index] = rw_licProg.Field<string>("ObrazProgramName") ;
-                            row_Profile[index] = row_profile.Field<string>("ProfileName");
-                            row_EntryId[index] = row_profile.Field<Guid>("Id");
-                            row_InnerObrazProg[index] = "";
-                            row_InnerEntryInEntryId[index] = "";
-                            row_StudyForm[index] = (rwEntry.Field<int>("StudyFormId") == 1) ? "Очная" : "Очно-заочная";
-                            row_StudyBasis[index] = (rwEntry.Field<int>("StudyBasisId") == 1) ? "Бюджетная" : "Договорная";
-                            row_KCP[index] = row_profile.Field<int>("KCP");
-                        }
-                    }
-                    /////  НЕНУЛЕВЫХ ПРОФИЛЕЙ НЕТ (ВОЗМОЖНО ЕСТЬ OBRAZ_PROGRAM_IN_ENTRY) 
-                    else
-                    {
-                        //// нужно получить EntryId 
-                        query = @"select distinct extEntry.Id, KCP 
-                                  from ed.extEntry" + abitFilters + " and LicenseProgramId=" + rwEntry.Field<int>("LicenseProgramId").ToString() +
-                                  " and ObrazProgramId=" + rw_licProg.Field<int>("ObrazProgramId").ToString() + 
-                                  " and StudyBasisId=" + rwEntry.Field<int>("StudyBasisId").ToString() +
-                                  " and StudyFormId=" + rwEntry.Field<int>("StudyFormId").ToString() + 
-                                  " and IsSecond = 0";
-                        DataSet ds = MainClass.Bdc.GetDataSet(query);
-                        Guid EntryId = ds.Tables[0].Rows[0].Field<Guid>("Id");
-                        int _KCP = ds.Tables[0].Rows[0].Field<int>("KCP");
-
-                        /// поиск по EntryId В ОБРАЗОВАТЕЛЬНЫХ ПРОГРАММАХ
-                        query = @"SELECT distinct InnerEntryInEntry.[Id] as Id, 
-                                SP_ObrazProgram.Name as Name, SP_ObrazProgram.Id as ObrazProgramId, 
-                                SP_Profile.Name as ProfileName,  ProfileId
-                                KCP,
-                                InnerEntryInEntry.EgeExamNameId , InnerEntryInEntry.EgeMin, EgeExamName.Name as EgeName, FacultyId
-                                FROM [ed].[InnerEntryInEntry] 
-                                inner join ed.SP_ObrazProgram on InnerEntryInEntry.ObrazProgramId = SP_ObrazProgram.Id
-                                inner join ed.SP_Profile on SP_Profile.Id= ProfileId
-                                left join ed.EgeExamName on EgeExamName.Id = InnerEntryInEntry.EgeExamNameId
-                                where EntryId ='" + EntryId + @"'
-                                order by ObrazProgramId";
-                        DataTable tbl_ObrProgram = MainClass.Bdc.GetDataSet(query).Tables[0];
-                        ///// приоритетов образ.программ нет
-                        if (tbl_ObrProgram.Rows.Count == 0)
-                        {
-                            index = Guid.NewGuid().ToString();//rwEntry.Field<int>("StudyFormId").ToString() + "_" + rwEntry.Field<int>("StudyBasisId").ToString() + "_" + rwEntry.Field<int>("LicenseProgramId").ToString() + "_" + rw_licProg.Field<int>("ObrazProgramId").ToString() + "_0";
-                            clm = new DataColumn();
-                            clm.ColumnName = index;
-                            examTable.Columns.Add(clm);
-                            row_FacultyId[index] = rwEntry.Field<int>("FacultyId");
-                            row_LicProg[index] = rwEntry.Field<string>("LicenseProgramName");
-                            row_ObrazProg[index] = rw_licProg.Field<String>("ObrazProgramName");
-                            row_Profile[index] = 
-                            row_EntryId[index] = EntryId.ToString();
-                            row_StudyForm[index] = (rwEntry.Field<int>("StudyFormId") == 1) ? "Очная" : "Очно-заочная";
-                            row_StudyBasis[index] = (rwEntry.Field<int>("StudyBasisId") == 1) ? "Бюджетная" : "Договорная";
-                            row_InnerEntryInEntryId[index] = "";
-                            //
-                            row_KCP[index] = _KCP;
-                        }
-                        else
-                        {
-                            ///// ПРИОРИТЕТЫ ОБРАЗ.ПРОГРАММ есть
-                            foreach (DataRow rw_ObProg in tbl_ObrProgram.Rows)
-                            {
-                                clm = new DataColumn();
-                                index = Guid.NewGuid().ToString();//rwEntry.Field<int>("StudyFormId").ToString() + "_" + rwEntry.Field<int>("StudyBasisId").ToString() + "_" + rwEntry.Field<int>("LicenseProgramId").ToString() + "_" + rw_ObProg.Field<int>("ObrazProgramId").ToString() + "_0";
-                                clm.ColumnName = index;
-                                examTable.Columns.Add(clm);
-                                row_FacultyId[index] = rwEntry.Field<int>("FacultyId");
-                                row_ObrazProg[index] = rw_ObProg.Field<String>("Name");
-                                row_LicProg[index] = rwEntry.Field<string>("LicenseProgramName");
-                                row_EntryId[index] = EntryId;
-                                row_StudyForm[index] = (rwEntry.Field<int>("StudyFormId") == 1) ? "Очная" : "Очно-заочная";
-                                row_StudyBasis[index] = (rwEntry.Field<int>("StudyBasisId") == 1) ? "Бюджетная" : "Договорная";
-                                row_InnerEntryInEntryId[index] = rw_ObProg.Field<Guid>("Id").ToString();
-                                row_Ege[index] = (!String.IsNullOrEmpty(rw_ObProg.Field<int?>("EgeExamNameId").ToString())) ? rw_ObProg.Field<int?>("EgeExamNameId") + "_" + rw_ObProg.Field<string>("EgeName") + "(" + rw_ObProg.Field<int?>("EgeMin") + ")" : "";
-                                row_KCP[index] = rw_ObProg.Field<int>("KCP");
-                            }
-                        }
-                    }
-                }
-                // ЗАКОНЧИЛСЯ ПОИСК ВНУТРИ ОБРАЗОВАТЕЛЬНОЙ ПРОГРАММЫ
-            }
-            */ 
+             
             wc.SetText("Пересчет контрольных цифр приема...(0/" + (examTable.Columns.Count - 1).ToString() + ")");
             for (int i = 1; i < examTable.Columns.Count; i++)
             {
@@ -430,7 +306,7 @@ namespace Priem
             string Wave = "_FirstWave";
             if (cbZeroWave.Checked)
                 Wave = "_ZeroWave";
-            query = @"select " + toplist + @" Abiturient.Id, extPerson.PersonNum, Abiturient.PersonId, Abiturient.Priority, extAbitMarksSum.TotalSum, extPerson.FIO as FIO
+            query = @"select " + toplist + @" Abiturient.Id, extPerson.PersonNum, extPerson.HasOriginals, Abiturient.PersonId, Abiturient.Priority, extAbitMarksSum.TotalSum, extPerson.FIO as FIO
             from ed.Abiturient
             inner join ed.extPerson on Abiturient.PersonId = extPerson.Id
             left join ed.extAbitMarksSum on extAbitMarksSum.Id = Abiturient.Id
@@ -455,6 +331,7 @@ namespace Priem
                 {
                     Guid _AbitId = rw.Field<Guid>("Id");
                     Guid _PersonId = rw.Field<Guid>("PersonId");
+                    bool HasOriginals = rw.Field<bool>("HasOriginals");
                     string FIO = rw.Field<string>("PersonNum") + "_" + rw.Field<string>("FIO");
                     if (!PersonList.Contains(_PersonId))
                     {

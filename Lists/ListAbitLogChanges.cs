@@ -215,6 +215,11 @@ namespace Priem
                 if (iStudyBasisId.HasValue)
                     data = data.Where(x => x.StudyBasisId == iStudyBasisId);
 
+                DateTime dtFrom = dtpDateFrom.Value.Date;
+                data = data.Where(x => x.ActionTime >= dtFrom);
+                DateTime dtTo = dtpDateTo.Value.Date.AddDays(1).AddSeconds(-1);
+                data = data.Where(x => x.ActionTime < dtTo);
+
                 var _data = data.Select(x => new
                     {
                         x.Id,

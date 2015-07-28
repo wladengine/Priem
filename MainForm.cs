@@ -79,7 +79,12 @@ namespace Priem
                     MainClass.dbType = PriemType.Priem;
                     MainClass.IsTestDB = false;
                     break;
-                
+                case "priemsecond":
+                    _titleString = " на первый курс (новые правила)";
+                    MainClass.dbType = PriemType.Priem;
+                    MainClass.connString = DBConstants.CS_PRIEM_SECOND;
+                    MainClass.IsTestDB = false;
+                    break;
                 case "priemmag":
                     _titleString = " в магистратуру";
                     MainClass.dbType = PriemType.PriemMag;
@@ -838,6 +843,11 @@ namespace Priem
         }
 
         private void smiCountries_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void smiLoadExamsResultsToParentExamTool_Click(object sender, EventArgs e)
         {
 
         }

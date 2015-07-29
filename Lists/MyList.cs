@@ -533,12 +533,17 @@ namespace Priem
         private void PaintGrid()
         {
             if (MainClass.dbType == PriemType.Priem)
-                PaintGrid1kurs();
+            {
+                if (Check())
+                    PaintGrid1kurs();
+            }
             else
                 PaintGridMag();
         }
         private void PaintGrid1kurs()
         {
+            int proc = int.Parse(tbDinamicWave.Text);
+            double DinamicWave = 1.0 * proc / 100;
             for (int colindex = 1 + 1; colindex < dgvAbitList.Columns.Count; colindex += 2)
             {
                 if (String.IsNullOrEmpty(dgvAbitList.Rows[RowInnerObrazProgram].Cells[colindex].Value.ToString()))
@@ -550,7 +555,7 @@ namespace Priem
                 int.TryParse(dgvAbitList.Rows[RowKCP].Cells[colindex].Value.ToString(), out KCP);
 
                 int greencnt = 0;
-                int iKCP = (int)Math.Ceiling(0.8 * KCP);
+                int iKCP = (int)Math.Ceiling(DinamicWave * KCP);
                 for (int j = startrow; (greencnt < iKCP) && (j < dgvAbitList.Rows.Count); j++)
                 {
                     if (String.IsNullOrEmpty(dgvAbitList.Rows[j].Cells[colindex].Value.ToString()))
@@ -607,7 +612,7 @@ namespace Priem
                 int KCP_temp = 0;
                 if (int.TryParse(dgvAbitList.Rows[RowKCP].Cells[colindex].Value.ToString(), out KCP_temp))
                 {
-                    int iKCP_temp = (int)Math.Ceiling(0.8 * KCP_temp);
+                    int iKCP_temp = (int)Math.Ceiling(DinamicWave * KCP_temp);
                     for (int j = startrow; j < dgvAbitList.Rows.Count; j++)
                     {
                         string cellvalue = dgvAbitList.Rows[j].Cells[colindex].Value.ToString();
@@ -707,7 +712,7 @@ namespace Priem
                                     int KCP_temp = 0;                                   
                                     if (int.TryParse(dgvAbitList.Rows[RowKCP].Cells[kvp.Key].Value.ToString(), out KCP_temp))
                                     { }
-                                    int iKCP_temp = (int)Math.Ceiling(0.8 * KCP_temp);
+                                    int iKCP_temp = (int)Math.Ceiling(DinamicWave * KCP_temp);
 
                                     cellvalue = dgvAbitList.Rows[kvp.Value + startrow].Cells[kvp.Key].Value.ToString();
                                     temp = cellvalue.Substring(0, cellvalue.IndexOf('_'));
@@ -1168,7 +1173,7 @@ namespace Priem
             dgvAbitList.Rows[RowInnerEntryInEntryId].Visible = false;
             dgvAbitList.Rows[RowObrazProgramName].Visible = false;
         }
-
+readonly
         private void DeletePaintGrid()
         {
             foreach (DataGridViewRow rw in dgvAbitList.Rows)
@@ -1477,12 +1482,26 @@ namespace Priem
             {
                 if (dgvAbitList.Rows[kvp.Value + startrow].Cells[kvp.Key] == dgvAbitList.CurrentCell)
                 {
-                    int ind = Coord_Save[index].IndexOf(kvp);
+                    int or_ind = Coord_Save[index].IndexOf(kvp);
+                    
+                    int ind = or_ind;
                     ind++;
                     if (ind == Coord_Save[index].Count)
-                        ind = 0; 
+                        ind = 0;
 
-                    dgvAbitList.CurrentCell = dgvAbitList.Rows[Coord_Save[index][ind].Value + startrow].Cells[Coord_Save[index][ind].Key];
+                    DataGridViewCell cell = dgvAbitList.Rows[Coord_Save[index][ind].Value + startrow].Cells[Coord_Save[index][ind].Key];
+                    while (!cell.Visible)
+                    {
+                        ind++;
+                        if (ind == Coord_Save[index].Count)
+                            ind = 0;
+
+                        cell = dgvAbitList.Rows[Coord_Save[index][ind].Value + startrow].Cells[Coord_Save[index][ind].Key];
+                        if (ind == or_ind)
+                            break;
+                    }
+
+                    dgvAbitList.CurrentCell = cell;
                     return;
                 }
             }
@@ -1633,6 +1652,9 @@ namespace Priem
         }
         private void RePaintGrid()
         {
+            if (dgvAbitList.Rows.Count <= startrow)
+                return;
+
             UndoCopyTable();
             DeletePaintGrid();
             Coord = new List<List<KeyValuePair<int, int>>>();
@@ -1649,6 +1671,9 @@ namespace Priem
 
         private void btnRestoreOriginals_Click(object sender, EventArgs e)
         {
+            if (dgvAbitList.Rows.Count <= startrow)
+                return;
+
             for (int i = startrow; i < dgvAbitList.Rows.Count; i++)
             {
                 foreach (DataGridViewCell dcell in dgvAbitList.Rows[i].Cells)
@@ -1664,6 +1689,21 @@ namespace Priem
                 }
             }
             RePaintGrid();
+        }
+
+        private void tbDinamicWave_TextChanged(object sender, EventArgs e)
+        {
+            tbDinamicWave.Text = tbDinamicWave.Text.Replace('.', ',');
+        }
+        private bool Check()
+        {
+            int proc;
+            if (!int.TryParse(tbDinamicWave.Text, out proc))
+            {
+                MessageBox.Show("Неверный формат процента зачисляемых","!");
+                return false;
+            }
+            return true;
         }
 
     }

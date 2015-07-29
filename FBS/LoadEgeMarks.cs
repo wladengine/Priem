@@ -53,18 +53,19 @@ namespace Priem
 )  AS [Дата последнего протокола о допуске]
 FROM
 (
-SELECT Abiturient.Id AS AbiturientId, ExamInEntry.Id AS ExamInEntryId, Abiturient.EntryId
-FROM ed.Abiturient
-INNER JOIN ed.ExamInEntry ON ExamInEntry.EntryId = Abiturient.EntryId
-INNER JOIN ed.EgeToExam ON EgeToExam.ExamId = ExamInEntry.ExamId
-INNER JOIN ed.extEnableProtocol ON extEnableProtocol.AbiturientId = Abiturient.Id
-WHERE extEnableProtocol.IsOld = 0 AND extEnableProtocol.Excluded = 0
-AND Abiturient.BackDoc = 0 AND Abiturient.NotEnabled = 0
-EXCEPT
-SELECT AbiturientId, ExamInEntryId, ExamInEntry.EntryId
-FROM ed.Mark
-INNER JOIN ed.ExamInEntry ON ExamInEntry.Id = Mark.ExamInEntryId
-INNER JOIN ed.EgeToExam ON EgeToExam.ExamId = ExamInEntry.ExamId
+    SELECT Abiturient.Id AS AbiturientId, ExamInEntry.Id AS ExamInEntryId, Abiturient.EntryId
+    FROM ed.Abiturient
+    INNER JOIN ed.ExamInEntry ON ExamInEntry.EntryId = Abiturient.EntryId
+    INNER JOIN ed.EgeToExam ON EgeToExam.ExamId = ExamInEntry.ExamId
+    INNER JOIN ed.extEnableProtocol ON extEnableProtocol.AbiturientId = Abiturient.Id
+    WHERE extEnableProtocol.IsOld = 0 AND extEnableProtocol.Excluded = 0
+    AND Abiturient.BackDoc = 0 AND Abiturient.NotEnabled = 0
+    AND Abiturient.CompetitionId NOT IN (1, 8)
+    EXCEPT
+    SELECT AbiturientId, ExamInEntryId, ExamInEntry.EntryId
+    FROM ed.Mark
+    INNER JOIN ed.ExamInEntry ON ExamInEntry.Id = Mark.ExamInEntryId
+    INNER JOIN ed.EgeToExam ON EgeToExam.ExamId = ExamInEntry.ExamId
 ) t
 INNER JOIN ed.extEntry ON extEntry.Id = t.EntryId
 WHERE extEntry.StudyLevelGroupId = 1
@@ -160,7 +161,7 @@ ORDER BY 1";
                         }
                     }
                     else
-                        SetMarksForExam(ExamId, FacultyId.Value);
+                        SetMarksForExam(ExamId.Value, FacultyId.Value);
                 }
 
                 UpdateGridAbits();
@@ -180,12 +181,15 @@ ORDER BY 1";
             
         }
 
-        private void SetMarksForExam(int? examId, int iFacultyId)
+        private void SetMarksForExam(int examId, int iFacultyId)
         {
             try
             {
                 using (PriemEntities context = new PriemEntities())
                 {
+                    if (context.EgeToExam.Where(x => x.ExamId == examId).Count() == 0)
+                        return;
+
                     int examInostr = 380;
                     int filFacId = 18;
 
@@ -193,44 +197,44 @@ ORDER BY 1";
                     string flt_enable = " AND qAbiturient.NotEnabled = 0 ";
                     string flt_protocol = " AND ProtocolTypeId = 1 AND IsOld = 0 AND Excluded = 0 ";
                     string flt_status = " /*AND ed.extFBSStatus.FBSStatusId IN (1,4) */";
-                    string flt_mark = string.Format(@" AND 
+                    string flt_mark = string.Format(@" AND qAbiturient.Id NOT IN 
 (
-    qAbiturient.Id NOT IN /*оценка по НЕ-ДОПу ещё не проставлена*/
+    /*оценка по НЕ-ДОПу ещё не проставлена*/
     (
-        (
-            SELECT Mark.AbiturientId 
-            FROM ed.Mark 
-            INNER JOIN ed.extExamInEntry ON Mark.ExamInEntryId = extExamInEntry.Id 
-            WHERE Mark.AbiturientId = qAbiturient.Id 
-            AND extExamInEntry.ExamId = {0}
-            AND extExamInEntry.IsAdditional=0
-        ) 
-        UNION /*или у абитуриента зачёлся балл ниже, чем есть среди его ЕГЭ*/
-        (
-            SELECT qMark.AbiturientId
-            FROM ed.Mark AS qMark
-            INNER JOIN ed.Abiturient ABIT ON ABIT.Id = qMark.AbiturientId
-            INNER JOIN ed.hlpEgeMarkMaxApprovedValue ON hlpEgeMarkMaxApprovedValue.PersonId = ABIT.PersonId 
-            INNER JOIN ed.ExamInEntry ON ExamInEntry.Id = qMark.ExamInEntryId
-            INNER JOIN ed.EgeToExam ON EgeToExam.ExamId = ExamInEntry.ExamId 
-            WHERE qMark.Value < hlpEgeMarkMaxApprovedValue.EgeMarkValue 
-            AND qMark.IsFromEge = 1 
-            AND qAbiturient.EntryId = ABIT.EntryId
-            AND ExamInEntry.ExamId = EgeToExam.ExamId
-            AND ExamInEntry.ExamId = {0}
-            AND hlpEgeMarkMaxApprovedValue.EgeExamNameId = EgeToExam.EgeExamNameId
-        )
+        SELECT Mark.AbiturientId 
+        FROM ed.Mark 
+        INNER JOIN ed.extExamInEntry ON Mark.ExamInEntryId = extExamInEntry.Id 
+        WHERE Mark.AbiturientId = qAbiturient.Id 
+        AND extExamInEntry.ExamId = @ExamId
+        AND extExamInEntry.IsAdditional=0
+    ) 
+    UNION
+    --OR qAbiturient.Id IN
+    /*или у абитуриента зачёлся балл ниже, чем есть среди его ЕГЭ*/
+    (
+        SELECT qMark.AbiturientId
+        FROM ed.Mark AS qMark
+        INNER JOIN ed.Abiturient ABIT ON ABIT.Id = qMark.AbiturientId
+        INNER JOIN ed.hlpEgeMarkMaxApprovedValue ON hlpEgeMarkMaxApprovedValue.PersonId = ABIT.PersonId 
+        INNER JOIN ed.ExamInEntry ON ExamInEntry.Id = qMark.ExamInEntryId
+        INNER JOIN ed.EgeToExam ON EgeToExam.ExamId = ExamInEntry.ExamId 
+        WHERE qMark.Value = hlpEgeMarkMaxApprovedValue.EgeMarkValue 
+        AND qMark.IsFromEge = 1 
+        AND qAbiturient.EntryId = ABIT.EntryId
+        AND ExamInEntry.ExamId = EgeToExam.ExamId
+        AND ExamInEntry.ExamId = @ExamId
+        AND hlpEgeMarkMaxApprovedValue.EgeExamNameId = EgeToExam.EgeExamNameId
     )
 )", examId);
-                    string flt_hasEge = string.Format(" AND Person.Id IN (SELECT PersonId FROM ed.EgeMark LEFT JOIN ed.EgeToExam ON EgeMark.EgeExamNameId = EgeToExam.EgeExamNameId WHERE EgeToExam.ExamId = {0})", examId);
-                    string flt_hasExam = string.Format(" AND qAbiturient.EntryId IN (SELECT ed.ExamInEntry.EntryId FROM ed.ExamInEntry WHERE ExamInEntry.ExamId = {0})", examId);
+                    //string flt_hasEge = string.Format(" AND Person.Id IN (SELECT PersonId FROM ed.EgeMark LEFT JOIN ed.EgeToExam ON EgeMark.EgeExamNameId = EgeToExam.EgeExamNameId WHERE EgeToExam.ExamId = @ExamId)", examId);
+                    string flt_hasExam = string.Format(" AND qAbiturient.EntryId IN (SELECT ed.ExamInEntry.EntryId FROM ed.ExamInEntry WHERE ExamInEntry.ExamId = @ExamId)", examId);
 
                     string queryAbits = @"SELECT qAbiturient.Id, qAbiturient.PersonId, E.FacultyId, qAbiturient.EntryId FROM ed.Abiturient AS qAbiturient 
                             INNER JOIN ed.extEntry E ON E.Id = qAbiturient.EntryId
-                            LEFT JOIN ed.Person ON qAbiturient.PersonId = Person.Id /*LEFT JOIN ed.extFBSStatus ON ed.extFBSStatus.PersonId = Person.Id */
+                            LEFT JOIN ed.Person ON qAbiturient.PersonId = Person.Id
                             LEFT JOIN ed.extProtocol ON extProtocol.AbiturientId = qAbiturient.Id WHERE 1 = 1 ";
 
-                    DataSet ds = bdc.GetDataSet(queryAbits + GetAbitFilterString(iFacultyId) + flt_backDoc + flt_enable + flt_protocol + flt_status + flt_mark + flt_hasExam + flt_hasEge);
+                    DataSet ds = bdc.GetDataSet(queryAbits + GetAbitFilterString(iFacultyId) + flt_backDoc + flt_enable + flt_protocol + flt_status + flt_mark + flt_hasExam /*+ flt_hasEge*/, new SortedList<string, object>() { { "@ExamId", examId } });
 
                     var Fac = context.SP_Faculty.Where(x => x.Id == iFacultyId).Select(x => x.Name).FirstOrDefault();
                     var Ex = context.Exam.Where(x => x.Id == examId).Select(x => x.ExamName.Name).FirstOrDefault();

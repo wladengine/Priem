@@ -99,6 +99,9 @@
             this.smiFiltersChoose = new System.Windows.Forms.ToolStripMenuItem();
             this.smiHelp = new System.Windows.Forms.ToolStripMenuItem();
             this.smiBooks = new System.Windows.Forms.ToolStripMenuItem();
+            this.baseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.smiRegions = new System.Windows.Forms.ToolStripMenuItem();
+            this.smiCountries = new System.Windows.Forms.ToolStripMenuItem();
             this.конкурсыToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.smiLicenseProgram = new System.Windows.Forms.ToolStripMenuItem();
             this.smiObrazProgram = new System.Windows.Forms.ToolStripMenuItem();
@@ -146,9 +149,7 @@
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.lblDBPath = new System.Windows.Forms.ToolStripStatusLabel();
             this.tsslMain = new System.Windows.Forms.ToolStripStatusLabel();
-            this.baseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.smiRegions = new System.Windows.Forms.ToolStripMenuItem();
-            this.smiCountries = new System.Windows.Forms.ToolStripMenuItem();
+            this.smiLoadExamsResultsToParentExamTool = new System.Windows.Forms.ToolStripMenuItem();
             this.msMainMenu.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -743,6 +744,29 @@
             this.smiBooks.Size = new System.Drawing.Size(152, 20);
             this.smiBooks.Text = "Справочники для Паши";
             // 
+            // baseToolStripMenuItem
+            // 
+            this.baseToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.smiRegions,
+            this.smiCountries});
+            this.baseToolStripMenuItem.Name = "baseToolStripMenuItem";
+            this.baseToolStripMenuItem.Size = new System.Drawing.Size(453, 22);
+            this.baseToolStripMenuItem.Text = "Базовые справочники";
+            // 
+            // smiRegions
+            // 
+            this.smiRegions.Name = "smiRegions";
+            this.smiRegions.Size = new System.Drawing.Size(122, 22);
+            this.smiRegions.Text = "Регионы";
+            this.smiRegions.Click += new System.EventHandler(this.smiRegions_Click);
+            // 
+            // smiCountries
+            // 
+            this.smiCountries.Name = "smiCountries";
+            this.smiCountries.Size = new System.Drawing.Size(122, 22);
+            this.smiCountries.Text = "Страны";
+            this.smiCountries.Click += new System.EventHandler(this.smiCountries_Click);
+            // 
             // конкурсыToolStripMenuItem
             // 
             this.конкурсыToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -936,7 +960,7 @@
             // vuzNamesToolStripMenuItem
             // 
             this.vuzNamesToolStripMenuItem.Name = "vuzNamesToolStripMenuItem";
-            this.vuzNamesToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.vuzNamesToolStripMenuItem.Size = new System.Drawing.Size(130, 22);
             this.vuzNamesToolStripMenuItem.Text = "VuzNames";
             this.vuzNamesToolStripMenuItem.Click += new System.EventHandler(this.vuzNamesToolStripMenuItem_Click);
             // 
@@ -946,7 +970,8 @@
             this.smiEnterMarks,
             this.smiLoadMarks,
             this.smiDecryptor,
-            this.smiAppeal});
+            this.smiAppeal,
+            this.smiLoadExamsResultsToParentExamTool});
             this.smiCrypto.Name = "smiCrypto";
             this.smiCrypto.Size = new System.Drawing.Size(91, 20);
             this.smiCrypto.Text = "Шифровалка";
@@ -954,28 +979,28 @@
             // smiEnterMarks
             // 
             this.smiEnterMarks.Name = "smiEnterMarks";
-            this.smiEnterMarks.Size = new System.Drawing.Size(242, 22);
+            this.smiEnterMarks.Size = new System.Drawing.Size(243, 22);
             this.smiEnterMarks.Text = "Ввод оценок в ведомость";
             this.smiEnterMarks.Click += new System.EventHandler(this.smiEnterMarks_Click);
             // 
             // smiLoadMarks
             // 
             this.smiLoadMarks.Name = "smiLoadMarks";
-            this.smiLoadMarks.Size = new System.Drawing.Size(242, 22);
+            this.smiLoadMarks.Size = new System.Drawing.Size(243, 22);
             this.smiLoadMarks.Text = "Загрузка оценок из ведомости";
             this.smiLoadMarks.Click += new System.EventHandler(this.smiLoadMarks_Click);
             // 
             // smiDecryptor
             // 
             this.smiDecryptor.Name = "smiDecryptor";
-            this.smiDecryptor.Size = new System.Drawing.Size(242, 22);
+            this.smiDecryptor.Size = new System.Drawing.Size(243, 22);
             this.smiDecryptor.Text = "Дешифровка";
             this.smiDecryptor.Click += new System.EventHandler(this.smiDecryptor_Click);
             // 
             // smiAppeal
             // 
             this.smiAppeal.Name = "smiAppeal";
-            this.smiAppeal.Size = new System.Drawing.Size(242, 22);
+            this.smiAppeal.Size = new System.Drawing.Size(243, 22);
             this.smiAppeal.Text = "Ведомость для аппеляции";
             this.smiAppeal.Click += new System.EventHandler(this.smiAppeal_Click);
             // 
@@ -1091,28 +1116,12 @@
             this.tsslMain.Name = "tsslMain";
             this.tsslMain.Size = new System.Drawing.Size(0, 17);
             // 
-            // baseToolStripMenuItem
+            // smiLoadExamsResultsToParentExamTool
             // 
-            this.baseToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.smiRegions,
-            this.smiCountries});
-            this.baseToolStripMenuItem.Name = "baseToolStripMenuItem";
-            this.baseToolStripMenuItem.Size = new System.Drawing.Size(453, 22);
-            this.baseToolStripMenuItem.Text = "Базовые справочники";
-            // 
-            // smiRegions
-            // 
-            this.smiRegions.Name = "smiRegions";
-            this.smiRegions.Size = new System.Drawing.Size(152, 22);
-            this.smiRegions.Text = "Регионы";
-            this.smiRegions.Click += new System.EventHandler(this.smiRegions_Click);
-            // 
-            // smiCountries
-            // 
-            this.smiCountries.Name = "smiCountries";
-            this.smiCountries.Size = new System.Drawing.Size(152, 22);
-            this.smiCountries.Text = "Страны";
-            this.smiCountries.Click += new System.EventHandler(this.smiCountries_Click);
+            this.smiLoadExamsResultsToParentExamTool.Name = "smiLoadExamsResultsToParentExamTool";
+            this.smiLoadExamsResultsToParentExamTool.Size = new System.Drawing.Size(243, 22);
+            this.smiLoadExamsResultsToParentExamTool.Text = "loadExamsResultsToParentExam";
+            this.smiLoadExamsResultsToParentExamTool.Click += new System.EventHandler(this.smiLoadExamsResultsToParentExamTool_Click);
             // 
             // MainForm
             // 
@@ -1258,6 +1267,7 @@
         private System.Windows.Forms.ToolStripMenuItem baseToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem smiRegions;
         private System.Windows.Forms.ToolStripMenuItem smiCountries;
+        private System.Windows.Forms.ToolStripMenuItem smiLoadExamsResultsToParentExamTool;
 
     }
 }

@@ -73,14 +73,19 @@
             this.btnToExcel = new System.Windows.Forms.Button();
             this.cbStudyLevelGroup = new System.Windows.Forms.ComboBox();
             this.label5 = new System.Windows.Forms.Label();
+            this.gbWait = new System.Windows.Forms.GroupBox();
+            this.lblWait = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dgvAbits)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.gbPasha.SuspendLayout();
+            this.gbWait.SuspendLayout();
             this.SuspendLayout();
             // 
             // lblCount
             // 
             this.lblCount.Location = new System.Drawing.Point(444, 585);
+            this.lblCount.Size = new System.Drawing.Size(40, 13);
+            this.lblCount.Text = "Всего:";
             // 
             // btnCard
             // 
@@ -554,11 +559,32 @@
             this.label5.TabIndex = 142;
             this.label5.Text = "Уровень";
             // 
+            // gbWait
+            // 
+            this.gbWait.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.gbWait.Controls.Add(this.lblWait);
+            this.gbWait.Location = new System.Drawing.Point(485, 295);
+            this.gbWait.Name = "gbWait";
+            this.gbWait.Size = new System.Drawing.Size(200, 36);
+            this.gbWait.TabIndex = 144;
+            this.gbWait.TabStop = false;
+            this.gbWait.Visible = false;
+            // 
+            // lblWait
+            // 
+            this.lblWait.AutoSize = true;
+            this.lblWait.Location = new System.Drawing.Point(31, 16);
+            this.lblWait.Name = "lblWait";
+            this.lblWait.Size = new System.Drawing.Size(139, 13);
+            this.lblWait.TabIndex = 11;
+            this.lblWait.Text = "Пожалуйста, подождите...";
+            // 
             // RatingList
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(848, 633);
+            this.Controls.Add(this.gbWait);
             this.Controls.Add(this.cbStudyLevelGroup);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.btnToExcel);
@@ -634,9 +660,12 @@
             this.Controls.SetChildIndex(this.btnToExcel, 0);
             this.Controls.SetChildIndex(this.label5, 0);
             this.Controls.SetChildIndex(this.cbStudyLevelGroup, 0);
+            this.Controls.SetChildIndex(this.gbWait, 0);
             ((System.ComponentModel.ISupportInitialize)(this.dgvAbits)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.gbPasha.ResumeLayout(false);
+            this.gbWait.ResumeLayout(false);
+            this.gbWait.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -685,5 +714,7 @@
         private System.Windows.Forms.Button btnToExcel;
         private System.Windows.Forms.ComboBox cbStudyLevelGroup;
         private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.GroupBox gbWait;
+        private System.Windows.Forms.Label lblWait;
     }
 }

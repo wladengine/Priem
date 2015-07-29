@@ -16,6 +16,7 @@ using WordOut;
 using RtfWriter;
 using PriemLib;
 using System.Data.Entity.Core.Objects;
+using System.Threading.Tasks;
 
 namespace Priem
 {
@@ -34,14 +35,20 @@ namespace Priem
 
         bool bFirstWaveEnabled = MainClass.bFirstWaveEnabled;
 
+        BackgroundWorker bw = new BackgroundWorker();
+
         //constructor
         public RatingList(bool fromFixieren)
         {
             InitializeComponent();
             InitVariables();
 
+            bw.WorkerSupportsCancellation = true;
+            bw.DoWork += UpdateDataGrid_DoWorkAsync;
+            bw.RunWorkerCompleted += UpdateDataGrid_AsyncWorkCompleted;
+
             _queryBody = @"SELECT DISTINCT qAbiturient.Id as Id, qAbiturient.RegNum as Рег_Номер, 
-                    extPerson.PersonNum as 'Ид. номер', extPerson.FIO as ФИО, 
+                    extPerson.PersonNum as 'Ид. номер', qAbiturient.Priority as [Приоритет], extPerson.FIO as ФИО, 
                     extAbitMarksSum.TotalSum + extAbitAdditionalMarksSum.AdditionalMarksSum as 'Сумма баллов', extAbitMarksSum.TotalSum as 'Сумма баллов (осн)', extAbitAdditionalMarksSum.AdditionalMarksSum AS 'Сумма баллов (ИндДост)', extAbitMarksSum.TotalCount as 'Кол-во оценок', 
                     case when EXISTS (SELECT * FROM ed.Abiturient AB WHERE AB.HasOriginals>0 AND AB.PersonId = qAbiturient.PersonId AND AB.BackDoc = 0) then 'Да' else 'Нет' end as 'Подлинники документов', 
                     ed.qAbiturient.Coefficient as 'Рейтинговый коэффициент', 
@@ -52,7 +59,15 @@ namespace Priem
                     CASE WHEN  extPerson_EducationInfo_Current.AttestatSeries IN ('ЗА','ЗБ','ЗВ','АЗ') then 1 else CASE WHEN  extPerson_EducationInfo_Current.AttestatSeries IN ('СА','СБ','СВ') then 2 else 3 end end as attestat,
                     (CASE WHEN extPerson_EducationInfo_Current.IsExcellent=1 THEN 5 ELSE extPerson_EducationInfo_Current.SchoolAVG END) as attAvg, 
                     CASE WHEN (CompetitionId=1  OR CompetitionId=8) then 1 else case when (CompetitionId=2 OR CompetitionId=7) AND extPerson.Privileges>0 then 2 else (case when CompetitionId=6 then 3 else 4 end) end end as comp, 
-                    CASE WHEN (CompetitionId=1 OR CompetitionId=8) then ed.qAbiturient.Coefficient else 10000 end as noexamssort, 
+                    /*CASE WHEN (CompetitionId=1 OR CompetitionId=8) then ed.qAbiturient.Coefficient else 10000 end as noexamssort, */
+(CASE WHEN CompetitionId NOT IN (1, 8) 
+                                              THEN 0 ELSE (CASE WHEN hlpAbiturient_Olympiads_SortLevel1.[AbiturientId] IS NOT NULL 
+                                              THEN 100 + extAbitAdditionalMarksSum.AdditionalMarksSum ELSE (CASE WHEN hlpAbiturient_Olympiads_SortLevel2.[AbiturientId] IS NOT NULL 
+                                              THEN 90 + extAbitAdditionalMarksSum.AdditionalMarksSum ELSE (CASE WHEN hlpAbiturient_Olympiads_SortLevel3.[AbiturientId] IS NOT NULL 
+                                              THEN 80 + extAbitAdditionalMarksSum.AdditionalMarksSum ELSE (CASE WHEN hlpAbiturient_Olympiads_SortLevel4.[AbiturientId] IS NOT NULL 
+                                              THEN 70 + extAbitAdditionalMarksSum.AdditionalMarksSum ELSE 50 END) END) END) END) END) as noexamssort,
+                    (CASE WHEN CompetitionId NOT IN (1, 8) THEN 0 ELSE qAbiturient.Coefficient END) AS noexamsKoefsort,
+                    (CASE WHEN CompetitionId NOT IN (1, 8) THEN 0 ELSE extPerson_EducationInfo_Current.SchoolAVG END) AS noexamsAttAVGSort,
                     CASE WHEN (CompetitionId=5 OR CompetitionId=9) then 1 else 0 end as preimsort,
                     case when extPerson_EducationInfo_Current.IsExcellent>0 then 'Да' else 'Нет' end as 'Медалист', 
                     extPerson_EducationInfo_Current.AttestatSeries as 'Серия аттестата', 
@@ -78,6 +93,10 @@ namespace Priem
                     LEFT JOIN ed.extAbitMarkByRating ON qAbiturient.Id = extAbitMarkByRating.Id
                     LEFT JOIN ed.hlpMinMarkAbiturient ON hlpMinMarkAbiturient.Id = qAbiturient.Id
                     LEFT JOIN ed.qAbiturientForeignApplicationsOnly qFor ON qAbiturient.Id = qFor.Id
+                    LEFT JOIN [ed].hlpAbiturient_Olympiads_SortLevel1 ON qAbiturient.Id = hlpAbiturient_Olympiads_SortLevel1.[AbiturientId] 
+                    LEFT JOIN [ed].hlpAbiturient_Olympiads_SortLevel2 ON qAbiturient.Id = hlpAbiturient_Olympiads_SortLevel2.[AbiturientId] 
+                    LEFT JOIN [ed].hlpAbiturient_Olympiads_SortLevel3 ON qAbiturient.Id = hlpAbiturient_Olympiads_SortLevel3.[AbiturientId] 
+                    LEFT JOIN [ed].hlpAbiturient_Olympiads_SortLevel4 ON qAbiturient.Id = hlpAbiturient_Olympiads_SortLevel4.[AbiturientId]
                     LEFT JOIN ed.[_FirstWaveBackUp] FW ON FW.AbiturientId = qAbiturient.Id";
 
             if (MainClass.dbType == PriemType.PriemMag)
@@ -462,9 +481,10 @@ namespace Priem
                            select ab).Count();
 
                 enteredCrimea = (from ab in context.qAbitAll
+                                 join ent in context.Entry on ab.EntryId equals ent.Id
                            join ev in context.extEntryView
                            on ab.Id equals ev.AbiturientId
-                           where ab.IsCrimea && ab.EntryId == entryId
+                           where ab.IsCrimea && (ab.EntryId == entryId || ent.ParentEntryId == entryId)
                            select ab).Count();
 
                 enteredQuota = (from ab in context.qAbitAll
@@ -488,7 +508,7 @@ namespace Priem
                 else if (IsQuota)
                     return planQuota - enteredQuota;
                 else
-                    return plan - planCel - entered - enteredQuota;
+                    return plan - planCel - entered - enteredQuota - enteredCrimea;
             }
         }
 
@@ -506,6 +526,7 @@ namespace Priem
                  && fv.StudyBasisId == StudyBasisId
                  && fv.IsCel == IsCel
                  && fv.IsCrimea == IsCrimea
+                 && fv.IsQuota == IsQuota
                  select fv).FirstOrDefault();
             
             string DocNum = string.Empty;
@@ -536,6 +557,12 @@ namespace Priem
         int plan = 0;
         public override void UpdateDataGrid()
         {
+            if (bw.IsBusy)
+            {
+                bw.CancelAsync();
+                return;
+            }
+
             try
             {                
                 string sOrderBy = string.Empty;
@@ -544,7 +571,7 @@ namespace Priem
                     sOrderBy =
                         chbCel.Checked ?
                         " ORDER BY ed.qAbiturient.Coefficient, comp , noexamssort desc, 'Сумма баллов' desc, ed.extAbitMarksSum.TotalCount desc, ФИО" :
-                        " ORDER BY comp , noexamssort, 'Сумма баллов' desc, 'Проф. экзамен' DESC, ed.qAbiturient.Coefficient DESC, ed.extAbitMarksSum.TotalCount desc, ФИО";
+                        " ORDER BY comp , noexamssort DESC, 'Сумма баллов' desc, 'Проф. экзамен' DESC, ed.qAbiturient.Coefficient DESC, ed.extAbitMarksSum.TotalCount desc, ФИО";
                 }
                 else
                 {
@@ -552,7 +579,7 @@ namespace Priem
                         chbCel.Checked ?
                         " ORDER BY ed.qAbiturient.Coefficient, comp, noexamssort desc, 'Сумма баллов' desc, ProfSort desc, ProfAdd desc, ed.extAbitMarksSum.TotalCount desc, ФИО"
                         :
-                        " ORDER BY comp, noexamssort, 'Сумма баллов' desc, [Экзамен 1] desc, [Экзамен 2] desc, [Экзамен 3] desc, preimsort desc, ProfAdd desc, " +
+                        " ORDER BY comp, noexamssort DESC, noexamsKoefsort, noexamsAttAVGSort DESC, 'Сумма баллов' desc, [Экзамен 1] desc, [Экзамен 2] desc, [Экзамен 3] desc, preimsort desc, ProfAdd desc, " +
                         "olymp, Медалист, attAvg desc, ed.qAbiturient.Coefficient, ed.extAbitMarksSum.TotalCount desc, ФИО"
                         ;
                 }
@@ -569,7 +596,7 @@ namespace Priem
                         _queryOrange = @", CASE WHEN EXISTS(SELECT ed.extEntryView.Id FROM ed.extEntryView INNER JOIN ed.Abiturient a ON ed.extEntryView.AbiturientId = a.Id WHERE a.PersonId = ed.qAbiturient.PersonId) then 1 else 0 end as orange ";
 
                     string queryFix = _queryBody + _queryOrange +
-                    @" FROM ed.qAbiturient                     
+                    @" FROM ed.qAbiturient 
                     INNER JOIN ed.extPerson ON ed.extPerson.Id = ed.qAbiturient.PersonId                    
                     INNER JOIN ed.extPerson_EducationInfo_Current ON extPerson_EducationInfo_Current.PersonId = extPerson.Id
                     INNER JOIN ed.Competition ON ed.Competition.Id = ed.qAbiturient.CompetitionId 
@@ -580,7 +607,12 @@ namespace Priem
                     LEFT JOIN ed.hlpAbiturientProf ON ed.hlpAbiturientProf.Id = ed.qAbiturient.Id 
                     LEFT JOIN ed.extAbitMarksSum ON ed.qAbiturient.Id = ed.extAbitMarksSum.Id
                     LEFT JOIN ed.extAbitAdditionalMarksSum ON qAbiturient.Id = extAbitAdditionalMarksSum.AbiturientId
-                    LEFT JOIN ed.extAbitMarkByRating ON ed.qAbiturient.Id = ed.extAbitMarkByRating.Id";
+                    LEFT JOIN ed.extAbitMarkByRating ON ed.qAbiturient.Id = ed.extAbitMarkByRating.Id
+                    LEFT JOIN [ed].hlpAbiturient_Olympiads_SortLevel1 ON qAbiturient.Id = hlpAbiturient_Olympiads_SortLevel1.[AbiturientId] 
+                    LEFT JOIN [ed].hlpAbiturient_Olympiads_SortLevel2 ON qAbiturient.Id = hlpAbiturient_Olympiads_SortLevel2.[AbiturientId] 
+                    LEFT JOIN [ed].hlpAbiturient_Olympiads_SortLevel3 ON qAbiturient.Id = hlpAbiturient_Olympiads_SortLevel3.[AbiturientId] 
+                    LEFT JOIN [ed].hlpAbiturient_Olympiads_SortLevel4 ON qAbiturient.Id = hlpAbiturient_Olympiads_SortLevel4.[AbiturientId]
+";
 
                     string whereFix = string.Format(
 @" WHERE ed.FixierenView.StudyLevelGroupId IN ({10}) AND ed.FixierenView.StudyFormId={0} AND ed.FixierenView.StudyBasisId={1} AND ed.FixierenView.FacultyId={2} 
@@ -599,11 +631,11 @@ AND ed.FixierenView.IsSecond = {7} AND ed.FixierenView.IsReduced = {8} AND ed.Fi
                     string sFilters = GetFilterString();
                     
                     //целевики?
-                    //if (chbCel.Checked)
-                    //    sFilters += " AND ed.qAbiturient.CompetitionId IN (6) ";
+                    if (chbCel.Checked)
+                        sFilters += " AND ed.qAbiturient.CompetitionId = 6";
                     // в общем списке выводить всех 
-                    //else
-                    //    sFilters += " AND ed.qAbiturient.CompetitionId NOT IN (6) ";
+                    else
+                        sFilters += " AND ed.qAbiturient.CompetitionId <> 6";
 
                     //не забрали доки
                     sFilters += " AND (qAbiturient.BackDoc=0) ";
@@ -685,40 +717,136 @@ AND ed.FixierenView.IsSecond = {7} AND ed.FixierenView.IsReduced = {8} AND ed.Fi
                 if (!dgvAbits.Columns.Contains("Number"))
                     dgvAbits.Columns.Add("Number", "№ п/п");
 
-                HelpClass.FillDataGrid(dgvAbits, _bdc, totalQuery, "");
+                lblCount.Text = "             Cвободных мест: " + plan;
 
-                dgvAbits.Columns["Id"].Visible = false;
-                dgvAbits.Columns["comp"].Visible = false;
-                dgvAbits.Columns["noexamssort"].Visible = false;
-                dgvAbits.Columns["preimsort"].Visible = false;
-                dgvAbits.Columns["olymp"].Visible = false;
-                dgvAbits.Columns["attestat"].Visible = false;
-                dgvAbits.Columns["attAvg"].Visible = false;
-                dgvAbits.Columns["ProfSort"].Visible = false;
-                dgvAbits.Columns["ProfAdd"].Visible = false;
-                dgvAbits.Columns["orange"].Visible = false;
+                //HelpClass.FillDataGrid(dgvAbits, _bdc, totalQuery, "");
+                bw.RunWorkerAsync(new { dgv = dgvAbits, _bdc = _bdc, _sQuery = totalQuery, filters = "", _orderBy = "" });
+                gbWait.Visible = true;
+                UpdateControlsEnableStatus(false);
 
-                if (MainClass.dbType == PriemType.PriemMag)
-                {
-                    dgvAbits.Columns["Серия аттестата"].Visible = false;
-                    dgvAbits.Columns["Медалист"].HeaderText = "Красный диплом";
-                }
-                else
-                    dgvAbits.Columns["Серия диплома"].Visible = false;
+                //dgvAbits.Columns["Id"].Visible = false;
+                //dgvAbits.Columns["comp"].Visible = false;
+                //dgvAbits.Columns["noexamssort"].Visible = false;
+                //dgvAbits.Columns["preimsort"].Visible = false;
+                //dgvAbits.Columns["olymp"].Visible = false;
+                //dgvAbits.Columns["attestat"].Visible = false;
+                //dgvAbits.Columns["attAvg"].Visible = false;
+                //dgvAbits.Columns["ProfSort"].Visible = false;
+                //dgvAbits.Columns["ProfAdd"].Visible = false;
+                //dgvAbits.Columns["orange"].Visible = false;
+
+                //if (MainClass.dbType == PriemType.PriemMag)
+                //{
+                //    dgvAbits.Columns["Серия аттестата"].Visible = false;
+                //    dgvAbits.Columns["Медалист"].HeaderText = "Красный диплом";
+                //}
+                //else
+                //    dgvAbits.Columns["Серия диплома"].Visible = false;
                 
-                foreach (DataGridViewColumn column in dgvAbits.Columns)
-                {
-                    column.SortMode = DataGridViewColumnSortMode.NotSortable;
-                }
-
-                lblCount.Text = dgvAbits.RowCount.ToString() + "             Cвободных мест: "+plan;
+                //foreach (DataGridViewColumn column in dgvAbits.Columns)
+                //{
+                //    column.SortMode = DataGridViewColumnSortMode.NotSortable;
+                //}
             }
             catch (Exception ex)
             {
                 WinFormsServ.Error("Ошибка при обновлении списка.", ex);
             }
         }
-      
+
+        async void UpdateDataGrid_DoWorkAsync(object sender, DoWorkEventArgs e)
+        {
+            SQLClass BDC = new SQLClass();
+            BDC.OpenDatabase(MainClass.connString);
+
+            Task<DataView> task = HelpClass.GetDataViewAsync((DataGridView)((dynamic)e.Argument).dgv, /*(BDClass)((dynamic)e.Argument)._bdc*/BDC, (string)((dynamic)e.Argument)._sQuery, (string)((dynamic)e.Argument).filters, _orderBy, false);
+
+            while (!task.IsCompleted)
+            {
+                if (bw.CancellationPending)
+                {
+                    e.Cancel = true;
+                    return;
+                }
+
+                System.Threading.Thread.Sleep(25);
+            }
+
+            e.Result = await task;
+        }
+        void UpdateDataGrid_AsyncWorkCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            gbWait.Visible = false;
+            UpdateControlsEnableStatus(true);
+
+            if (e.Cancelled || (e.Error != null))
+                return;
+
+            dgvAbits.DataSource = e.Result;
+
+            dgvAbits.Columns["Id"].Visible = false;
+            dgvAbits.Columns["comp"].Visible = false;
+            dgvAbits.Columns["noexamssort"].Visible = false;
+            dgvAbits.Columns["noexamsKoefsort"].Visible = false;
+            dgvAbits.Columns["preimsort"].Visible = false;
+            dgvAbits.Columns["olymp"].Visible = false;
+            dgvAbits.Columns["attestat"].Visible = false;
+            dgvAbits.Columns["attAvg"].Visible = false;
+            dgvAbits.Columns["ProfSort"].Visible = false;
+            dgvAbits.Columns["ProfAdd"].Visible = false;
+            dgvAbits.Columns["orange"].Visible = false;
+
+            if (MainClass.dbType == PriemType.PriemMag)
+            {
+                dgvAbits.Columns["Серия аттестата"].Visible = false;
+                dgvAbits.Columns["Медалист"].HeaderText = "Красный диплом";
+            }
+            else
+                dgvAbits.Columns["Серия диплома"].Visible = false;
+
+            foreach (DataGridViewColumn column in dgvAbits.Columns)
+            {
+                column.SortMode = DataGridViewColumnSortMode.NotSortable;
+            }
+
+            lblCount.Text = "Всего: " + dgvAbits.RowCount.ToString() + "             Cвободных мест: " + plan;
+        }
+
+        private void UpdateControlsEnableStatus(bool status)
+        {
+            cbFaculty.Enabled = status;
+            cbLicenseProgram.Enabled = status;
+            cbObrazProgram.Enabled = status;
+            cbProfile.Enabled = status;
+            cbStudyBasis.Enabled = status;
+            cbStudyForm.Enabled = status;
+            cbStudyLevelGroup.Enabled = status;
+            tbFIO.Enabled = status;
+            tbNumber.Enabled = status;
+            btnCard.Enabled = status;
+            btnAdd.Enabled = status;
+            btnDeleteAb.Enabled = status;
+            btnFixieren.Enabled = status;
+            btnFixierenWeb.Enabled = status;
+            btnLock.Enabled = status;
+            btnRemove.Enabled = status;
+            btnToExcel.Enabled = status;
+            btnUnfix.Enabled = status;
+            btnUnlock.Enabled = status;
+            btnWord.Enabled = status;
+
+            chbCel.Enabled = status;
+            chbFix.Enabled = status;
+            chbIsCrimea.Enabled = status;
+            chbIsParallel.Enabled = status;
+            chbIsQuota.Enabled = status;
+            chbIsReduced.Enabled = status;
+            chbIsSecond.Enabled = status;
+            chbWithOlymps.Enabled = status;
+
+            btnUpdateGrid.Text = status ? "Вывести список" : "Отмена";
+        }
+
         private string GetFilterString()
         {
             string s = " WHERE 1=1 ";
@@ -1000,7 +1128,7 @@ AND ed.FixierenView.IsSecond = {7} AND ed.FixierenView.IsReduced = {8} AND ed.Fi
             {
                 WinFormsServ.Error("Ошибка при локе/анлоке", ex);
             }
-            return;            
+            return;
         }
 
         private void btnUnlock_Click(object sender, EventArgs e)
@@ -1049,7 +1177,7 @@ AND ed.FixierenView.IsSecond = {7} AND ed.FixierenView.IsReduced = {8} AND ed.Fi
                              select fv.Id).FirstOrDefault();
                         
                         //удалили старое
-                        context.FirstWave_DELETE(entryId, IsCel, IsCrimea);
+                        context.FirstWave_DELETE(entryId, IsCel, IsCrimea, IsQuota);
 
                         var fix = from fx in context.Fixieren
                                   where fx.FixierenViewId == fixViewId
@@ -1108,7 +1236,7 @@ AND ed.FixierenView.IsSecond = {7} AND ed.FixierenView.IsReduced = {8} AND ed.Fi
                                      select fv.Id).FirstOrDefault();
                     
                     //удалили
-                    context.FirstWave_DELETE(entryId, IsCel, IsCrimea);
+                    context.FirstWave_DELETE(entryId, IsCel, IsCrimea, IsQuota);
                 }
             }
             catch (Exception ex)
@@ -1205,6 +1333,14 @@ AND ed.FixierenView.IsSecond = {7} AND ed.FixierenView.IsReduced = {8} AND ed.Fi
         private void btnToExcel_Click(object sender, EventArgs e)
         {
             PrintClass.PrintAllToExcel(dgvAbits);
-        }             
+        }
+
+        protected override void OnClosing(CancelEventArgs e)
+        {
+            if (bw.IsBusy)
+                bw.CancelAsync();
+
+            base.OnClosing(e);
+        }
     }
 }

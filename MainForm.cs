@@ -851,5 +851,10 @@ namespace Priem
         {
 
         }
+
+        private void smiAbitRatingKofGroupChanging_Click(object sender, EventArgs e)
+        {
+            new ListAbitRatingKofGroupChanging().Show();
+        }
     }
 }

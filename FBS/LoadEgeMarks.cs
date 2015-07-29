@@ -197,19 +197,19 @@ ORDER BY 1";
                     string flt_enable = " AND qAbiturient.NotEnabled = 0 ";
                     string flt_protocol = " AND ProtocolTypeId = 1 AND IsOld = 0 AND Excluded = 0 ";
                     string flt_status = " /*AND ed.extFBSStatus.FBSStatusId IN (1,4) */";
-                    string flt_mark = string.Format(@" AND qAbiturient.Id NOT IN 
+                    string flt_mark = string.Format(@" AND 
 (
-    /*оценка по НЕ-ДОПу ещё не проставлена*/
+    qAbiturient.Id NOT IN 
     (
-        SELECT Mark.AbiturientId 
-        FROM ed.Mark 
-        INNER JOIN ed.extExamInEntry ON Mark.ExamInEntryId = extExamInEntry.Id 
-        WHERE Mark.AbiturientId = qAbiturient.Id 
-        AND extExamInEntry.ExamId = @ExamId
-        AND extExamInEntry.IsAdditional=0
-    ) 
-    UNION
-    --OR qAbiturient.Id IN
+        /*оценка по НЕ-ДОПу ещё не проставлена*/
+            SELECT Mark.AbiturientId 
+            FROM ed.Mark 
+            INNER JOIN ed.extExamInEntry ON Mark.ExamInEntryId = extExamInEntry.Id 
+            WHERE Mark.AbiturientId = qAbiturient.Id 
+            AND extExamInEntry.ExamId = {0}
+            AND extExamInEntry.IsAdditional=0
+    )
+    /*OR qAbiturient.Id IN
     /*или у абитуриента зачёлся балл ниже, чем есть среди его ЕГЭ*/
     (
         SELECT qMark.AbiturientId
@@ -218,16 +218,16 @@ ORDER BY 1";
         INNER JOIN ed.hlpEgeMarkMaxApprovedValue ON hlpEgeMarkMaxApprovedValue.PersonId = ABIT.PersonId 
         INNER JOIN ed.ExamInEntry ON ExamInEntry.Id = qMark.ExamInEntryId
         INNER JOIN ed.EgeToExam ON EgeToExam.ExamId = ExamInEntry.ExamId 
-        WHERE qMark.Value = hlpEgeMarkMaxApprovedValue.EgeMarkValue 
+        WHERE EgeToExam.EgeExamNameId = hlpEgeMarkMaxApprovedValue.EgeExamNameId 
         AND qMark.IsFromEge = 1 
         AND qAbiturient.EntryId = ABIT.EntryId
         AND ExamInEntry.ExamId = EgeToExam.ExamId
-        AND ExamInEntry.ExamId = @ExamId
-        AND hlpEgeMarkMaxApprovedValue.EgeExamNameId = EgeToExam.EgeExamNameId
-    )
+        AND ExamInEntry.ExamId = {0}
+        AND hlpEgeMarkMaxApprovedValue.EgeMarkValue > qMark.Value
+    )*/
 )", examId);
                     //string flt_hasEge = string.Format(" AND Person.Id IN (SELECT PersonId FROM ed.EgeMark LEFT JOIN ed.EgeToExam ON EgeMark.EgeExamNameId = EgeToExam.EgeExamNameId WHERE EgeToExam.ExamId = @ExamId)", examId);
-                    string flt_hasExam = string.Format(" AND qAbiturient.EntryId IN (SELECT ed.ExamInEntry.EntryId FROM ed.ExamInEntry WHERE ExamInEntry.ExamId = @ExamId)", examId);
+                    string flt_hasExam = string.Format(" AND qAbiturient.EntryId IN (SELECT ed.ExamInEntry.EntryId FROM ed.ExamInEntry WHERE ExamInEntry.ExamId = {0})", examId);
 
                     string queryAbits = @"SELECT qAbiturient.Id, qAbiturient.PersonId, E.FacultyId, qAbiturient.EntryId FROM ed.Abiturient AS qAbiturient 
                             INNER JOIN ed.extEntry E ON E.Id = qAbiturient.EntryId

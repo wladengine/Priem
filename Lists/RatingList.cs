@@ -270,6 +270,7 @@ namespace Priem
                 {
                     using (PriemEntities context = new PriemEntities())
                     {
+
                         Guid? entId = (from ent in MainClass.GetEntry(context)
                                        where ent.IsSecond == IsSecond && ent.IsParallel == IsParallel && ent.IsReduced == IsReduced
                                        && ent.LicenseProgramId == LicenseProgramId
@@ -277,6 +278,8 @@ namespace Priem
                                        && (ProfileId == null ? ent.ProfileId == 0 : ent.ProfileId == ProfileId)
                                        && ent.StudyFormId == StudyFormId
                                        && ent.StudyBasisId == StudyBasisId
+                                       && ent.IsCrimea == IsCrimea
+                                       && ent.IsForeign == IsForeign
                                        select ent.Id).FirstOrDefault();
                         return entId;
                     }
@@ -286,6 +289,10 @@ namespace Priem
                     return null;
                 }
             }            
+        }
+        private bool IsForeign
+        {
+            get { return MainClass.dbType == PriemType.PriemForeigners; }
         }
 
         private void FillStudyLevelGroup()
@@ -463,6 +470,7 @@ namespace Priem
                        && ent.StudyFormId == StudyFormId
                        && ent.StudyBasisId == StudyBasisId
                        && ent.IsCrimea == IsCrimea
+
                        select ent).FirstOrDefault();
 
                 if (entry == null)
@@ -571,7 +579,7 @@ namespace Priem
                     sOrderBy =
                         chbCel.Checked ?
                         " ORDER BY ed.qAbiturient.Coefficient, comp , noexamssort desc, 'Сумма баллов' desc, ed.extAbitMarksSum.TotalCount desc, ФИО" :
-                        " ORDER BY comp , noexamssort DESC, 'Сумма баллов' desc, 'Проф. экзамен' DESC, ed.qAbiturient.Coefficient DESC, ed.extAbitMarksSum.TotalCount desc, ФИО";
+                        " ORDER BY comp , 'Сумма баллов' desc, 'Проф. экзамен' DESC, ed.qAbiturient.Coefficient DESC, ed.extAbitMarksSum.TotalCount desc, ФИО";
                 }
                 else
                 {
@@ -663,14 +671,14 @@ AND ed.FixierenView.IsSecond = {7} AND ed.FixierenView.IsReduced = {8} AND ed.Fi
                     else
                         sFilters += " AND ((CompetitionId=1 OR CompetitionId=8) OR hlpMinMarkAbiturient.Id IS NULL)";
 
-                    string examsCnt = _bdc.GetStringValue(string.Format(" SELECT Count(Id) FROM ed.extExamInEntry WHERE EntryId='{0}' ", EntryId.ToString()));
+                    string examsCnt = _bdc.GetStringValue(string.Format(" SELECT Count(Id) FROM ed.extExamInEntry WHERE EntryId='{0}' AND ParentExamInEntryId IS NULL", EntryId.ToString()));
                    
                     if (MainClass.dbType == PriemType.PriemMag)
                     { 
                         _queryOrange = @", CASE WHEN EXISTS(SELECT PersonId FROM ed.hlpPersonsWithOriginals WHERE PersonId = ed.qAbiturient.PersonId AND EntryId <> ed.qAbiturient.EntryId) then 1 else 0 end as orange ";
                         
                         // кроме бэ нужное кол-во оценок есть
-                        sFilters += " AND ((CompetitionId=1  OR CompetitionId=8) OR ed.extAbitMarksSum.TotalCount = " + examsCnt + " ) ";
+                        sFilters += " AND ((CompetitionId=1  OR CompetitionId=8) OR extAbitMarksSum.TotalCount = " + examsCnt + " ) ";
 
                         if (bMagAddNabor1Enabled)
                             sFilters += " AND qAbiturient.DocInsertDate > '" + dtMagAddNabor1.ToShortDateString() + "' ";
@@ -701,7 +709,7 @@ AND ed.FixierenView.IsSecond = {7} AND ed.FixierenView.IsReduced = {8} AND ed.Fi
                         sFilters += @" AND (CompetitionId IN (1, 8) 
                                         OR (ed.qAbiturient.PersonId NOT IN (SELECT PersonId FROM ed.EgeCertificate) 
                                            AND ed.qAbiturient.Id NOT IN (SELECT abiturientid from ed.Mark where IsFromEge = 1) /*and ed.extPerson.EgeInSPbgu = 0 */and ed.qAbiturient.IsSecond = 0 and ed.qAbiturient.IsReduced = 0 and ed.qAbiturient.IsParallel = 0) 
-                                        OR ed.extAbitMarksSum.TotalCount = (
+                                        OR extAbitMarksSum.TotalCount = (
 		                                SELECT COUNT(*) 
 		                                FROM ed.extExamInEntry 
 		                                WHERE extExamInEntry.EntryId = qAbiturient.EntryId

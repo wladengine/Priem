@@ -44,6 +44,7 @@
             this.smiOlympCheckList = new System.Windows.Forms.ToolStripMenuItem();
             this.smiListAbitWithInnerPriorities = new System.Windows.Forms.ToolStripMenuItem();
             this.smiMyList = new System.Windows.Forms.ToolStripMenuItem();
+            this.smiAbitRatingKofGroupChanging = new System.Windows.Forms.ToolStripMenuItem();
             this.smiProtocols = new System.Windows.Forms.ToolStripMenuItem();
             this.smiEnableProtocol = new System.Windows.Forms.ToolStripMenuItem();
             this.smiDisEnableProtocol = new System.Windows.Forms.ToolStripMenuItem();
@@ -134,6 +135,7 @@
             this.smiLoadMarks = new System.Windows.Forms.ToolStripMenuItem();
             this.smiDecryptor = new System.Windows.Forms.ToolStripMenuItem();
             this.smiAppeal = new System.Windows.Forms.ToolStripMenuItem();
+            this.smiLoadExamsResultsToParentExamTool = new System.Windows.Forms.ToolStripMenuItem();
             this.smiFBS = new System.Windows.Forms.ToolStripMenuItem();
             this.smiGetByFIOPasp = new System.Windows.Forms.ToolStripMenuItem();
             this.smiGetByFIOPasp2 = new System.Windows.Forms.ToolStripMenuItem();
@@ -149,7 +151,6 @@
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.lblDBPath = new System.Windows.Forms.ToolStripStatusLabel();
             this.tsslMain = new System.Windows.Forms.ToolStripStatusLabel();
-            this.smiLoadExamsResultsToParentExamTool = new System.Windows.Forms.ToolStripMenuItem();
             this.msMainMenu.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -189,7 +190,8 @@
             this.smiRatingList,
             this.smiOlympCheckList,
             this.smiListAbitWithInnerPriorities,
-            this.smiMyList});
+            this.smiMyList,
+            this.smiAbitRatingKofGroupChanging});
             this.smiLists.Name = "smiLists";
             this.smiLists.Size = new System.Drawing.Size(60, 20);
             this.smiLists.Text = "Списки";
@@ -286,6 +288,13 @@
             this.smiMyList.Size = new System.Drawing.Size(402, 22);
             this.smiMyList.Text = "Рейтинговый список конкурсов с внутр. приоритетами";
             this.smiMyList.Click += new System.EventHandler(this.smiMyList_Click);
+            // 
+            // smiAbitRatingKofGroupChanging
+            // 
+            this.smiAbitRatingKofGroupChanging.Name = "smiAbitRatingKofGroupChanging";
+            this.smiAbitRatingKofGroupChanging.Size = new System.Drawing.Size(402, 22);
+            this.smiAbitRatingKofGroupChanging.Text = "Групповое назначение рейтинговых коэффициентов";
+            this.smiAbitRatingKofGroupChanging.Click += new System.EventHandler(this.smiAbitRatingKofGroupChanging_Click);
             // 
             // smiProtocols
             // 
@@ -1004,6 +1013,13 @@
             this.smiAppeal.Text = "Ведомость для аппеляции";
             this.smiAppeal.Click += new System.EventHandler(this.smiAppeal_Click);
             // 
+            // smiLoadExamsResultsToParentExamTool
+            // 
+            this.smiLoadExamsResultsToParentExamTool.Name = "smiLoadExamsResultsToParentExamTool";
+            this.smiLoadExamsResultsToParentExamTool.Size = new System.Drawing.Size(243, 22);
+            this.smiLoadExamsResultsToParentExamTool.Text = "loadExamsResultsToParentExam";
+            this.smiLoadExamsResultsToParentExamTool.Click += new System.EventHandler(this.smiLoadExamsResultsToParentExamTool_Click);
+            // 
             // smiFBS
             // 
             this.smiFBS.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -1115,13 +1131,6 @@
             // 
             this.tsslMain.Name = "tsslMain";
             this.tsslMain.Size = new System.Drawing.Size(0, 17);
-            // 
-            // smiLoadExamsResultsToParentExamTool
-            // 
-            this.smiLoadExamsResultsToParentExamTool.Name = "smiLoadExamsResultsToParentExamTool";
-            this.smiLoadExamsResultsToParentExamTool.Size = new System.Drawing.Size(243, 22);
-            this.smiLoadExamsResultsToParentExamTool.Text = "loadExamsResultsToParentExam";
-            this.smiLoadExamsResultsToParentExamTool.Click += new System.EventHandler(this.smiLoadExamsResultsToParentExamTool_Click);
             // 
             // MainForm
             // 
@@ -1268,6 +1277,7 @@
         private System.Windows.Forms.ToolStripMenuItem smiRegions;
         private System.Windows.Forms.ToolStripMenuItem smiCountries;
         private System.Windows.Forms.ToolStripMenuItem smiLoadExamsResultsToParentExamTool;
+        private System.Windows.Forms.ToolStripMenuItem smiAbitRatingKofGroupChanging;
 
     }
 }

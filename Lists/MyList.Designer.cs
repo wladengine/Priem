@@ -65,6 +65,10 @@
             this.rbCrimea = new System.Windows.Forms.RadioButton();
             this.rbForeign = new System.Windows.Forms.RadioButton();
             this.rbCommon = new System.Windows.Forms.RadioButton();
+            this.btnRePaint = new System.Windows.Forms.Button();
+            this.pictureBoxBeige = new System.Windows.Forms.PictureBox();
+            this.labelBeige = new System.Windows.Forms.Label();
+            this.btnRestoreOriginals = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dgvAbitList)).BeginInit();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
@@ -75,6 +79,7 @@
             this.groupBox1.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.groupBox4.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxBeige)).BeginInit();
             this.SuspendLayout();
             // 
             // lblCount
@@ -84,7 +89,7 @@
             // 
             // btnCard
             // 
-            this.btnCard.Location = new System.Drawing.Point(27, 515);
+            this.btnCard.Location = new System.Drawing.Point(49, 515);
             this.btnCard.Visible = false;
             // 
             // btnRemove
@@ -99,7 +104,7 @@
             // 
             // btnClose
             // 
-            this.btnClose.Location = new System.Drawing.Point(13, 515);
+            this.btnClose.Location = new System.Drawing.Point(35, 515);
             this.btnClose.Visible = false;
             // 
             // cbFaculty
@@ -160,11 +165,11 @@
             this.dgvAbitList.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvAbitList.Location = new System.Drawing.Point(13, 174);
             this.dgvAbitList.Name = "dgvAbitList";
-            this.dgvAbitList.Size = new System.Drawing.Size(1075, 373);
+            this.dgvAbitList.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
+            this.dgvAbitList.Size = new System.Drawing.Size(1097, 373);
             this.dgvAbitList.TabIndex = 5;
             this.dgvAbitList.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvAbitList_CellContentDoubleClick);
             this.dgvAbitList.CellMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dgvAbitList_CellMouseClick);
-            this.dgvAbitList.CellMouseEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvAbitList_CellMouseEnter);
             // 
             // groupBox2
             // 
@@ -323,7 +328,7 @@
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(661, 95);
+            this.label8.Location = new System.Drawing.Point(664, 111);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(422, 13);
             this.label8.TabIndex = 79;
@@ -343,15 +348,15 @@
             this.labelWhite.AutoSize = true;
             this.labelWhite.Location = new System.Drawing.Point(690, 74);
             this.labelWhite.Name = "labelWhite";
-            this.labelWhite.Size = new System.Drawing.Size(294, 13);
+            this.labelWhite.Size = new System.Drawing.Size(397, 13);
             this.labelWhite.TabIndex = 80;
-            this.labelWhite.Text = "Не рекомендован к зачислению ни по одной программе";
+            this.labelWhite.Text = "Не рекомендован к зачислению ни по одной программе (или нет оригинала)";
             // 
             // label10
             // 
             this.label10.AutoSize = true;
             this.label10.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label10.Location = new System.Drawing.Point(661, 116);
+            this.label10.Location = new System.Drawing.Point(661, 124);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(413, 15);
             this.label10.TabIndex = 82;
@@ -455,11 +460,53 @@
             this.rbCommon.Text = "общий";
             this.rbCommon.UseVisualStyleBackColor = true;
             // 
+            // btnRePaint
+            // 
+            this.btnRePaint.Location = new System.Drawing.Point(664, 145);
+            this.btnRePaint.Name = "btnRePaint";
+            this.btnRePaint.Size = new System.Drawing.Size(160, 23);
+            this.btnRePaint.TabIndex = 89;
+            this.btnRePaint.Text = "Пересчитать";
+            this.btnRePaint.UseVisualStyleBackColor = true;
+            this.btnRePaint.Click += new System.EventHandler(this.btnRePaint_Click);
+            // 
+            // pictureBoxBeige
+            // 
+            this.pictureBoxBeige.BackColor = System.Drawing.Color.Beige;
+            this.pictureBoxBeige.Location = new System.Drawing.Point(664, 90);
+            this.pictureBoxBeige.Name = "pictureBoxBeige";
+            this.pictureBoxBeige.Size = new System.Drawing.Size(25, 15);
+            this.pictureBoxBeige.TabIndex = 91;
+            this.pictureBoxBeige.TabStop = false;
+            // 
+            // labelBeige
+            // 
+            this.labelBeige.AutoSize = true;
+            this.labelBeige.Location = new System.Drawing.Point(690, 91);
+            this.labelBeige.Name = "labelBeige";
+            this.labelBeige.Size = new System.Drawing.Size(214, 13);
+            this.labelBeige.TabIndex = 90;
+            this.labelBeige.Text = "Находится в 80%-зоне, но нет оригинала";
+            // 
+            // btnRestoreOriginals
+            // 
+            this.btnRestoreOriginals.Location = new System.Drawing.Point(827, 145);
+            this.btnRestoreOriginals.Name = "btnRestoreOriginals";
+            this.btnRestoreOriginals.Size = new System.Drawing.Size(260, 23);
+            this.btnRestoreOriginals.TabIndex = 92;
+            this.btnRestoreOriginals.Text = "Восстановить исходные значения оригиналов";
+            this.btnRestoreOriginals.UseVisualStyleBackColor = true;
+            this.btnRestoreOriginals.Click += new System.EventHandler(this.btnRestoreOriginals_Click);
+            // 
             // MyList
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1100, 553);
+            this.ClientSize = new System.Drawing.Size(1122, 553);
+            this.Controls.Add(this.btnRestoreOriginals);
+            this.Controls.Add(this.pictureBoxBeige);
+            this.Controls.Add(this.labelBeige);
+            this.Controls.Add(this.btnRePaint);
             this.Controls.Add(this.groupBox4);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox1);
@@ -507,6 +554,10 @@
             this.Controls.SetChildIndex(this.groupBox1, 0);
             this.Controls.SetChildIndex(this.groupBox3, 0);
             this.Controls.SetChildIndex(this.groupBox4, 0);
+            this.Controls.SetChildIndex(this.btnRePaint, 0);
+            this.Controls.SetChildIndex(this.labelBeige, 0);
+            this.Controls.SetChildIndex(this.pictureBoxBeige, 0);
+            this.Controls.SetChildIndex(this.btnRestoreOriginals, 0);
             ((System.ComponentModel.ISupportInitialize)(this.dgvAbitList)).EndInit();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
@@ -521,6 +572,7 @@
             this.groupBox3.PerformLayout();
             this.groupBox4.ResumeLayout(false);
             this.groupBox4.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxBeige)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -564,5 +616,9 @@
         private System.Windows.Forms.RadioButton rbCrimea;
         private System.Windows.Forms.RadioButton rbForeign;
         private System.Windows.Forms.RadioButton rbCommon;
+        private System.Windows.Forms.Button btnRePaint;
+        private System.Windows.Forms.PictureBox pictureBoxBeige;
+        private System.Windows.Forms.Label labelBeige;
+        private System.Windows.Forms.Button btnRestoreOriginals;
     }
 }

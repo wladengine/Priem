@@ -151,6 +151,7 @@
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.lblDBPath = new System.Windows.Forms.ToolStripStatusLabel();
             this.tsslMain = new System.Windows.Forms.ToolStripStatusLabel();
+            this.smiDisEntryOrderFromReEnter = new System.Windows.Forms.ToolStripMenuItem();
             this.msMainMenu.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -305,7 +306,8 @@
             this.smiChangeCompBE,
             this.smiEntryView,
             this.smiDisEntryView,
-            this.smiOrderNumbers});
+            this.smiOrderNumbers,
+            this.smiDisEntryOrderFromReEnter});
             this.smiProtocols.Name = "smiProtocols";
             this.smiProtocols.Size = new System.Drawing.Size(83, 20);
             this.smiProtocols.Text = "Протоколы";
@@ -313,49 +315,49 @@
             // smiEnableProtocol
             // 
             this.smiEnableProtocol.Name = "smiEnableProtocol";
-            this.smiEnableProtocol.Size = new System.Drawing.Size(353, 22);
+            this.smiEnableProtocol.Size = new System.Drawing.Size(545, 22);
             this.smiEnableProtocol.Text = "Протокол о допуске";
             this.smiEnableProtocol.Click += new System.EventHandler(this.smiEnableProtocol_Click);
             // 
             // smiDisEnableProtocol
             // 
             this.smiDisEnableProtocol.Name = "smiDisEnableProtocol";
-            this.smiDisEnableProtocol.Size = new System.Drawing.Size(353, 22);
+            this.smiDisEnableProtocol.Size = new System.Drawing.Size(545, 22);
             this.smiDisEnableProtocol.Text = "Протокол об исключении из протокола о допуске";
             this.smiDisEnableProtocol.Click += new System.EventHandler(this.smiDisEnableProtocol_Click);
             // 
             // smiChangeCompCel
             // 
             this.smiChangeCompCel.Name = "smiChangeCompCel";
-            this.smiChangeCompCel.Size = new System.Drawing.Size(353, 22);
+            this.smiChangeCompCel.Size = new System.Drawing.Size(545, 22);
             this.smiChangeCompCel.Text = "Протокол о смене конкурса целевикам";
             this.smiChangeCompCel.Click += new System.EventHandler(this.smiChangeCompCel_Click);
             // 
             // smiChangeCompBE
             // 
             this.smiChangeCompBE.Name = "smiChangeCompBE";
-            this.smiChangeCompBE.Size = new System.Drawing.Size(353, 22);
+            this.smiChangeCompBE.Size = new System.Drawing.Size(545, 22);
             this.smiChangeCompBE.Text = "Протокол о смене типа конкурса на общий";
             this.smiChangeCompBE.Click += new System.EventHandler(this.smiChangeCompBE_Click);
             // 
             // smiEntryView
             // 
             this.smiEntryView.Name = "smiEntryView";
-            this.smiEntryView.Size = new System.Drawing.Size(353, 22);
+            this.smiEntryView.Size = new System.Drawing.Size(545, 22);
             this.smiEntryView.Text = "Представление к зачислению";
             this.smiEntryView.Click += new System.EventHandler(this.smiEntryView_Click);
             // 
             // smiDisEntryView
             // 
             this.smiDisEntryView.Name = "smiDisEntryView";
-            this.smiDisEntryView.Size = new System.Drawing.Size(353, 22);
+            this.smiDisEntryView.Size = new System.Drawing.Size(545, 22);
             this.smiDisEntryView.Text = "Приказ об исключении";
             this.smiDisEntryView.Click += new System.EventHandler(this.smiDisEntryView_Click);
             // 
             // smiOrderNumbers
             // 
             this.smiOrderNumbers.Name = "smiOrderNumbers";
-            this.smiOrderNumbers.Size = new System.Drawing.Size(353, 22);
+            this.smiOrderNumbers.Size = new System.Drawing.Size(545, 22);
             this.smiOrderNumbers.Text = "Номера приказов";
             this.smiOrderNumbers.Click += new System.EventHandler(this.smiOrderNumbers_Click);
             // 
@@ -1132,6 +1134,13 @@
             this.tsslMain.Name = "tsslMain";
             this.tsslMain.Size = new System.Drawing.Size(0, 17);
             // 
+            // smiDisEntryOrderFromReEnter
+            // 
+            this.smiDisEntryOrderFromReEnter.Name = "smiDisEntryOrderFromReEnter";
+            this.smiDisEntryOrderFromReEnter.Size = new System.Drawing.Size(545, 22);
+            this.smiDisEntryOrderFromReEnter.Text = "Представление к отчислению в связи с проходом по более приоритетному конкурсу";
+            this.smiDisEntryOrderFromReEnter.Click += new System.EventHandler(this.smiDisEntryOrderFromReEnter_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1278,6 +1287,7 @@
         private System.Windows.Forms.ToolStripMenuItem smiCountries;
         private System.Windows.Forms.ToolStripMenuItem smiLoadExamsResultsToParentExamTool;
         private System.Windows.Forms.ToolStripMenuItem smiAbitRatingKofGroupChanging;
+        private System.Windows.Forms.ToolStripMenuItem smiDisEntryOrderFromReEnter;
 
     }
 }

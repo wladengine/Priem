@@ -856,5 +856,10 @@ namespace Priem
         {
             new ListAbitRatingKofGroupChanging().Show();
         }
+
+        private void smiDisEntryOrderFromReEnter_Click(object sender, EventArgs e)
+        {
+            new DisEntryFromReEnterViewList().Show();
+        }
     }
 }

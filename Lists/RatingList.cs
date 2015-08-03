@@ -470,7 +470,6 @@ namespace Priem
                        && ent.StudyFormId == StudyFormId
                        && ent.StudyBasisId == StudyBasisId
                        && ent.IsCrimea == IsCrimea
-
                        select ent).FirstOrDefault();
 
                 if (entry == null)
@@ -490,10 +489,10 @@ namespace Priem
 
                 enteredCrimea = (from ab in context.qAbitAll
                                  join ent in context.Entry on ab.EntryId equals ent.Id
-                           join ev in context.extEntryView
-                           on ab.Id equals ev.AbiturientId
-                           where ab.IsCrimea && (ab.EntryId == entryId || ent.ParentEntryId == entryId)
-                           select ab).Count();
+                                 join ev in context.extEntryView
+                                 on ab.Id equals ev.AbiturientId
+                                 where ab.IsCrimea && (ab.EntryId == entryId || ent.ParentEntryId == entryId)
+                                 select ab).Count();
 
                 enteredQuota = (from ab in context.qAbitAll
                                  join ev in context.extEntryView
@@ -506,6 +505,8 @@ namespace Priem
                               on ab.Id equals ev.AbiturientId
                               where ab.CompetitionId == 6 && ab.EntryId == entryId
                               select ab).Count();
+
+                planCrimea = context.Entry.Where(x => x.ParentEntryId == entryId).Select(x => x.KCP).DefaultIfEmpty(0).First() ?? 0;
                
                 CheckLockAndPasha(context);
 
@@ -516,7 +517,9 @@ namespace Priem
                 else if (IsQuota)
                     return planQuota - enteredQuota;
                 else
-                    return plan - planCel - entered - enteredQuota - enteredCrimea;
+                {
+                    return plan - enteredCel - entered - enteredQuota - enteredCrimea;
+                }
             }
         }
 

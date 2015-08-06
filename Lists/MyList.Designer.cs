@@ -69,10 +69,17 @@
             this.pictureBoxBeige = new System.Windows.Forms.PictureBox();
             this.labelBeige = new System.Windows.Forms.Label();
             this.btnRestoreOriginals = new System.Windows.Forms.Button();
-            this.gbDinamicWave = new System.Windows.Forms.GroupBox();
-            this.label9 = new System.Windows.Forms.Label();
-            this.tbDinamicWave = new System.Windows.Forms.TextBox();
+            this.gb1kurs = new System.Windows.Forms.GroupBox();
+            this.btnSetAllOrigins = new System.Windows.Forms.Button();
+            this.chbOnlyWithOrigins = new System.Windows.Forms.CheckBox();
             this.label11 = new System.Windows.Forms.Label();
+            this.tbDinamicWave = new System.Windows.Forms.TextBox();
+            this.label9 = new System.Windows.Forms.Label();
+            this.gbMag = new System.Windows.Forms.GroupBox();
+            this.chbOnlyWithOriginsMag = new System.Windows.Forms.CheckBox();
+            this.label12 = new System.Windows.Forms.Label();
+            this.tbDinamicWaveMag = new System.Windows.Forms.TextBox();
+            this.label13 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dgvAbitList)).BeginInit();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
@@ -84,7 +91,8 @@
             this.groupBox3.SuspendLayout();
             this.groupBox4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxBeige)).BeginInit();
-            this.gbDinamicWave.SuspendLayout();
+            this.gb1kurs.SuspendLayout();
+            this.gbMag.SuspendLayout();
             this.SuspendLayout();
             // 
             // lblCount
@@ -94,7 +102,7 @@
             // 
             // btnCard
             // 
-            this.btnCard.Location = new System.Drawing.Point(183, 515);
+            this.btnCard.Location = new System.Drawing.Point(245, 515);
             this.btnCard.Visible = false;
             // 
             // btnRemove
@@ -109,7 +117,7 @@
             // 
             // btnClose
             // 
-            this.btnClose.Location = new System.Drawing.Point(169, 515);
+            this.btnClose.Location = new System.Drawing.Point(231, 515);
             this.btnClose.Visible = false;
             // 
             // cbFaculty
@@ -140,7 +148,6 @@
             this.cbStudyForm.Name = "cbStudyForm";
             this.cbStudyForm.Size = new System.Drawing.Size(194, 21);
             this.cbStudyForm.TabIndex = 2;
-            this.cbStudyForm.SelectedIndexChanged += new System.EventHandler(this.cbStudyForm_SelectedIndexChanged);
             // 
             // cbLicenseProgram
             // 
@@ -171,9 +178,8 @@
             this.dgvAbitList.Location = new System.Drawing.Point(13, 174);
             this.dgvAbitList.Name = "dgvAbitList";
             this.dgvAbitList.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
-            this.dgvAbitList.Size = new System.Drawing.Size(1231, 373);
+            this.dgvAbitList.Size = new System.Drawing.Size(1293, 373);
             this.dgvAbitList.TabIndex = 5;
-            this.dgvAbitList.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvAbitList_CellContentDoubleClick);
             this.dgvAbitList.CellMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dgvAbitList_CellMouseClick);
             // 
             // groupBox2
@@ -198,7 +204,6 @@
             this.cbZeroWave.TabIndex = 86;
             this.cbZeroWave.Text = "Выводить только зачисленных";
             this.cbZeroWave.UseVisualStyleBackColor = true;
-            this.cbZeroWave.CheckedChanged += new System.EventHandler(this.cbZeroWave_CheckedChanged);
             // 
             // tbAbitsTop
             // 
@@ -353,9 +358,9 @@
             this.labelWhite.AutoSize = true;
             this.labelWhite.Location = new System.Drawing.Point(690, 74);
             this.labelWhite.Name = "labelWhite";
-            this.labelWhite.Size = new System.Drawing.Size(397, 13);
+            this.labelWhite.Size = new System.Drawing.Size(367, 13);
             this.labelWhite.TabIndex = 80;
-            this.labelWhite.Text = "Не рекомендован к зачислению ни по одной программе (или нет оригинала)";
+            this.labelWhite.Text = "Не рекомендован к зачислению на эту программу (или нет оригинала)";
             // 
             // label10
             // 
@@ -375,7 +380,6 @@
             this.btn_GreenList.TabIndex = 83;
             this.btn_GreenList.Text = "GreenList";
             this.btn_GreenList.UseVisualStyleBackColor = true;
-            this.btn_GreenList.Click += new System.EventHandler(this.btn_GreenList_Click);
             // 
             // pictureBoxThistle
             // 
@@ -467,9 +471,9 @@
             // 
             // btnRePaint
             // 
-            this.btnRePaint.Location = new System.Drawing.Point(6, 19);
+            this.btnRePaint.Location = new System.Drawing.Point(6, 18);
             this.btnRePaint.Name = "btnRePaint";
-            this.btnRePaint.Size = new System.Drawing.Size(131, 23);
+            this.btnRePaint.Size = new System.Drawing.Size(199, 23);
             this.btnRePaint.TabIndex = 89;
             this.btnRePaint.Text = "Пересчитать";
             this.btnRePaint.UseVisualStyleBackColor = true;
@@ -495,39 +499,63 @@
             // 
             // btnRestoreOriginals
             // 
-            this.btnRestoreOriginals.Location = new System.Drawing.Point(6, 44);
+            this.btnRestoreOriginals.Location = new System.Drawing.Point(6, 42);
             this.btnRestoreOriginals.Name = "btnRestoreOriginals";
-            this.btnRestoreOriginals.Size = new System.Drawing.Size(131, 48);
+            this.btnRestoreOriginals.Size = new System.Drawing.Size(199, 24);
             this.btnRestoreOriginals.TabIndex = 92;
-            this.btnRestoreOriginals.Text = "Восстановить исходные значения оригиналов";
+            this.btnRestoreOriginals.Text = "Восстановить значения оригиналов";
             this.btnRestoreOriginals.UseVisualStyleBackColor = true;
             this.btnRestoreOriginals.Click += new System.EventHandler(this.btnRestoreOriginals_Click);
             // 
-            // gbDinamicWave
+            // gb1kurs
             // 
-            this.gbDinamicWave.Controls.Add(this.label11);
-            this.gbDinamicWave.Controls.Add(this.tbDinamicWave);
-            this.gbDinamicWave.Controls.Add(this.label9);
-            this.gbDinamicWave.Controls.Add(this.btnRePaint);
-            this.gbDinamicWave.Controls.Add(this.btnRestoreOriginals);
-            this.gbDinamicWave.Location = new System.Drawing.Point(1095, 5);
-            this.gbDinamicWave.Name = "gbDinamicWave";
-            this.gbDinamicWave.Size = new System.Drawing.Size(149, 162);
-            this.gbDinamicWave.TabIndex = 93;
-            this.gbDinamicWave.TabStop = false;
-            this.gbDinamicWave.Text = "1 курс";
+            this.gb1kurs.Controls.Add(this.btnSetAllOrigins);
+            this.gb1kurs.Controls.Add(this.chbOnlyWithOrigins);
+            this.gb1kurs.Controls.Add(this.label11);
+            this.gb1kurs.Controls.Add(this.tbDinamicWave);
+            this.gb1kurs.Controls.Add(this.label9);
+            this.gb1kurs.Controls.Add(this.btnRePaint);
+            this.gb1kurs.Controls.Add(this.btnRestoreOriginals);
+            this.gb1kurs.Location = new System.Drawing.Point(1095, 5);
+            this.gb1kurs.Name = "gb1kurs";
+            this.gb1kurs.Size = new System.Drawing.Size(211, 162);
+            this.gb1kurs.TabIndex = 93;
+            this.gb1kurs.TabStop = false;
+            this.gb1kurs.Text = "1 курс";
             // 
-            // label9
+            // btnSetAllOrigins
             // 
-            this.label9.Location = new System.Drawing.Point(6, 95);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(131, 31);
-            this.label9.TabIndex = 93;
-            this.label9.Text = "Кол-во зачисляемых в первую волну";
+            this.btnSetAllOrigins.Location = new System.Drawing.Point(6, 69);
+            this.btnSetAllOrigins.Name = "btnSetAllOrigins";
+            this.btnSetAllOrigins.Size = new System.Drawing.Size(199, 24);
+            this.btnSetAllOrigins.TabIndex = 101;
+            this.btnSetAllOrigins.Text = "Проставить оригиналы всем";
+            this.btnSetAllOrigins.UseVisualStyleBackColor = true;
+            this.btnSetAllOrigins.Click += new System.EventHandler(this.btnSetAllOrigins_Click);
+            // 
+            // chbOnlyWithOrigins
+            // 
+            this.chbOnlyWithOrigins.Checked = true;
+            this.chbOnlyWithOrigins.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chbOnlyWithOrigins.Location = new System.Drawing.Point(6, 134);
+            this.chbOnlyWithOrigins.Name = "chbOnlyWithOrigins";
+            this.chbOnlyWithOrigins.Size = new System.Drawing.Size(199, 22);
+            this.chbOnlyWithOrigins.TabIndex = 100;
+            this.chbOnlyWithOrigins.Text = "Только с оригиналами";
+            this.chbOnlyWithOrigins.UseVisualStyleBackColor = true;
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(106, 114);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(15, 13);
+            this.label11.TabIndex = 95;
+            this.label11.Text = "%";
             // 
             // tbDinamicWave
             // 
-            this.tbDinamicWave.Location = new System.Drawing.Point(9, 126);
+            this.tbDinamicWave.Location = new System.Drawing.Point(6, 111);
             this.tbDinamicWave.Name = "tbDinamicWave";
             this.tbDinamicWave.Size = new System.Drawing.Size(94, 20);
             this.tbDinamicWave.TabIndex = 94;
@@ -535,21 +563,73 @@
             this.tbDinamicWave.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.tbDinamicWave.TextChanged += new System.EventHandler(this.tbDinamicWave_TextChanged);
             // 
-            // label11
+            // label9
             // 
-            this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(109, 129);
-            this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(15, 13);
-            this.label11.TabIndex = 95;
-            this.label11.Text = "%";
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(6, 95);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(193, 13);
+            this.label9.TabIndex = 93;
+            this.label9.Text = "Кол-во зачисляемых в первую волну";
             // 
-            // MyList
+            // gbMag
+            // 
+            this.gbMag.Controls.Add(this.chbOnlyWithOriginsMag);
+            this.gbMag.Controls.Add(this.label12);
+            this.gbMag.Controls.Add(this.tbDinamicWaveMag);
+            this.gbMag.Controls.Add(this.label13);
+            this.gbMag.Location = new System.Drawing.Point(1095, 5);
+            this.gbMag.Name = "gbMag";
+            this.gbMag.Size = new System.Drawing.Size(211, 162);
+            this.gbMag.TabIndex = 94;
+            this.gbMag.TabStop = false;
+            this.gbMag.Text = "Магистратура";
+            // 
+            // chbOnlyWithOriginsMag
+            // 
+            this.chbOnlyWithOriginsMag.Enabled = false;
+            this.chbOnlyWithOriginsMag.Location = new System.Drawing.Point(6, 54);
+            this.chbOnlyWithOriginsMag.Name = "chbOnlyWithOriginsMag";
+            this.chbOnlyWithOriginsMag.Size = new System.Drawing.Size(199, 25);
+            this.chbOnlyWithOriginsMag.TabIndex = 99;
+            this.chbOnlyWithOriginsMag.Text = "Только с оригиналами";
+            this.chbOnlyWithOriginsMag.UseVisualStyleBackColor = true;
+            // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Location = new System.Drawing.Point(106, 35);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(15, 13);
+            this.label12.TabIndex = 98;
+            this.label12.Text = "%";
+            // 
+            // tbDinamicWaveMag
+            // 
+            this.tbDinamicWaveMag.Location = new System.Drawing.Point(6, 32);
+            this.tbDinamicWaveMag.Name = "tbDinamicWaveMag";
+            this.tbDinamicWaveMag.ReadOnly = true;
+            this.tbDinamicWaveMag.Size = new System.Drawing.Size(94, 20);
+            this.tbDinamicWaveMag.TabIndex = 97;
+            this.tbDinamicWaveMag.Text = "100";
+            this.tbDinamicWaveMag.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            // 
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.Location = new System.Drawing.Point(3, 17);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(193, 13);
+            this.label13.TabIndex = 96;
+            this.label13.Text = "Кол-во зачисляемых в первую волну";
+            // 
+            // NewMyList
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1256, 553);
-            this.Controls.Add(this.gbDinamicWave);
+            this.ClientSize = new System.Drawing.Size(1318, 553);
+            this.Controls.Add(this.gbMag);
+            this.Controls.Add(this.gb1kurs);
             this.Controls.Add(this.pictureBoxBeige);
             this.Controls.Add(this.labelBeige);
             this.Controls.Add(this.groupBox4);
@@ -572,7 +652,7 @@
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.dgvAbitList);
             this.Controls.Add(this.btnFillGrid);
-            this.Name = "MyList";
+            this.Name = "NewMyList";
             this.Text = "MyList";
             this.Controls.SetChildIndex(this.btnFillGrid, 0);
             this.Controls.SetChildIndex(this.dgvAbitList, 0);
@@ -601,7 +681,8 @@
             this.Controls.SetChildIndex(this.groupBox4, 0);
             this.Controls.SetChildIndex(this.labelBeige, 0);
             this.Controls.SetChildIndex(this.pictureBoxBeige, 0);
-            this.Controls.SetChildIndex(this.gbDinamicWave, 0);
+            this.Controls.SetChildIndex(this.gb1kurs, 0);
+            this.Controls.SetChildIndex(this.gbMag, 0);
             ((System.ComponentModel.ISupportInitialize)(this.dgvAbitList)).EndInit();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
@@ -617,8 +698,10 @@
             this.groupBox4.ResumeLayout(false);
             this.groupBox4.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxBeige)).EndInit();
-            this.gbDinamicWave.ResumeLayout(false);
-            this.gbDinamicWave.PerformLayout();
+            this.gb1kurs.ResumeLayout(false);
+            this.gb1kurs.PerformLayout();
+            this.gbMag.ResumeLayout(false);
+            this.gbMag.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -666,9 +749,16 @@
         private System.Windows.Forms.PictureBox pictureBoxBeige;
         private System.Windows.Forms.Label labelBeige;
         private System.Windows.Forms.Button btnRestoreOriginals;
-        private System.Windows.Forms.GroupBox gbDinamicWave;
+        private System.Windows.Forms.GroupBox gb1kurs;
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.TextBox tbDinamicWave;
         private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.GroupBox gbMag;
+        private System.Windows.Forms.Label label12;
+        private System.Windows.Forms.TextBox tbDinamicWaveMag;
+        private System.Windows.Forms.Label label13;
+        private System.Windows.Forms.Button btnSetAllOrigins;
+        private System.Windows.Forms.CheckBox chbOnlyWithOrigins;
+        private System.Windows.Forms.CheckBox chbOnlyWithOriginsMag;
     }
 }

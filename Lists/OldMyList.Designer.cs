@@ -1,6 +1,6 @@
 ﻿namespace Priem
 {
-    partial class NewMyList
+    partial class MyList
     {
         /// <summary>
         /// Required designer variable.
@@ -70,13 +70,9 @@
             this.labelBeige = new System.Windows.Forms.Label();
             this.btnRestoreOriginals = new System.Windows.Forms.Button();
             this.gbDinamicWave = new System.Windows.Forms.GroupBox();
-            this.label11 = new System.Windows.Forms.Label();
-            this.tbDinamicWave = new System.Windows.Forms.TextBox();
             this.label9 = new System.Windows.Forms.Label();
-            this.groupBox5 = new System.Windows.Forms.GroupBox();
-            this.label12 = new System.Windows.Forms.Label();
-            this.tbDinamicWaveMag = new System.Windows.Forms.TextBox();
-            this.label13 = new System.Windows.Forms.Label();
+            this.tbDinamicWave = new System.Windows.Forms.TextBox();
+            this.label11 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dgvAbitList)).BeginInit();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
@@ -89,7 +85,6 @@
             this.groupBox4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxBeige)).BeginInit();
             this.gbDinamicWave.SuspendLayout();
-            this.groupBox5.SuspendLayout();
             this.SuspendLayout();
             // 
             // lblCount
@@ -145,6 +140,7 @@
             this.cbStudyForm.Name = "cbStudyForm";
             this.cbStudyForm.Size = new System.Drawing.Size(194, 21);
             this.cbStudyForm.TabIndex = 2;
+            this.cbStudyForm.SelectedIndexChanged += new System.EventHandler(this.cbStudyForm_SelectedIndexChanged);
             // 
             // cbLicenseProgram
             // 
@@ -177,6 +173,7 @@
             this.dgvAbitList.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
             this.dgvAbitList.Size = new System.Drawing.Size(1231, 373);
             this.dgvAbitList.TabIndex = 5;
+            this.dgvAbitList.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvAbitList_CellContentDoubleClick);
             this.dgvAbitList.CellMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dgvAbitList_CellMouseClick);
             // 
             // groupBox2
@@ -377,6 +374,7 @@
             this.btn_GreenList.TabIndex = 83;
             this.btn_GreenList.Text = "GreenList";
             this.btn_GreenList.UseVisualStyleBackColor = true;
+            this.btn_GreenList.Click += new System.EventHandler(this.btn_GreenList_Click);
             // 
             // pictureBoxThistle
             // 
@@ -518,14 +516,13 @@
             this.gbDinamicWave.TabStop = false;
             this.gbDinamicWave.Text = "1 курс";
             // 
-            // label11
+            // label9
             // 
-            this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(109, 129);
-            this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(15, 13);
-            this.label11.TabIndex = 95;
-            this.label11.Text = "%";
+            this.label9.Location = new System.Drawing.Point(6, 95);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(131, 31);
+            this.label9.TabIndex = 93;
+            this.label9.Text = "Кол-во зачисляемых в первую волну";
             // 
             // tbDinamicWave
             // 
@@ -537,59 +534,20 @@
             this.tbDinamicWave.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.tbDinamicWave.TextChanged += new System.EventHandler(this.tbDinamicWave_TextChanged);
             // 
-            // label9
+            // label11
             // 
-            this.label9.Location = new System.Drawing.Point(6, 95);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(131, 31);
-            this.label9.TabIndex = 93;
-            this.label9.Text = "Кол-во зачисляемых в первую волну";
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(109, 129);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(15, 13);
+            this.label11.TabIndex = 95;
+            this.label11.Text = "%";
             // 
-            // groupBox5
-            // 
-            this.groupBox5.Controls.Add(this.label12);
-            this.groupBox5.Controls.Add(this.tbDinamicWaveMag);
-            this.groupBox5.Controls.Add(this.label13);
-            this.groupBox5.Location = new System.Drawing.Point(934, 8);
-            this.groupBox5.Name = "groupBox5";
-            this.groupBox5.Size = new System.Drawing.Size(149, 159);
-            this.groupBox5.TabIndex = 94;
-            this.groupBox5.TabStop = false;
-            this.groupBox5.Text = "ы";
-            // 
-            // label12
-            // 
-            this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(106, 51);
-            this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(15, 13);
-            this.label12.TabIndex = 98;
-            this.label12.Text = "%";
-            // 
-            // tbDinamicWaveMag
-            // 
-            this.tbDinamicWaveMag.Location = new System.Drawing.Point(6, 48);
-            this.tbDinamicWaveMag.Name = "tbDinamicWaveMag";
-            this.tbDinamicWaveMag.ReadOnly = true;
-            this.tbDinamicWaveMag.Size = new System.Drawing.Size(94, 20);
-            this.tbDinamicWaveMag.TabIndex = 97;
-            this.tbDinamicWaveMag.Text = "100";
-            this.tbDinamicWaveMag.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            // 
-            // label13
-            // 
-            this.label13.Location = new System.Drawing.Point(3, 17);
-            this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(131, 31);
-            this.label13.TabIndex = 96;
-            this.label13.Text = "Кол-во зачисляемых в первую волну";
-            // 
-            // NewMyList
+            // MyList
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1256, 553);
-            this.Controls.Add(this.groupBox5);
             this.Controls.Add(this.gbDinamicWave);
             this.Controls.Add(this.pictureBoxBeige);
             this.Controls.Add(this.labelBeige);
@@ -613,7 +571,7 @@
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.dgvAbitList);
             this.Controls.Add(this.btnFillGrid);
-            this.Name = "NewMyList";
+            this.Name = "MyList";
             this.Text = "MyList";
             this.Controls.SetChildIndex(this.btnFillGrid, 0);
             this.Controls.SetChildIndex(this.dgvAbitList, 0);
@@ -643,7 +601,6 @@
             this.Controls.SetChildIndex(this.labelBeige, 0);
             this.Controls.SetChildIndex(this.pictureBoxBeige, 0);
             this.Controls.SetChildIndex(this.gbDinamicWave, 0);
-            this.Controls.SetChildIndex(this.groupBox5, 0);
             ((System.ComponentModel.ISupportInitialize)(this.dgvAbitList)).EndInit();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
@@ -661,8 +618,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxBeige)).EndInit();
             this.gbDinamicWave.ResumeLayout(false);
             this.gbDinamicWave.PerformLayout();
-            this.groupBox5.ResumeLayout(false);
-            this.groupBox5.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -714,9 +669,5 @@
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.TextBox tbDinamicWave;
         private System.Windows.Forms.Label label9;
-        private System.Windows.Forms.GroupBox groupBox5;
-        private System.Windows.Forms.Label label12;
-        private System.Windows.Forms.TextBox tbDinamicWaveMag;
-        private System.Windows.Forms.Label label13;
     }
 }

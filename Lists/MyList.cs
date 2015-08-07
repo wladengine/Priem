@@ -846,7 +846,7 @@ namespace Priem
                             int min_in_prior = ColumnList.Select(x => x.Key.InnerPriorities[i]).Min();
                             Column column = ent.ColumnList.Where(x => x.InnerPriorities[i] == min_in_prior).Select(x => x).First();
                             ColumnList[column] ++;
-                            foreach (Column col in ent.ColumnList.Where(x=>ColumnList.ContainsKey(x) && x!=column).ToList())
+                            foreach (Column col in ent.ColumnList.Where(x=> x!=column).ToList())
                             {
                                     col.SetYellowColor(i);
                             }

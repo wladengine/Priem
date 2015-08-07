@@ -64,7 +64,7 @@ namespace Priem
             {
                 using (PriemEntities context = new PriemEntities())
                 {
-                    ComboServ.FillCombo(cbStudyBasis, HelpClass.GetComboListByTable("ed.StudyBasis", "ORDER BY Name"), false, true);
+                    ComboServ.FillCombo(cbStudyBasis, HelpClass.GetComboListByTable("ed.StudyBasis", "ORDER BY Name"), false, false);
                     FillFaculty();
                     cbStudyBasis.SelectedIndex = 0;
                     FillStudyForm();
@@ -157,7 +157,6 @@ namespace Priem
         private void FillGrid(string abitFilters)
         {
             Coord = new PersonCoordinates();
-
             NewWatch wc = new NewWatch();
 
             #region FillLicensePrograms
@@ -406,7 +405,6 @@ namespace Priem
             dgvAbitList.DataSource = new DataView(examTable);
 
             PaintGrid();
-
             dgvAbitList.ColumnHeadersVisible = false;
             dgvAbitList.AllowUserToOrderColumns = false;
             for (int i = 0; i < dgvAbitList.Columns.Count; i++)
@@ -926,7 +924,6 @@ namespace Priem
             }
             PaintGrid();
         }
-
         protected override void Dgv_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
             if (dgvAbitList.CurrentCell.Value is bool || dgvAbitList.CurrentCell.RowIndex < LastSystemRow)

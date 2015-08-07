@@ -166,21 +166,27 @@ namespace Priem
 
         void bw_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            dgv.DataSource = e.Result;
+            if (e.Error == null)
+            {
+                dgv.DataSource = e.Result;
 
-            dgv.Columns["Id"].Visible = false;
-            dgv.Columns["PersonNum"].HeaderText = "Ид. номер";
-            dgv.Columns["FIO"].HeaderText = "ФИО";
-            dgv.Columns["RegNum"].HeaderText = "Рег. номер";
-            dgv.Columns["LP"].HeaderText = "Направление";
-            dgv.Columns["OP"].HeaderText = "Обр. программа";
-            dgv.Columns["ProfileName"].HeaderText = "Профиль";
-            dgv.Columns["StudyFormName"].HeaderText = "Форма обучения";
-            dgv.Columns["StudyBasisName"].HeaderText = "Основа обучения";
-            dgv.Columns["ActionType"].HeaderText = "Событие";
-            dgv.Columns["ActionTime"].HeaderText = "Время";
-            dgv.Columns["ActionAuthor"].HeaderText = "Автор";
-
+                dgv.Columns["Id"].Visible = false;
+                dgv.Columns["PersonNum"].HeaderText = "Ид. номер";
+                dgv.Columns["FIO"].HeaderText = "ФИО";
+                dgv.Columns["RegNum"].HeaderText = "Рег. номер";
+                dgv.Columns["LP"].HeaderText = "Направление";
+                dgv.Columns["OP"].HeaderText = "Обр. программа";
+                dgv.Columns["ProfileName"].HeaderText = "Профиль";
+                dgv.Columns["StudyFormName"].HeaderText = "Форма обучения";
+                dgv.Columns["StudyBasisName"].HeaderText = "Основа обучения";
+                dgv.Columns["ActionType"].HeaderText = "Событие";
+                dgv.Columns["ActionTime"].HeaderText = "Время";
+                dgv.Columns["ActionAuthor"].HeaderText = "Автор";
+            }
+            else
+            {
+                WinFormsServ.Error(e.Error);
+            }
             cbFaculty.Enabled = true;
             cbLicenseProgram.Enabled = true;
             cbObrazProgram.Enabled = true;

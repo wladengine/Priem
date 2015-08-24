@@ -582,7 +582,7 @@ namespace Priem
                     sOrderBy =
                         chbCel.Checked ?
                         " ORDER BY ed.qAbiturient.Coefficient, comp , noexamssort desc, 'Сумма баллов' desc, ed.extAbitMarksSum.TotalCount desc, ФИО" :
-                        " ORDER BY comp , 'Сумма баллов' desc, 'Проф. экзамен' DESC, ed.qAbiturient.Coefficient DESC, ed.extAbitMarksSum.TotalCount desc, ФИО";
+                        " ORDER BY comp , 'Сумма баллов' desc, 'Проф. экзамен' DESC, ed.qAbiturient.Coefficient DESC, attAvg desc, ed.extAbitMarksSum.TotalCount desc, ФИО";
                 }
                 else
                 {

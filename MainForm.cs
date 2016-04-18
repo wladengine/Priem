@@ -12,6 +12,7 @@ using System.Diagnostics;
 using EducServLib;
 using System.Threading;
 using PriemLib;
+using System.IO;
 
 namespace Priem
 {
@@ -72,10 +73,13 @@ namespace Priem
             MainClass.connString = DBConstants.CS_PRIEM;
             MainClass.connStringOnline = DBConstants.CS_PriemONLINE;
 
+            DateTime crDate = DateTime.MinValue;
+
             switch (dbName.ToLowerInvariant())
             {
                 case "priem":
-                    _titleString = " на первый курс";
+                    crDate = new FileInfo("Priem_1kurs.exe").LastWriteTime;
+                    _titleString = " на первый курс (версия от " + crDate.ToShortDateString() + " " + crDate.ToShortTimeString() + ")";
                     MainClass.dbType = PriemType.Priem;
                     MainClass.IsTestDB = false;
                     break;
@@ -86,7 +90,8 @@ namespace Priem
                     MainClass.IsTestDB = false;
                     break;
                 case "priemmag":
-                    _titleString = " в магистратуру";
+                    crDate = new FileInfo("Priem_mag.exe").LastWriteTime;
+                    _titleString = " в магистратуру (версия от " + crDate.ToShortDateString() + " " + crDate.ToShortTimeString() + ")";
                     MainClass.dbType = PriemType.PriemMag;
                     MainClass.IsTestDB = false;
                     break;

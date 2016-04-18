@@ -252,8 +252,9 @@ namespace Priem
 
                 Guid EntryId = entryList[0];
 
-                var examInEntry = (from ExInEnt in context.ExamInEntry
-                                   join EgeToEx in context.EgeToExam on ExInEnt.ExamId equals EgeToEx.ExamId
+                var examInEntry = (from ExInEnt in context.ExamInEntryBlock
+                                   join ExamInEntUnit in context.ExamInEntryBlockUnit on ExInEnt.Id equals ExamInEntUnit.ExamInEntryBlockId
+                                   join EgeToEx in context.EgeToExam on ExamInEntUnit.ExamId equals EgeToEx.ExamId
                                    where ExInEnt.EntryId == EntryId
                                    select EgeToEx.EgeExamNameId).Distinct().ToList();
 

@@ -51,10 +51,6 @@
     <StartupObject>Priem.Program</StartupObject>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="BDClassLib, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>bin\Release\BDClassLib.dll</HintPath>
-    </Reference>
     <Reference Include="EntityFramework">
       <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
     </Reference>
@@ -313,6 +309,10 @@
     <ProjectReference Include="..\..\..\EDUCATION\EducServLib\EducServLib\EducServLib.csproj">
       <Project>{96257583-5ff8-4f63-aed3-96c36df6477d}</Project>
       <Name>EducServLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\GRADUATE\BDClassLib\BDClassLib\BDClassLib.csproj">
+      <Project>{0880ad34-06a6-4825-a4b7-55ac3e69ccda}</Project>
+      <Name>BDClassLib</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\BaseFormsLib\BaseFormsLib\BaseFormsLib.csproj">
       <Project>{264ef71d-fe21-4be1-b7eb-ccf3b5fd219f}</Project>

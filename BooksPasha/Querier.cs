@@ -148,7 +148,7 @@ namespace Priem
                         ProrectorId = context.Prorektor.Select(x => x.Id).DefaultIfEmpty(0).Max() + 1;
                         pr.Id = ProrectorId;
 
-                        context.Prorektor.AddObject(pr);
+                        context.Prorektor.Add(pr);
                         context.SaveChanges();
                     }
                     else

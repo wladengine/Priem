@@ -207,7 +207,7 @@ ORDER BY 1";
             INNER JOIN ed.extExamInEntry ON Mark.ExamInEntryId = extExamInEntry.Id 
             WHERE Mark.AbiturientId = qAbiturient.Id 
             AND extExamInEntry.ExamId = {0}
-            AND extExamInEntry.IsAdditional=0
+            AND extExamInEntry.IsAdditional = 0
     )
     /*OR qAbiturient.Id IN
     /*или у абитуриента зачёлся балл ниже, чем есть среди его ЕГЭ*/
@@ -254,11 +254,11 @@ ORDER BY 1";
                             Guid persId = new Guid(dsRow["PersonId"].ToString());
                             Guid entryId = new Guid(dsRow["EntryId"].ToString());
 
-                            int? exInEntryId = (from eie in context.extExamInEntry
+                            Guid? exInEntryBlockId = (from eie in context.extExamInEntry
                                                 where eie.EntryId == entryId && eie.ExamId == examId
                                                 select eie.Id).FirstOrDefault();
 
-                            if (exInEntryId == null)
+                            if (exInEntryBlockId == null)
                                 continue;
 
                             Guid egeCertificateId = Guid.Empty;
@@ -377,7 +377,7 @@ ORDER BY 1";
                             }
 
                             if (balls != null)
-                                context.Mark_Insert(abId, exInEntryId, balls, dtDateExam.Value.Date, true, false, false, null, null, egeCertificateId);
+                                context.Mark_Insert(abId, exInEntryBlockId, balls, dtDateExam.Value.Date, true, false, false, null, null, egeCertificateId);
                             else
                                 continue;
 

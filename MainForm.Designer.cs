@@ -53,6 +53,7 @@
             this.smiEntryView = new System.Windows.Forms.ToolStripMenuItem();
             this.smiDisEntryView = new System.Windows.Forms.ToolStripMenuItem();
             this.smiOrderNumbers = new System.Windows.Forms.ToolStripMenuItem();
+            this.smiDisEntryOrderFromReEnter = new System.Windows.Forms.ToolStripMenuItem();
             this.smiMarks = new System.Windows.Forms.ToolStripMenuItem();
             this.smiExams = new System.Windows.Forms.ToolStripMenuItem();
             this.smiOlymps = new System.Windows.Forms.ToolStripMenuItem();
@@ -130,6 +131,7 @@
             this.smiPayDataEntry = new System.Windows.Forms.ToolStripMenuItem();
             this.othersToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.vuzNamesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.loadOlympFromFISToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.smiCrypto = new System.Windows.Forms.ToolStripMenuItem();
             this.smiEnterMarks = new System.Windows.Forms.ToolStripMenuItem();
             this.smiLoadMarks = new System.Windows.Forms.ToolStripMenuItem();
@@ -151,7 +153,7 @@
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.lblDBPath = new System.Windows.Forms.ToolStripStatusLabel();
             this.tsslMain = new System.Windows.Forms.ToolStripStatusLabel();
-            this.smiDisEntryOrderFromReEnter = new System.Windows.Forms.ToolStripMenuItem();
+            this.loadVserossToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.msMainMenu.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -360,6 +362,13 @@
             this.smiOrderNumbers.Size = new System.Drawing.Size(545, 22);
             this.smiOrderNumbers.Text = "Номера приказов";
             this.smiOrderNumbers.Click += new System.EventHandler(this.smiOrderNumbers_Click);
+            // 
+            // smiDisEntryOrderFromReEnter
+            // 
+            this.smiDisEntryOrderFromReEnter.Name = "smiDisEntryOrderFromReEnter";
+            this.smiDisEntryOrderFromReEnter.Size = new System.Drawing.Size(545, 22);
+            this.smiDisEntryOrderFromReEnter.Text = "Представление к отчислению в связи с проходом по более приоритетному конкурсу";
+            this.smiDisEntryOrderFromReEnter.Click += new System.EventHandler(this.smiDisEntryOrderFromReEnter_Click);
             // 
             // smiMarks
             // 
@@ -963,7 +972,9 @@
             // othersToolStripMenuItem
             // 
             this.othersToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.vuzNamesToolStripMenuItem});
+            this.vuzNamesToolStripMenuItem,
+            this.loadOlympFromFISToolStripMenuItem,
+            this.loadVserossToolStripMenuItem});
             this.othersToolStripMenuItem.Name = "othersToolStripMenuItem";
             this.othersToolStripMenuItem.Size = new System.Drawing.Size(453, 22);
             this.othersToolStripMenuItem.Text = "Others";
@@ -971,9 +982,16 @@
             // vuzNamesToolStripMenuItem
             // 
             this.vuzNamesToolStripMenuItem.Name = "vuzNamesToolStripMenuItem";
-            this.vuzNamesToolStripMenuItem.Size = new System.Drawing.Size(130, 22);
+            this.vuzNamesToolStripMenuItem.Size = new System.Drawing.Size(179, 22);
             this.vuzNamesToolStripMenuItem.Text = "VuzNames";
             this.vuzNamesToolStripMenuItem.Click += new System.EventHandler(this.vuzNamesToolStripMenuItem_Click);
+            // 
+            // loadOlympFromFISToolStripMenuItem
+            // 
+            this.loadOlympFromFISToolStripMenuItem.Name = "loadOlympFromFISToolStripMenuItem";
+            this.loadOlympFromFISToolStripMenuItem.Size = new System.Drawing.Size(179, 22);
+            this.loadOlympFromFISToolStripMenuItem.Text = "LoadOlympFromFIS";
+            this.loadOlympFromFISToolStripMenuItem.Click += new System.EventHandler(this.loadOlympFromFISToolStripMenuItem_Click);
             // 
             // smiCrypto
             // 
@@ -1134,12 +1152,12 @@
             this.tsslMain.Name = "tsslMain";
             this.tsslMain.Size = new System.Drawing.Size(0, 17);
             // 
-            // smiDisEntryOrderFromReEnter
+            // loadVserossToolStripMenuItem
             // 
-            this.smiDisEntryOrderFromReEnter.Name = "smiDisEntryOrderFromReEnter";
-            this.smiDisEntryOrderFromReEnter.Size = new System.Drawing.Size(545, 22);
-            this.smiDisEntryOrderFromReEnter.Text = "Представление к отчислению в связи с проходом по более приоритетному конкурсу";
-            this.smiDisEntryOrderFromReEnter.Click += new System.EventHandler(this.smiDisEntryOrderFromReEnter_Click);
+            this.loadVserossToolStripMenuItem.Name = "loadVserossToolStripMenuItem";
+            this.loadVserossToolStripMenuItem.Size = new System.Drawing.Size(179, 22);
+            this.loadVserossToolStripMenuItem.Text = "LoadVseross";
+            this.loadVserossToolStripMenuItem.Click += new System.EventHandler(this.loadVserossToolStripMenuItem_Click);
             // 
             // MainForm
             // 
@@ -1288,6 +1306,8 @@
         private System.Windows.Forms.ToolStripMenuItem smiLoadExamsResultsToParentExamTool;
         private System.Windows.Forms.ToolStripMenuItem smiAbitRatingKofGroupChanging;
         private System.Windows.Forms.ToolStripMenuItem smiDisEntryOrderFromReEnter;
+        private System.Windows.Forms.ToolStripMenuItem loadOlympFromFISToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem loadVserossToolStripMenuItem;
 
     }
 }

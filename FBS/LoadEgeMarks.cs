@@ -44,7 +44,42 @@ namespace Priem
 
         private void UpdateGridAbits()
         {
-            string quer = @"SELECT DISTINCT extEntry.FacultyName AS [Факультет], COUNT(DISTINCT t.AbiturientId) AS [Абитуриентов], 
+//            string quer = @"SELECT DISTINCT extEntry.FacultyName AS [Факультет], 
+//COUNT(DISTINCT t.AbiturientId) AS [Абитуриентов], 
+//(
+//	SELECT CONVERT(nvarchar, MAX(extEnableProtocol.Date), 104) 
+//	+ ' ' + CONVERT(nvarchar, MAX(extEnableProtocol.Date), 108)
+//	FROM ed.extEnableProtocol WHERE extEnableProtocol.StudyLevelGroupId = 1 
+//	AND extEnableProtocol.FacultyId = extEntry.FacultyId
+//)  AS [Дата последнего протокола о допуске]
+//FROM
+//(
+//    SELECT 
+//		CASE WHEN Mark.Id IS NULL AND Person_AdditionalInfo.EgeInSPbgu = 0
+//		THEN Abiturient.Id 
+//		ELSE NULL 
+//		END
+//		AS AbiturientId, Abiturient.EntryId
+//    FROM ed.Abiturient
+//    INNER JOIN ed.Person_AdditionalInfo ON Person_AdditionalInfo.PersonId = Abiturient.PersonId
+//    INNER JOIN ed.extExamInEntry ON extExamInEntry.EntryId = Abiturient.EntryId
+//    INNER JOIN ed.EgeToExam ON EgeToExam.ExamId = extExamInEntry.ExamId
+//    INNER JOIN ed.extEnableProtocol ON extEnableProtocol.AbiturientId = Abiturient.Id
+//    LEFT JOIN ed.Mark ON Mark.ExamInEntryBlockUnitId = extExamInEntry.Id AND Mark.AbiturientId = Abiturient.Id
+//    WHERE extEnableProtocol.IsOld = 0 AND extEnableProtocol.Excluded = 0
+//    AND Abiturient.BackDoc = 0 AND Abiturient.NotEnabled = 0
+//    AND Abiturient.CompetitionId NOT IN (1, 8)
+//) t
+//INNER JOIN ed.extEntry ON extEntry.Id = t.EntryId
+//WHERE extEntry.StudyLevelGroupId = 1
+//GROUP BY extEntry.FacultyName, extEntry.FacultyId
+//ORDER BY 1";
+
+            BackgroundWorker bw = new BackgroundWorker();
+            bw.DoWork += (sender, e) =>
+            {
+                string quer = @"SELECT DISTINCT extEntry.FacultyName AS [Факультет], 
+COUNT(DISTINCT t.AbiturientId) AS [Абитуриентов], 
 (
 	SELECT CONVERT(nvarchar, MAX(extEnableProtocol.Date), 104) 
 	+ ' ' + CONVERT(nvarchar, MAX(extEnableProtocol.Date), 108)
@@ -53,28 +88,45 @@ namespace Priem
 )  AS [Дата последнего протокола о допуске]
 FROM
 (
-    SELECT Abiturient.Id AS AbiturientId, ExamInEntry.Id AS ExamInEntryId, Abiturient.EntryId
+    SELECT 
+		CASE WHEN Mark.Id IS NULL AND Person_AdditionalInfo.EgeInSPbgu = 0
+		THEN Abiturient.Id 
+		ELSE NULL 
+		END
+		AS AbiturientId, Abiturient.EntryId
     FROM ed.Abiturient
-    INNER JOIN ed.ExamInEntry ON ExamInEntry.EntryId = Abiturient.EntryId
-    INNER JOIN ed.EgeToExam ON EgeToExam.ExamId = ExamInEntry.ExamId
+    INNER JOIN ed.Person_AdditionalInfo ON Person_AdditionalInfo.PersonId = Abiturient.PersonId
+    INNER JOIN ed.extExamInEntry ON extExamInEntry.EntryId = Abiturient.EntryId
+    INNER JOIN ed.EgeToExam ON EgeToExam.ExamId = extExamInEntry.ExamId
     INNER JOIN ed.extEnableProtocol ON extEnableProtocol.AbiturientId = Abiturient.Id
+    LEFT JOIN ed.Mark ON Mark.ExamInEntryBlockUnitId = extExamInEntry.Id AND Mark.AbiturientId = Abiturient.Id
     WHERE extEnableProtocol.IsOld = 0 AND extEnableProtocol.Excluded = 0
     AND Abiturient.BackDoc = 0 AND Abiturient.NotEnabled = 0
     AND Abiturient.CompetitionId NOT IN (1, 8)
-    EXCEPT
-    SELECT AbiturientId, ExamInEntryId, ExamInEntry.EntryId
-    FROM ed.Mark
-    INNER JOIN ed.ExamInEntry ON ExamInEntry.Id = Mark.ExamInEntryId
-    INNER JOIN ed.EgeToExam ON EgeToExam.ExamId = ExamInEntry.ExamId
 ) t
 INNER JOIN ed.extEntry ON extEntry.Id = t.EntryId
 WHERE extEntry.StudyLevelGroupId = 1
 GROUP BY extEntry.FacultyName, extEntry.FacultyId
 ORDER BY 1";
-            dgvProtocols.DataSource = MainClass.Bdc.GetDataSet(quer, new SortedList<string, object>() { { "@Date", MainClass._1k_LastEgeMarkLoadTime.AddMinutes(-10) } }).Tables[0];
-            dgvProtocols.Columns["Факультет"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCellsExceptHeader;
-            dgvProtocols.Columns["Абитуриентов"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCellsExceptHeader;
-            dgvProtocols.Columns["Дата последнего протокола о допуске"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCellsExceptHeader;
+                e.Result = MainClass.Bdc.GetDataSet(quer).Tables[0];
+            };
+            bw.RunWorkerCompleted += (sender, e) =>
+            {
+                gbLoading.Visible = false;
+                if (!e.Cancelled)
+                {
+                    dgvProtocols.DataSource = e.Result;
+                    dgvProtocols.Columns["Факультет"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCellsExceptHeader;
+                    dgvProtocols.Columns["Абитуриентов"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCellsExceptHeader;
+                    dgvProtocols.Columns["Дата последнего протокола о допуске"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCellsExceptHeader;
+                }
+            };
+            gbLoading.Visible = true;
+            bw.RunWorkerAsync();
+            //dgvProtocols.DataSource = MainClass.Bdc.GetDataSet(quer).Tables[0];
+            //dgvProtocols.Columns["Факультет"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCellsExceptHeader;
+            //dgvProtocols.Columns["Абитуриентов"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCellsExceptHeader;
+            //dgvProtocols.Columns["Дата последнего протокола о допуске"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCellsExceptHeader;
         }
 
         void cbFaculty_SelectedIndexChanged(object sender, EventArgs e)
@@ -132,53 +184,62 @@ ORDER BY 1";
 
             try
             {
-                wtc = new NewWatch(2);
-                wtc.Show();
-                marksCount = 0;
-
+                List<int> lstFac = new List<int>();
                 if (FacultyId == null)
                 {
                     using (PriemEntities context = new PriemEntities())
                     {
-                        foreach (int facId in context.extEntry.Where(x => x.StudyLevelGroupId == 1).Select(x => x.FacultyId).Distinct().ToList())
-                        {
-                            var ent = Exams.GetExamsWithFilters(context, MainClass.lstStudyLevelGroupId, facId, null, null, null, null, null, null, null, null)
-                                .Where(c => !c.IsAdditional && !c.IsSecond && !c.IsGosLine);
-                            foreach (var exInEnt in ent.Select(x => x.ExamId).Distinct())
-                                SetMarksForExam(exInEnt, facId);
-                        }
+                        lstFac = context.extEntry.Where(x => x.StudyLevelGroupId == 1).Select(x => x.FacultyId).Distinct().ToList();
                     }
                 }
                 else
+                    lstFac.Add(FacultyId.Value);
+
+                List<KeyValuePair<int, int>> lstPairs = new List<KeyValuePair<int, int>>();
+                foreach (int iFacId in lstFac)
                 {
                     if (ExamId == null)
                     {
-                        foreach (KeyValuePair<string, string> ex in cbExam.Items)
+                        using (PriemEntities context = new PriemEntities())
                         {
-                            int exId;
-                            if (int.TryParse(ex.Key, out exId))
-                                SetMarksForExam(exId, FacultyId.Value);
+                            var ent = Exams.GetExamsWithFilters(context, MainClass.lstStudyLevelGroupId, iFacId, null, null, null, null, null, null, null, null)
+                                    .Where(c => !c.IsAdditional && !c.IsSecond && !c.IsGosLine);
+                            foreach (var exInEnt in ent.Select(x => x.ExamId).Distinct())
+                                lstPairs.Add(new KeyValuePair<int, int>(iFacId, exInEnt));
                         }
                     }
                     else
-                        SetMarksForExam(ExamId.Value, FacultyId.Value);
+                        lstPairs.Add(new KeyValuePair<int, int>(iFacId, ExamId.Value));
                 }
 
-                UpdateGridAbits();
+                BackgroundWorker bw = new BackgroundWorker();
+                bw.DoWork += (sender, e) =>
+                {
+                    wtc = new NewWatch(2);
+                    wtc.Show();
+                    wtc.TopMost = true;
+                    marksCount = 0;
 
-                MainClass._1k_LastEgeMarkLoadTime = DateTime.Now;
+                    foreach (KeyValuePair<int, int> kvp in lstPairs)
+                        SetMarksForExam(kvp.Value, kvp.Key);
+                };
+                bw.RunWorkerCompleted += (sender, e) =>
+                {
+                    wtc.Close();
+                    btnOk.Enabled = true;
+                    UpdateGridAbits();
+                    MessageBox.Show(string.Format("Зачтено {0} оценок", marksCount));
+
+                    MainClass._1k_LastEgeMarkLoadTime = DateTime.Now;
+                };
+
+                bw.RunWorkerAsync();
+                btnOk.Enabled = false;
             }
             catch (Exception ex)
             {
                 WinFormsServ.Error("Ошибка загрузки оценок " + ex.Message);
             }
-            finally
-            {
-                wtc.Close();
-                MessageBox.Show(string.Format("Зачтено {0} оценок", marksCount));
-            }
-
-            
         }
 
         private void SetMarksForExam(int examId, int iFacultyId)
@@ -204,7 +265,7 @@ ORDER BY 1";
         /*оценка по НЕ-ДОПу ещё не проставлена*/
             SELECT Mark.AbiturientId 
             FROM ed.Mark 
-            INNER JOIN ed.extExamInEntry ON Mark.ExamInEntryId = extExamInEntry.Id 
+            INNER JOIN ed.extExamInEntry ON Mark.ExamInEntryBlockUnitId = extExamInEntry.Id 
             WHERE Mark.AbiturientId = qAbiturient.Id 
             AND extExamInEntry.ExamId = {0}
             AND extExamInEntry.IsAdditional = 0
@@ -216,18 +277,18 @@ ORDER BY 1";
         FROM ed.Mark AS qMark
         INNER JOIN ed.Abiturient ABIT ON ABIT.Id = qMark.AbiturientId
         INNER JOIN ed.hlpEgeMarkMaxApprovedValue ON hlpEgeMarkMaxApprovedValue.PersonId = ABIT.PersonId 
-        INNER JOIN ed.ExamInEntry ON ExamInEntry.Id = qMark.ExamInEntryId
-        INNER JOIN ed.EgeToExam ON EgeToExam.ExamId = ExamInEntry.ExamId 
+        INNER JOIN ed.extExamInEntry ON extExamInEntry.Id = qMark.ExamInEntryBlockUnitId
+        INNER JOIN ed.EgeToExam ON EgeToExam.ExamId = extExamInEntry.ExamId 
         WHERE EgeToExam.EgeExamNameId = hlpEgeMarkMaxApprovedValue.EgeExamNameId 
         AND qMark.IsFromEge = 1 
         AND qAbiturient.EntryId = ABIT.EntryId
-        AND ExamInEntry.ExamId = EgeToExam.ExamId
-        AND ExamInEntry.ExamId = {0}
+        AND extExamInEntry.ExamId = EgeToExam.ExamId
+        AND extExamInEntry.ExamId = {0}
         AND hlpEgeMarkMaxApprovedValue.EgeMarkValue > qMark.Value
     )*/
 )", examId);
                     //string flt_hasEge = string.Format(" AND Person.Id IN (SELECT PersonId FROM ed.EgeMark LEFT JOIN ed.EgeToExam ON EgeMark.EgeExamNameId = EgeToExam.EgeExamNameId WHERE EgeToExam.ExamId = @ExamId)", examId);
-                    string flt_hasExam = string.Format(" AND qAbiturient.EntryId IN (SELECT ed.ExamInEntry.EntryId FROM ed.ExamInEntry WHERE ExamInEntry.ExamId = {0})", examId);
+                    string flt_hasExam = string.Format(" AND qAbiturient.EntryId IN (SELECT extExamInEntry.EntryId FROM ed.extExamInEntry WHERE extExamInEntry.ExamId = {0})", examId);
 
                     string queryAbits = @"SELECT qAbiturient.Id, qAbiturient.PersonId, E.FacultyId, qAbiturient.EntryId FROM ed.Abiturient AS qAbiturient 
                             INNER JOIN ed.extEntry E ON E.Id = qAbiturient.EntryId
@@ -254,11 +315,11 @@ ORDER BY 1";
                             Guid persId = new Guid(dsRow["PersonId"].ToString());
                             Guid entryId = new Guid(dsRow["EntryId"].ToString());
 
-                            Guid? exInEntryBlockId = (from eie in context.extExamInEntry
+                            Guid? exInEntryBlockUnitId = (from eie in context.extExamInEntry
                                                 where eie.EntryId == entryId && eie.ExamId == examId
                                                 select eie.Id).FirstOrDefault();
 
-                            if (exInEntryBlockId == null)
+                            if (exInEntryBlockUnitId == null)
                                 continue;
 
                             Guid egeCertificateId = Guid.Empty;
@@ -377,7 +438,7 @@ ORDER BY 1";
                             }
 
                             if (balls != null)
-                                context.Mark_Insert(abId, exInEntryBlockId, balls, dtDateExam.Value.Date, true, false, false, null, null, egeCertificateId);
+                                context.Mark_Insert(abId, exInEntryBlockUnitId, balls, dtDateExam.Value.Date, true, false, false, null, null, egeCertificateId);
                             else
                                 continue;
 

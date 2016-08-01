@@ -321,7 +321,7 @@ namespace Priem
             string Wave = "_FirstWave";
             if (cbZeroWave.Checked)
                 Wave = "_ZeroWave";
-            query = @"select " + toplist + @" Abiturient.Id, extPerson.PersonNum, extPerson.HasOriginals, 
+            query = @"select " + toplist + @" Abiturient.Id, extPerson.PersonNum, (CASE WHEN EXISTS(SELECT * FROM ed.extEntryView EV WHERE EV.PersonId = Abiturient.PersonId AND EV.Priority < Abiturient.Priority) THEN CONVERT(bit, 0) ELSE extPerson.HasOriginals END) AS HasOriginals, 
             Abiturient.PersonId, Abiturient.Priority
             --,  extAbitMarksSum.TotalSum
             , extPerson.FIO as FIO

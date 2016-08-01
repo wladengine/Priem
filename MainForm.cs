@@ -86,7 +86,7 @@ namespace Priem
                     MainClass.InitQueryBuilder();
                     ShowProtocolWarning();
 
-                    if (System.Environment.UserName == "v.chikhira")
+                    if (System.Environment.UserName == "v.chikhira" || MainClass.IsPasha())
                         CheckEgeRequests();
                 };
                 bw_tech.RunWorkerCompleted += (sender, e) =>
@@ -1015,6 +1015,11 @@ namespace Priem
             {
                 OlympVserossImporter.ImportDataFromXML(ofd.FileName);
             }
+        }
+
+        private void выгрузкаМотАспирToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            LoadAspirFilesClass.LoadFiles();
         }
     }
 }

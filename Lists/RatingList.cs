@@ -49,13 +49,22 @@ namespace Priem
 
             _queryBody = @"SELECT DISTINCT qAbiturient.Id as Id, qAbiturient.RegNum as Рег_Номер, 
                     extPerson.PersonNum as 'Ид. номер', qAbiturient.Priority as [Приоритет], extPerson.FIO as ФИО, 
-                    extAbitMarksSum.TotalSum + extAbitAdditionalMarksSum.AdditionalMarksSum as 'Сумма баллов', extAbitMarksSum.TotalSum as 'Сумма баллов (осн)', extAbitAdditionalMarksSum.AdditionalMarksSum AS 'Сумма баллов (ИндДост)', extAbitMarksSum.TotalCount as 'Кол-во оценок', 
+                    extAbitMarksSum.TotalSum + extAbitAdditionalMarksSum.AdditionalMarksSum as 'Сумма баллов', 
+                    extAbitMarksSum.TotalSum as 'Сумма баллов (осн)', 
+                    extAbitAdditionalMarksSum.AdditionalMarksSum AS 'Сумма баллов (ИндДост)', 
+                    extAbitMarksSum.TotalCount as 'Кол-во оценок', 
                     case when EXISTS (SELECT * FROM ed.Abiturient AB WHERE AB.HasOriginals>0 AND AB.PersonId = qAbiturient.PersonId AND AB.BackDoc = 0) then 'Да' else 'Нет' end as 'Подлинники документов', 
                     ed.qAbiturient.Coefficient as 'Рейтинговый коэффициент', 
                     ed.Competition.Name as Конкурс, hlpAbiturientProf.Prof AS 'Проф. экзамен', 
                     ed.hlpAbiturientProfAdd.ProfAdd AS 'Доп. экзамен',
                     extAbitMarkByRating.Value1 AS [Экзамен 1], extAbitMarkByRating.Value2 AS [Экзамен 2], extAbitMarkByRating.Value3 AS [Экзамен 3],
-                    CASE WHEN EXISTS(SELECT Id FROM ed.hlpProfOlympiads AS Olympiads WHERE OlympValueId = 6 AND AbiturientId = ed.qAbiturient.Id) then 1 else CASE WHEN EXISTS(SELECT Id FROM ed.hlpProfOlympiads AS Olympiads WHERE OlympValueId = 5 AND AbiturientId = ed.qAbiturient.Id) then 2 else CASE WHEN EXISTS(SELECT Id FROM ed.hlpProfOlympiads AS Olympiads WHERE OlympValueId = 7 AND AbiturientId = ed.qAbiturient.Id) then 3 else 4 end end end as olymp,
+                    CASE WHEN EXISTS(SELECT Id FROM ed.hlpProfOlympiads AS Olympiads WHERE OlympValueId = 6 AND AbiturientId = ed.qAbiturient.Id) then 1 
+                        else CASE WHEN EXISTS(SELECT Id FROM ed.hlpProfOlympiads AS Olympiads WHERE OlympValueId = 5 AND AbiturientId = ed.qAbiturient.Id) then 2 
+                            else CASE WHEN EXISTS(SELECT Id FROM ed.hlpProfOlympiads AS Olympiads WHERE OlympValueId = 7 AND AbiturientId = ed.qAbiturient.Id) then 3 
+                                else 4 
+                                end 
+                            end 
+                        end as olymp,
                     CASE WHEN  extPerson_EducationInfo_Current.AttestatSeries IN ('ЗА','ЗБ','ЗВ','АЗ') then 1 else CASE WHEN  extPerson_EducationInfo_Current.AttestatSeries IN ('СА','СБ','СВ') then 2 else 3 end end as attestat,
                     (CASE WHEN extPerson_EducationInfo_Current.IsExcellent=1 THEN 5 ELSE extPerson_EducationInfo_Current.SchoolAVG END) as attAvg, 
                     CASE WHEN (CompetitionId=1  OR CompetitionId=8) then 1 else case when (CompetitionId=2 OR CompetitionId=7) AND extPerson.Privileges>0 then 2 else (case when CompetitionId=6 then 3 else 4 end) end end as comp, 
@@ -66,8 +75,9 @@ namespace Priem
                                               THEN 90 + extAbitAdditionalMarksSum.AdditionalMarksSum ELSE (CASE WHEN hlpAbiturient_Olympiads_SortLevel3.[AbiturientId] IS NOT NULL 
                                               THEN 80 + extAbitAdditionalMarksSum.AdditionalMarksSum ELSE (CASE WHEN hlpAbiturient_Olympiads_SortLevel4.[AbiturientId] IS NOT NULL 
                                               THEN 70 + extAbitAdditionalMarksSum.AdditionalMarksSum ELSE 50 END) END) END) END) END) as noexamssort,
-                    (CASE WHEN CompetitionId NOT IN (1, 8) THEN 0 ELSE qAbiturient.Coefficient END) AS noexamsKoefsort,
+                    (CASE WHEN CompetitionId NOT IN (1, 8) THEN 0 ELSE extAbitAdditionalMarksSum.AdditionalMarksSum END) AS noexamsKoefsort,
                     (CASE WHEN CompetitionId NOT IN (1, 8) THEN 0 ELSE extPerson_EducationInfo_Current.SchoolAVG END) AS noexamsAttAVGSort,
+                    (CASE WHEN CompetitionId NOT IN (1, 8) THEN 0 ELSE (CASE WHEN extPerson.Privileges > 0 THEN 10 ELSE 1 END) END) AS noexamsPrivSort,
                     CASE WHEN (CompetitionId=5 OR CompetitionId=9) then 1 else 0 end as preimsort,
                     case when extPerson_EducationInfo_Current.IsExcellent>0 then 'Да' else 'Нет' end as 'Медалист', 
                     extPerson_EducationInfo_Current.AttestatSeries as 'Серия аттестата', 
@@ -574,6 +584,9 @@ namespace Priem
                 return;
             }
 
+            if (!StudyFormId.HasValue || !StudyBasisId.HasValue || !FacultyId.HasValue || !LicenseProgramId.HasValue || !ObrazProgramId.HasValue)
+                return;
+
             try
             {                
                 string sOrderBy = string.Empty;
@@ -588,9 +601,9 @@ namespace Priem
                 {
                     sOrderBy =
                         chbCel.Checked ?
-                        " ORDER BY ed.qAbiturient.Coefficient, comp, noexamssort desc, 'Сумма баллов' desc, ProfSort desc, ProfAdd desc, ed.extAbitMarksSum.TotalCount desc, ФИО"
+                        " ORDER BY ed.qAbiturient.Coefficient, comp, noexamssort desc, 'Сумма баллов' desc, 'Сумма баллов (осн)' DESC, ProfSort desc, ProfAdd desc, ed.extAbitMarksSum.TotalCount desc, ФИО"
                         :
-                        " ORDER BY comp, noexamssort DESC, noexamsKoefsort, noexamsAttAVGSort DESC, 'Сумма баллов' desc, [Экзамен 1] desc, [Экзамен 2] desc, [Экзамен 3] desc, preimsort desc, ProfAdd desc, " +
+                        " ORDER BY comp, noexamssort DESC, noexamsKoefsort DESC, noexamsPrivSort, noexamsAttAVGSort DESC, 'Сумма баллов' desc, 'Сумма баллов (осн)' DESC, [Экзамен 1] desc, [Экзамен 2] desc, [Экзамен 3] desc, preimsort desc, ProfAdd desc, " +
                         "olymp, Медалист, attAvg desc, ed.qAbiturient.Coefficient, ed.extAbitMarksSum.TotalCount desc, ФИО"
                         ;
                 }
@@ -602,33 +615,33 @@ namespace Priem
                 if (chbFix.Checked)
                 {
                     if (MainClass.dbType == PriemType.PriemMag)
-                        _queryOrange = @", CASE WHEN EXISTS(SELECT PersonId FROM ed.hlpPersonsWithOriginals WHERE PersonId = ed.qAbiturient.PersonId AND EntryId <> ed.qAbiturient.EntryId) then 1 else 0 end as orange ";
+                        _queryOrange = @", CASE WHEN EXISTS(SELECT PersonId FROM ed.hlpPersonsWithOriginals WHERE PersonId = qAbiturient.PersonId AND EntryId <> qAbiturient.EntryId) then 1 else 0 end as orange ";
                     else
-                        _queryOrange = @", CASE WHEN EXISTS(SELECT ed.extEntryView.Id FROM ed.extEntryView INNER JOIN ed.Abiturient a ON ed.extEntryView.AbiturientId = a.Id WHERE a.PersonId = ed.qAbiturient.PersonId) then 1 else 0 end as orange ";
+                        _queryOrange = @", CASE WHEN EXISTS(SELECT extEntryView.Id FROM ed.extEntryView INNER JOIN ed.Abiturient a ON ed.extEntryView.AbiturientId = a.Id WHERE a.PersonId = qAbiturient.PersonId) then 1 else 0 end as orange ";
 
                     string queryFix = _queryBody + _queryOrange +
                     @" FROM ed.qAbiturient 
-                    INNER JOIN ed.extPerson ON ed.extPerson.Id = ed.qAbiturient.PersonId                    
+                    INNER JOIN ed.extPerson ON extPerson.Id = qAbiturient.PersonId                    
                     INNER JOIN ed.extPerson_EducationInfo_Current ON extPerson_EducationInfo_Current.PersonId = extPerson.Id
-                    INNER JOIN ed.Competition ON ed.Competition.Id = ed.qAbiturient.CompetitionId 
-                    INNER JOIN ed.Fixieren ON ed.Fixieren.AbiturientId=ed.qAbiturient.Id 
+                    INNER JOIN ed.Competition ON Competition.Id = qAbiturient.CompetitionId 
+                    INNER JOIN ed.Fixieren ON Fixieren.AbiturientId = qAbiturient.Id 
                     LEFT JOIN ed.hlpEntryWithAddExams ON hlpEntryWithAddExams.EntryId = qAbiturient.EntryId
-                    LEFT JOIN ed.FixierenView ON ed.Fixieren.FixierenViewId=ed.FixierenView.Id 
-                    LEFT JOIN ed.hlpAbiturientProfAdd ON ed.hlpAbiturientProfAdd.Id = ed.qAbiturient.Id 
-                    LEFT JOIN ed.hlpAbiturientProf ON ed.hlpAbiturientProf.Id = ed.qAbiturient.Id 
-                    LEFT JOIN ed.extAbitMarksSum ON ed.qAbiturient.Id = ed.extAbitMarksSum.Id
+                    LEFT JOIN ed.FixierenView ON Fixieren.FixierenViewId = FixierenView.Id 
+                    LEFT JOIN ed.hlpAbiturientProfAdd ON ed.hlpAbiturientProfAdd.Id = qAbiturient.Id 
+                    LEFT JOIN ed.hlpAbiturientProf ON hlpAbiturientProf.Id = qAbiturient.Id 
+                    LEFT JOIN ed.extAbitMarksSum ON qAbiturient.Id = extAbitMarksSum.Id
                     LEFT JOIN ed.extAbitAdditionalMarksSum ON qAbiturient.Id = extAbitAdditionalMarksSum.AbiturientId
                     LEFT JOIN ed.extAbitMarkByRating ON ed.qAbiturient.Id = ed.extAbitMarkByRating.Id
-                    LEFT JOIN [ed].hlpAbiturient_Olympiads_SortLevel1 ON qAbiturient.Id = hlpAbiturient_Olympiads_SortLevel1.[AbiturientId] 
-                    LEFT JOIN [ed].hlpAbiturient_Olympiads_SortLevel2 ON qAbiturient.Id = hlpAbiturient_Olympiads_SortLevel2.[AbiturientId] 
-                    LEFT JOIN [ed].hlpAbiturient_Olympiads_SortLevel3 ON qAbiturient.Id = hlpAbiturient_Olympiads_SortLevel3.[AbiturientId] 
-                    LEFT JOIN [ed].hlpAbiturient_Olympiads_SortLevel4 ON qAbiturient.Id = hlpAbiturient_Olympiads_SortLevel4.[AbiturientId]
+                    LEFT JOIN ed.hlpAbiturient_Olympiads_SortLevel1 ON qAbiturient.Id = hlpAbiturient_Olympiads_SortLevel1.[AbiturientId] 
+                    LEFT JOIN ed.hlpAbiturient_Olympiads_SortLevel2 ON qAbiturient.Id = hlpAbiturient_Olympiads_SortLevel2.[AbiturientId] 
+                    LEFT JOIN ed.hlpAbiturient_Olympiads_SortLevel3 ON qAbiturient.Id = hlpAbiturient_Olympiads_SortLevel3.[AbiturientId] 
+                    LEFT JOIN ed.hlpAbiturient_Olympiads_SortLevel4 ON qAbiturient.Id = hlpAbiturient_Olympiads_SortLevel4.[AbiturientId]
 ";
 
                     string whereFix = string.Format(
-@" WHERE ed.FixierenView.StudyLevelGroupId IN ({10}) AND ed.FixierenView.StudyFormId={0} AND ed.FixierenView.StudyBasisId={1} AND ed.FixierenView.FacultyId={2} 
-AND ed.FixierenView.LicenseProgramId={3} AND ed.FixierenView.ObrazProgramId={4} {5} AND ed.FixierenView.IsCel = {6}
-AND ed.FixierenView.IsSecond = {7} AND ed.FixierenView.IsReduced = {8} AND ed.FixierenView.IsParallel = {9} AND ed.FixierenView.IsCrimea = {11} AND ed.FixierenView.IsQuota = {12}",
+@" WHERE FixierenView.StudyLevelGroupId IN ({10}) AND FixierenView.StudyFormId={0} AND FixierenView.StudyBasisId={1} AND FixierenView.FacultyId={2} 
+AND FixierenView.LicenseProgramId={3} AND FixierenView.ObrazProgramId={4} {5} AND FixierenView.IsCel = {6}
+AND FixierenView.IsSecond = {7} AND FixierenView.IsReduced = {8} AND FixierenView.IsParallel = {9} AND FixierenView.IsCrimea = {11} AND FixierenView.IsQuota = {12}",
                         StudyFormId, StudyBasisId, FacultyId, LicenseProgramId, ObrazProgramId, ProfileId == null ? " AND ed.FixierenView.ProfileId IS NULL" : "AND ed.FixierenView.ProfileId='" + ProfileId + "'",
                         QueryServ.StringParseFromBool(IsCel), QueryServ.StringParseFromBool(IsSecond), QueryServ.StringParseFromBool(IsReduced), QueryServ.StringParseFromBool(IsParallel), 
                         Util.BuildStringWithCollection(MainClass.lstStudyLevelGroupId), QueryServ.StringParseFromBool(IsCrimea), QueryServ.StringParseFromBool(IsQuota));
@@ -643,15 +656,15 @@ AND ed.FixierenView.IsSecond = {7} AND ed.FixierenView.IsReduced = {8} AND ed.Fi
                     
                     //целевики?
                     if (chbCel.Checked)
-                        sFilters += " AND ed.qAbiturient.CompetitionId = 6";
+                        sFilters += " AND qAbiturient.CompetitionId = 6";
                     // в общем списке выводить всех 
                     else
-                        sFilters += " AND ed.qAbiturient.CompetitionId <> 6";
+                        sFilters += " AND qAbiturient.CompetitionId <> 6";
 
                     //не забрали доки
-                    sFilters += " AND (qAbiturient.BackDoc=0) ";
+                    sFilters += " AND qAbiturient.BackDoc = 0 ";
 
-                    sFilters += " AND qAbiturient.Id NOT IN (select abiturientid from ed.extentryview) ";
+                    sFilters += " AND qAbiturient.Id NOT IN (SELECT AbiturientId FROM ed.extEntryView) ";
 
                     //не иностранцы
                     sFilters += " AND qFor.Id IS NULL ";
@@ -666,7 +679,7 @@ AND ed.FixierenView.IsSecond = {7} AND ed.FixierenView.IsReduced = {8} AND ed.Fi
                     if (IsQuota)
                         sFilters += " AND qAbiturient.CompetitionId IN (2, 7) ";
                     else
-                        sFilters += " AND ed.qAbiturient.CompetitionId NOT IN (2, 7) ";
+                        sFilters += " AND qAbiturient.CompetitionId NOT IN (2, 7) ";
 
                     // кроме бэ преодолены мин планки 
                     if (MainClass.dbType == PriemType.PriemMag)
@@ -674,14 +687,14 @@ AND ed.FixierenView.IsSecond = {7} AND ed.FixierenView.IsReduced = {8} AND ed.Fi
                     else
                         sFilters += " AND ((CompetitionId=1 OR CompetitionId=8) OR hlpMinMarkAbiturient.Id IS NULL)";
 
-                    string examsCnt = _bdc.GetStringValue(string.Format(" SELECT Count(Id) FROM ed.extExamInEntry WHERE EntryId='{0}' AND ParentExamInEntryId IS NULL", EntryId.ToString()));
+                    string examsCnt = _bdc.GetStringValue(string.Format(" SELECT Count(Id) FROM ed.extExamInEntry WHERE EntryId='{0}' AND ParentExamInEntryBlockId IS NULL", EntryId.ToString()));
                    
                     if (MainClass.dbType == PriemType.PriemMag)
                     { 
-                        _queryOrange = @", CASE WHEN EXISTS(SELECT PersonId FROM ed.hlpPersonsWithOriginals WHERE PersonId = ed.qAbiturient.PersonId AND EntryId <> ed.qAbiturient.EntryId) then 1 else 0 end as orange ";
+                        _queryOrange = @", CASE WHEN EXISTS(SELECT PersonId FROM ed.hlpPersonsWithOriginals WHERE PersonId = qAbiturient.PersonId AND EntryId <> qAbiturient.EntryId) then 1 else 0 end as orange ";
                         
                         // кроме бэ нужное кол-во оценок есть
-                        sFilters += " AND ((CompetitionId=1  OR CompetitionId=8) OR extAbitMarksSum.TotalCount = " + examsCnt + " ) ";
+                        sFilters += " AND ((CompetitionId=1 OR CompetitionId=8) OR extAbitMarksSum.TotalCount = " + examsCnt + " ) ";
 
                         if (bMagAddNabor1Enabled)
                             sFilters += " AND qAbiturient.DocInsertDate > '" + dtMagAddNabor1.ToShortDateString() + "' ";
@@ -690,7 +703,7 @@ AND ed.FixierenView.IsSecond = {7} AND ed.FixierenView.IsReduced = {8} AND ed.Fi
                     }
                     else
                     {
-                        _queryOrange = @", CASE WHEN EXISTS(SELECT ed.extEntryView.Id FROM ed.extEntryView INNER JOIN ed.Abiturient a ON ed.extEntryView.AbiturientId = a.Id WHERE a.PersonId = ed.qAbiturient.PersonId) then 1 else 0 end as orange ";
+                        _queryOrange = @", CASE WHEN EXISTS(SELECT extEntryView.Id FROM ed.extEntryView INNER JOIN ed.Abiturient a ON extEntryView.AbiturientId = a.Id WHERE a.PersonId = qAbiturient.PersonId) then 1 else 0 end as orange ";
 
                         if (bFirstWaveEnabled && MainClass.dbType == PriemType.Priem && StudyBasisId != 2)
                             sFilters += " AND FW.AbiturientId IS NOT NULL";
@@ -711,7 +724,7 @@ AND ed.FixierenView.IsSecond = {7} AND ed.FixierenView.IsReduced = {8} AND ed.Fi
                         // кроме бэ и тех, у кого нет сертификатов и оценок нужное кол-во оценок есть
                         sFilters += @" AND (CompetitionId IN (1, 8) 
                                         OR (ed.qAbiturient.PersonId NOT IN (SELECT PersonId FROM ed.EgeCertificate) 
-                                           AND ed.qAbiturient.Id NOT IN (SELECT abiturientid from ed.Mark where IsFromEge = 1) /*and ed.extPerson.EgeInSPbgu = 0 */and ed.qAbiturient.IsSecond = 0 and ed.qAbiturient.IsReduced = 0 and ed.qAbiturient.IsParallel = 0) 
+                                           AND qAbiturient.Id NOT IN (SELECT AbiturientId FROM ed.Mark WHERE IsFromEge = 1) AND qAbiturient.IsSecond = 0 AND qAbiturient.IsReduced = 0 AND qAbiturient.IsParallel = 0) 
                                         OR extAbitMarksSum.TotalCount = (
 		                                SELECT COUNT(*) 
 		                                FROM ed.extExamInEntry 
@@ -730,34 +743,9 @@ AND ed.FixierenView.IsSecond = {7} AND ed.FixierenView.IsReduced = {8} AND ed.Fi
 
                 lblCount.Text = "             Cвободных мест: " + plan;
 
-                //HelpClass.FillDataGrid(dgvAbits, _bdc, totalQuery, "");
                 bw.RunWorkerAsync(new { dgv = dgvAbits, _bdc = _bdc, _sQuery = totalQuery, filters = "", _orderBy = "" });
                 gbWait.Visible = true;
                 UpdateControlsEnableStatus(false);
-
-                //dgvAbits.Columns["Id"].Visible = false;
-                //dgvAbits.Columns["comp"].Visible = false;
-                //dgvAbits.Columns["noexamssort"].Visible = false;
-                //dgvAbits.Columns["preimsort"].Visible = false;
-                //dgvAbits.Columns["olymp"].Visible = false;
-                //dgvAbits.Columns["attestat"].Visible = false;
-                //dgvAbits.Columns["attAvg"].Visible = false;
-                //dgvAbits.Columns["ProfSort"].Visible = false;
-                //dgvAbits.Columns["ProfAdd"].Visible = false;
-                //dgvAbits.Columns["orange"].Visible = false;
-
-                //if (MainClass.dbType == PriemType.PriemMag)
-                //{
-                //    dgvAbits.Columns["Серия аттестата"].Visible = false;
-                //    dgvAbits.Columns["Медалист"].HeaderText = "Красный диплом";
-                //}
-                //else
-                //    dgvAbits.Columns["Серия диплома"].Visible = false;
-                
-                //foreach (DataGridViewColumn column in dgvAbits.Columns)
-                //{
-                //    column.SortMode = DataGridViewColumnSortMode.NotSortable;
-                //}
             }
             catch (Exception ex)
             {
@@ -774,6 +762,11 @@ AND ed.FixierenView.IsSecond = {7} AND ed.FixierenView.IsReduced = {8} AND ed.Fi
 
             while (!task.IsCompleted)
             {
+                if (task.IsFaulted)
+                {
+                    e.Cancel = true;
+                    return;
+                }
                 if (bw.CancellationPending)
                 {
                     e.Cancel = true;
@@ -783,7 +776,10 @@ AND ed.FixierenView.IsSecond = {7} AND ed.FixierenView.IsReduced = {8} AND ed.Fi
                 System.Threading.Thread.Sleep(25);
             }
 
-            e.Result = await task;
+            if (task.IsFaulted)
+                e.Cancel = true;
+            else
+                e.Result = await task;
         }
         void UpdateDataGrid_AsyncWorkCompleted(object sender, RunWorkerCompletedEventArgs e)
         {

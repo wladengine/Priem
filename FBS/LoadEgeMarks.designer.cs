@@ -40,6 +40,7 @@
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.gbLoading = new System.Windows.Forms.GroupBox();
             this.label1 = new System.Windows.Forms.Label();
+            this.chbDeepScan = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.dgvProtocols)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.gbLoading.SuspendLayout();
@@ -49,7 +50,7 @@
             // 
             this.btnOk.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnOk.Location = new System.Drawing.Point(114, 537);
+            this.btnOk.Location = new System.Drawing.Point(115, 537);
             this.btnOk.Name = "btnOk";
             this.btnOk.Size = new System.Drawing.Size(181, 23);
             this.btnOk.TabIndex = 52;
@@ -62,7 +63,7 @@
             this.label6.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(48, 514);
+            this.label6.Location = new System.Drawing.Point(49, 514);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(33, 13);
             this.label6.TabIndex = 51;
@@ -72,7 +73,7 @@
             // 
             this.dtDateExam.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.dtDateExam.Location = new System.Drawing.Point(87, 511);
+            this.dtDateExam.Location = new System.Drawing.Point(88, 511);
             this.dtDateExam.Name = "dtDateExam";
             this.dtDateExam.Size = new System.Drawing.Size(258, 20);
             this.dtDateExam.TabIndex = 50;
@@ -166,11 +167,24 @@
             this.label1.TabIndex = 50;
             this.label1.Text = "Выполняется запрос, подождите...";
             // 
+            // chbDeepScan
+            // 
+            this.chbDeepScan.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.chbDeepScan.AutoSize = true;
+            this.chbDeepScan.Location = new System.Drawing.Point(35, 566);
+            this.chbDeepScan.Name = "chbDeepScan";
+            this.chbDeepScan.Size = new System.Drawing.Size(346, 17);
+            this.chbDeepScan.TabIndex = 64;
+            this.chbDeepScan.Text = "Глубокий поиск (перезапись апелляций) - работает медленнее";
+            this.chbDeepScan.UseVisualStyleBackColor = true;
+            // 
             // LoadEgeMarks
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(421, 572);
+            this.ClientSize = new System.Drawing.Size(421, 594);
+            this.Controls.Add(this.chbDeepScan);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.cbExam);
             this.Controls.Add(this.cbFaculty);
@@ -204,5 +218,6 @@
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.GroupBox gbLoading;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.CheckBox chbDeepScan;
     }
 }

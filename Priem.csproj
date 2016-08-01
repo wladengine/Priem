@@ -93,6 +93,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AsynchronousQueryExecutor.cs" />
+    <Compile Include="BooksPasha\LoadAspirFilesClass.cs" />
     <Compile Include="BooksPasha\Querier.cs">
       <SubType>Form</SubType>
     </Compile>

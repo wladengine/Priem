@@ -132,6 +132,7 @@
             this.othersToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.vuzNamesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.loadOlympFromFISToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.loadVserossToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.smiCrypto = new System.Windows.Forms.ToolStripMenuItem();
             this.smiEnterMarks = new System.Windows.Forms.ToolStripMenuItem();
             this.smiLoadMarks = new System.Windows.Forms.ToolStripMenuItem();
@@ -153,7 +154,7 @@
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.lblDBPath = new System.Windows.Forms.ToolStripStatusLabel();
             this.tsslMain = new System.Windows.Forms.ToolStripStatusLabel();
-            this.loadVserossToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.выгрузкаМотАспирToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.msMainMenu.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -974,7 +975,8 @@
             this.othersToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.vuzNamesToolStripMenuItem,
             this.loadOlympFromFISToolStripMenuItem,
-            this.loadVserossToolStripMenuItem});
+            this.loadVserossToolStripMenuItem,
+            this.выгрузкаМотАспирToolStripMenuItem});
             this.othersToolStripMenuItem.Name = "othersToolStripMenuItem";
             this.othersToolStripMenuItem.Size = new System.Drawing.Size(453, 22);
             this.othersToolStripMenuItem.Text = "Others";
@@ -982,16 +984,23 @@
             // vuzNamesToolStripMenuItem
             // 
             this.vuzNamesToolStripMenuItem.Name = "vuzNamesToolStripMenuItem";
-            this.vuzNamesToolStripMenuItem.Size = new System.Drawing.Size(179, 22);
+            this.vuzNamesToolStripMenuItem.Size = new System.Drawing.Size(188, 22);
             this.vuzNamesToolStripMenuItem.Text = "VuzNames";
             this.vuzNamesToolStripMenuItem.Click += new System.EventHandler(this.vuzNamesToolStripMenuItem_Click);
             // 
             // loadOlympFromFISToolStripMenuItem
             // 
             this.loadOlympFromFISToolStripMenuItem.Name = "loadOlympFromFISToolStripMenuItem";
-            this.loadOlympFromFISToolStripMenuItem.Size = new System.Drawing.Size(179, 22);
+            this.loadOlympFromFISToolStripMenuItem.Size = new System.Drawing.Size(188, 22);
             this.loadOlympFromFISToolStripMenuItem.Text = "LoadOlympFromFIS";
             this.loadOlympFromFISToolStripMenuItem.Click += new System.EventHandler(this.loadOlympFromFISToolStripMenuItem_Click);
+            // 
+            // loadVserossToolStripMenuItem
+            // 
+            this.loadVserossToolStripMenuItem.Name = "loadVserossToolStripMenuItem";
+            this.loadVserossToolStripMenuItem.Size = new System.Drawing.Size(188, 22);
+            this.loadVserossToolStripMenuItem.Text = "LoadVseross";
+            this.loadVserossToolStripMenuItem.Click += new System.EventHandler(this.loadVserossToolStripMenuItem_Click);
             // 
             // smiCrypto
             // 
@@ -1152,12 +1161,12 @@
             this.tsslMain.Name = "tsslMain";
             this.tsslMain.Size = new System.Drawing.Size(0, 17);
             // 
-            // loadVserossToolStripMenuItem
+            // выгрузкаМотАспирToolStripMenuItem
             // 
-            this.loadVserossToolStripMenuItem.Name = "loadVserossToolStripMenuItem";
-            this.loadVserossToolStripMenuItem.Size = new System.Drawing.Size(179, 22);
-            this.loadVserossToolStripMenuItem.Text = "LoadVseross";
-            this.loadVserossToolStripMenuItem.Click += new System.EventHandler(this.loadVserossToolStripMenuItem_Click);
+            this.выгрузкаМотАспирToolStripMenuItem.Name = "выгрузкаМотАспирToolStripMenuItem";
+            this.выгрузкаМотАспирToolStripMenuItem.Size = new System.Drawing.Size(188, 22);
+            this.выгрузкаМотАспирToolStripMenuItem.Text = "Выгрузка мот. аспир";
+            this.выгрузкаМотАспирToolStripMenuItem.Click += new System.EventHandler(this.выгрузкаМотАспирToolStripMenuItem_Click);
             // 
             // MainForm
             // 
@@ -1308,6 +1317,7 @@
         private System.Windows.Forms.ToolStripMenuItem smiDisEntryOrderFromReEnter;
         private System.Windows.Forms.ToolStripMenuItem loadOlympFromFISToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem loadVserossToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem выгрузкаМотАспирToolStripMenuItem;
 
     }
 }

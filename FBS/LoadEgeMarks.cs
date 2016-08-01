@@ -182,6 +182,8 @@ ORDER BY 1";
             if (!MainClass.IsPasha())
                 return;
 
+            bool deepScan = chbDeepScan.Checked;
+
             try
             {
                 List<int> lstFac = new List<int>();
@@ -221,11 +223,13 @@ ORDER BY 1";
                     marksCount = 0;
 
                     foreach (KeyValuePair<int, int> kvp in lstPairs)
-                        SetMarksForExam(kvp.Value, kvp.Key);
+                        SetMarksForExam(kvp.Value, kvp.Key, deepScan);
+
+                    wtc.Close();
                 };
                 bw.RunWorkerCompleted += (sender, e) =>
                 {
-                    wtc.Close();
+                    
                     btnOk.Enabled = true;
                     UpdateGridAbits();
                     MessageBox.Show(string.Format("Зачтено {0} оценок", marksCount));
@@ -242,7 +246,7 @@ ORDER BY 1";
             }
         }
 
-        private void SetMarksForExam(int examId, int iFacultyId)
+        private void SetMarksForExam(int examId, int iFacultyId, bool deepScan)
         {
             try
             {
@@ -270,7 +274,8 @@ ORDER BY 1";
             AND extExamInEntry.ExamId = {0}
             AND extExamInEntry.IsAdditional = 0
     )
-    /*OR qAbiturient.Id IN
+    {1}
+)", examId, deepScan ? string.Format(@"OR qAbiturient.Id IN
     /*или у абитуриента зачёлся балл ниже, чем есть среди его ЕГЭ*/
     (
         SELECT qMark.AbiturientId
@@ -285,8 +290,7 @@ ORDER BY 1";
         AND extExamInEntry.ExamId = EgeToExam.ExamId
         AND extExamInEntry.ExamId = {0}
         AND hlpEgeMarkMaxApprovedValue.EgeMarkValue > qMark.Value
-    )*/
-)", examId);
+    )", examId) : "");
                     //string flt_hasEge = string.Format(" AND Person.Id IN (SELECT PersonId FROM ed.EgeMark LEFT JOIN ed.EgeToExam ON EgeMark.EgeExamNameId = EgeToExam.EgeExamNameId WHERE EgeToExam.ExamId = @ExamId)", examId);
                     string flt_hasExam = string.Format(" AND qAbiturient.EntryId IN (SELECT extExamInEntry.EntryId FROM ed.extExamInEntry WHERE extExamInEntry.ExamId = {0})", examId);
 

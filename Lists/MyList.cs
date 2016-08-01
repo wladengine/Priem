@@ -233,12 +233,12 @@ namespace Priem
                 if (!cbZeroWave.Checked)
                 {
                     x.KCP = x.KCP - int.Parse(MainClass.Bdc.GetStringValue(@"
-                                    select COUNT( distinct extEntryView.Id) 
+                                    select COUNT( distinct extEntryView.AbiturientId) 
                                     from ed.extEntryView
                                     inner join ed.Abiturient on AbiturientId = Abiturient.Id
                                     join ed.Entry on Abiturient.EntryId = Entry.Id 
-                                    where Abiturient.EntryId = '" + x.EntryId.ToString() + @"'
-                                    and Abiturient.CompetitionId NOT IN (12,11)
+                                    where (Abiturient.EntryId = '" + x.EntryId.ToString() + @"'
+                                    and Abiturient.CompetitionId NOT IN (12,11))
                                      or 
                                     (Entry.ParentEntryId = extEntryView.EntryId  )
                                     "));
@@ -251,14 +251,14 @@ namespace Priem
                         else
                         { 
                             col.MaxKCP = col.MaxKCP - int.Parse(MainClass.Bdc.GetStringValue(@"
-                                    select COUNT ( distinct extEntryView.Id) 
+                                    select COUNT ( distinct extEntryView.AbiturientId) 
                                     from ed.extEntryView
                                     inner join ed.Abiturient on AbiturientId = Abiturient.Id
                                     join ed.Entry on extEntryView.EntryId = Entry.Id
                                     join ed.InnerEntryInEntry on InnerEntryInEntry.EntryId = Entry.Id
-                                    where Abiturient.EntryId = '" + x.EntryId + @"' and 
+                                    where (Abiturient.EntryId = '" + x.EntryId + @"' and 
                                     Abiturient.InnerEntryInEntryId = '" + col.InnerEntryId + @"'
-                                    and Abiturient.CompetitionId NOT IN (12,11)
+                                    and Abiturient.CompetitionId NOT IN (12,11))
                                     or 
                                     (Entry.ParentEntryId = extEntryView.EntryId and InnerEntryInEntry.ParentInnerEntryInEntryId = Abiturient.InnerEntryInEntryId)
                                     "));
@@ -728,7 +728,6 @@ namespace Priem
         private void btnRePaint_Click(object sender, EventArgs e)
         {
             PaintGrid();
-           
         }
         private void PaintGrid()
         {
@@ -792,9 +791,12 @@ namespace Priem
                                     }
                                     else if (tmp_ab.Priority < ab.Priority)
                                     {
-                                        ab.SetIsYellow();
-                                        c.InCompetition = false;
-                                        entry.SetNextGreen();
+                                        if (ab.IsGreen())
+                                        {
+                                            ab.SetIsYellow();
+                                            c.InCompetition = false;
+                                            entry.SetNextGreen();
+                                        }
                                     }
                                     HasChanges = true;
                                 }
@@ -980,17 +982,21 @@ namespace Priem
         public Guid PersonId;
         public string regNum_FIO;
         public int Priority;
-        private bool isGreen;
-        private bool isBeige;
-        private bool isYellow;
-        private bool isBlue;
-        private bool isRed;
-        public bool HasOriginals;
+        private bool isGreen { get; set; }
+        private bool isBeige { get; set; }
+        private bool isYellow { get; set; }
+        private bool isBlue { get; set; }
+        private bool isRed { get; set; }
+        public bool HasOriginals{ get; set; }
         private bool HasOriginals_restore;
 
         public Abiturient(bool hasOrig)
         {
             HasOriginals_restore = hasOrig;
+            isBeige = isGreen = isYellow = isBlue = isRed = false;
+        }
+        public void SetIsEmpty()
+        {
             isBeige = isGreen = isYellow = isBlue = isRed = false;
         }
         public void SetIsBeige()
@@ -1139,6 +1145,10 @@ namespace Priem
         }
         public void SetIsGreen()
         {
+            foreach (Abiturient ab in Abits)
+            {
+                ab.SetIsEmpty();
+            }
             for (int i = 0; (i < MaxCountGreen)&&(i<Abits.Count); i++)
                 Abits[i].SetIsBeige();
             int j = 0;

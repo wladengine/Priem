@@ -1021,5 +1021,10 @@ namespace Priem
         {
             LoadAspirFilesClass.LoadFiles();
         }
+
+        private void smiExamsVedMarkToHistory_Click(object sender, EventArgs e)
+        {
+            new ExamsVedMarkToHistory().Show();
+        }
     }
 }

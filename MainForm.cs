@@ -12,7 +12,6 @@ using System.Diagnostics;
 using EducServLib;
 using System.Threading;
 using PriemLib;
-using System.IO;
 
 namespace Priem
 {
@@ -21,11 +20,6 @@ namespace Priem
         private DBPriem _bdc;
         private string _titleString;
         private bool bSuccessAuth;
-        private BackgroundWorker bw_tech;
-
-        private bool bFirstRun = true;
-        private bool bNewVersionWarningShowing = false;
-        BackgroundWorker bwChecker;
 
         public MainForm()
         {
@@ -47,133 +41,26 @@ namespace Priem
                     return;
                 }
 
-                //автоматическая проверка актуальной версии
-                bwChecker = new BackgroundWorker();
-                bwChecker.WorkerSupportsCancellation = true;
-                bwChecker.DoWork += (sender, e) =>
-                {
-                    int zz = 0;
-                    int treshHoldSeconds = 30;
-                    //3 min
-                    while (true && !e.Cancel)
-                    {
-                        zz++;
-                        Thread.Sleep(1000);
-                        if (zz >= treshHoldSeconds)
-                        {
-                            ((BackgroundWorker)sender).ReportProgress(0);
-                            //CheckActualVersion();
-                            zz = 0;
-                        }
-                    }
-                };
-                bwChecker.WorkerReportsProgress = true;
-                bwChecker.ProgressChanged += (sender, e) => { CheckActualVersion(); };
-
-                bwChecker.RunWorkerAsync();
-
                 _bdc = MainClass.Bdc;
-                //string sPath = string.Format("{0}; Пользователь: {1}", _titleString, MainClass.GetUserName());
-
-                CheckActualVersion();
-                //OpenHelp(sPath);
+                string sPath = string.Format("{0}; Пользователь: {1}", _titleString, MainClass.GetUserName());
+                
+                OpenHelp(sPath);
 
                 //Технические запросы к базе делаются асинхронно для ускорения запуска стартового окна
-                bw_tech = new BackgroundWorker();
-                bw_tech.DoWork += (sender, e) =>
-                {
-                    MainClass.DeleteAllOpenByHolder();
-                    MainClass.InitQueryBuilder();
-                    ShowProtocolWarning();
+                Thread t1 = new Thread(MainClass.DeleteAllOpenByHolder);
+                t1.Start();
+                Thread t2 = new Thread(MainClass.InitQueryBuilder);
+                t2.Start();
+                Thread t3 = new Thread(ShowProtocolWarning);
+                t3.Start();
 
-                    if (System.Environment.UserName == "v.chikhira" || MainClass.IsPasha())
-                        CheckEgeRequests();
-                };
-                bw_tech.RunWorkerCompleted += (sender, e) =>
-                {
-                    if (e.Error != null)
-                        WinFormsServ.Error(e.Error);
-                };
-                bw_tech.WorkerSupportsCancellation = true;
-                bw_tech.RunWorkerAsync();
+                OpenStartForm();
             }
             catch (Exception exc)
             {
                 WinFormsServ.Error("Не удалось подключиться под вашей учетной записью  " + exc.Message);
                 msMainMenu.Enabled = false;
             }
-        }
-
-        public void CheckActualVersion()
-        {
-            if (bNewVersionWarningShowing)
-                return;
-
-            using (PriemEntities context = new PriemEntities())
-            {
-                string currPath = Application.StartupPath;
-
-                bool bIsDev = false;
-                if (currPath.IndexOf(@"D:\Projects\2013 - MainPriem\Priem\Priem\bin\Release", StringComparison.OrdinalIgnoreCase) == 0)
-                    bIsDev = true;
-
-                string AppType_Postfix = "";
-                switch (MainClass.dbType)
-                {
-                    case PriemType.Priem: { AppType_Postfix = "1kurs"; break; }
-                    case PriemType.PriemMag: { AppType_Postfix = "mag"; break; }
-                    case PriemType.PriemAspirant: { AppType_Postfix = "aspirant"; break; }
-                    case PriemType.PriemSPO: { AppType_Postfix = "spo"; break; }
-                }
-
-                string actualPath = context.C_AppSettings.Where(x => x.ParamKey == "CurrentDir_" + AppType_Postfix)
-                    .Select(x => x.ParamValue).FirstOrDefault();
-
-                string sForceAutoOpenCurrentVer = context.C_AppSettings.Where(x => x.ParamKey == "ForceAutoOpenCurrentVer_" + AppType_Postfix)
-                    .Select(x => x.ParamValue).FirstOrDefault();
-                bool bForceAutoOpenCurrentVer = "1".Equals(sForceAutoOpenCurrentVer, StringComparison.OrdinalIgnoreCase);
-
-                DateTime dtInfo = new FileInfo(Application.ExecutablePath).LastWriteTime;
-                //string versionInfo = string.Format(" (версия от {0})", dtInfo.ToShortDateString() + " " + dtInfo.ToShortTimeString());
-                if (!bIsDev && !string.IsNullOrEmpty(actualPath) && !currPath.Equals(actualPath, StringComparison.OrdinalIgnoreCase))
-                {
-                    if (bForceAutoOpenCurrentVer)
-                        OpenActualVersion(actualPath);
-                    else
-                    {
-                        string Message = "Вышла новая версия приложения. Запустить актуальную версию?";
-                        bNewVersionWarningShowing = true;
-                        var dr = MessageBox.Show(Message, "Контроль версий", MessageBoxButtons.YesNo);
-                        bNewVersionWarningShowing = false;
-                        if (dr == System.Windows.Forms.DialogResult.Yes)
-                            OpenActualVersion(actualPath);
-                        else if (bFirstRun)
-                            OpenHelp(string.Format("{0}; Пользователь: {1}", _titleString/* + versionInfo*/, MainClass.GetUserName()));
-                    }
-                }
-                else
-                {
-                    if (bFirstRun)
-                        OpenHelp(string.Format("{0}; Пользователь: {1}", _titleString/* + versionInfo*/, MainClass.GetUserName()));
-                }
-            }
-        }
-
-        public void OpenActualVersion(string path)
-        {
-            bwChecker.CancelAsync();
-
-            string ExeFile = "";
-            switch (MainClass.dbType)
-            {
-                case PriemType.Priem: { ExeFile = "1kurs"; break; }
-                case PriemType.PriemMag: { ExeFile = "mag"; break; }
-                case PriemType.PriemAspirant: { ExeFile = "aspirant"; break; }
-                case PriemType.PriemSPO: { ExeFile = "spo"; break; }
-            }
-
-            System.Diagnostics.Process.Start(path.TrimEnd('\\') + string.Format("\\Priem_{0}.exe", ExeFile));
-            this.Close();
         }
 
         /// <summary>
@@ -185,12 +72,10 @@ namespace Priem
             MainClass.connString = DBConstants.CS_PRIEM;
             MainClass.connStringOnline = DBConstants.CS_PriemONLINE;
 
-            DateTime crDate = new FileInfo(Application.ExecutablePath).LastWriteTime;
-
             switch (dbName.ToLowerInvariant())
             {
                 case "priem":
-                    _titleString = " на первый курс (версия от " + crDate.ToShortDateString() + " " + crDate.ToShortTimeString() + ")";
+                    _titleString = " на первый курс";
                     MainClass.dbType = PriemType.Priem;
                     MainClass.IsTestDB = false;
                     break;
@@ -201,7 +86,7 @@ namespace Priem
                     MainClass.IsTestDB = false;
                     break;
                 case "priemmag":
-                    _titleString = " в магистратуру (версия от " + crDate.ToShortDateString() + " " + crDate.ToShortTimeString() + ")";
+                    _titleString = " в магистратуру";
                     MainClass.dbType = PriemType.PriemMag;
                     MainClass.IsTestDB = false;
                     break;
@@ -246,8 +131,6 @@ namespace Priem
         {
             try
             {
-                bFirstRun = false;
-
                 MainClass.dirTemplates = string.Format(@"{0}\Templates", Application.StartupPath);
                 tsslMain.Text = string.Format("Открыта база: Прием в СПбГУ {0} {1}; ", MainClass.sPriemYear, path);
 
@@ -396,9 +279,6 @@ namespace Priem
 
                 //временно                
                 smiImport.Visible = false;
-
-
-                OpenStartForm();
             }
             catch (Exception exc)
             {
@@ -461,17 +341,6 @@ namespace Priem
             }
         }
 
-        private void CheckEgeRequests()
-        {
-            using (PriemEntities context = new PriemEntities())
-            {
-                DateTime dt = DateTime.Now.AddMinutes(-2);
-                int cnt = context.PersonEgeRequest.Where(x => !x.IsChecked && x.DateRequest < dt).Count();
-                if (cnt > 0)
-                    WinFormsServ.Error("В настоящий момент не обработано " + cnt + " запросов ЕГЭ. Проверь работу сервиса взаимодействия с ФИС.");
-            }
-        }
-
         private void ShowMessageIfTestDB()
         {
             //предупреждение об тестовом режиме базы
@@ -484,8 +353,6 @@ namespace Priem
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            bw_tech.CancelAsync();
-            bwChecker.CancelAsync();
             //сохраняем параметры
             try
             {
@@ -995,31 +862,9 @@ namespace Priem
             new DisEntryFromReEnterViewList().Show();
         }
 
-        private void loadOlympFromFISToolStripMenuItem_Click(object sender, EventArgs e)
+        private void markToHistoryToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            OpenFileDialog ofd = new OpenFileDialog();
-            ofd.Filter = "XML files|*.xml";
-            var dr = ofd.ShowDialog();
-            if (dr == System.Windows.Forms.DialogResult.OK)
-            {
-                OlympFISImporterClass.ImportDataFromXML(ofd.FileName);
-            }
-        }
-
-        private void loadVserossToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            OpenFileDialog ofd = new OpenFileDialog();
-            ofd.Filter = "Excel 2007|*.xlsx";
-            var dr = ofd.ShowDialog();
-            if (dr == System.Windows.Forms.DialogResult.OK)
-            {
-                OlympVserossImporter.ImportDataFromXML(ofd.FileName);
-            }
-        }
-
-        private void выгрузкаМотАспирToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            LoadAspirFilesClass.LoadFiles();
+            new ExamsVedMarkToHistory().Show();
         }
     }
 }

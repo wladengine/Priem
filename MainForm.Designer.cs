@@ -131,14 +131,13 @@
             this.smiPayDataEntry = new System.Windows.Forms.ToolStripMenuItem();
             this.othersToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.vuzNamesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.loadOlympFromFISToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.loadVserossToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.smiCrypto = new System.Windows.Forms.ToolStripMenuItem();
             this.smiEnterMarks = new System.Windows.Forms.ToolStripMenuItem();
             this.smiLoadMarks = new System.Windows.Forms.ToolStripMenuItem();
             this.smiDecryptor = new System.Windows.Forms.ToolStripMenuItem();
             this.smiAppeal = new System.Windows.Forms.ToolStripMenuItem();
             this.smiLoadExamsResultsToParentExamTool = new System.Windows.Forms.ToolStripMenuItem();
+            this.markToHistoryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.smiFBS = new System.Windows.Forms.ToolStripMenuItem();
             this.smiGetByFIOPasp = new System.Windows.Forms.ToolStripMenuItem();
             this.smiGetByFIOPasp2 = new System.Windows.Forms.ToolStripMenuItem();
@@ -154,7 +153,6 @@
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.lblDBPath = new System.Windows.Forms.ToolStripStatusLabel();
             this.tsslMain = new System.Windows.Forms.ToolStripStatusLabel();
-            this.выгрузкаМотАспирToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.msMainMenu.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -973,10 +971,7 @@
             // othersToolStripMenuItem
             // 
             this.othersToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.vuzNamesToolStripMenuItem,
-            this.loadOlympFromFISToolStripMenuItem,
-            this.loadVserossToolStripMenuItem,
-            this.выгрузкаМотАспирToolStripMenuItem});
+            this.vuzNamesToolStripMenuItem});
             this.othersToolStripMenuItem.Name = "othersToolStripMenuItem";
             this.othersToolStripMenuItem.Size = new System.Drawing.Size(453, 22);
             this.othersToolStripMenuItem.Text = "Others";
@@ -984,23 +979,9 @@
             // vuzNamesToolStripMenuItem
             // 
             this.vuzNamesToolStripMenuItem.Name = "vuzNamesToolStripMenuItem";
-            this.vuzNamesToolStripMenuItem.Size = new System.Drawing.Size(188, 22);
+            this.vuzNamesToolStripMenuItem.Size = new System.Drawing.Size(130, 22);
             this.vuzNamesToolStripMenuItem.Text = "VuzNames";
             this.vuzNamesToolStripMenuItem.Click += new System.EventHandler(this.vuzNamesToolStripMenuItem_Click);
-            // 
-            // loadOlympFromFISToolStripMenuItem
-            // 
-            this.loadOlympFromFISToolStripMenuItem.Name = "loadOlympFromFISToolStripMenuItem";
-            this.loadOlympFromFISToolStripMenuItem.Size = new System.Drawing.Size(188, 22);
-            this.loadOlympFromFISToolStripMenuItem.Text = "LoadOlympFromFIS";
-            this.loadOlympFromFISToolStripMenuItem.Click += new System.EventHandler(this.loadOlympFromFISToolStripMenuItem_Click);
-            // 
-            // loadVserossToolStripMenuItem
-            // 
-            this.loadVserossToolStripMenuItem.Name = "loadVserossToolStripMenuItem";
-            this.loadVserossToolStripMenuItem.Size = new System.Drawing.Size(188, 22);
-            this.loadVserossToolStripMenuItem.Text = "LoadVseross";
-            this.loadVserossToolStripMenuItem.Click += new System.EventHandler(this.loadVserossToolStripMenuItem_Click);
             // 
             // smiCrypto
             // 
@@ -1009,7 +990,8 @@
             this.smiLoadMarks,
             this.smiDecryptor,
             this.smiAppeal,
-            this.smiLoadExamsResultsToParentExamTool});
+            this.smiLoadExamsResultsToParentExamTool,
+            this.markToHistoryToolStripMenuItem});
             this.smiCrypto.Name = "smiCrypto";
             this.smiCrypto.Size = new System.Drawing.Size(91, 20);
             this.smiCrypto.Text = "Шифровалка";
@@ -1017,37 +999,44 @@
             // smiEnterMarks
             // 
             this.smiEnterMarks.Name = "smiEnterMarks";
-            this.smiEnterMarks.Size = new System.Drawing.Size(243, 22);
+            this.smiEnterMarks.Size = new System.Drawing.Size(325, 22);
             this.smiEnterMarks.Text = "Ввод оценок в ведомость";
             this.smiEnterMarks.Click += new System.EventHandler(this.smiEnterMarks_Click);
             // 
             // smiLoadMarks
             // 
             this.smiLoadMarks.Name = "smiLoadMarks";
-            this.smiLoadMarks.Size = new System.Drawing.Size(243, 22);
+            this.smiLoadMarks.Size = new System.Drawing.Size(325, 22);
             this.smiLoadMarks.Text = "Загрузка оценок из ведомости";
             this.smiLoadMarks.Click += new System.EventHandler(this.smiLoadMarks_Click);
             // 
             // smiDecryptor
             // 
             this.smiDecryptor.Name = "smiDecryptor";
-            this.smiDecryptor.Size = new System.Drawing.Size(243, 22);
+            this.smiDecryptor.Size = new System.Drawing.Size(325, 22);
             this.smiDecryptor.Text = "Дешифровка";
             this.smiDecryptor.Click += new System.EventHandler(this.smiDecryptor_Click);
             // 
             // smiAppeal
             // 
             this.smiAppeal.Name = "smiAppeal";
-            this.smiAppeal.Size = new System.Drawing.Size(243, 22);
+            this.smiAppeal.Size = new System.Drawing.Size(325, 22);
             this.smiAppeal.Text = "Ведомость для аппеляции";
             this.smiAppeal.Click += new System.EventHandler(this.smiAppeal_Click);
             // 
             // smiLoadExamsResultsToParentExamTool
             // 
             this.smiLoadExamsResultsToParentExamTool.Name = "smiLoadExamsResultsToParentExamTool";
-            this.smiLoadExamsResultsToParentExamTool.Size = new System.Drawing.Size(243, 22);
+            this.smiLoadExamsResultsToParentExamTool.Size = new System.Drawing.Size(325, 22);
             this.smiLoadExamsResultsToParentExamTool.Text = "loadExamsResultsToParentExam";
             this.smiLoadExamsResultsToParentExamTool.Click += new System.EventHandler(this.smiLoadExamsResultsToParentExamTool_Click);
+            // 
+            // markToHistoryToolStripMenuItem
+            // 
+            this.markToHistoryToolStripMenuItem.Name = "markToHistoryToolStripMenuItem";
+            this.markToHistoryToolStripMenuItem.Size = new System.Drawing.Size(325, 22);
+            this.markToHistoryToolStripMenuItem.Text = "Перенос оценок из промежуточной таблицы";
+            this.markToHistoryToolStripMenuItem.Click += new System.EventHandler(this.markToHistoryToolStripMenuItem_Click);
             // 
             // smiFBS
             // 
@@ -1160,13 +1149,6 @@
             // 
             this.tsslMain.Name = "tsslMain";
             this.tsslMain.Size = new System.Drawing.Size(0, 17);
-            // 
-            // выгрузкаМотАспирToolStripMenuItem
-            // 
-            this.выгрузкаМотАспирToolStripMenuItem.Name = "выгрузкаМотАспирToolStripMenuItem";
-            this.выгрузкаМотАспирToolStripMenuItem.Size = new System.Drawing.Size(188, 22);
-            this.выгрузкаМотАспирToolStripMenuItem.Text = "Выгрузка мот. аспир";
-            this.выгрузкаМотАспирToolStripMenuItem.Click += new System.EventHandler(this.выгрузкаМотАспирToolStripMenuItem_Click);
             // 
             // MainForm
             // 
@@ -1315,9 +1297,7 @@
         private System.Windows.Forms.ToolStripMenuItem smiLoadExamsResultsToParentExamTool;
         private System.Windows.Forms.ToolStripMenuItem smiAbitRatingKofGroupChanging;
         private System.Windows.Forms.ToolStripMenuItem smiDisEntryOrderFromReEnter;
-        private System.Windows.Forms.ToolStripMenuItem loadOlympFromFISToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem loadVserossToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem выгрузкаМотАспирToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem markToHistoryToolStripMenuItem;
 
     }
 }

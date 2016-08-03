@@ -325,11 +325,8 @@ namespace Priem
 ,  (CASE 
   WHEN EXISTS(SELECT * FROM ed.extEntryView  EV 
   join ed.Abiturient A on EV.AbiturientId = A.Id
-  left join ed.ApplicationDetails on A.Id = ApplicationDetails.ApplicationId
   WHERE EV.PersonId = Abiturient.PersonId 
-  AND (EV.Priority < Abiturient.Priority
-  or (EV.Priority = Abiturient.Priority and ApplicationDetails.InnerEntryInEntryPriority <= D.InnerEntryInEntryPriority))
-  ) 
+  AND EV.Priority <= Abiturient.Priority) 
   THEN CONVERT(bit, 0) 
   ELSE extPerson.HasOriginals END)
   AS HasOriginals
@@ -337,7 +334,6 @@ namespace Priem
             
             , extPerson.FIO as FIO
             from ed.Abiturient
-            left join ApplicationDetails D on D.ApplicationId = Abiturient.Id and D.InnerEntryInEntryId = Abiturient.InnerEntryInEntryId
             inner join ed.extPerson on Abiturient.PersonId = extPerson.Id
             
             inner join ed." + Wave + @" on " + Wave + @".AbiturientId = Abiturient.Id

@@ -324,6 +324,11 @@ namespace Priem
             query = @"select " + toplist + @" Abiturient.Id, extPerson.PersonNum
 ,  (CASE 
   WHEN EXISTS(SELECT * FROM ed.extEntryView  EV  
+  WHERE EV.PersonId = Abiturient.PersonId ) 
+  THEN CONVERT(bit, 1) 
+  ELSE CONVERT(bit, 0)  END) as PersonInEntryView
+,  (CASE 
+  WHEN EXISTS(SELECT * FROM ed.extEntryView  EV  
   WHERE EV.AbiturientId = Abiturient.Id ) 
   THEN CONVERT(bit, 1) 
   ELSE CONVERT(bit, 0)  END) as InEntryView
@@ -359,7 +364,9 @@ namespace Priem
                     Abit.AbitId = rw.Field<Guid>("Id");
                     Abit.PersonId = rw.Field<Guid>("PersonId");
                     Abit.HasOriginals = rw.Field<bool>("HasOriginals");
-                    
+                    if (rw.Field<bool>("PersonInEntryView"))
+                        Abit.SetIsGray();
+                     
                     Abit.regNum_FIO = rw.Field<string>("PersonNum") + "_" + rw.Field<string>("FIO");
                     Abit.Priority = rw.Field<int?>("Priority") ?? 0;
                     x.Abits.Add(Abit);
@@ -867,12 +874,13 @@ namespace Priem
                 int entryInd = EntryList.IndexOf(ent);
                 for (int i = 0; i < ent.Abits.Count; i++)
                 {
-                    if (ent.Abits[i].IsGray())
-                        foreach (Column col in ent.ColumnList)
-                            col.SetGrayColor(i);
-                    else if (ent.Abits[i].InEntryView)
+                    if (ent.Abits[i].InEntryView)
                         foreach (Column col in ent.ColumnList)
                             col.SetThistleColor(i,true);
+                    else if (ent.Abits[i].IsGray())
+                        foreach (Column col in ent.ColumnList)
+                            col.SetGrayColor(i);
+                            
                     else if (!ent.Abits[i].HasColor())
                         foreach (Column col in ent.ColumnList)
                             col.SetEmptyColor(i); 

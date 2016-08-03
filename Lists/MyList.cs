@@ -321,11 +321,23 @@ namespace Priem
             string Wave = "_FirstWave";
             if (cbZeroWave.Checked)
                 Wave = "_ZeroWave";
-            query = @"select " + toplist + @" Abiturient.Id, extPerson.PersonNum, (CASE WHEN EXISTS(SELECT * FROM ed.extEntryView EV WHERE EV.PersonId = Abiturient.PersonId AND EV.Priority < Abiturient.Priority) THEN CONVERT(bit, 0) ELSE extPerson.HasOriginals END) AS HasOriginals, 
-            Abiturient.PersonId, Abiturient.Priority
+            query = @"select " + toplist + @" Abiturient.Id, extPerson.PersonNum
+,  (CASE 
+  WHEN EXISTS(SELECT * FROM ed.extEntryView  EV 
+  join ed.Abiturient A on EV.AbiturientId = A.Id
+  left join ed.ApplicationDetails on A.Id = ApplicationDetails.ApplicationId
+  WHERE EV.PersonId = Abiturient.PersonId 
+  AND (EV.Priority < Abiturient.Priority
+  or (EV.Priority = Abiturient.Priority and ApplicationDetails.InnerEntryInEntryPriority <= D.InnerEntryInEntryPriority))
+  ) 
+  THEN CONVERT(bit, 0) 
+  ELSE extPerson.HasOriginals END)
+  AS HasOriginals
+            , Abiturient.PersonId, Abiturient.Priority
             --,  extAbitMarksSum.TotalSum
             , extPerson.FIO as FIO
             from ed.Abiturient
+            left join ApplicationDetails D on D.ApplicationId = Abiturient.Id
             inner join ed.extPerson on Abiturient.PersonId = extPerson.Id
            -- left join ed.extAbitMarksSum on extAbitMarksSum.Id = Abiturient.Id
             inner join ed." + Wave + @" on " + Wave + @".AbiturientId = Abiturient.Id
@@ -522,6 +534,10 @@ namespace Priem
                         m.MenuItems.Add(new MenuItem("Перейти к зеленой позиции", new EventHandler(this.ContextMenuToGreen_OnClick)));
                         m.MenuItems.Add(new MenuItem("Открыть карточку абитуриента", new EventHandler(this.ContextMenuOpenCard_OnClick)));
                         m.MenuItems.Add(new MenuItem("Перейти к следующему конкурсу", new EventHandler(this.ContextMenuNextApp_OnClick)));
+                        m.MenuItems.Add(new MenuItem("Исключить из всех конкурсов", new EventHandler(this.ContextMenuExcept_OnClick)));
+                        m.MenuItems.Add(new MenuItem("Добавить в конкурс", new EventHandler(this.ContextMenuInclude_OnClick)));
+
+
 
                         Point pCell = dgvAbitList.GetCellDisplayRectangle(dgvAbitList.CurrentCell.ColumnIndex, dgvAbitList.CurrentCell.RowIndex, true).Location;
                         Point pGrid = dgvAbitList.Location;
@@ -567,6 +583,28 @@ namespace Priem
                         }
             }
         }
+        private void ContextMenuInclude_OnClick(object sender, EventArgs e)
+        {
+            string EntryId = dgvAbitList.Rows[rowEntryId].Cells[dgvAbitList.CurrentCell.ColumnIndex].Value.ToString();
+            clEntry ent = EntryList.Where(x => x.EntryId == EntryId).Select(x => x).First();
+            Abiturient Abit = ent.Abits.Where(x => dgvAbitList.CurrentCell.Value.ToString().Contains(x.regNum_FIO)).Select(x => x).First();
+            var AbitCoord = Coord.GetCoordintesList(Abit.PersonId);
+            var CurrCord = AbitCoord.Where(x => x.entryindex == EntryList.IndexOf(ent)).Select(x => x).First();
+            CurrCord.InCompetition = true;
+            Abit.SetIsEmpty(); 
+        }
+        private void ContextMenuExcept_OnClick(object sender, EventArgs e)
+        {
+            string EntryId = dgvAbitList.Rows[rowEntryId].Cells[dgvAbitList.CurrentCell.ColumnIndex].Value.ToString();
+            clEntry ent = EntryList.Where(x => x.EntryId == EntryId).Select(x => x).First();
+            Abiturient Abit = ent.Abits.Where(x => dgvAbitList.CurrentCell.Value.ToString().Contains(x.regNum_FIO)).Select(x => x).First();
+            foreach (var x in Coord.GetCoordintesList(Abit.PersonId))
+            {
+                x.InCompetition = false;
+                EntryList[x.entryindex].Abits[x.abitlistindex].SetIsGray();
+            }
+        }
+
         private void ContextMenuToGreen_OnClick(object sender, EventArgs e)
         {
             string EntryId = dgvAbitList.Rows[rowEntryId].Cells[dgvAbitList.CurrentCell.ColumnIndex].Value.ToString();
@@ -816,6 +854,9 @@ namespace Priem
                     if (!ent.Abits[i].HasColor())
                         foreach (Column col in ent.ColumnList)
                             col.SetEmptyColor(i);
+                    else if (ent.Abits[i].IsGray())
+                        foreach (Column col in ent.ColumnList)
+                            col.SetGrayColor(i);
                     else if (ent.Abits[i].IsGreen())
                         foreach (Column col in ent.ColumnList)
                             col.SetGreenColor(i);
@@ -987,6 +1028,8 @@ namespace Priem
         private bool isYellow { get; set; }
         private bool isBlue { get; set; }
         private bool isRed { get; set; }
+        private bool isGray { get; set; }
+
         public bool HasOriginals{ get; set; }
         private bool HasOriginals_restore;
 
@@ -1024,6 +1067,10 @@ namespace Priem
             isRed = true;
             isGreen = isBeige = isBlue = isYellow = false;
         }
+        public void SetIsGray()
+        {
+            isGray = true;
+        }
         public bool IsGreen()
         {
             return isGreen;
@@ -1044,9 +1091,14 @@ namespace Priem
         {
             return isRed;
         }
+        public bool IsGray()
+        {
+            return isGray;
+        }
+
         public bool HasColor()
         {
-            return isGreen || isBlue || isBeige || isYellow || isRed;
+            return isGreen || isBlue || isBeige || isYellow || isRed || isGray;
         }
         public void Restore(bool? hasOrigin)
         {
@@ -1111,6 +1163,10 @@ namespace Priem
         {
             AbitsColorList[abitid] = Color.Beige;
         } 
+        public void SetGrayColor(int abitid)
+        {
+            AbitsColorList[abitid] = Color.Gainsboro;
+        }
     }
     public class clEntry
     {
@@ -1131,7 +1187,6 @@ namespace Priem
             ColumnList = new List<Column>();
             Abits = new List<Abiturient>();
         }
-
         public clEntry(string licprog, string obrazprog, string prof)
         {
             ColumnList = new List<Column>();

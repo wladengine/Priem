@@ -772,10 +772,26 @@ namespace Priem
 
             foreach (var x in EntryList)
             {
+                foreach (var ab in x.Abits.Where(t=>t.InEntryView).ToList())
+                {
+                    var lst = Coord.GetCoordintesList(ab.PersonId);
+                    Coordinates c = lst.Where(t => t.entryindex == EntryList.IndexOf(x) && t.abitlistindex == x.Abits.IndexOf(ab)).Select(t => t).First();
+                    foreach (var coor in lst.Where(cc=>cc!=c).ToList())
+                    {
+                        coor.InCompetition = false;
+                        EntryList[coor.entryindex].Abits[coor.abitlistindex].SetIsGray();
+                    }
+
+                }
+            }
+
+            foreach (var x in EntryList)
+            {
                 x.Restore(false);
                 x.SetMaxCountGreen(DinamicWave);
                 x.SetIsGreen();
             }
+            
             bool HasChanges = true;
             int whileind = 0;
 
@@ -1036,6 +1052,10 @@ namespace Priem
         public int GetLengh()
         {
             return PersonCoordList.Count;
+        }
+        public int GetIsNotInCompetition()
+        {
+            return PersonCoordList.SelectMany(x => x.Value).ToList().Where(x => !x.InCompetition).Count();
         }
         public void Restore()
         {

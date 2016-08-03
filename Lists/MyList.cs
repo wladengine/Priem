@@ -323,15 +323,14 @@ namespace Priem
                 Wave = "_ZeroWave";
             query = @"select " + toplist + @" Abiturient.Id, extPerson.PersonNum
 ,  (CASE 
-  WHEN EXISTS(SELECT * FROM ed.extEntryView  EV 
-  join ed.Abiturient A on EV.AbiturientId = A.Id
-  WHERE EV.PersonId = Abiturient.PersonId 
-  AND EV.Priority <= Abiturient.Priority) 
-  THEN CONVERT(bit, 0) 
-  ELSE extPerson.HasOriginals END)
-  AS HasOriginals
-            , Abiturient.PersonId, Abiturient.Priority
-            
+  WHEN EXISTS(SELECT * FROM ed.extEntryView  EV  
+  WHERE EV.AbiturientId = Abiturient.Id ) 
+  THEN CONVERT(bit, 1) 
+  ELSE CONVERT(bit, 0)  END) as InEntryView
+, extPerson.HasOriginals  AS HasOriginals
+            , Abiturient.PersonId
+            , Abiturient.Priority 
+            , Abiturient.InnerEntryInEntryId 
             , extPerson.FIO as FIO
             from ed.Abiturient
             inner join ed.extPerson on Abiturient.PersonId = extPerson.Id
@@ -356,10 +355,11 @@ namespace Priem
                 DataSet ds = MainClass.Bdc.GetDataSet(query, new SortedList<string, object> { { "@EntryId", x.EntryId } });
                 foreach (DataRow rw in ds.Tables[0].Rows)
                 {
-                    Abiturient Abit = new Abiturient(rw.Field<bool>("HasOriginals"));
+                    Abiturient Abit = new Abiturient(rw.Field<bool>("HasOriginals"), rw.Field<bool>("InEntryView"), rw.Field<Guid?>("InnerEntryInEntryId"));
                     Abit.AbitId = rw.Field<Guid>("Id");
                     Abit.PersonId = rw.Field<Guid>("PersonId");
                     Abit.HasOriginals = rw.Field<bool>("HasOriginals");
+                    
                     Abit.regNum_FIO = rw.Field<string>("PersonNum") + "_" + rw.Field<string>("FIO");
                     Abit.Priority = rw.Field<int?>("Priority") ?? 0;
                     x.Abits.Add(Abit);
@@ -523,7 +523,7 @@ namespace Priem
             else
             {
                 if (e.RowIndex >= LastSystemRow)
-                    if (e.Button == MouseButtons.Right)
+                    if (e.Button == MouseButtons.Right && !(dgvAbitList.CurrentCell.Value is bool))
                     {
                         dgvAbitList.CurrentCell = dgvAbitList.Rows[e.RowIndex].Cells[e.ColumnIndex];
                         ContextMenu m = new ContextMenu();
@@ -532,8 +532,6 @@ namespace Priem
                         m.MenuItems.Add(new MenuItem("Перейти к следующему конкурсу", new EventHandler(this.ContextMenuNextApp_OnClick)));
                         m.MenuItems.Add(new MenuItem("Исключить из всех конкурсов", new EventHandler(this.ContextMenuExcept_OnClick)));
                         m.MenuItems.Add(new MenuItem("Добавить в конкурс", new EventHandler(this.ContextMenuInclude_OnClick)));
-
-
 
                         Point pCell = dgvAbitList.GetCellDisplayRectangle(dgvAbitList.CurrentCell.ColumnIndex, dgvAbitList.CurrentCell.RowIndex, true).Location;
                         Point pGrid = dgvAbitList.Location;
@@ -794,7 +792,7 @@ namespace Priem
                     for (int abitid = 0; abitid < entry.Abits.Count; abitid++)
                     {
                         Abiturient ab = entry.Abits[abitid];
-                        if (ab.IsGray())
+                        if (ab.IsGray() || ab.InEntryView)
                             continue;
                         if (ab.IsGreen())
                         {
@@ -808,7 +806,7 @@ namespace Priem
                                     continue;
 
                                 Abiturient tmp_ab = EntryList[x.entryindex].Abits[x.abitlistindex];
-                                if (tmp_ab.IsGray())
+                                if (tmp_ab.IsGray() || ab.InEntryView)
                                 {
                                     continue;
                                 }
@@ -856,12 +854,12 @@ namespace Priem
                     if (ent.Abits[i].IsGray())
                         foreach (Column col in ent.ColumnList)
                             col.SetGrayColor(i);
+                    else if (ent.Abits[i].InEntryView)
+                        foreach (Column col in ent.ColumnList)
+                            col.SetThistleColor(i,true);
                     else if (!ent.Abits[i].HasColor())
                         foreach (Column col in ent.ColumnList)
-                            col.SetEmptyColor(i);
-                    else if (ent.Abits[i].IsGray())
-                        foreach (Column col in ent.ColumnList)
-                            col.SetGrayColor(i);
+                            col.SetEmptyColor(i); 
                     else if (ent.Abits[i].IsGreen())
                         foreach (Column col in ent.ColumnList)
                             col.SetGreenColor(i);
@@ -889,20 +887,31 @@ namespace Priem
                     if (ColumnList.Count>0)
                         for (int i = 0; i<ent.Abits.Count; i++)
                         {
-                            if (!ent.Abits[i].IsGreen()) continue;
-
-                            int min_in_prior = ColumnList.Select(x => x.Key.InnerPriorities[i]).Min();
-                            Column column = ent.ColumnList.Where(x => x.InnerPriorities[i] == min_in_prior).Select(x => x).First();
-                            ColumnList[column] ++;
-                            foreach (Column col in ent.ColumnList.Where(x=> x!=column).ToList())
+                            if (ent.Abits[i].InEntryView)
                             {
-                                    col.SetYellowColor(i);
+                                Column column = ent.ColumnList.Where(x => x.InnerEntryId == ent.Abits[i].InnerEntryId.ToString()).Select(x => x).First();
+                                foreach (Column col in ent.ColumnList.Where(x => x != column).ToList())
+                                {
+                                    col.SetThistleColor(i, false);
+                                }
                             }
-                            if (ColumnList[column] >= column.MaxKCP)
+                            else
                             {
-                                ColumnList.Remove(column);
-                                if (ColumnList.Count() == 0)
-                                    break;
+                                if (!ent.Abits[i].IsGreen()) continue;
+
+                                int min_in_prior = ColumnList.Select(x => x.Key.InnerPriorities[i]).Min();
+                                Column column = ent.ColumnList.Where(x => x.InnerPriorities[i] == min_in_prior).Select(x => x).First();
+                                ColumnList[column]++;
+                                foreach (Column col in ent.ColumnList.Where(x => x != column).ToList())
+                                {
+                                    col.SetYellowColor(i);
+                                }
+                                if (ColumnList[column] >= column.MaxKCP)
+                                {
+                                    ColumnList.Remove(column);
+                                    if (ColumnList.Count() == 0)
+                                        break;
+                                }
                             }
                         }
                 }
@@ -1041,6 +1050,7 @@ namespace Priem
     {
         public Guid AbitId;
         public Guid PersonId;
+        public Guid? InnerEntryId;
         public string regNum_FIO;
         public int Priority;
         private bool isGreen { get; set; }
@@ -1048,14 +1058,17 @@ namespace Priem
         private bool isYellow { get; set; }
         private bool isBlue { get; set; }
         private bool isRed { get; set; }
-        private bool isGray { get; set; } 
+        private bool isGray { get; set; }
+        public bool InEntryView { get; set; }
 
         public bool HasOriginals{ get; set; }
         private bool HasOriginals_restore;
 
-        public Abiturient(bool hasOrig)
+        public Abiturient(bool hasOrig, bool inEntryView, Guid? inner)
         {
             HasOriginals_restore = hasOrig;
+            InEntryView = inEntryView;
+            InnerEntryId = inner;
             isGray = isBeige = isGreen = isYellow = isBlue = isRed = false;
         }
         public void SetIsEmpty()
@@ -1193,6 +1206,10 @@ namespace Priem
         {
             AbitsColorList[abitid] = Color.Gainsboro;
         }
+        public void SetThistleColor(int abitid, bool x)
+        {
+            AbitsColorList[abitid] = x? Color.Plum : Color.Thistle;
+        }
     }
     public class clEntry
     {
@@ -1233,7 +1250,7 @@ namespace Priem
             int cnt = 0;
             for (int i = 0; (cnt < MaxCountGreen) && (i < Abits.Count);i++ )
             {
-                if (!Abits[i].IsGray())
+                if (!Abits[i].IsGray() && !Abits[i].InEntryView)
                 {
                     Abits[i].SetIsBeige();
                     cnt++;
@@ -1243,7 +1260,7 @@ namespace Priem
             int a = 0;
             while (j < MaxCountGreen && a < Abits.Count)
             {
-                if (Abits[a].HasOriginals && !Abits[a].IsGray())
+                if (Abits[a].HasOriginals && !Abits[a].IsGray() && !Abits[a].InEntryView)
                 {
                     Abits[a].SetIsGreen();
                     j++;

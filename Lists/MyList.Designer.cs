@@ -395,9 +395,9 @@
             this.labelThistle.AutoSize = true;
             this.labelThistle.Location = new System.Drawing.Point(690, 58);
             this.labelThistle.Name = "labelThistle";
-            this.labelThistle.Size = new System.Drawing.Size(374, 13);
+            this.labelThistle.Size = new System.Drawing.Size(55, 13);
             this.labelThistle.TabIndex = 84;
-            this.labelThistle.Text = "У абитуриента нет необходимого ЕГЭ для образовательной программы";
+            this.labelThistle.Text = "Зачислен";
             // 
             // groupBox1
             // 
@@ -623,7 +623,7 @@
             this.label13.TabIndex = 96;
             this.label13.Text = "Кол-во зачисляемых в первую волну";
             // 
-            // NewMyList
+            // MyList
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -652,7 +652,7 @@
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.dgvAbitList);
             this.Controls.Add(this.btnFillGrid);
-            this.Name = "NewMyList";
+            this.Name = "MyList";
             this.Text = "MyList";
             this.Controls.SetChildIndex(this.btnFillGrid, 0);
             this.Controls.SetChildIndex(this.dgvAbitList, 0);

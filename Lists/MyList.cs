@@ -334,12 +334,12 @@ namespace Priem
   ELSE extPerson.HasOriginals END)
   AS HasOriginals
             , Abiturient.PersonId, Abiturient.Priority
-            --,  extAbitMarksSum.TotalSum
+            
             , extPerson.FIO as FIO
             from ed.Abiturient
-            left join ApplicationDetails D on D.ApplicationId = Abiturient.Id
+            left join ApplicationDetails D on D.ApplicationId = Abiturient.Id and D.InnerEntryInEntryId = Abiturient.InnerEntryInEntryId
             inner join ed.extPerson on Abiturient.PersonId = extPerson.Id
-           -- left join ed.extAbitMarksSum on extAbitMarksSum.Id = Abiturient.Id
+            
             inner join ed." + Wave + @" on " + Wave + @".AbiturientId = Abiturient.Id
             inner join ed.extEntry on Abiturient.EntryId = extEntry.Id
             " + ((cbZeroWave.Checked) ? "inner join ed.extEntryView on extEntryView.AbiturientId = Abiturient.Id" : "") +
@@ -588,9 +588,7 @@ namespace Priem
             string EntryId = dgvAbitList.Rows[rowEntryId].Cells[dgvAbitList.CurrentCell.ColumnIndex].Value.ToString();
             clEntry ent = EntryList.Where(x => x.EntryId == EntryId).Select(x => x).First();
             Abiturient Abit = ent.Abits.Where(x => dgvAbitList.CurrentCell.Value.ToString().Contains(x.regNum_FIO)).Select(x => x).First();
-            var AbitCoord = Coord.GetCoordintesList(Abit.PersonId);
-            var CurrCord = AbitCoord.Where(x => x.entryindex == EntryList.IndexOf(ent)).Select(x => x).First();
-            CurrCord.InCompetition = true;
+            Abit.RestoreExcluded();
             Abit.SetIsEmpty(); 
         }
         private void ContextMenuExcept_OnClick(object sender, EventArgs e)
@@ -600,7 +598,6 @@ namespace Priem
             Abiturient Abit = ent.Abits.Where(x => dgvAbitList.CurrentCell.Value.ToString().Contains(x.regNum_FIO)).Select(x => x).First();
             foreach (var x in Coord.GetCoordintesList(Abit.PersonId))
             {
-                x.InCompetition = false;
                 EntryList[x.entryindex].Abits[x.abitlistindex].SetIsGray();
             }
         }
@@ -781,6 +778,7 @@ namespace Priem
 
             foreach (var x in EntryList)
             {
+                x.Restore(false);
                 x.SetMaxCountGreen(DinamicWave);
                 x.SetIsGreen();
             }
@@ -800,6 +798,8 @@ namespace Priem
                     for (int abitid = 0; abitid < entry.Abits.Count; abitid++)
                     {
                         Abiturient ab = entry.Abits[abitid];
+                        if (ab.IsGray())
+                            continue;
                         if (ab.IsGreen())
                         {
                             var lst = Coord.GetCoordintesList(ab.PersonId);
@@ -812,6 +812,11 @@ namespace Priem
                                     continue;
 
                                 Abiturient tmp_ab = EntryList[x.entryindex].Abits[x.abitlistindex];
+                                if (tmp_ab.IsGray())
+                                {
+                                    continue;
+                                }
+
                                 if (tmp_ab.IsGreen())
                                 {
                                     if (tmp_ab.Priority == ab.Priority)
@@ -849,9 +854,13 @@ namespace Priem
             nw.Show();
             foreach (clEntry ent in EntryList)
             {
+                int entryInd = EntryList.IndexOf(ent);
                 for (int i = 0; i < ent.Abits.Count; i++)
                 {
-                    if (!ent.Abits[i].HasColor())
+                    if (ent.Abits[i].IsGray())
+                        foreach (Column col in ent.ColumnList)
+                            col.SetGrayColor(i);
+                    else if (!ent.Abits[i].HasColor())
                         foreach (Column col in ent.ColumnList)
                             col.SetEmptyColor(i);
                     else if (ent.Abits[i].IsGray())
@@ -977,6 +986,21 @@ namespace Priem
             Abiturient Abit = ent.Abits.Where(x => dgvAbitList.CurrentCell.Value.ToString().Contains(x.regNum_FIO)).Select(x => x).First();
             MainClass.OpenCardPerson(Abit.PersonId.ToString(), this, dgvAbitList.CurrentRow.Index);
         }
+
+        private void btnRestoreExcluded_Click(object sender, EventArgs e)
+        {
+            foreach (clEntry en in EntryList)
+            {
+                en.RestoreExcluded();
+                for (int abid = 0; abid < en.Abits.Count; abid++)
+                    foreach (Column col in en.ColumnList)
+                    {
+                        dgvAbitList.Rows[abid + LastSystemRow].Cells[col.ColumnIndex - 1].Value = en.Abits[abid].HasOriginals;
+                    }
+            }
+
+            PaintGrid();
+        }
     }
 
     public class PersonCoordinates
@@ -1028,7 +1052,7 @@ namespace Priem
         private bool isYellow { get; set; }
         private bool isBlue { get; set; }
         private bool isRed { get; set; }
-        private bool isGray { get; set; }
+        private bool isGray { get; set; } 
 
         public bool HasOriginals{ get; set; }
         private bool HasOriginals_restore;
@@ -1036,7 +1060,7 @@ namespace Priem
         public Abiturient(bool hasOrig)
         {
             HasOriginals_restore = hasOrig;
-            isBeige = isGreen = isYellow = isBlue = isRed = false;
+            isGray = isBeige = isGreen = isYellow = isBlue = isRed = false;
         }
         public void SetIsEmpty()
         {
@@ -1104,10 +1128,16 @@ namespace Priem
         {
             isBeige = isGreen = isYellow = isBlue = isRed = false;
             if (hasOrigin.HasValue)
-                HasOriginals = hasOrigin.Value;
+            {
+                if (hasOrigin.Value)
+                    HasOriginals = hasOrigin.Value;
+            }
             else
                 HasOriginals = HasOriginals_restore;
-
+        }
+        public void RestoreExcluded()
+        {
+            isGray = false;
         }
     }
     public class Column
@@ -1204,13 +1234,20 @@ namespace Priem
             {
                 ab.SetIsEmpty();
             }
-            for (int i = 0; (i < MaxCountGreen)&&(i<Abits.Count); i++)
-                Abits[i].SetIsBeige();
+            int cnt = 0;
+            for (int i = 0; (cnt < MaxCountGreen) && (i < Abits.Count);i++ )
+            {
+                if (!Abits[i].IsGray())
+                {
+                    Abits[i].SetIsBeige();
+                    cnt++;
+                }
+            }
             int j = 0;
             int a = 0;
             while (j < MaxCountGreen && a < Abits.Count)
             {
-                if (Abits[a].HasOriginals)
+                if (Abits[a].HasOriginals && !Abits[a].IsGray())
                 {
                     Abits[a].SetIsGreen();
                     j++;
@@ -1232,6 +1269,11 @@ namespace Priem
                     return;
                 }
             }
+        }
+        public void RestoreExcluded()
+        {
+            foreach (Abiturient abit in Abits)
+                abit.RestoreExcluded();
         }
         public void Restore()
         { Restore(null); }

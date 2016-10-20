@@ -124,22 +124,22 @@
             this.номераЗачетокToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.smiExportStudent = new System.Windows.Forms.ToolStripMenuItem();
             this.smiRatingBackUp = new System.Windows.Forms.ToolStripMenuItem();
-            this.smiMakeBackDoc = new System.Windows.Forms.ToolStripMenuItem();
-            this.smiDeleteDog = new System.Windows.Forms.ToolStripMenuItem();
-            this.smiSplitEntryViews = new System.Windows.Forms.ToolStripMenuItem();
-            this.smiQuerier = new System.Windows.Forms.ToolStripMenuItem();
             this.smiPayDataEntry = new System.Windows.Forms.ToolStripMenuItem();
             this.othersToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.vuzNamesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.loadOlympFromFISToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.loadVserossToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.выгрузкаМотАспирToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.testFILESTREAMToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.iDToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.перезачестьОценкиСБюджетаНаДоговорToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.smiCrypto = new System.Windows.Forms.ToolStripMenuItem();
             this.smiEnterMarks = new System.Windows.Forms.ToolStripMenuItem();
             this.smiLoadMarks = new System.Windows.Forms.ToolStripMenuItem();
             this.smiDecryptor = new System.Windows.Forms.ToolStripMenuItem();
             this.smiAppeal = new System.Windows.Forms.ToolStripMenuItem();
             this.smiLoadExamsResultsToParentExamTool = new System.Windows.Forms.ToolStripMenuItem();
+            this.smiExamsVedMarkToHistory = new System.Windows.Forms.ToolStripMenuItem();
             this.smiFBS = new System.Windows.Forms.ToolStripMenuItem();
             this.smiGetByFIOPasp = new System.Windows.Forms.ToolStripMenuItem();
             this.smiGetByFIOPasp2 = new System.Windows.Forms.ToolStripMenuItem();
@@ -149,13 +149,13 @@
             this.smiExport = new System.Windows.Forms.ToolStripMenuItem();
             this.smiVTB = new System.Windows.Forms.ToolStripMenuItem();
             this.smiSberbank = new System.Windows.Forms.ToolStripMenuItem();
+            this.smiExportToNewStudent = new System.Windows.Forms.ToolStripMenuItem();
             this.smiImport = new System.Windows.Forms.ToolStripMenuItem();
             this.срюбаллToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.оплатаДоговоровToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.lblDBPath = new System.Windows.Forms.ToolStripStatusLabel();
             this.tsslMain = new System.Windows.Forms.ToolStripStatusLabel();
-            this.smiExamsVedMarkToHistory = new System.Windows.Forms.ToolStripMenuItem();
             this.msMainMenu.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -756,12 +756,9 @@
             this.номераЗачетокToolStripMenuItem,
             this.smiExportStudent,
             this.smiRatingBackUp,
-            this.smiMakeBackDoc,
-            this.smiDeleteDog,
-            this.smiSplitEntryViews,
-            this.smiQuerier,
             this.smiPayDataEntry,
-            this.othersToolStripMenuItem});
+            this.othersToolStripMenuItem,
+            this.перезачестьОценкиСБюджетаНаДоговорToolStripMenuItem});
             this.smiBooks.Name = "smiBooks";
             this.smiBooks.Size = new System.Drawing.Size(152, 20);
             this.smiBooks.Text = "Справочники для Паши";
@@ -772,7 +769,7 @@
             this.smiRegions,
             this.smiCountries});
             this.baseToolStripMenuItem.Name = "baseToolStripMenuItem";
-            this.baseToolStripMenuItem.Size = new System.Drawing.Size(453, 22);
+            this.baseToolStripMenuItem.Size = new System.Drawing.Size(311, 22);
             this.baseToolStripMenuItem.Text = "Базовые справочники";
             // 
             // smiRegions
@@ -796,7 +793,7 @@
             this.smiObrazProgram,
             this.smiProfile});
             this.конкурсыToolStripMenuItem.Name = "конкурсыToolStripMenuItem";
-            this.конкурсыToolStripMenuItem.Size = new System.Drawing.Size(453, 22);
+            this.конкурсыToolStripMenuItem.Size = new System.Drawing.Size(311, 22);
             this.конкурсыToolStripMenuItem.Text = "Конкурсы";
             // 
             // smiLicenseProgram
@@ -823,28 +820,28 @@
             // smiEntry
             // 
             this.smiEntry.Name = "smiEntry";
-            this.smiEntry.Size = new System.Drawing.Size(453, 22);
+            this.smiEntry.Size = new System.Drawing.Size(311, 22);
             this.smiEntry.Text = "Конкурс";
             this.smiEntry.Click += new System.EventHandler(this.smiEntry_Click);
             // 
             // smiCompetitiveGroup
             // 
             this.smiCompetitiveGroup.Name = "smiCompetitiveGroup";
-            this.smiCompetitiveGroup.Size = new System.Drawing.Size(453, 22);
+            this.smiCompetitiveGroup.Size = new System.Drawing.Size(311, 22);
             this.smiCompetitiveGroup.Text = "Конкурсные группы";
             this.smiCompetitiveGroup.Click += new System.EventHandler(this.smiCompetitiveGroup_Click);
             // 
             // smiExamName
             // 
             this.smiExamName.Name = "smiExamName";
-            this.smiExamName.Size = new System.Drawing.Size(453, 22);
+            this.smiExamName.Size = new System.Drawing.Size(311, 22);
             this.smiExamName.Text = "Названия экзаменов";
             this.smiExamName.Click += new System.EventHandler(this.smiExamName_Click);
             // 
             // smiExam
             // 
             this.smiExam.Name = "smiExam";
-            this.smiExam.Size = new System.Drawing.Size(453, 22);
+            this.smiExam.Size = new System.Drawing.Size(311, 22);
             this.smiExam.Text = "Экзамены";
             this.smiExam.Click += new System.EventHandler(this.smiExam_Click);
             // 
@@ -856,7 +853,7 @@
             this.smiOlympSubject,
             this.smiOlympBook});
             this.smiOlymBook.Name = "smiOlymBook";
-            this.smiOlymBook.Size = new System.Drawing.Size(453, 22);
+            this.smiOlymBook.Size = new System.Drawing.Size(311, 22);
             this.smiOlymBook.Text = "Олимпиады";
             this.smiOlymBook.Click += new System.EventHandler(this.smiOlymBook_Click);
             // 
@@ -890,84 +887,56 @@
             // smiEGE
             // 
             this.smiEGE.Name = "smiEGE";
-            this.smiEGE.Size = new System.Drawing.Size(453, 22);
+            this.smiEGE.Size = new System.Drawing.Size(311, 22);
             this.smiEGE.Text = "ЕГЭ";
             this.smiEGE.Click += new System.EventHandler(this.smiEGE_Click);
             // 
             // smiMinEge
             // 
             this.smiMinEge.Name = "smiMinEge";
-            this.smiMinEge.Size = new System.Drawing.Size(453, 22);
+            this.smiMinEge.Size = new System.Drawing.Size(311, 22);
             this.smiMinEge.Text = "Минимальные планки по ЕГЭ";
             this.smiMinEge.Click += new System.EventHandler(this.smiMinEge_Click);
             // 
             // smiEnterManual
             // 
             this.smiEnterManual.Name = "smiEnterManual";
-            this.smiEnterManual.Size = new System.Drawing.Size(453, 22);
+            this.smiEnterManual.Size = new System.Drawing.Size(311, 22);
             this.smiEnterManual.Text = "Ведомость ручного ввода";
             this.smiEnterManual.Click += new System.EventHandler(this.smiEnterManual_Click);
             // 
             // smiRatingListPasha
             // 
             this.smiRatingListPasha.Name = "smiRatingListPasha";
-            this.smiRatingListPasha.Size = new System.Drawing.Size(453, 22);
+            this.smiRatingListPasha.Size = new System.Drawing.Size(311, 22);
             this.smiRatingListPasha.Text = "Рейтинговый список для сайта";
             this.smiRatingListPasha.Click += new System.EventHandler(this.smiRatingListPasha_Click);
             // 
             // номераЗачетокToolStripMenuItem
             // 
             this.номераЗачетокToolStripMenuItem.Name = "номераЗачетокToolStripMenuItem";
-            this.номераЗачетокToolStripMenuItem.Size = new System.Drawing.Size(453, 22);
+            this.номераЗачетокToolStripMenuItem.Size = new System.Drawing.Size(311, 22);
             this.номераЗачетокToolStripMenuItem.Text = "Номера зачеток";
             this.номераЗачетокToolStripMenuItem.Click += new System.EventHandler(this.номераЗачетокToolStripMenuItem_Click);
             // 
             // smiExportStudent
             // 
             this.smiExportStudent.Name = "smiExportStudent";
-            this.smiExportStudent.Size = new System.Drawing.Size(453, 22);
+            this.smiExportStudent.Size = new System.Drawing.Size(311, 22);
             this.smiExportStudent.Text = "Выгрузка для студента";
             this.smiExportStudent.Click += new System.EventHandler(this.smiExportStudent_Click);
             // 
             // smiRatingBackUp
             // 
             this.smiRatingBackUp.Name = "smiRatingBackUp";
-            this.smiRatingBackUp.Size = new System.Drawing.Size(453, 22);
+            this.smiRatingBackUp.Size = new System.Drawing.Size(311, 22);
             this.smiRatingBackUp.Text = "Бэкап рейтинга";
             this.smiRatingBackUp.Click += new System.EventHandler(this.smiRatingBackUp_Click);
-            // 
-            // smiMakeBackDoc
-            // 
-            this.smiMakeBackDoc.Name = "smiMakeBackDoc";
-            this.smiMakeBackDoc.Size = new System.Drawing.Size(453, 22);
-            this.smiMakeBackDoc.Text = "Проставить забор документам на платное, поступившим на бюджет";
-            this.smiMakeBackDoc.Click += new System.EventHandler(this.smiMakeBackDoc_Click);
-            // 
-            // smiDeleteDog
-            // 
-            this.smiDeleteDog.Name = "smiDeleteDog";
-            this.smiDeleteDog.Size = new System.Drawing.Size(453, 22);
-            this.smiDeleteDog.Text = "Удалить платников (зачисленных или backdoc)";
-            this.smiDeleteDog.Click += new System.EventHandler(this.smiDeleteDog_Click);
-            // 
-            // smiSplitEntryViews
-            // 
-            this.smiSplitEntryViews.Name = "smiSplitEntryViews";
-            this.smiSplitEntryViews.Size = new System.Drawing.Size(453, 22);
-            this.smiSplitEntryViews.Text = "Разделить представления на б/э и в/к";
-            this.smiSplitEntryViews.Click += new System.EventHandler(this.smiSplitEntryViews_Click);
-            // 
-            // smiQuerier
-            // 
-            this.smiQuerier.Name = "smiQuerier";
-            this.smiQuerier.Size = new System.Drawing.Size(453, 22);
-            this.smiQuerier.Text = "Querier";
-            this.smiQuerier.Click += new System.EventHandler(this.smiQuerier_Click);
             // 
             // smiPayDataEntry
             // 
             this.smiPayDataEntry.Name = "smiPayDataEntry";
-            this.smiPayDataEntry.Size = new System.Drawing.Size(453, 22);
+            this.smiPayDataEntry.Size = new System.Drawing.Size(311, 22);
             this.smiPayDataEntry.Text = "Реквизиты для договоров";
             this.smiPayDataEntry.Click += new System.EventHandler(this.smiPayDataEntry_Click);
             // 
@@ -977,9 +946,11 @@
             this.vuzNamesToolStripMenuItem,
             this.loadOlympFromFISToolStripMenuItem,
             this.loadVserossToolStripMenuItem,
-            this.выгрузкаМотАспирToolStripMenuItem});
+            this.выгрузкаМотАспирToolStripMenuItem,
+            this.testFILESTREAMToolStripMenuItem,
+            this.iDToolStripMenuItem});
             this.othersToolStripMenuItem.Name = "othersToolStripMenuItem";
-            this.othersToolStripMenuItem.Size = new System.Drawing.Size(453, 22);
+            this.othersToolStripMenuItem.Size = new System.Drawing.Size(311, 22);
             this.othersToolStripMenuItem.Text = "Others";
             // 
             // vuzNamesToolStripMenuItem
@@ -1009,6 +980,27 @@
             this.выгрузкаМотАспирToolStripMenuItem.Size = new System.Drawing.Size(188, 22);
             this.выгрузкаМотАспирToolStripMenuItem.Text = "Выгрузка мот. аспир";
             this.выгрузкаМотАспирToolStripMenuItem.Click += new System.EventHandler(this.выгрузкаМотАспирToolStripMenuItem_Click);
+            // 
+            // testFILESTREAMToolStripMenuItem
+            // 
+            this.testFILESTREAMToolStripMenuItem.Name = "testFILESTREAMToolStripMenuItem";
+            this.testFILESTREAMToolStripMenuItem.Size = new System.Drawing.Size(188, 22);
+            this.testFILESTREAMToolStripMenuItem.Text = "TestFILESTREAM";
+            this.testFILESTREAMToolStripMenuItem.Click += new System.EventHandler(this.testFILESTREAMToolStripMenuItem_Click);
+            // 
+            // iDToolStripMenuItem
+            // 
+            this.iDToolStripMenuItem.Name = "iDToolStripMenuItem";
+            this.iDToolStripMenuItem.Size = new System.Drawing.Size(188, 22);
+            this.iDToolStripMenuItem.Text = "ID";
+            this.iDToolStripMenuItem.Click += new System.EventHandler(this.iDToolStripMenuItem_Click);
+            // 
+            // перезачестьОценкиСБюджетаНаДоговорToolStripMenuItem
+            // 
+            this.перезачестьОценкиСБюджетаНаДоговорToolStripMenuItem.Name = "перезачестьОценкиСБюджетаНаДоговорToolStripMenuItem";
+            this.перезачестьОценкиСБюджетаНаДоговорToolStripMenuItem.Size = new System.Drawing.Size(311, 22);
+            this.перезачестьОценкиСБюджетаНаДоговорToolStripMenuItem.Text = "Перезачесть оценки с бюджета на договор";
+            this.перезачестьОценкиСБюджетаНаДоговорToolStripMenuItem.Click += new System.EventHandler(this.перезачестьОценкиСБюджетаНаДоговорToolStripMenuItem_Click);
             // 
             // smiCrypto
             // 
@@ -1055,8 +1047,15 @@
             // 
             this.smiLoadExamsResultsToParentExamTool.Name = "smiLoadExamsResultsToParentExamTool";
             this.smiLoadExamsResultsToParentExamTool.Size = new System.Drawing.Size(325, 22);
-            this.smiLoadExamsResultsToParentExamTool.Text = "loadExamsResultsToParentExam";
+            this.smiLoadExamsResultsToParentExamTool.Text = "Загрузить оценки в родительский экзамен";
             this.smiLoadExamsResultsToParentExamTool.Click += new System.EventHandler(this.smiLoadExamsResultsToParentExamTool_Click);
+            // 
+            // smiExamsVedMarkToHistory
+            // 
+            this.smiExamsVedMarkToHistory.Name = "smiExamsVedMarkToHistory";
+            this.smiExamsVedMarkToHistory.Size = new System.Drawing.Size(325, 22);
+            this.smiExamsVedMarkToHistory.Text = "Перенос оценок из промежуточной таблицы";
+            this.smiExamsVedMarkToHistory.Click += new System.EventHandler(this.smiExamsVedMarkToHistory_Click);
             // 
             // smiFBS
             // 
@@ -1109,7 +1108,8 @@
             // 
             this.smiExport.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.smiVTB,
-            this.smiSberbank});
+            this.smiSberbank,
+            this.smiExportToNewStudent});
             this.smiExport.Name = "smiExport";
             this.smiExport.Size = new System.Drawing.Size(64, 20);
             this.smiExport.Text = "Экспорт";
@@ -1117,16 +1117,23 @@
             // smiVTB
             // 
             this.smiVTB.Name = "smiVTB";
-            this.smiVTB.Size = new System.Drawing.Size(235, 22);
+            this.smiVTB.Size = new System.Drawing.Size(244, 22);
             this.smiVTB.Text = "Поступивших для ВТБ24";
             this.smiVTB.Click += new System.EventHandler(this.smiVTB_Click);
             // 
             // smiSberbank
             // 
             this.smiSberbank.Name = "smiSberbank";
-            this.smiSberbank.Size = new System.Drawing.Size(235, 22);
+            this.smiSberbank.Size = new System.Drawing.Size(244, 22);
             this.smiSberbank.Text = "Поступивших для Сбербанка";
             this.smiSberbank.Click += new System.EventHandler(this.smiSberbank_Click);
+            // 
+            // smiExportToNewStudent
+            // 
+            this.smiExportToNewStudent.Name = "smiExportToNewStudent";
+            this.smiExportToNewStudent.Size = new System.Drawing.Size(244, 22);
+            this.smiExportToNewStudent.Text = "Экспорт в \"Карточку Студента\"";
+            this.smiExportToNewStudent.Click += new System.EventHandler(this.smiExportToNewStudent_Click);
             // 
             // smiImport
             // 
@@ -1169,13 +1176,6 @@
             // 
             this.tsslMain.Name = "tsslMain";
             this.tsslMain.Size = new System.Drawing.Size(0, 17);
-            // 
-            // smiExamsVedMarkToHistory
-            // 
-            this.smiExamsVedMarkToHistory.Name = "smiExamsVedMarkToHistory";
-            this.smiExamsVedMarkToHistory.Size = new System.Drawing.Size(325, 22);
-            this.smiExamsVedMarkToHistory.Text = "Перенос оценок из промежуточной таблицы";
-            this.smiExamsVedMarkToHistory.Click += new System.EventHandler(this.smiExamsVedMarkToHistory_Click);
             // 
             // MainForm
             // 
@@ -1280,8 +1280,6 @@
         private System.Windows.Forms.ToolStripMenuItem smiGetByFIOPasp2;
         private System.Windows.Forms.ToolStripMenuItem smiRegionFacultyAbitCount;
         private System.Windows.Forms.ToolStripMenuItem smiRatingBackUp;
-        private System.Windows.Forms.ToolStripMenuItem smiMakeBackDoc;
-        private System.Windows.Forms.ToolStripMenuItem smiDeleteDog;
         private System.Windows.Forms.ToolStripMenuItem smiOlympStatistics;
         private System.Windows.Forms.ToolStripMenuItem предметыПоРегионамToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem smiOlympSubjectByRegion;
@@ -1294,8 +1292,6 @@
         private System.Windows.Forms.ToolStripMenuItem smiExamsResultCSV;
         private System.Windows.Forms.ToolStripMenuItem smiPriemResults_AbitExamResults;
         private System.Windows.Forms.ToolStripMenuItem smiFormB;
-        private System.Windows.Forms.ToolStripMenuItem smiSplitEntryViews;
-        private System.Windows.Forms.ToolStripMenuItem smiQuerier;
         private System.Windows.Forms.ToolStripMenuItem smiPayDataEntry;
         private System.Windows.Forms.ToolStripMenuItem smiFormV;
         private System.Windows.Forms.ToolStripMenuItem smiCompetitiveGroup;
@@ -1328,6 +1324,10 @@
         private System.Windows.Forms.ToolStripMenuItem loadVserossToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem выгрузкаМотАспирToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem smiExamsVedMarkToHistory;
+        private System.Windows.Forms.ToolStripMenuItem testFILESTREAMToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem iDToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem перезачестьОценкиСБюджетаНаДоговорToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem smiExportToNewStudent;
 
     }
 }

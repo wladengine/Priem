@@ -324,7 +324,7 @@ namespace Priem
             query = @"select " + toplist + @" Abiturient.Id, extPerson.PersonNum
 ,  (CASE 
   WHEN EXISTS(SELECT * FROM ed.extEntryView  EV  
-  WHERE EV.PersonId = Abiturient.PersonId ) 
+  WHERE EV.PersonId = Abiturient.PersonId AND EV.Priority < Abiturient.Priority) 
   THEN CONVERT(bit, 1) 
   ELSE CONVERT(bit, 0)  END) as PersonInEntryView
 ,  (CASE 

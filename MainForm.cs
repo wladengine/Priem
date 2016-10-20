@@ -106,57 +106,61 @@ namespace Priem
 
         public void CheckActualVersion()
         {
-            if (bNewVersionWarningShowing)
-                return;
-
-            using (PriemEntities context = new PriemEntities())
+            try
             {
-                string currPath = Application.StartupPath;
+                if (bNewVersionWarningShowing)
+                    return;
 
-                bool bIsDev = false;
-                if (currPath.IndexOf(@"D:\Projects\2013 - MainPriem\Priem\Priem\bin\Release", StringComparison.OrdinalIgnoreCase) == 0)
-                    bIsDev = true;
-
-                string AppType_Postfix = "";
-                switch (MainClass.dbType)
+                using (PriemEntities context = new PriemEntities())
                 {
-                    case PriemType.Priem: { AppType_Postfix = "1kurs"; break; }
-                    case PriemType.PriemMag: { AppType_Postfix = "mag"; break; }
-                    case PriemType.PriemAspirant: { AppType_Postfix = "aspirant"; break; }
-                    case PriemType.PriemSPO: { AppType_Postfix = "spo"; break; }
-                }
+                    string currPath = Application.StartupPath;
 
-                string actualPath = context.C_AppSettings.Where(x => x.ParamKey == "CurrentDir_" + AppType_Postfix)
-                    .Select(x => x.ParamValue).FirstOrDefault();
+                    bool bIsDev = false;
+                    if (currPath.IndexOf(@"D:\Projects\2013 - MainPriem\Priem\Priem\bin\Release", StringComparison.OrdinalIgnoreCase) == 0)
+                        bIsDev = true;
 
-                string sForceAutoOpenCurrentVer = context.C_AppSettings.Where(x => x.ParamKey == "ForceAutoOpenCurrentVer_" + AppType_Postfix)
-                    .Select(x => x.ParamValue).FirstOrDefault();
-                bool bForceAutoOpenCurrentVer = "1".Equals(sForceAutoOpenCurrentVer, StringComparison.OrdinalIgnoreCase);
+                    string AppType_Postfix = "";
+                    switch (MainClass.dbType)
+                    {
+                        case PriemType.Priem: { AppType_Postfix = "1kurs"; break; }
+                        case PriemType.PriemMag: { AppType_Postfix = "mag"; break; }
+                        case PriemType.PriemAspirant: { AppType_Postfix = "aspirant"; break; }
+                        case PriemType.PriemSPO: { AppType_Postfix = "spo"; break; }
+                    }
 
-                DateTime dtInfo = new FileInfo(Application.ExecutablePath).LastWriteTime;
-                //string versionInfo = string.Format(" (версия от {0})", dtInfo.ToShortDateString() + " " + dtInfo.ToShortTimeString());
-                if (!bIsDev && !string.IsNullOrEmpty(actualPath) && !currPath.Equals(actualPath, StringComparison.OrdinalIgnoreCase))
-                {
-                    if (bForceAutoOpenCurrentVer)
-                        OpenActualVersion(actualPath);
+                    string actualPath = context.C_AppSettings.Where(x => x.ParamKey == "CurrentDir_" + AppType_Postfix)
+                        .Select(x => x.ParamValue).FirstOrDefault();
+
+                    string sForceAutoOpenCurrentVer = context.C_AppSettings.Where(x => x.ParamKey == "ForceAutoOpenCurrentVer_" + AppType_Postfix)
+                        .Select(x => x.ParamValue).FirstOrDefault();
+                    bool bForceAutoOpenCurrentVer = "1".Equals(sForceAutoOpenCurrentVer, StringComparison.OrdinalIgnoreCase);
+
+                    DateTime dtInfo = new FileInfo(Application.ExecutablePath).LastWriteTime;
+                    //string versionInfo = string.Format(" (версия от {0})", dtInfo.ToShortDateString() + " " + dtInfo.ToShortTimeString());
+                    if (!bIsDev && !string.IsNullOrEmpty(actualPath) && !currPath.Equals(actualPath, StringComparison.OrdinalIgnoreCase))
+                    {
+                        if (bForceAutoOpenCurrentVer)
+                            OpenActualVersion(actualPath);
+                        else
+                        {
+                            string Message = "Вышла новая версия приложения. Запустить актуальную версию?";
+                            bNewVersionWarningShowing = true;
+                            var dr = MessageBox.Show(Message, "Контроль версий", MessageBoxButtons.YesNo);
+                            bNewVersionWarningShowing = false;
+                            if (dr == System.Windows.Forms.DialogResult.Yes)
+                                OpenActualVersion(actualPath);
+                            else if (bFirstRun)
+                                OpenHelp(string.Format("{0}; Пользователь: {1}", _titleString/* + versionInfo*/, MainClass.GetUserName()));
+                        }
+                    }
                     else
                     {
-                        string Message = "Вышла новая версия приложения. Запустить актуальную версию?";
-                        bNewVersionWarningShowing = true;
-                        var dr = MessageBox.Show(Message, "Контроль версий", MessageBoxButtons.YesNo);
-                        bNewVersionWarningShowing = false;
-                        if (dr == System.Windows.Forms.DialogResult.Yes)
-                            OpenActualVersion(actualPath);
-                        else if (bFirstRun)
+                        if (bFirstRun)
                             OpenHelp(string.Format("{0}; Пользователь: {1}", _titleString/* + versionInfo*/, MainClass.GetUserName()));
                     }
                 }
-                else
-                {
-                    if (bFirstRun)
-                        OpenHelp(string.Format("{0}; Пользователь: {1}", _titleString/* + versionInfo*/, MainClass.GetUserName()));
-                }
             }
+            catch { }
         }
 
         public void OpenActualVersion(string path)
@@ -982,7 +986,7 @@ namespace Priem
 
         private void smiLoadExamsResultsToParentExamTool_Click(object sender, EventArgs e)
         {
-
+            MarkProvider.LoadExamsResultsToParentExam();
         }
 
         private void smiAbitRatingKofGroupChanging_Click(object sender, EventArgs e)
@@ -1025,6 +1029,26 @@ namespace Priem
         private void smiExamsVedMarkToHistory_Click(object sender, EventArgs e)
         {
             new ExamsVedMarkToHistory().Show();
+        }
+
+        private void testFILESTREAMToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FilestreamTestClass.TestHashFunc();
+        }
+
+        private void iDToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SomeMethodsClass.AddExamIndividualAchievements();
+        }
+
+        private void перезачестьОценкиСБюджетаНаДоговорToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            MarkProvider.ReSetMarkFromBudget();
+        }
+
+        private void smiExportToNewStudent_Click(object sender, EventArgs e)
+        {
+            ExportClass.ExportInNewStudent();
         }
     }
 }

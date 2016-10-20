@@ -21,36 +21,61 @@ namespace Priem
                 string dir = fld.SelectedPath;
                 
                 List<string> lstOP = new List<string>();
-                lstOP.Add("Математическая кибернетика");
-                lstOP.Add("Системный анализ, информатика и управление");
-                lstOP.Add("Информатика");
-                lstOP.Add("Механика");
-                lstOP.Add("Прикладная математика и процессы управления");
+                //lstOP.Add("Математическая кибернетика");
+                //lstOP.Add("Системный анализ, информатика и управление");
+                //lstOP.Add("Информатика");
+                //lstOP.Add("Механика");
+                //lstOP.Add("Прикладная математика и процессы управления");
+                lstOP.Add("Уголовный процесс, криминалистика, теория оперативно-розыскной деятельности");
+                //lstOP.Add("Прикладная математика и информатика");
                 foreach (string OP in lstOP)
                 {
                     string query = @"SELECT qq.Id, F.FileExtention, F.FileData
-FROM OnlineAbitFiles.dbo.qAbitFiles_OnlyEssay qq
+FROM OnlineAbitFiles.dbo.qAbitFiles_OnlyMotivLetter qq
 INNER JOIN extAbitFiles_All F ON qq.Id = F.Id
 WHERE qq.PersonId IN
 (
 	SELECT DISTINCT APP.PersonId
 	FROM Application2015 APP
 	INNER JOIN Entry E ON APP.EntryId = E.Id
-	WHERE E.StudyLevelGroupId = 4
+	WHERE E.StudyLevelGroupId = 2
 	AND E.ObrazProgramName = @OP
 )
 UNION ALL
 SELECT qq.Id, F.FileExtention, F.FileData
-FROM OnlinePriem2015.dbo.qAbitFiles_OnlyEssay qq
+FROM OnlinePriem2015.dbo.qAbitFiles_OnlyMotivLetter qq
 INNER JOIN extAbitFiles_All F ON qq.Id = F.Id
 WHERE qq.PersonId IN
 (
 	SELECT DISTINCT APP.PersonId
 	FROM Application2015 APP
 	INNER JOIN Entry E ON APP.EntryId = E.Id
-	WHERE E.StudyLevelGroupId = 4
+	WHERE E.StudyLevelGroupId = 2
 	AND E.ObrazProgramName = @OP
 )";
+//                    string query = @"SELECT qq.Id, F.FileExtention, F.FileData
+//FROM OnlineAbitFiles.dbo.qAbitFiles_OnlyEssay qq
+//INNER JOIN extAbitFiles_All F ON qq.Id = F.Id
+//WHERE qq.PersonId IN
+//(
+//	SELECT DISTINCT APP.PersonId
+//	FROM Application2015 APP
+//	INNER JOIN Entry E ON APP.EntryId = E.Id
+//	WHERE E.StudyLevelGroupId = 2
+//	AND E.ObrazProgramName = @OP
+//)
+//UNION ALL
+//SELECT qq.Id, F.FileExtention, F.FileData
+//FROM OnlinePriem2015.dbo.qAbitFiles_OnlyEssay qq
+//INNER JOIN extAbitFiles_All F ON qq.Id = F.Id
+//WHERE qq.PersonId IN
+//(
+//	SELECT DISTINCT APP.PersonId
+//	FROM Application2015 APP
+//	INNER JOIN Entry E ON APP.EntryId = E.Id
+//	WHERE E.StudyLevelGroupId = 2
+//	AND E.ObrazProgramName = @OP
+//)";
                     DataTable tbl = MainClass.BdcOnlineReadWrite.GetDataSet(query, new SortedList<string, object>() { { "@OP", OP } }).Tables[0];
                     foreach (DataRow rw in tbl.Rows)
                     {

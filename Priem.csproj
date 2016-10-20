@@ -120,6 +120,7 @@
     <Compile Include="FBS\LoadFBS.designer.cs">
       <DependentUpon>LoadFBS.cs</DependentUpon>
     </Compile>
+    <Compile Include="FilestreamTestClass.cs" />
     <Compile Include="Filters\Columns.cs">
       <SubType>Form</SubType>
     </Compile>

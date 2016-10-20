@@ -1014,7 +1014,8 @@ AND FixierenView.IsSecond = {7} AND FixierenView.IsReduced = {8} AND FixierenVie
 
         private void btnWord_Click(object sender, EventArgs e)
         {
-            ToWord();
+            //ToWord();
+            new RaitingListToWord(dgvAbits.Columns.Contains("Олимпиада"), dgvAbits).Show();
         }
 
         private void ToWord()

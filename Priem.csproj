@@ -201,6 +201,12 @@
     <Compile Include="Lists\PersonChanges.designer.cs">
       <DependentUpon>PersonChanges.cs</DependentUpon>
     </Compile>
+    <Compile Include="Lists\RaitingListToWord.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Lists\RaitingListToWord.Designer.cs">
+      <DependentUpon>RaitingListToWord.cs</DependentUpon>
+    </Compile>
     <Compile Include="Lists\RatingList.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -268,6 +274,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Lists\PersonChanges.resx">
       <DependentUpon>PersonChanges.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Lists\RaitingListToWord.resx">
+      <DependentUpon>RaitingListToWord.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Lists\RatingList.resx">
       <DependentUpon>RatingList.cs</DependentUpon>

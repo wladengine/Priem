@@ -116,7 +116,7 @@ namespace Priem
                     string currPath = Application.StartupPath;
 
                     bool bIsDev = false;
-                    if (currPath.IndexOf(@"D:\Projects\2013 - MainPriem\Priem\Priem\bin\Release", StringComparison.OrdinalIgnoreCase) == 0)
+                    if (currPath.IndexOf(@"\bin\", StringComparison.OrdinalIgnoreCase) >= 0)
                         bIsDev = true;
 
                     string AppType_Postfix = "";
@@ -176,8 +176,15 @@ namespace Priem
                 case PriemType.PriemSPO: { ExeFile = "spo"; break; }
             }
 
-            System.Diagnostics.Process.Start(path.TrimEnd('\\') + string.Format("\\Priem_{0}.exe", ExeFile));
-            this.Close();
+            try
+            {
+                System.Diagnostics.Process.Start(path.TrimEnd('\\') + string.Format("\\Priem_{0}.exe", ExeFile));
+                Environment.Exit(0);
+            }
+            catch (Exception ex)
+            {
+                WinFormsServ.Warning(ex.Message);
+            }
         }
 
         /// <summary>
@@ -1048,7 +1055,7 @@ namespace Priem
 
         private void smiExportToNewStudent_Click(object sender, EventArgs e)
         {
-            ExportClass.ExportInNewStudent();
+            new FormExportToStudCard().Show();
         }
     }
 }

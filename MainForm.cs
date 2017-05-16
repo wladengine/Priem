@@ -136,7 +136,6 @@ namespace Priem
                     bool bForceAutoOpenCurrentVer = "1".Equals(sForceAutoOpenCurrentVer, StringComparison.OrdinalIgnoreCase);
 
                     DateTime dtInfo = new FileInfo(Application.ExecutablePath).LastWriteTime;
-                    //string versionInfo = string.Format(" (версия от {0})", dtInfo.ToShortDateString() + " " + dtInfo.ToShortTimeString());
                     if (!bIsDev && !string.IsNullOrEmpty(actualPath) && !currPath.Equals(actualPath, StringComparison.OrdinalIgnoreCase))
                     {
                         if (bForceAutoOpenCurrentVer)
@@ -150,13 +149,13 @@ namespace Priem
                             if (dr == System.Windows.Forms.DialogResult.Yes)
                                 OpenActualVersion(actualPath);
                             else if (bFirstRun)
-                                OpenHelp(string.Format("{0}; Пользователь: {1}", _titleString/* + versionInfo*/, MainClass.GetUserName()));
+                                OpenHelp(string.Format("{0}; Пользователь: {1}", _titleString, MainClass.GetUserName()));
                         }
                     }
                     else
                     {
                         if (bFirstRun)
-                            OpenHelp(string.Format("{0}; Пользователь: {1}", _titleString/* + versionInfo*/, MainClass.GetUserName()));
+                            OpenHelp(string.Format("{0}; Пользователь: {1}", _titleString, MainClass.GetUserName()));
                     }
                 }
             }

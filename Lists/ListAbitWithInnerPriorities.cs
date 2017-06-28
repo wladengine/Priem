@@ -231,7 +231,6 @@ namespace Priem
                                   && (StudyBasisId.HasValue ? entry.StudyBasisId == StudyBasisId : true)
                                   && (StudyFormId.HasValue ? entry.StudyFormId == StudyFormId : true)
                                   && entry.IsForeign == rbIsForeign.Checked
-                                  && entry.IsCrimea == rbIsCrimea.Checked
                                   select new
                                   {
                                       entry.Id,
@@ -352,7 +351,6 @@ namespace Priem
                                   && (StudyBasisId.HasValue ? entry.StudyBasisId == StudyBasisId : true)
                                   && (StudyFormId.HasValue ? entry.StudyFormId == StudyFormId : true)
                                   && entry.IsForeign == rbIsForeign.Checked
-                                  && entry.IsCrimea == rbIsCrimea.Checked
                              select new
                              {
                                  abit.PersonId, 

@@ -68,7 +68,6 @@
             this.btnUpdateGrid = new System.Windows.Forms.Button();
             this.btnFixieren = new System.Windows.Forms.Button();
             this.chbWithOlymps = new System.Windows.Forms.CheckBox();
-            this.chbIsCrimea = new System.Windows.Forms.CheckBox();
             this.chbIsQuota = new System.Windows.Forms.CheckBox();
             this.btnToExcel = new System.Windows.Forms.Button();
             this.cbStudyLevelGroup = new System.Windows.Forms.ComboBox();
@@ -499,28 +498,17 @@
             // chbWithOlymps
             // 
             this.chbWithOlymps.AutoSize = true;
-            this.chbWithOlymps.Location = new System.Drawing.Point(12, 337);
+            this.chbWithOlymps.Location = new System.Drawing.Point(10, 314);
             this.chbWithOlymps.Name = "chbWithOlymps";
             this.chbWithOlymps.Size = new System.Drawing.Size(105, 17);
             this.chbWithOlymps.TabIndex = 138;
             this.chbWithOlymps.Text = "c олимпиадами";
             this.chbWithOlymps.UseVisualStyleBackColor = true;
             // 
-            // chbIsCrimea
-            // 
-            this.chbIsCrimea.AutoSize = true;
-            this.chbIsCrimea.Location = new System.Drawing.Point(130, 291);
-            this.chbIsCrimea.Name = "chbIsCrimea";
-            this.chbIsCrimea.Size = new System.Drawing.Size(55, 17);
-            this.chbIsCrimea.TabIndex = 139;
-            this.chbIsCrimea.Text = "Крым";
-            this.chbIsCrimea.UseVisualStyleBackColor = true;
-            this.chbIsCrimea.CheckedChanged += new System.EventHandler(this.chbIsCrimea_CheckedChanged);
-            // 
             // chbIsQuota
             // 
             this.chbIsQuota.AutoSize = true;
-            this.chbIsQuota.Location = new System.Drawing.Point(12, 314);
+            this.chbIsQuota.Location = new System.Drawing.Point(94, 291);
             this.chbIsQuota.Name = "chbIsQuota";
             this.chbIsQuota.Size = new System.Drawing.Size(82, 17);
             this.chbIsQuota.TabIndex = 140;
@@ -589,7 +577,6 @@
             this.Controls.Add(this.label5);
             this.Controls.Add(this.btnToExcel);
             this.Controls.Add(this.chbIsQuota);
-            this.Controls.Add(this.chbIsCrimea);
             this.Controls.Add(this.chbWithOlymps);
             this.Controls.Add(this.btnFixieren);
             this.Controls.Add(this.btnUpdateGrid);
@@ -655,7 +642,6 @@
             this.Controls.SetChildIndex(this.btnUpdateGrid, 0);
             this.Controls.SetChildIndex(this.btnFixieren, 0);
             this.Controls.SetChildIndex(this.chbWithOlymps, 0);
-            this.Controls.SetChildIndex(this.chbIsCrimea, 0);
             this.Controls.SetChildIndex(this.chbIsQuota, 0);
             this.Controls.SetChildIndex(this.btnToExcel, 0);
             this.Controls.SetChildIndex(this.label5, 0);
@@ -709,7 +695,6 @@
         private System.Windows.Forms.Button btnUpdateGrid;
         private System.Windows.Forms.Button btnFixieren;
         private System.Windows.Forms.CheckBox chbWithOlymps;
-        private System.Windows.Forms.CheckBox chbIsCrimea;
         private System.Windows.Forms.CheckBox chbIsQuota;
         private System.Windows.Forms.Button btnToExcel;
         private System.Windows.Forms.ComboBox cbStudyLevelGroup;

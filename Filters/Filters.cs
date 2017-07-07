@@ -84,7 +84,7 @@ namespace Priem
             AddItem(new FilterItem("Не допущен", FilterType.Bool, "ed.qAbiturient.NotEnabled", "ed.qAbiturient"));
             AddItem(new FilterItem("Дата возврата документов", FilterType.DateFromTo, "ed.qAbiturient.BackDocDate", "ed.qAbiturient"));
             AddItem(new FilterItem("Дата подачи документов", FilterType.DateFromTo, "ed.qAbiturient.DocDate", "ed.qAbiturient"));
-            AddItem(new FilterItem("Сумма баллов", FilterType.FromTo, "ed.extAbitMarksSum.TotalSum", "ed.extAbitMarksSum"));
+            AddItem(new FilterItem("Сумма баллов", FilterType.FromTo, "ed.qAbiturient.Sum", "ed.qAbiturient"));
             AddItem(new FilterItem("Ин. язык испытания", FilterType.Multi, "ed.qAbiturient.LanguageId", "ed.qAbiturient", "SELECT Id, Name FROM ed.Language ORDER BY Name"));
             AddItem(new FilterItem("Средний балл сессии", FilterType.FromTo, "ed.qAbiturient.SessionAVG", "ed.qAbiturient"));
             AddItem(new FilterItem("Статус студента", FilterType.FromTo, "ed.qAbiturient.StudentStatus", "ed.qAbiturient"));

@@ -346,7 +346,6 @@ namespace Priem
             @"
             where Abiturient.EntryId=@EntryId and Abiturient.BackDoc = 0
             and Abiturient.CompetitionId NOT IN (12,11)
-            --order by extAbitMarksSum.TotalSum desc
              order by  " + Wave + @".SortNum 
             ";
             wc.SetMax(EntryList.Count);

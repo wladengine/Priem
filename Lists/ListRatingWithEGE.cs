@@ -270,7 +270,7 @@ namespace Priem
                 }
 
                 string query = "SELECT extAbit.RegNum AS [Рег номер], extPerson.FIO AS [ФИО], extAbit.Priority AS [Приоритет], " + EgeSelect +
-                    @"extAbitMarksSum.TotalSum AS [Сумма баллов], 
+                    @"extAbit.Sum AS [Сумма баллов], 
 (CASE WHEN EXISTS 
 	(
 		SELECT * 
@@ -283,7 +283,6 @@ namespace Priem
 FROM ed.Abiturient AS extAbit
 INNER JOIN ed.extEntry ON extEntry.Id = extAbit.EntryId
 INNER JOIN ed.extPerson ON extPerson.Id = extAbit.PersonId
-INNER JOIN ed.extAbitMarksSum ON extAbit.Id = extAbitMarksSum.Id
 /*INNER JOIN ed._FirstWaveGreen ON extAbit.Id = _FirstWaveGreen.AbiturientId*/
 INNER JOIN ed._FirstWave FW ON FW.AbiturientId = extAbit.Id
 ";

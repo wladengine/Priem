@@ -49,10 +49,10 @@ namespace Priem
 
             _queryBody = @"SELECT DISTINCT qAbiturient.Id as Id, qAbiturient.RegNum as Рег_Номер, 
                     extPerson.PersonNum as 'Ид. номер', qAbiturient.Priority as [Приоритет], extPerson.FIO as ФИО, 
-                    extAbitMarksSum.TotalSum + extAbitAdditionalMarksSum.AdditionalMarksSum as 'Сумма баллов', 
-                    extAbitMarksSum.TotalSum as 'Сумма баллов (осн)', 
+                    qAbiturient.Sum + extAbitAdditionalMarksSum.AdditionalMarksSum as 'Сумма баллов', 
+                    qAbiturient.Sum as 'Сумма баллов (осн)', 
                     extAbitAdditionalMarksSum.AdditionalMarksSum AS 'Сумма баллов (ИндДост)', 
-                    extAbitMarksSum.TotalCount as 'Кол-во оценок', 
+                    qAbiturient.MarksCount as 'Кол-во оценок', 
                     case when EXISTS (SELECT * FROM ed.Abiturient AB WHERE AB.HasOriginals>0 AND AB.PersonId = qAbiturient.PersonId AND AB.BackDoc = 0) then 'Да' else 'Нет' end as 'Подлинники документов', 
                     qAbiturient.Coefficient as 'Рейтинговый коэффициент', 
                     Competition.Name as Конкурс, hlpAbiturientProf.Prof AS 'Проф. экзамен', 
@@ -98,7 +98,6 @@ INNER JOIN ed.extEnableProtocol ON extEnableProtocol.AbiturientId = qAbiturient.
 LEFT JOIN ed.hlpEntryWithAddExams ON hlpEntryWithAddExams.EntryId = qAbiturient.EntryId
 LEFT JOIN ed.hlpAbiturientProfAdd ON hlpAbiturientProfAdd.Id = qAbiturient.Id 
 LEFT JOIN ed.hlpAbiturientProf ON hlpAbiturientProf.Id = qAbiturient.Id 
-LEFT JOIN ed.extAbitMarksSum ON qAbiturient.Id = extAbitMarksSum.Id
 LEFT JOIN ed.extAbitAdditionalMarksSum ON qAbiturient.Id = extAbitAdditionalMarksSum.AbiturientId
 LEFT JOIN ed.extAbitMarkByRating ON qAbiturient.Id = extAbitMarkByRating.Id
 LEFT JOIN ed.hlpMinMarkAbiturient ON hlpMinMarkAbiturient.Id = qAbiturient.Id
@@ -577,17 +576,17 @@ LEFT JOIN ed.[_FirstWaveBackUp] FW ON FW.AbiturientId = qAbiturient.Id";
                 {
                     sOrderBy =
                         chbCel.Checked ?
-                        " ORDER BY qAbiturient.Coefficient, comp , noexamssort desc, 'Сумма баллов' desc, extAbitMarksSum.TotalCount desc, ФИО" :
-                        " ORDER BY comp , 'Сумма баллов' desc, 'Проф. экзамен' DESC, qAbiturient.Coefficient DESC, /*attAvg desc,*/ [Средний балл] desc, extAbitMarksSum.TotalCount desc, ФИО";
+                        " ORDER BY qAbiturient.Coefficient, comp , noexamssort desc, 'Сумма баллов' desc, qAbiturient.MarksCount desc, ФИО" :
+                        " ORDER BY comp , 'Сумма баллов' desc, 'Проф. экзамен' DESC, qAbiturient.Coefficient DESC, /*attAvg desc,*/ [Средний балл] desc, qAbiturient.MarksCount desc, ФИО";
                 }
                 else
                 {
                     sOrderBy =
                         chbCel.Checked ?
-                        " ORDER BY qAbiturient.Coefficient, comp, noexamssort desc, 'Сумма баллов' desc, 'Сумма баллов (осн)' DESC, ProfSort desc, ProfAdd desc, extAbitMarksSum.TotalCount desc, ФИО"
+                        " ORDER BY qAbiturient.Coefficient, comp, noexamssort desc, 'Сумма баллов' desc, 'Сумма баллов (осн)' DESC, ProfSort desc, ProfAdd desc, qAbiturient.MarksCount desc, ФИО"
                         :
                         " ORDER BY comp, noexamssort DESC, noexamsKoefsort DESC, noexamsPrivSort, noexamsAttAVGSort DESC, 'Сумма баллов' desc, 'Сумма баллов (осн)' DESC, [Экзамен 1] desc, [Экзамен 2] desc, [Экзамен 3] desc, preimsort desc, ProfAdd desc, " +
-                        "olymp, Медалист, attAvg desc, qAbiturient.Coefficient, extAbitMarksSum.TotalCount desc, ФИО"
+                        "olymp, Медалист, attAvg desc, qAbiturient.Coefficient, qAbiturient.MarksCount desc, ФИО"
                         ;
                 }
                 string totalQuery = null;
@@ -612,7 +611,7 @@ LEFT JOIN ed.[_FirstWaveBackUp] FW ON FW.AbiturientId = qAbiturient.Id";
                     LEFT JOIN ed.FixierenView ON Fixieren.FixierenViewId = FixierenView.Id 
                     LEFT JOIN ed.hlpAbiturientProfAdd ON hlpAbiturientProfAdd.Id = qAbiturient.Id 
                     LEFT JOIN ed.hlpAbiturientProf ON hlpAbiturientProf.Id = qAbiturient.Id 
-                    LEFT JOIN ed.extAbitMarksSum ON qAbiturient.Id = extAbitMarksSum.Id
+
                     LEFT JOIN ed.extAbitAdditionalMarksSum ON qAbiturient.Id = extAbitAdditionalMarksSum.AbiturientId
                     LEFT JOIN ed.extAbitMarkByRating ON qAbiturient.Id = extAbitMarkByRating.Id
                     LEFT JOIN ed.hlpAbiturient_Olympiads_SortLevel1 ON qAbiturient.Id = hlpAbiturient_Olympiads_SortLevel1.[AbiturientId] 
@@ -672,7 +671,7 @@ AND FixierenView.IsSecond = {7} AND FixierenView.IsReduced = {8} AND FixierenVie
                         _queryOrange = @", CASE WHEN EXISTS(SELECT PersonId FROM ed.hlpPersonsWithOriginals WHERE PersonId = qAbiturient.PersonId AND EntryId <> qAbiturient.EntryId) then 1 else 0 end as orange ";
 
                         // кроме бэ нужное кол-во оценок есть
-                        sFilters += " AND ((CompetitionId=1 OR CompetitionId=8) OR extAbitMarksSum.TotalCount = " + examsCnt + " ) ";
+                        sFilters += " AND ((CompetitionId=1 OR CompetitionId=8) OR qAbiturient.MarksCount = " + examsCnt + " ) ";
 
                         if (bMagAddNabor1Enabled)
                             sFilters += " AND qAbiturient.DocInsertDate > '" + dtMagAddNabor1.ToShortDateString() + "' ";
@@ -687,7 +686,7 @@ AND FixierenView.IsSecond = {7} AND FixierenView.IsReduced = {8} AND FixierenVie
                             sFilters += " AND FW.AbiturientId IS NOT NULL";
 
                         // кроме бэ нужное кол-во оценок есть
-                        sFilters += " AND ((CompetitionId=1 OR CompetitionId=8) OR extAbitMarksSum.TotalCount = " + examsCnt + " ) ";
+                        sFilters += " AND ((CompetitionId=1 OR CompetitionId=8) OR qAbiturient.MarksCount = " + examsCnt + " ) ";
 
                         //эту хрень использовать только во второй волне - оно не будет работать, пока в _FirstWaveBackup или в _FirstWave не появятся люди
                         //ЗАКОММЕНТИТЬ К НОВОМУ ПРИЁМУ!!!
@@ -706,7 +705,7 @@ AND FixierenView.IsSecond = {7} AND FixierenView.IsReduced = {8} AND FixierenVie
                         sFilters += @" AND (CompetitionId IN (1, 8) 
                                         OR (qAbiturient.PersonId NOT IN (SELECT PersonId FROM ed.EgeCertificate) 
                                            AND qAbiturient.Id NOT IN (SELECT AbiturientId FROM ed.Mark WHERE IsFromEge = 1) AND qAbiturient.IsSecond = 0 AND qAbiturient.IsReduced = 0 AND qAbiturient.IsParallel = 0) 
-                                        OR extAbitMarksSum.TotalCount = (
+                                        OR qAbiturient.MarksCount = (
 		                                SELECT COUNT(*) 
 		                                FROM ed.extExamInEntry 
 		                                WHERE extExamInEntry.EntryId = qAbiturient.EntryId AND extExamInEntry.ExamId = 850

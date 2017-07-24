@@ -41,6 +41,8 @@
             this.gbLoading = new System.Windows.Forms.GroupBox();
             this.label1 = new System.Windows.Forms.Label();
             this.chbDeepScan = new System.Windows.Forms.CheckBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.lblEgeLastMarkLoad = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dgvProtocols)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.gbLoading.SuspendLayout();
@@ -130,7 +132,7 @@
             this.dgvProtocols.Name = "dgvProtocols";
             this.dgvProtocols.ReadOnly = true;
             this.dgvProtocols.RowHeadersVisible = false;
-            this.dgvProtocols.Size = new System.Drawing.Size(385, 388);
+            this.dgvProtocols.Size = new System.Drawing.Size(385, 366);
             this.dgvProtocols.TabIndex = 62;
             // 
             // groupBox1
@@ -140,9 +142,9 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox1.Controls.Add(this.gbLoading);
             this.groupBox1.Controls.Add(this.dgvProtocols);
-            this.groupBox1.Location = new System.Drawing.Point(12, 92);
+            this.groupBox1.Location = new System.Drawing.Point(12, 114);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(397, 413);
+            this.groupBox1.Size = new System.Drawing.Size(397, 391);
             this.groupBox1.TabIndex = 63;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Список абитуриентов без оценок, попавших в протокол о допуске";
@@ -151,7 +153,7 @@
             // 
             this.gbLoading.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.gbLoading.Controls.Add(this.label1);
-            this.gbLoading.Location = new System.Drawing.Point(102, 171);
+            this.gbLoading.Location = new System.Drawing.Point(102, 160);
             this.gbLoading.Name = "gbLoading";
             this.gbLoading.Size = new System.Drawing.Size(200, 44);
             this.gbLoading.TabIndex = 63;
@@ -179,11 +181,30 @@
             this.chbDeepScan.Text = "Глубокий поиск (перезапись апелляций) - работает медленнее";
             this.chbDeepScan.UseVisualStyleBackColor = true;
             // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(14, 94);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(192, 13);
+            this.label2.TabIndex = 65;
+            this.label2.Text = "Дата и время последней подгрузки:";
+            // 
+            // lblEgeLastMarkLoad
+            // 
+            this.lblEgeLastMarkLoad.Location = new System.Drawing.Point(212, 94);
+            this.lblEgeLastMarkLoad.Name = "lblEgeLastMarkLoad";
+            this.lblEgeLastMarkLoad.Size = new System.Drawing.Size(192, 13);
+            this.lblEgeLastMarkLoad.TabIndex = 66;
+            this.lblEgeLastMarkLoad.Text = "ещё до царя Гороха";
+            // 
             // LoadEgeMarks
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(421, 594);
+            this.Controls.Add(this.lblEgeLastMarkLoad);
+            this.Controls.Add(this.label2);
             this.Controls.Add(this.chbDeepScan);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.cbExam);
@@ -219,5 +240,7 @@
         private System.Windows.Forms.GroupBox gbLoading;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.CheckBox chbDeepScan;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label lblEgeLastMarkLoad;
     }
 }

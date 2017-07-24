@@ -44,36 +44,17 @@ namespace Priem
 
         private void UpdateGridAbits()
         {
-//            string quer = @"SELECT DISTINCT extEntry.FacultyName AS [Факультет], 
-//COUNT(DISTINCT t.AbiturientId) AS [Абитуриентов], 
-//(
-//	SELECT CONVERT(nvarchar, MAX(extEnableProtocol.Date), 104) 
-//	+ ' ' + CONVERT(nvarchar, MAX(extEnableProtocol.Date), 108)
-//	FROM ed.extEnableProtocol WHERE extEnableProtocol.StudyLevelGroupId = 1 
-//	AND extEnableProtocol.FacultyId = extEntry.FacultyId
-//)  AS [Дата последнего протокола о допуске]
-//FROM
-//(
-//    SELECT 
-//		CASE WHEN Mark.Id IS NULL AND Person_AdditionalInfo.EgeInSPbgu = 0
-//		THEN Abiturient.Id 
-//		ELSE NULL 
-//		END
-//		AS AbiturientId, Abiturient.EntryId
-//    FROM ed.Abiturient
-//    INNER JOIN ed.Person_AdditionalInfo ON Person_AdditionalInfo.PersonId = Abiturient.PersonId
-//    INNER JOIN ed.extExamInEntry ON extExamInEntry.EntryId = Abiturient.EntryId
-//    INNER JOIN ed.EgeToExam ON EgeToExam.ExamId = extExamInEntry.ExamId
-//    INNER JOIN ed.extEnableProtocol ON extEnableProtocol.AbiturientId = Abiturient.Id
-//    LEFT JOIN ed.Mark ON Mark.ExamInEntryBlockUnitId = extExamInEntry.Id AND Mark.AbiturientId = Abiturient.Id
-//    WHERE extEnableProtocol.IsOld = 0 AND extEnableProtocol.Excluded = 0
-//    AND Abiturient.BackDoc = 0 AND Abiturient.NotEnabled = 0
-//    AND Abiturient.CompetitionId NOT IN (1, 8)
-//) t
-//INNER JOIN ed.extEntry ON extEntry.Id = t.EntryId
-//WHERE extEntry.StudyLevelGroupId = 1
-//GROUP BY extEntry.FacultyName, extEntry.FacultyId
-//ORDER BY 1";
+            string query = "SELECT [ParamValue] FROM ed._AppSettings WHERE [ParamKey]='1k_LastEgeMarkLoadTime'";
+            string sDate = MainClass.Bdc.GetStringValue(query);
+            DateTime dtDate = DateTime.MinValue;
+            if (DateTime.TryParse(sDate, out dtDate))
+            {
+                lblEgeLastMarkLoad.Text = sDate;
+                if (dtDate.AddDays(1) < DateTime.Now)
+                    lblEgeLastMarkLoad.ForeColor = Color.Red;
+                else
+                    lblEgeLastMarkLoad.ForeColor = Color.Green;
+            }
 
             BackgroundWorker bw = new BackgroundWorker();
             bw.DoWork += (sender, e) =>
@@ -108,7 +89,10 @@ INNER JOIN ed.extEntry ON extEntry.Id = t.EntryId
 WHERE extEntry.StudyLevelGroupId = 1
 GROUP BY extEntry.FacultyName, extEntry.FacultyId
 ORDER BY 1";
-                e.Result = MainClass.Bdc.GetDataSet(quer).Tables[0];
+
+                var _bdc = new DBPriem();
+                _bdc.OpenDatabase(MainClass.connString);
+                e.Result = _bdc.GetDataSet(quer).Tables[0];
             };
             bw.RunWorkerCompleted += (sender, e) =>
             {
@@ -123,10 +107,6 @@ ORDER BY 1";
             };
             gbLoading.Visible = true;
             bw.RunWorkerAsync();
-            //dgvProtocols.DataSource = MainClass.Bdc.GetDataSet(quer).Tables[0];
-            //dgvProtocols.Columns["Факультет"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCellsExceptHeader;
-            //dgvProtocols.Columns["Абитуриентов"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCellsExceptHeader;
-            //dgvProtocols.Columns["Дата последнего протокола о допуске"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCellsExceptHeader;
         }
 
         void cbFaculty_SelectedIndexChanged(object sender, EventArgs e)
@@ -261,7 +241,6 @@ ORDER BY 1";
                     string flt_backDoc = " AND qAbiturient.BackDoc = 0  ";
                     string flt_enable = " AND qAbiturient.NotEnabled = 0 ";
                     string flt_protocol = " AND ProtocolTypeId = 1 AND IsOld = 0 AND Excluded = 0 ";
-                    string flt_status = " /*AND ed.extFBSStatus.FBSStatusId IN (1,4) */";
                     string flt_mark = string.Format(@" AND 
 (
     qAbiturient.Id NOT IN 
@@ -281,17 +260,18 @@ ORDER BY 1";
         SELECT qMark.AbiturientId
         FROM ed.Mark AS qMark
         INNER JOIN ed.Abiturient ABIT ON ABIT.Id = qMark.AbiturientId
-        INNER JOIN ed.hlpEgeMarkMaxApprovedValue ON hlpEgeMarkMaxApprovedValue.PersonId = ABIT.PersonId 
+        INNER JOIN ed.Person_FetchEgeMarkMaxApprovedValues ON Person_FetchEgeMarkMaxApprovedValues.PersonId = ABIT.PersonId 
         INNER JOIN ed.extExamInEntry ON extExamInEntry.Id = qMark.ExamInEntryBlockUnitId
         INNER JOIN ed.EgeToExam ON EgeToExam.ExamId = extExamInEntry.ExamId 
-        WHERE EgeToExam.EgeExamNameId = hlpEgeMarkMaxApprovedValue.EgeExamNameId 
+        WHERE EgeToExam.EgeExamNameId = Person_FetchEgeMarkMaxApprovedValues.EgeExamNameId 
         AND qMark.IsFromEge = 1 
         AND qAbiturient.EntryId = ABIT.EntryId
         AND extExamInEntry.ExamId = EgeToExam.ExamId
         AND extExamInEntry.ExamId = {0}
-        AND hlpEgeMarkMaxApprovedValue.EgeMarkValue > qMark.Value
+        AND ABIT.NotEnabled = 0
+        GROUP BY qMark.AbiturientId, qMark.Value
+        HAVING MAX(Person_FetchEgeMarkMaxApprovedValues.EgeMarkValue) <> qMark.Value
     )", examId) : "");
-                    //string flt_hasEge = string.Format(" AND Person.Id IN (SELECT PersonId FROM ed.EgeMark LEFT JOIN ed.EgeToExam ON EgeMark.EgeExamNameId = EgeToExam.EgeExamNameId WHERE EgeToExam.ExamId = @ExamId)", examId);
                     string flt_hasExam = string.Format(" AND qAbiturient.EntryId IN (SELECT extExamInEntry.EntryId FROM ed.extExamInEntry WHERE extExamInEntry.ExamId = {0})", examId);
 
                     string queryAbits = @"SELECT qAbiturient.Id, qAbiturient.PersonId, E.FacultyId, qAbiturient.EntryId FROM ed.Abiturient AS qAbiturient 
@@ -299,7 +279,7 @@ ORDER BY 1";
                             LEFT JOIN ed.Person ON qAbiturient.PersonId = Person.Id
                             LEFT JOIN ed.extProtocol ON extProtocol.AbiturientId = qAbiturient.Id WHERE 1 = 1 ";
 
-                    DataSet ds = bdc.GetDataSet(queryAbits + GetAbitFilterString(iFacultyId) + flt_backDoc + flt_enable + flt_protocol + flt_status + flt_mark + flt_hasExam /*+ flt_hasEge*/, new SortedList<string, object>() { { "@ExamId", examId } });
+                    DataSet ds = bdc.GetDataSet(queryAbits + GetAbitFilterString(iFacultyId) + flt_backDoc + flt_enable + flt_protocol + flt_mark + flt_hasExam, new SortedList<string, object>() { { "@ExamId", examId } });
 
                     var Fac = context.SP_Faculty.Where(x => x.Id == iFacultyId).Select(x => x.Name).FirstOrDefault();
                     var Ex = context.Exam.Where(x => x.Id == examId).Select(x => x.ExamName.Name).FirstOrDefault();
@@ -331,12 +311,10 @@ ORDER BY 1";
                             if (examId != examInostr)
                             {
                                 var lBalls =
-                                    (from emm in context.hlpEgeMarkMaxApproved
+                                    (from emm in context.Person_FetchEgeMarkMaxApprovedValues
                                      join ete in context.EgeToExam on emm.EgeExamNameId equals ete.EgeExamNameId
                                      join em in context.EgeMark on emm.EgeMarkId equals em.Id
-                                     //join ec in context.EgeCertificate on emm.EgeCertificateId equals ec.Id
                                      where emm.PersonId == persId && ete.ExamId == examId
-                                     //&& (ec.FBSStatusId == 1 || ec.FBSStatusId == 4)
                                      select new
                                      {
                                          em.Value,
@@ -349,9 +327,10 @@ ORDER BY 1";
                             }
                             else
                             {
-                                List<int> lstInostr = (from ete in context.EgeToExam
-                                                       where ete.ExamId == examInostr
-                                                       select ete.EgeExamNameId).ToList<int>();
+                                List<int> lstInostr =
+                                    (from ete in context.EgeToExam
+                                     where ete.ExamId == examInostr
+                                     select ete.EgeExamNameId).ToList<int>();
 
                                 if (dsRow["FacultyId"].ToString() == filFacId.ToString())
                                 {
@@ -379,59 +358,16 @@ ORDER BY 1";
                                 }
                                 else
                                 {
-                                    //int cntEM = (from emm in context.extEgeMarkMaxAbitApproved
-                                    //             where lstInostr.Contains(emm.EgeExamNameId) && emm.AbiturientId == abId
-                                    //             select emm.EgeMarkId).Count();
-
-                                    //if (cntEM > 1)
-                                    //{
-                                    //    int? egeExamNameId = (from etl in context.EgeToLanguage
-                                    //                          join ab in context.qAbiturient
-                                    //                          on etl.LanguageId equals ab.LanguageId
-                                    //                          where etl.ExamId == examInostr && ab.Id == abId
-                                    //                          select etl.EgeExamNameId).FirstOrDefault();
-
-                                    //    if (egeExamNameId != null)
-                                    //    {
-                                    //        var lBalls =
-                                    //            (from emm in context.extEgeMarkMaxAbitApproved
-                                    //             where emm.AbiturientId == abId && emm.EgeExamNameId == egeExamNameId
-                                    //             select new
-                                    //             {
-                                    //                 emm.Value,
-                                    //                 emm.EgeCertificateId
-                                    //             }).ToList();
-                                    //        if (lBalls.Count() == 0)
-                                    //            continue;
-                                    //        balls = lBalls.OrderByDescending(x => x.Value).FirstOrDefault().Value;
-                                    //        egeCertificateId = lBalls.OrderByDescending(x => x.Value).FirstOrDefault().EgeCertificateId;
-                                    //    }
-                                    //}
-                                    //else
-                                    //{
-
                                     var lBalls =
-                                    //    (from emm in context.extEgeMarkMaxAbitApproved
-                                    //     join ete in context.EgeToExam on emm.EgeExamNameId equals ete.EgeExamNameId
-                                    //     join ec in context.EgeCertificate on emm.EgeCertificateId equals ec.Id
-                                    //     where emm.AbiturientId == abId && ete.ExamId == examId
-                                    //     && (ec.FBSStatusId == 1 || ec.FBSStatusId == 4)
-                                    //     select new
-                                    //     {
-                                    //         emm.Value,
-                                    //         emm.EgeCertificateId
-                                    //     }).ToList();
-                                    (from emm in context.hlpEgeMarkMaxApproved
-                                     join ete in context.EgeToExam on emm.EgeExamNameId equals ete.EgeExamNameId
-                                     join em in context.EgeMark on emm.EgeMarkId equals em.Id
-                                     //join ec in context.EgeCertificate on emm.EgeCertificateId equals ec.Id
-                                     where emm.PersonId == persId && ete.ExamId == examId
-                                     //&& (ec.FBSStatusId == 1 || ec.FBSStatusId == 4)
-                                     select new
-                                     {
-                                         em.Value,
-                                         em.EgeCertificateId
-                                     }).ToList();
+                                        (from emm in context.Person_FetchEgeMarkMaxApprovedValues
+                                         join ete in context.EgeToExam on emm.EgeExamNameId equals ete.EgeExamNameId
+                                         join em in context.EgeMark on emm.EgeMarkId equals em.Id
+                                         where emm.PersonId == persId && ete.ExamId == examId
+                                         select new
+                                         {
+                                             em.Value,
+                                             em.EgeCertificateId
+                                         }).ToList();
                                     if (lBalls.Count() == 0)
                                         continue;
                                     balls = lBalls.OrderByDescending(x => x.Value).FirstOrDefault().Value;

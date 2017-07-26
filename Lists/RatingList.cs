@@ -53,27 +53,26 @@ namespace Priem
                     qAbiturient.Sum as 'Сумма баллов (осн)', 
                     extAbitAdditionalMarksSum.AdditionalMarksSum AS 'Сумма баллов (ИндДост)', 
                     qAbiturient.MarksCount as 'Кол-во оценок', 
-                    case when EXISTS (SELECT * FROM ed.Abiturient AB WHERE AB.HasOriginals>0 AND AB.PersonId = qAbiturient.PersonId AND AB.BackDoc = 0) then 'Да' else 'Нет' end as 'Подлинники документов', 
+                    case when extPerson.HasOriginals = 1 then 'Да' else 'Нет' end as 'Подлинники документов', 
                     qAbiturient.Coefficient as 'Рейтинговый коэффициент', 
                     Competition.Name as Конкурс, hlpAbiturientProf.Prof AS 'Проф. экзамен', 
                     hlpAbiturientProfAdd.ProfAdd AS 'Доп. экзамен',
-                    extAbitMarkByRating.Value1 AS [Экзамен 1], extAbitMarkByRating.Value2 AS [Экзамен 2], extAbitMarkByRating.Value3 AS [Экзамен 3],
-                    CASE WHEN EXISTS(SELECT Id FROM ed.hlpProfOlympiads AS Olympiads WHERE OlympValueId = 6 AND AbiturientId = qAbiturient.Id) then 1 
-                        else CASE WHEN EXISTS(SELECT Id FROM ed.hlpProfOlympiads AS Olympiads WHERE OlympValueId = 5 AND AbiturientId = qAbiturient.Id) then 2 
-                            else CASE WHEN EXISTS(SELECT Id FROM ed.hlpProfOlympiads AS Olympiads WHERE OlympValueId = 7 AND AbiturientId = qAbiturient.Id) then 3 
+                    Abiturient_FetchValues.MarkOrderNumber1 AS [Экзамен 1], Abiturient_FetchValues.MarkOrderNumber2 AS [Экзамен 2], Abiturient_FetchValues.MarkOrderNumber3 AS [Экзамен 3],
+                    CASE WHEN EXISTS(SELECT Id FROM ed.hlpProfOlympiads AS Olympiads WHERE OlympValueId = 6 AND AbiturientId = qAbiturient.Id) THEN 1 
+                        else CASE WHEN EXISTS(SELECT Id FROM ed.hlpProfOlympiads AS Olympiads WHERE OlympValueId = 5 AND AbiturientId = qAbiturient.Id) THEN 2 
+                            else CASE WHEN EXISTS(SELECT Id FROM ed.hlpProfOlympiads AS Olympiads WHERE OlympValueId = 7 AND AbiturientId = qAbiturient.Id) THEN 3 
                                 else 4 
-                                end 
-                            end 
-                        end as olymp,
-                    CASE WHEN  extPerson_EducationInfo_Current.AttestatSeries IN ('ЗА','ЗБ','ЗВ','АЗ') then 1 else CASE WHEN  extPerson_EducationInfo_Current.AttestatSeries IN ('СА','СБ','СВ') then 2 else 3 end end as attestat,
-                    (CASE WHEN extPerson_EducationInfo_Current.IsExcellent=1 THEN 5 ELSE extPerson_EducationInfo_Current.SchoolAVG END) as attAvg, 
+                                END 
+                            END 
+                        END AS olymp,
+                    CASE WHEN extPerson_EducationInfo_Current.AttestatSeries IN ('ЗА','ЗБ','ЗВ','АЗ') then 1 else CASE WHEN extPerson_EducationInfo_Current.AttestatSeries IN ('СА','СБ','СВ') then 2 else 3 end end as attestat,
+                    (CASE WHEN extPerson_EducationInfo_Current.IsExcellent=1 THEN 5 ELSE extPerson_EducationInfo_Current.SchoolAVG END) as attAvg,
                     CASE WHEN (CompetitionId=1  OR CompetitionId=8) then 1 else case when (CompetitionId=2 OR CompetitionId=7) AND extPerson.Privileges>0 then 2 else (case when CompetitionId=6 then 3 else 4 end) end end as comp, 
-                    /*CASE WHEN (CompetitionId=1 OR CompetitionId=8) then qAbiturient.Coefficient else 10000 end as noexamssort, */
-(CASE WHEN CompetitionId NOT IN (1, 8) 
-                                              THEN 0 ELSE (CASE WHEN hlpAbiturient_Olympiads_SortLevel1.[AbiturientId] IS NOT NULL 
-                                              THEN 100 + extAbitAdditionalMarksSum.AdditionalMarksSum ELSE (CASE WHEN hlpAbiturient_Olympiads_SortLevel2.[AbiturientId] IS NOT NULL 
-                                              THEN 90 + extAbitAdditionalMarksSum.AdditionalMarksSum ELSE (CASE WHEN hlpAbiturient_Olympiads_SortLevel3.[AbiturientId] IS NOT NULL 
-                                              THEN 80 + extAbitAdditionalMarksSum.AdditionalMarksSum ELSE (CASE WHEN hlpAbiturient_Olympiads_SortLevel4.[AbiturientId] IS NOT NULL 
+                    (CASE WHEN CompetitionId NOT IN (1, 8) 
+                     THEN 0 ELSE (CASE WHEN hlpAbiturient_Olympiads_SortLevel1.[PersonId] IS NOT NULL 
+                                              THEN 100 + extAbitAdditionalMarksSum.AdditionalMarksSum ELSE (CASE WHEN hlpAbiturient_Olympiads_SortLevel2.[PersonId] IS NOT NULL 
+                                              THEN 90 + extAbitAdditionalMarksSum.AdditionalMarksSum ELSE (CASE WHEN hlpAbiturient_Olympiads_SortLevel3.[PersonId] IS NOT NULL 
+                                              THEN 80 + extAbitAdditionalMarksSum.AdditionalMarksSum ELSE (CASE WHEN hlpAbiturient_Olympiads_SortLevel4.[PersonId] IS NOT NULL 
                                               THEN 70 + extAbitAdditionalMarksSum.AdditionalMarksSum ELSE 50 END) END) END) END) END) as noexamssort,
                     (CASE WHEN CompetitionId NOT IN (1, 8) THEN 0 ELSE extAbitAdditionalMarksSum.AdditionalMarksSum END) AS noexamsKoefsort,
                     (CASE WHEN CompetitionId NOT IN (1, 8) THEN 0 ELSE extPerson_EducationInfo_Current.SchoolAVG END) AS noexamsAttAVGSort,
@@ -99,14 +98,13 @@ LEFT JOIN ed.hlpEntryWithAddExams ON hlpEntryWithAddExams.EntryId = qAbiturient.
 LEFT JOIN ed.hlpAbiturientProfAdd ON hlpAbiturientProfAdd.Id = qAbiturient.Id 
 LEFT JOIN ed.hlpAbiturientProf ON hlpAbiturientProf.Id = qAbiturient.Id 
 LEFT JOIN ed.extAbitAdditionalMarksSum ON qAbiturient.Id = extAbitAdditionalMarksSum.AbiturientId
-LEFT JOIN ed.extAbitMarkByRating ON qAbiturient.Id = extAbitMarkByRating.Id
+LEFT JOIN ed.Abiturient_FetchValues ON qAbiturient.Id = Abiturient_FetchValues.AbiturientId
 LEFT JOIN ed.hlpMinMarkAbiturient ON hlpMinMarkAbiturient.Id = qAbiturient.Id
-LEFT JOIN ed.qAbiturientForeignApplicationsOnly qFor ON qAbiturient.Id = qFor.Id
-LEFT JOIN [ed].hlpAbiturient_Olympiads_SortLevel1 ON qAbiturient.Id = hlpAbiturient_Olympiads_SortLevel1.[AbiturientId] 
-LEFT JOIN [ed].hlpAbiturient_Olympiads_SortLevel2 ON qAbiturient.Id = hlpAbiturient_Olympiads_SortLevel2.[AbiturientId] 
-LEFT JOIN [ed].hlpAbiturient_Olympiads_SortLevel3 ON qAbiturient.Id = hlpAbiturient_Olympiads_SortLevel3.[AbiturientId] 
-LEFT JOIN [ed].hlpAbiturient_Olympiads_SortLevel4 ON qAbiturient.Id = hlpAbiturient_Olympiads_SortLevel4.[AbiturientId]
-LEFT JOIN ed.[_FirstWaveBackUp] FW ON FW.AbiturientId = qAbiturient.Id";
+LEFT JOIN ed.hlpAbiturient_Olympiads_SortLevel1 ON qAbiturient.PersonId = hlpAbiturient_Olympiads_SortLevel1.[PersonId] 
+LEFT JOIN ed.hlpAbiturient_Olympiads_SortLevel2 ON qAbiturient.PersonId = hlpAbiturient_Olympiads_SortLevel2.[PersonId] 
+LEFT JOIN ed.hlpAbiturient_Olympiads_SortLevel3 ON qAbiturient.PersonId = hlpAbiturient_Olympiads_SortLevel3.[PersonId] 
+LEFT JOIN ed.hlpAbiturient_Olympiads_SortLevel4 ON qAbiturient.PersonId = hlpAbiturient_Olympiads_SortLevel4.[PersonId]
+LEFT JOIN ed._FirstWaveBackUp FW ON FW.AbiturientId = qAbiturient.Id";
 
             if (MainClass.dbType == PriemType.PriemMag)
                 _queryFrom += " LEFT JOIN ed.hlpMinMarkMag ON hlpMinMarkMag.AbiturientId = qAbiturient.Id";
@@ -190,112 +188,6 @@ LEFT JOIN ed.[_FirstWaveBackUp] FW ON FW.AbiturientId = qAbiturient.Id";
 
             if (MainClass.dbType == PriemType.PriemMag)
                 chbWithOlymps.Visible = false;
-        }
-
-        public int? StudyLevelGroupId
-        {
-            get { return ComboServ.GetComboIdInt(cbStudyLevelGroup); }
-            set { ComboServ.SetComboId(cbStudyLevelGroup, value); }
-        }
-        public int? FacultyId
-        {
-            get { return ComboServ.GetComboIdInt(cbFaculty); }
-            set { ComboServ.SetComboId(cbFaculty, value); }
-        }
-        public int? LicenseProgramId
-        {
-            get { return ComboServ.GetComboIdInt(cbLicenseProgram); }
-            set { ComboServ.SetComboId(cbLicenseProgram, value); }
-        }
-        public int? ObrazProgramId
-        {
-            get { return ComboServ.GetComboIdInt(cbObrazProgram); }
-            set { ComboServ.SetComboId(cbObrazProgram, value); }
-        }
-        public int? ProfileId
-        {
-            get
-            {
-                return ComboServ.GetComboIdInt(cbProfile);
-                //string prId = ComboServ.GetComboId(cbProfile);
-                //if (string.IsNullOrEmpty(prId))
-                //    return null;
-                //else
-                //    return new Guid(prId);
-            }
-            set
-            {
-                if (value == null)
-                    ComboServ.SetComboId(cbProfile, (string)null);
-                else
-                    ComboServ.SetComboId(cbProfile, value.ToString());
-            }
-        }
-        public int? StudyBasisId
-        {
-            get { return ComboServ.GetComboIdInt(cbStudyBasis); }
-            set { ComboServ.SetComboId(cbStudyBasis, value); }
-        }
-        public int? StudyFormId
-        {
-            get { return ComboServ.GetComboIdInt(cbStudyForm); }
-            set { ComboServ.SetComboId(cbStudyForm, value); }
-        }
-        public bool IsSecond
-        {
-            get { return chbIsSecond.Checked; }
-            set { chbIsSecond.Checked = value; }
-        }
-        public bool IsReduced
-        {
-            get { return chbIsReduced.Checked; }
-            set { chbIsReduced.Checked = value; }
-        }
-        public bool IsParallel
-        {
-            get { return chbIsParallel.Checked; }
-            set { chbIsParallel.Checked = value; }
-        }
-        public bool IsCel
-        {
-            get { return chbCel.Checked; }
-            set { chbCel.Checked = value; }
-        }
-        public bool IsQuota
-        {
-            get { return chbIsQuota.Checked; }
-            set { chbIsQuota.Checked = value; }
-        }
-        public Guid? EntryId
-        {
-            get
-            {
-                try
-                {
-                    using (PriemEntities context = new PriemEntities())
-                    {
-
-                        Guid? entId = (from ent in MainClass.GetEntry(context)
-                                       where ent.IsSecond == IsSecond && ent.IsParallel == IsParallel && ent.IsReduced == IsReduced
-                                       && ent.LicenseProgramId == LicenseProgramId
-                                       && ent.ObrazProgramId == ObrazProgramId
-                                       && (ProfileId == null ? ent.ProfileId == 0 : ent.ProfileId == ProfileId)
-                                       && ent.StudyFormId == StudyFormId
-                                       && ent.StudyBasisId == StudyBasisId
-                                       && ent.IsForeign == IsForeign
-                                       select ent.Id).FirstOrDefault();
-                        return entId;
-                    }
-                }
-                catch
-                {
-                    return null;
-                }
-            }            
-        }
-        private bool IsForeign
-        {
-            get { return MainClass.dbType == PriemType.PriemForeigners; }
         }
 
         private void FillStudyLevelGroup()
@@ -451,9 +343,55 @@ LEFT JOIN ed.[_FirstWaveBackUp] FW ON FW.AbiturientId = qAbiturient.Id";
 
             UpdateDataGrid();
         }
- 
+
+        private void chbIsReduced_CheckedChanged(object sender, EventArgs e)
+        {
+            FillStudyForm();
+            NullDataGrid();
+        }
+        private void chbIsParallel_CheckedChanged(object sender, EventArgs e)
+        {
+            FillStudyForm();
+            NullDataGrid();
+        }
+        private void chbIsSecond_CheckedChanged(object sender, EventArgs e)
+        {
+            FillStudyForm();
+            NullDataGrid();
+        }
+
+        private void chbCel_CheckedChanged(object sender, EventArgs e)
+        {
+            NullDataGrid();
+
+            if (IsQuota)
+                chbIsQuota.Checked = false;
+            //if (IsCel)
+            //    btnFixierenWeb.Enabled = false;
+            //else
+            //    btnFixierenWeb.Enabled = true;
+        }
+        private void chbIsCrimea_CheckedChanged(object sender, EventArgs e)
+        {
+            NullDataGrid();
+            if (IsCel)
+                chbCel.Checked = false;
+            if (IsQuota)
+                chbIsQuota.Checked = false;
+        }
+        private void chbIsQuota_CheckedChanged(object sender, EventArgs e)
+        {
+            NullDataGrid();
+            if (IsCel)
+                chbCel.Checked = false;
+        }
+
+        private void btnUpdateGrid_Click(object sender, EventArgs e)
+        {
+            UpdateDataGrid();
+        }
         #endregion
-        
+
         protected override void OpenCard(string id, BaseFormsLib.BaseFormEx formOwner, int? index)
         {
             MainClass.OpenCardAbit(id, this, dgvAbits.CurrentRow.Index);
@@ -613,18 +551,18 @@ LEFT JOIN ed.[_FirstWaveBackUp] FW ON FW.AbiturientId = qAbiturient.Id";
                     LEFT JOIN ed.hlpAbiturientProf ON hlpAbiturientProf.Id = qAbiturient.Id 
 
                     LEFT JOIN ed.extAbitAdditionalMarksSum ON qAbiturient.Id = extAbitAdditionalMarksSum.AbiturientId
-                    LEFT JOIN ed.extAbitMarkByRating ON qAbiturient.Id = extAbitMarkByRating.Id
+                    LEFT JOIN ed.Abiturient_FetchValues ON qAbiturient.Id = Abiturient_FetchValues.AbiturientId
                     LEFT JOIN ed.hlpAbiturient_Olympiads_SortLevel1 ON qAbiturient.Id = hlpAbiturient_Olympiads_SortLevel1.[AbiturientId] 
                     LEFT JOIN ed.hlpAbiturient_Olympiads_SortLevel2 ON qAbiturient.Id = hlpAbiturient_Olympiads_SortLevel2.[AbiturientId] 
                     LEFT JOIN ed.hlpAbiturient_Olympiads_SortLevel3 ON qAbiturient.Id = hlpAbiturient_Olympiads_SortLevel3.[AbiturientId] 
                     LEFT JOIN ed.hlpAbiturient_Olympiads_SortLevel4 ON qAbiturient.Id = hlpAbiturient_Olympiads_SortLevel4.[AbiturientId]
 ";
 
-                    string whereFix = string.Format(
-@" WHERE FixierenView.StudyLevelGroupId IN ({10}) AND FixierenView.StudyFormId={0} AND FixierenView.StudyBasisId={1} AND FixierenView.FacultyId={2} 
-AND FixierenView.LicenseProgramId={3} AND FixierenView.ObrazProgramId={4} {5} AND FixierenView.IsCel = {6}
+                    string whereFix = string.Format(@"
+WHERE FixierenView.StudyLevelGroupId IN ({10}) AND FixierenView.StudyFormId={0} AND FixierenView.StudyBasisId={1} AND FixierenView.FacultyId={2} 
+AND FixierenView.LicenseProgramId={3} AND FixierenView.ObrazProgramId={4} AND FixierenView.ProfileId='{5}' AND FixierenView.IsCel = {6}
 AND FixierenView.IsSecond = {7} AND FixierenView.IsReduced = {8} AND FixierenView.IsParallel = {9} AND FixierenView.IsQuota = {11}",
-                        StudyFormId, StudyBasisId, FacultyId, LicenseProgramId, ObrazProgramId, ProfileId == null ? " AND FixierenView.ProfileId IS NULL" : "AND FixierenView.ProfileId='" + ProfileId + "'",
+                        StudyFormId, StudyBasisId, FacultyId, LicenseProgramId, ObrazProgramId, ProfileId,
                         QueryServ.StringParseFromBool(IsCel), QueryServ.StringParseFromBool(IsSecond), QueryServ.StringParseFromBool(IsReduced), QueryServ.StringParseFromBool(IsParallel), 
                         Util.BuildStringWithCollection(MainClass.lstStudyLevelGroupId), QueryServ.StringParseFromBool(IsQuota));
 
@@ -650,7 +588,7 @@ AND FixierenView.IsSecond = {7} AND FixierenView.IsReduced = {8} AND FixierenVie
                     sFilters += " AND qAbiturient.Id NOT IN (SELECT AbiturientId FROM ed.extEntryView) ";
 
                     //не иностранцы
-                    sFilters += " AND qFor.Id IS NULL ";
+                    sFilters += " AND qAbiturient.IsForeign = 0 ";
 
                     //квотники?
                     if (IsQuota)
@@ -688,13 +626,6 @@ AND FixierenView.IsSecond = {7} AND FixierenView.IsReduced = {8} AND FixierenVie
                         // кроме бэ нужное кол-во оценок есть
                         sFilters += " AND ((CompetitionId=1 OR CompetitionId=8) OR qAbiturient.MarksCount = " + examsCnt + " ) ";
 
-                        //эту хрень использовать только во второй волне - оно не будет работать, пока в _FirstWaveBackup или в _FirstWave не появятся люди
-                        //ЗАКОММЕНТИТЬ К НОВОМУ ПРИЁМУ!!!
-                        //if (StudyBasisId == 2)
-                        //    sFilters += " AND qAbiturient.Id IN (SELECT AbiturientId FROM ed.[_FirstWaveBackup1-29072013])"; 
-                        //else
-                        //    sFilters += " AND qAbiturient.Id IN (SELECT AbiturientId FROM ed.[_FirstWave])";
-
                         if (MainClass.dbType == PriemType.Priem && b1kursAddNabor1Enabled)
                             sFilters += " AND qAbiturient.DocInsertDate > '" + dt1kursAddNabor1.ToShortDateString() + "' ";
 
@@ -702,14 +633,23 @@ AND FixierenView.IsSecond = {7} AND FixierenView.IsReduced = {8} AND FixierenVie
                         //sFilters += " AND ed.qAbiturient.CompetitionId NOT IN (6, 1, 2, 7) ";                                        
 
                         // кроме бэ и тех, у кого нет сертификатов и оценок нужное кол-во оценок есть
-                        sFilters += @" AND (CompetitionId IN (1, 8) 
-                                        OR (qAbiturient.PersonId NOT IN (SELECT PersonId FROM ed.EgeCertificate) 
-                                           AND qAbiturient.Id NOT IN (SELECT AbiturientId FROM ed.Mark WHERE IsFromEge = 1) AND qAbiturient.IsSecond = 0 AND qAbiturient.IsReduced = 0 AND qAbiturient.IsParallel = 0) 
-                                        OR qAbiturient.MarksCount = (
-		                                SELECT COUNT(*) 
-		                                FROM ed.extExamInEntry 
-		                                WHERE extExamInEntry.EntryId = qAbiturient.EntryId AND extExamInEntry.ExamId = 850
-	                                )) ";
+                        sFilters += @"
+                            AND 
+                            (
+                                CompetitionId IN (1, 8) 
+                                OR 
+                                (
+                                    qAbiturient.PersonId NOT IN (SELECT PersonId FROM ed.EgeCertificate) 
+                                    AND qAbiturient.Id NOT IN (SELECT AbiturientId FROM ed.Mark WHERE IsFromEge = 1) 
+                                    AND qAbiturient.IsSecond = 0 AND qAbiturient.IsReduced = 0 AND qAbiturient.IsParallel = 0
+                                ) 
+                                OR qAbiturient.MarksCount = 
+                                (
+		                            SELECT COUNT(*) 
+		                            FROM ed.extExamInEntry 
+		                            WHERE extExamInEntry.EntryId = qAbiturient.EntryId --AND extExamInEntry.ExamId = 850
+	                            )
+                            ) ";
                         
                         //if (StudyBasisId == 2)
                         //    sFilters += " AND qAbiturient.Id NOT IN (SELECT AbiturientId FROM ed._FirstWaveGreen)";
@@ -956,7 +896,7 @@ AND FixierenView.IsSecond = {7} AND FixierenView.IsReduced = {8} AND FixierenVie
                         int rand = new Random().Next(10000, 99999);
 
                         ObjectParameter fvId = new ObjectParameter("id", typeof(Guid));
-                        context.FixierenView_Insert(StudyLevelGroupId, FacultyId, LicenseProgramId, ObrazProgramId, ProfileId, StudyBasisId, StudyFormId, IsSecond, IsReduced, IsParallel, IsCel, rand, false, isCrimea: false, isQuota: IsQuota, id: fvId);
+                        context.FixierenView_Insert(StudyLevelGroupId, FacultyId, LicenseProgramId, ObrazProgramId, ProfileId, StudyBasisId, StudyFormId, IsSecond, IsReduced, IsParallel, IsCel, rand, false, isQuota: IsQuota, id: fvId);
                         Guid? viewId = (Guid?)fvId.Value;
 
                         int counter = 0;
@@ -992,113 +932,17 @@ AND FixierenView.IsSecond = {7} AND FixierenView.IsReduced = {8} AND FixierenVie
 
         private void btnWord_Click(object sender, EventArgs e)
         {
-            //ToWord();
             new RaitingListToWord(dgvAbits.Columns.Contains("Олимпиада"), dgvAbits).Show();
-        }
-
-        private void ToWord()
-        {
-            int rowCount = dgvAbits.Rows.Count;
-            if (rowCount == 0)
-                return;
-            try
-            {
-                float margin = (float)(20.0m * RtfConstants.MILLIMETERS_TO_POINTS);
-                RtfDocument doc = new RtfDocument(PaperSize.A4, PaperOrientation.Landscape, Lcid.Russian, margin, margin, margin, margin);
-
-                RtfTable table = doc.addTable(rowCount + 1, 14, (float)(276.1m * RtfConstants.MILLIMETERS_TO_POINTS));
-
-                // Устанавливаем ширину столбцов таблицы (в миллиметрах)
-                table.setColWidth(0, (float)(8.5m * RtfConstants.MILLIMETERS_TO_POINTS));
-                table.setColWidth(1, (float)(18.5m * RtfConstants.MILLIMETERS_TO_POINTS));
-                table.setColWidth(2, (float)(40.0m * RtfConstants.MILLIMETERS_TO_POINTS));
-                table.setColWidth(3, (float)(15.0m * RtfConstants.MILLIMETERS_TO_POINTS));
-                table.setColWidth(4, (float)(15.0m * RtfConstants.MILLIMETERS_TO_POINTS));
-                table.setColWidth(5, (float)(15.0m * RtfConstants.MILLIMETERS_TO_POINTS));
-                table.setColWidth(6, (float)(15.0m * RtfConstants.MILLIMETERS_TO_POINTS));
-                table.setColWidth(7, (float)(18.0m * RtfConstants.MILLIMETERS_TO_POINTS));
-                table.setColWidth(8, (float)(45.0m * RtfConstants.MILLIMETERS_TO_POINTS));
-                table.setColWidth(9, (float)(15.5m * RtfConstants.MILLIMETERS_TO_POINTS));
-                table.setColWidth(10, (float)(15.1m * RtfConstants.MILLIMETERS_TO_POINTS));
-                table.setColWidth(11, (float)(15.1m * RtfConstants.MILLIMETERS_TO_POINTS));
-                table.setColWidth(12, (float)(15.1m * RtfConstants.MILLIMETERS_TO_POINTS));
-                table.setColWidth(13, (float)(15.1m * RtfConstants.MILLIMETERS_TO_POINTS));
-
-                table.cell(0, 0).addParagraph().Text = "№ п/п";
-                table.cell(0, 1).addParagraph().Text = "Рег.номер";
-                table.cell(0, 2).addParagraph().Text = "ФИО";
-                table.cell(0, 3).addParagraph().Text = "Сумма баллов";
-                table.cell(0, 4).addParagraph().Text = "Проф. экзамен";
-                table.cell(0, 5).addParagraph().Text = "Доп. экзамен";
-                table.cell(0, 6).addParagraph().Text = "Конкурс";
-                table.cell(0, 7).addParagraph().Text = "Подлинники";
-                table.cell(0, 8).addParagraph().Text = "Контакты";
-                table.cell(0, 9).addParagraph().Text = "Медалист";
-                table.cell(0, 10).addParagraph().Text = "Серия док. об обр.";                
-                table.cell(0, 11).addParagraph().Text = "ср. балл";
-                table.cell(0, 12).addParagraph().Text = "Ретинг. коэфф.";
-                if (dgvAbits.Columns.Contains("Олимпиада"))
-                    table.cell(0, 13).addParagraph().Text = "Олимпиада";
-
-                for (int j = 0; j < 14; j++)
-                {
-                    // Устанавливаем горизонтальное и вертикальное выравнивание текста "по центру" в каждой ячейке таблицы
-                    table.cell(0, j).Alignment = Align.Center;
-                    table.cell(0, j).AlignmentVertical = AlignVertical.Middle;
-                }
-
-                int r = 0;
-                foreach (DataGridViewRow row in dgvAbits.Rows)
-                {
-                    ++r;
-                    table.cell(r, 0).addParagraph().Text = r.ToString();
-                    table.cell(r, 1).addParagraph().Text = row.Cells["Рег_Номер"].Value.ToString();
-                    table.cell(r, 2).addParagraph().Text = row.Cells["ФИО"].Value.ToString();
-                    table.cell(r, 3).addParagraph().Text = row.Cells["Сумма баллов"].Value.ToString();
-                    table.cell(r, 4).addParagraph().Text = row.Cells["Проф. экзамен"].Value.ToString();
-                    table.cell(r, 5).addParagraph().Text = row.Cells["Доп. экзамен"].Value.ToString();
-                    table.cell(r, 6).addParagraph().Text = row.Cells["Конкурс"].Value.ToString();
-                    table.cell(r, 7).addParagraph().Text = row.Cells["Подлинники документов"].Value.ToString();
-                    table.cell(r, 8).addParagraph().Text = row.Cells["Контакты"].Value.ToString();
-                    table.cell(r, 9).addParagraph().Text = row.Cells["Медалист"].Value.ToString();
-                    table.cell(r, 10).addParagraph().Text = MainClass.dbType == PriemType.PriemMag ? row.Cells["Серия диплома"].Value.ToString() : row.Cells["Серия аттестата"].Value.ToString();
-                    table.cell(r, 11).addParagraph().Text = row.Cells["Средний балл"].Value.ToString();
-                    table.cell(r, 12).addParagraph().Text = row.Cells["Рейтинговый коэффициент"].Value.ToString();
-                    if(dgvAbits.Columns.Contains("Олимпиада"))
-                        table.cell(r, 13).addParagraph().Text = row.Cells["Олимпиада"].Value.ToString(); 
-
-                    for (int j = 0; j < 14; j++)
-                    {
-                        // Устанавливаем горизонтальное и вертикальное выравнивание текста "по центру" в каждой ячейке таблицы
-                        table.cell(r, j).Alignment = Align.Center;
-                        table.cell(r, j).AlignmentVertical = AlignVertical.Middle;
-                    }
-                }
-
-                // Задаём толщину внутренних границ таблицы
-                table.setInnerBorder(RtfWriter.BorderStyle.Single, 0.5f);
-                // Задаём толщину внешних границ таблицы
-                table.setOuterBorder(RtfWriter.BorderStyle.Single, 0.5f);
-                
-                doc.save(MainClass.saveTempFolder + "\\RatingList.rtf");
-
-                // ==========================================================================
-                // Открываем сохранённый RTF файл
-                // ==========================================================================
-                WordDoc wd = new WordDoc(string.Format(@"{0}\RatingList.rtf", MainClass.saveTempFolder));
-            }
-            catch (Exception ex)
-            {
-                WinFormsServ.Error("Ошибка при составлении списка:\n" + ex.Message +
-                    ex.InnerException == null ? "" : ("\nВнутреннее исключение:\n" + ex.InnerException.Message));
-            }
         }
 
         private void btnLock_Click(object sender, EventArgs e)
         {
             LockUnlock(true);
         }
-
+        private void btnUnlock_Click(object sender, EventArgs e)
+        {
+            LockUnlock(false);
+        }
         private void LockUnlock(bool locked)
         {
             try
@@ -1117,16 +961,10 @@ AND FixierenView.IsSecond = {7} AND FixierenView.IsReduced = {8} AND FixierenVie
             return;
         }
 
-        private void btnUnlock_Click(object sender, EventArgs e)
-        {
-            LockUnlock(false);
-        }
-
         private void btnFixierenWeb_Click(object sender, EventArgs e)
         {
             WebFixieren();
         }
-
         private void WebFixieren()
         {
             int cnt = 0;
@@ -1162,7 +1000,7 @@ AND FixierenView.IsSecond = {7} AND FixierenView.IsReduced = {8} AND FixierenVie
                              select fv.Id).FirstOrDefault();
                         
                         //удалили старое
-                        context.FirstWave_DELETE(entryId, IsCel, isCrimea: false, isQuota: IsQuota);
+                        context.FirstWave_DELETE(entryId, IsCel, IsQuota);
 
                         var fix = from fx in context.Fixieren
                                   where fx.FixierenViewId == fixViewId
@@ -1200,7 +1038,6 @@ AND FixierenView.IsSecond = {7} AND FixierenView.IsReduced = {8} AND FixierenVie
         {
             Unfixieren();
         }
-
         private void Unfixieren()
         {
             try
@@ -1217,7 +1054,7 @@ AND FixierenView.IsSecond = {7} AND FixierenView.IsReduced = {8} AND FixierenVie
                                      select fv.Id).FirstOrDefault();
                     
                     //удалили
-                    context.FirstWave_DELETE(entryId, IsCel, isCrimea: false, isQuota: IsQuota);
+                    context.FirstWave_DELETE(entryId, IsCel, IsQuota);
                 }
             }
             catch (Exception ex)
@@ -1258,53 +1095,6 @@ AND FixierenView.IsSecond = {7} AND FixierenView.IsReduced = {8} AND FixierenVie
                     }
                 }
             }
-        }
-
-        private void btnUpdateGrid_Click(object sender, EventArgs e)
-        {
-            UpdateDataGrid();
-        }
-
-        private void chbIsReduced_CheckedChanged(object sender, EventArgs e)
-        {
-            FillStudyForm();
-            NullDataGrid();
-        }
-        private void chbIsParallel_CheckedChanged(object sender, EventArgs e)
-        {
-            FillStudyForm();
-            NullDataGrid();
-        }
-        private void chbIsSecond_CheckedChanged(object sender, EventArgs e)
-        {
-            FillStudyForm();
-            NullDataGrid();
-        }
-
-        private void chbCel_CheckedChanged(object sender, EventArgs e)
-        {
-            NullDataGrid();
-
-            if (IsQuota)
-                chbIsQuota.Checked = false;
-            //if (IsCel)
-            //    btnFixierenWeb.Enabled = false;
-            //else
-            //    btnFixierenWeb.Enabled = true;
-        }
-        private void chbIsCrimea_CheckedChanged(object sender, EventArgs e)
-        {
-            NullDataGrid();
-            if (IsCel)
-                chbCel.Checked = false;
-            if (IsQuota)
-                chbIsQuota.Checked = false;
-        }
-        private void chbIsQuota_CheckedChanged(object sender, EventArgs e)
-        {
-            NullDataGrid();
-            if (IsCel)
-                chbCel.Checked = false;
         }
 
         private void btnToExcel_Click(object sender, EventArgs e)

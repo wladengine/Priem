@@ -371,14 +371,6 @@ LEFT JOIN ed._FirstWaveBackUp FW ON FW.AbiturientId = qAbiturient.Id";
             //else
             //    btnFixierenWeb.Enabled = true;
         }
-        private void chbIsCrimea_CheckedChanged(object sender, EventArgs e)
-        {
-            NullDataGrid();
-            if (IsCel)
-                chbCel.Checked = false;
-            if (IsQuota)
-                chbIsQuota.Checked = false;
-        }
         private void chbIsQuota_CheckedChanged(object sender, EventArgs e)
         {
             NullDataGrid();
@@ -401,7 +393,7 @@ LEFT JOIN ed._FirstWaveBackUp FW ON FW.AbiturientId = qAbiturient.Id";
         {
             using (PriemEntities context = new PriemEntities())
             {
-                int plan = 0, planCel = 0, planCrimea = 0, planQuota = 0, entered = 0, enteredCel = 0, enteredQuota = 0;               
+                int plan = 0, planCel = 0, planQuota = 0, entered = 0, enteredCel = 0, enteredQuota = 0;               
 
                 qEntry entry = (from ent in MainClass.GetEntry(context)
                        where ent.IsReduced == IsReduced && ent.IsParallel == IsParallel && ent.IsSecond == IsSecond 
@@ -439,8 +431,6 @@ LEFT JOIN ed._FirstWaveBackUp FW ON FW.AbiturientId = qAbiturient.Id";
                               where ab.CompetitionId == 6 && ab.EntryId == entryId
                               select ab).Count();
 
-                planCrimea = context.Entry.Where(x => x.ParentEntryId == entryId).Select(x => x.KCP).DefaultIfEmpty(0).First() ?? 0;
-               
                 CheckLockAndPasha(context);
 
                 if (IsCel)
@@ -549,13 +539,12 @@ LEFT JOIN ed._FirstWaveBackUp FW ON FW.AbiturientId = qAbiturient.Id";
                     LEFT JOIN ed.FixierenView ON Fixieren.FixierenViewId = FixierenView.Id 
                     LEFT JOIN ed.hlpAbiturientProfAdd ON hlpAbiturientProfAdd.Id = qAbiturient.Id 
                     LEFT JOIN ed.hlpAbiturientProf ON hlpAbiturientProf.Id = qAbiturient.Id 
-
                     LEFT JOIN ed.extAbitAdditionalMarksSum ON qAbiturient.Id = extAbitAdditionalMarksSum.AbiturientId
                     LEFT JOIN ed.Abiturient_FetchValues ON qAbiturient.Id = Abiturient_FetchValues.AbiturientId
-                    LEFT JOIN ed.hlpAbiturient_Olympiads_SortLevel1 ON qAbiturient.Id = hlpAbiturient_Olympiads_SortLevel1.[AbiturientId] 
-                    LEFT JOIN ed.hlpAbiturient_Olympiads_SortLevel2 ON qAbiturient.Id = hlpAbiturient_Olympiads_SortLevel2.[AbiturientId] 
-                    LEFT JOIN ed.hlpAbiturient_Olympiads_SortLevel3 ON qAbiturient.Id = hlpAbiturient_Olympiads_SortLevel3.[AbiturientId] 
-                    LEFT JOIN ed.hlpAbiturient_Olympiads_SortLevel4 ON qAbiturient.Id = hlpAbiturient_Olympiads_SortLevel4.[AbiturientId]
+                    LEFT JOIN ed.hlpAbiturient_Olympiads_SortLevel1 ON qAbiturient.PersonId = hlpAbiturient_Olympiads_SortLevel1.[PersonId] 
+                    LEFT JOIN ed.hlpAbiturient_Olympiads_SortLevel2 ON qAbiturient.PersonId = hlpAbiturient_Olympiads_SortLevel2.[PersonId] 
+                    LEFT JOIN ed.hlpAbiturient_Olympiads_SortLevel3 ON qAbiturient.PersonId = hlpAbiturient_Olympiads_SortLevel3.[PersonId] 
+                    LEFT JOIN ed.hlpAbiturient_Olympiads_SortLevel4 ON qAbiturient.PersonId = hlpAbiturient_Olympiads_SortLevel4.[PersonId]
 ";
 
                     string whereFix = string.Format(@"
@@ -928,7 +917,7 @@ AND FixierenView.IsSecond = {7} AND FixierenView.IsReduced = {8} AND FixierenVie
             if (sfd.ShowDialog() == DialogResult.OK)
                 Print.PrintRatingProtocol(StudyFormId, StudyBasisId, FacultyId, LicenseProgramId, ObrazProgramId, ProfileId, IsCel,
                     plan, sfd.FileName, IsSecond, IsReduced, IsParallel, IsQuota);
-        }        
+        }
 
         private void btnWord_Click(object sender, EventArgs e)
         {
@@ -949,7 +938,7 @@ AND FixierenView.IsSecond = {7} AND FixierenView.IsReduced = {8} AND FixierenVie
             {
                 using (PriemEntities context = new PriemEntities())
                 {
-                    context.FixierenView_UpdateLocked(StudyLevelGroupId, FacultyId, LicenseProgramId, ObrazProgramId, ProfileId, StudyBasisId, StudyFormId, IsSecond, IsReduced, IsParallel, IsCel, isCrimea: false, locked: locked);
+                    context.FixierenView_UpdateLocked(StudyLevelGroupId, FacultyId, LicenseProgramId, ObrazProgramId, ProfileId, StudyBasisId, StudyFormId, IsSecond, IsReduced, IsParallel, IsCel, locked);
                     
                     lblLocked.Text = locked ? "ЗАЛОЧЕНА" : "НЕ залочена";
                 }

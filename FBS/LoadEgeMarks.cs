@@ -44,22 +44,24 @@ namespace Priem
 
         private void UpdateGridAbits()
         {
-            string query = "SELECT [ParamValue] FROM ed._AppSettings WHERE [ParamKey]='1k_LastEgeMarkLoadTime'";
-            string sDate = MainClass.Bdc.GetStringValue(query);
-            DateTime dtDate = DateTime.MinValue;
-            if (DateTime.TryParse(sDate, out dtDate))
+            try
             {
-                lblEgeLastMarkLoad.Text = sDate;
-                if (dtDate.AddDays(1) < DateTime.Now)
-                    lblEgeLastMarkLoad.ForeColor = Color.Red;
-                else
-                    lblEgeLastMarkLoad.ForeColor = Color.Green;
-            }
+                string query = "SELECT [ParamValue] FROM ed._AppSettings WHERE [ParamKey]='1k_LastEgeMarkLoadTime'";
+                string sDate = MainClass.Bdc.GetStringValue(query);
+                DateTime dtDate = DateTime.MinValue;
+                if (DateTime.TryParse(sDate, out dtDate))
+                {
+                    lblEgeLastMarkLoad.Text = sDate;
+                    if (dtDate.AddDays(1) < DateTime.Now)
+                        lblEgeLastMarkLoad.ForeColor = Color.Red;
+                    else
+                        lblEgeLastMarkLoad.ForeColor = Color.Green;
+                }
 
-            BackgroundWorker bw = new BackgroundWorker();
-            bw.DoWork += (sender, e) =>
-            {
-                string quer = @"SELECT DISTINCT extEntry.FacultyName AS [Факультет], 
+                BackgroundWorker bw = new BackgroundWorker();
+                bw.DoWork += (sender, e) =>
+                {
+                    string quer = @"SELECT DISTINCT extEntry.FacultyName AS [Факультет], 
 COUNT(DISTINCT t.AbiturientId) AS [Абитуриентов], 
 (
 	SELECT CONVERT(nvarchar, MAX(extEnableProtocol.Date), 104) 
@@ -90,23 +92,28 @@ WHERE extEntry.StudyLevelGroupId = 1
 GROUP BY extEntry.FacultyName, extEntry.FacultyId
 ORDER BY 1";
 
-                var _bdc = new DBPriem();
-                _bdc.OpenDatabase(MainClass.connString);
-                e.Result = _bdc.GetDataSet(quer).Tables[0];
-            };
-            bw.RunWorkerCompleted += (sender, e) =>
-            {
-                gbLoading.Visible = false;
-                if (!e.Cancelled)
+                    var _bdc = new DBPriem();
+                    _bdc.OpenDatabase(MainClass.connString);
+                    e.Result = _bdc.GetDataSet(quer).Tables[0];
+                };
+                bw.RunWorkerCompleted += (sender, e) =>
                 {
-                    dgvProtocols.DataSource = e.Result;
-                    dgvProtocols.Columns["Факультет"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCellsExceptHeader;
-                    dgvProtocols.Columns["Абитуриентов"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCellsExceptHeader;
-                    dgvProtocols.Columns["Дата последнего протокола о допуске"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCellsExceptHeader;
-                }
-            };
-            gbLoading.Visible = true;
-            bw.RunWorkerAsync();
+                    gbLoading.Visible = false;
+                    if (!e.Cancelled)
+                    {
+                        dgvProtocols.DataSource = e.Result;
+                        dgvProtocols.Columns["Факультет"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCellsExceptHeader;
+                        dgvProtocols.Columns["Абитуриентов"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCellsExceptHeader;
+                        dgvProtocols.Columns["Дата последнего протокола о допуске"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCellsExceptHeader;
+                    }
+                };
+                gbLoading.Visible = true;
+                bw.RunWorkerAsync();
+            }
+            catch (Exception ex)
+            {
+                WinFormsServ.Error(ex);
+            }
         }
 
         void cbFaculty_SelectedIndexChanged(object sender, EventArgs e)
@@ -116,12 +123,19 @@ ORDER BY 1";
 
         private void FillExams()
         {
-            using (PriemEntities context = new PriemEntities())
+            try
             {
-                var ent = Exams.GetExamsWithFilters(context, MainClass.lstStudyLevelGroupId, FacultyId, null, null, null, null, null, null, null, null).Where(c => !c.IsAdditional);               
+                using (PriemEntities context = new PriemEntities())
+                {
+                    var ent = Exams.GetExamsWithFilters(context, MainClass.lstStudyLevelGroupId, FacultyId, null, null, null, null, null, null, null, null).Where(c => !c.IsAdditional);
 
-                List<KeyValuePair<string, string>> lst = ent.ToList().Select(u => new KeyValuePair<string, string>(u.ExamId.ToString(), u.ExamName)).Distinct().ToList();
-                ComboServ.FillCombo(cbExam, lst, false, true);
+                    List<KeyValuePair<string, string>> lst = ent.ToList().Select(u => new KeyValuePair<string, string>(u.ExamId.ToString(), u.ExamName)).Distinct().ToList();
+                    ComboServ.FillCombo(cbExam, lst, false, true);
+                }
+            }
+            catch (Exception ex)
+            {
+                WinFormsServ.Error(ex);
             }
         }
 
